@@ -1,7 +1,25 @@
 {
-  "and": ["and"],
-  "ascending": ["ascending"],
-  "descending": ["descending"],
-  "ignore-case": ["ignore-case"],
-  "empty": ["empty"]
+  "and-words": [
+    "and",
+    "y",
+    "e"
+  ],
+  "ascending": [
+    "ascending"
+  ],
+  "descending": [
+    "descending"
+  ],
+  "ignore-case": [
+    [
+      "skip",
+      "case"
+    ],
+    "case-insensitive",
+    "ignore-case"
+  ],
+  "empty": [
+    "empty",
+    "nothing"
+  ]
 }

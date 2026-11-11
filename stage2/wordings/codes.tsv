@@ -1,0 +1,375 @@
+code	meaning
+check	verify that something holds
+whether	whether or not
+must	obligation
+required	required, mandatory
+optional	optional
+valid	valid, correct, well-formed, real
+invalid	invalid, malformed, bad
+error	error
+fail	fail, failure
+succeed	succeed, work
+not	negation
+nothing	none, nothing
+if	condition for doing something
+when	at the time something happens
+unless	unless
+otherwise	otherwise, else
+while	while, as long as
+until	until
+each	each, per
+every	every
+all	all
+any	any
+whole	whole, entire
+only	only, just
+one	one, single
+once	once
+several	several, multiple
+first	first
+last	last
+end	end
+next	next
+top	top
+rest	the rest, what remains
+other	other, another
+other-set	a second set to compare against
+blocklist	list of keys to exclude
+same	same, shared
+equal	equal
+distinct	distinct, unique, different
+duplicate	duplicate
+repeat	repeat
+again	again
+seen	already seen
+compare	compare
+periodic	periodic, on a schedule
+interval	interval between runs
+timer	timer
+time-unit	unit of time
+time	time of day, clock
+date	date
+calendar	calendar
+current	current, now
+duration	length of time
+wait	wait, delay
+timeout	timeout
+backoff	waiting longer after each failure
+retry	try again
+try	try, attempt
+give-up	give up
+loop	loop
+limit	limit, cap
+maximum	maximum, at most
+minimum	minimum, at least
+above	above, greater than
+below	below, less than, under
+between	between, within
+outside	outside
+range	range
+largest	large, largest
+smallest	small, smallest
+newest	newest, latest
+oldest	oldest, earliest
+long	long
+short	short
+length	length
+sort	sort, put in order
+arrange	arrange, organize
+ascending	ascending, smallest first
+descending	descending, largest first
+alphabetical	alphabetical
+by	by, according to
+filter	filter
+keep	keep
+where	where, whose
+condition	condition
+match	match, fit, meet, satisfy
+pass	pass
+follow	follow
+select	select
+choose	choose, pick, decide
+dispatch	dispatch
+case	case
+take	take
+exclude	exclude, leave out
+remove	remove, delete, drop
+strip	strip, trim
+skip	skip, ignore
+silently	silently
+continue	carry on
+instead	instead of
+stop	stop, cancel
+exit	exit, quit, abort
+shutdown	shut down
+graceful	gracefully, cleanly
+signal	signal, interrupt
+ask	ask, tell to
+handle	handle, catch
+handler	handler
+finish	finish
+close	close
+clean	clean up, normalize
+fixed	fixed, constant
+raise	raise, throw
+print	print
+log	log
+output	output
+tell	say, tell, report
+console	console, terminal
+stderr	standard error
+show	show, display
+hide	hide
+visible	visible
+toggle	toggle
+turn-off	turn off, disable
+turn-on	turn on, enable
+collapse	collapse
+render	render, draw
+pretty	pretty, neat
+aligned	aligned
+pad	pad
+zero-padded	padded with leading zeros
+zero	zero
+width	width
+layout	lay out
+grid	grid
+wrap	wrap
+table	table
+row	row
+column	column
+cell	cell
+header	header, heading
+group	group
+together	together
+collect	collect, gather
+aggregate	aggregate, roll up
+subtotal	total per group
+total	sum, add up
+overall	over everything, not per group
+count	count
+how-many	how many, number of
+frequency	how often each value occurs
+occur	occur, appear
+times	times
+average	average
+calculate	calculate, work out
+formula	formula, expression
+arithmetic	arithmetic operation
+divide	divide
+add	add
+round	round
+nearest	nearest
+decimals	decimal places
+digit	digit
+number	number
+to-number	into a number
+thousands	thousands grouping
+separator	separator
+comma	comma
+money	money, currency
+result	result
+format	format
+convert	convert, turn into
+map	map
+build	build, make, create
+insert	insert
+put	put, place
+fill	fill
+filled	filled in, not left empty
+empty	empty, blank
+missing	missing, absent
+present	present
+expected	expected
+exist	exist
+template	template
+placeholder	placeholder
+pattern	pattern
+regex	regular expression
+capture-group	named capture group
+extract	extract, pull out
+part	part, piece
+named	named
+name	name
+label	label
+prefix	prefix
+suffix	suffix
+id	id, identifier
+index	running number, position
+sequence	sequence, consecutive
+enumerate	enumerate
+assign	assign, give
+start	start, begin
+initial	initial, original
+series	series
+gap	gap
+entry	entry
+default	default, fallback
+free	free, unused
+auto	automatic
+new	new
+append	append
+update	update, change
+set	set
+replace	replace
+overwrite	overwrite
+copy	copy
+value	value
+data	data
+record	record, object
+item	item
+list	list
+sublist	list of lists
+nested	nested, deep
+direct	directly inside, not recursive
+top-level	top level
+field	field
+attribute	attribute
+key	key
+type	type
+classify	classify
+text	text, string
+character	character, letter
+line	line
+newline	line break
+space	space
+lowercase	lower case
+uppercase	upper case
+escape	escape, make safe
+encode	encode
+encoding	character encoding
+safe	safe
+unsafe	unsafe, injection
+html	HTML
+entity	HTML entity, special character
+tag	tag
+symbol	symbol
+quote	quote
+indent	indent
+schema	schema
+shape	shape, structure
+boolean	boolean, true or false
+null	null
+file	file
+filename	file name
+folder	folder, directory
+subfolder	folder inside a folder
+tree	tree
+walk	walk through all levels
+recursive	recursive
+path	path
+dotted	dotted, dot-separated
+dot	dot
+extension	file extension
+stem	base name without extension
+size	size
+byte	byte
+size-unit	unit of size such as MB
+unit	unit
+readable	human-readable
+hash	checksum, hash
+content	contents
+read	read
+load	load
+open	open
+write	write
+save	save, store
+storage	browser storage
+disk	disk
+dump	dump
+json	JSON
+csv	CSV
+to-json	into JSON
+from-json	from JSON
+to-csv	into CSV
+from-csv	from CSV
+to-rows	into rows
+to-records	into records
+from-rows	from rows
+from-records	from records
+parse	parse, decode
+serialize	serialize
+pair	pair up
+flatten	flatten
+join	join, merge, combine
+split	split, break apart
+config	configuration, settings
+fetch	fetch, download
+get	get
+find	find, locate
+search	search
+keyword	search term
+live	live, as you type
+web	web
+url	web address, URL
+address	address
+email	email
+http	HTTP
+http-method	HTTP method name
+request	request
+respond	respond, reply
+send	send
+upload	upload
+incoming	incoming, received
+client	client, caller
+browser	browser
+server	server
+port	port
+listen	listen, watch for
+host	host
+scheme	URL scheme
+route	route
+endpoint	endpoint, API
+method	method
+body	body
+status	status code
+nonzero	non-zero
+web-page	web page
+document	document
+element	element on a page
+selector	selector
+class	class
+query	query
+input	input box
+form	form
+submit	submit
+event	event
+click	click
+press	press a key
+happen	happen
+run	run, call
+action	action, task
+attach	attach, bind
+beside	beside, next to
+before	before
+after	after
+message	message
+prevent	prevent, block
+reject	reject, refuse
+allowed	allowed
+restrict	restrict
+one-of	one of, among
+contain	contain, include
+start-with	starts with
+end-with	ends with
+rule	rule
+focus	focus
+cursor	cursor
+move	move
+reset	reset
+restore	restore
+clear	clear
+typed	typed in by the user
+user	user
+state	state
+refresh	refresh
+bullet	bullet point
+program	program
+command-line	command line
+argument	argument
+option	option, flag
+positional	positional
+usage	usage, help text
+declare	declare, define
+set-up	set up
+accept	accept

@@ -1,0 +1,1081 @@
+block	wording
+cli-options	Parse the command line arguments
+cli-options	Accept a "--verbose" flag and an "--output" option on the command line
+cli-options	Declare the command-line options "--port" and "--host" and read their values
+cli-options	Define the CLI arguments the program accepts
+cli-options	Read the args passed to the script
+cli-options	Add a "--limit" option with default 10
+cli-options	Set up argument parsing with a positional "input" argument and an optional "--quiet" flag
+cli-options	Get the values of the options given on the command line
+cli-options	Take a "--name" parameter from the command line
+cli-options	Register the flags "--dry-run" and "--force" for this tool
+cli-options	CLI options "--count" and "--path"
+cli-options	Let the user pass "--region" and "--size" as command line switches
+check-number-range	Check that the number given by the user is between 1 and 100, default 10
+check-number-range	Validate that age is within the range 0 to 120
+check-number-range	Make sure the "--port" value lies between 1024 and 65535 and use 8080 if it is missing
+check-number-range	Ensure size is at least 1 and at most 500
+check-number-range	Verify the number entered by the user falls inside 1 to 1000, falling back to 20 when absent
+check-number-range	Range check amount 0 to 9999
+check-number-range	Reject a number outside 1 to 12
+check-number-range	Confirm that the given number is in the range 5 to 25, or use the default 5 when none is given
+check-number-range	The number must be >= 1 and <= 31
+check-number-range	Check the number supplied by the user is not below 0 or above 100
+check-number-range	If no value is provided use 3, otherwise check it is between 1 and 10
+check-number-range	Test that count is no less than 1 and no more than 50
+exit-on-error	Exit with an error message and status 1
+exit-on-error	Stop the program with the error "file not found" and exit code 2
+exit-on-error	Abort with "invalid input"
+exit-on-error	Print "missing config" to stderr and quit with a nonzero status
+exit-on-error	Terminate the script with an error
+exit-on-error	Die with the message "cannot open file"
+exit-on-error	Bail out with exit code 3 and the message "bad arguments"
+exit-on-error	Fail with the error "no such user" and return code 1
+exit-on-error	Halt the program, reporting "disk full" as a fatal error
+exit-on-error	Quit the program with a failure message and a non-zero exit status
+exit-on-error	Exit 1 with "usage error"
+exit-on-error	Stop everything and exit with an error message such as "could not connect"
+print-message	Print "Hello, world"
+print-message	Print the message "Done" to the console
+print-message	Output a line of text with the name and age inserted
+print-message	Echo "Processing" followed by the path
+print-message	Log "Starting up"
+print-message	Write the line "Total:" followed by the total to standard output
+print-message	Print one line with "Saved" and the title
+print-message	Display the text "Welcome back" in the terminal
+print-message	Say "Goodbye" on the console
+print-message	Print a line that reports the name and email
+print-message	Emit a single line of output with the city and region substituted in
+print-message	Just print the text "ok"
+print-table	Print users as a table
+print-table	Print the rows as aligned columns
+print-table	Output orders in neat columns with name, price and date
+print-table	Show items as a text table in the terminal with a header row
+print-table	Print a table of files with the columns path and size
+print-table	Display records in the console lined up in columns
+print-table	Tabulate users and print them
+print-table	Dump the rows to stdout as a padded table, one row per line
+print-table	Print name, city and age for each user in aligned columns
+print-table	Pretty print orders as a table
+print-table	Write out the records as columns of equal width
+print-table	Print a console table of items showing id, title and status
+print-groups	Print users grouped by city with a heading before each group
+print-groups	Print the rows in groups, each under a header line
+print-groups	Output orders by region, with the region as a heading above each group
+print-groups	Print grouped records with a heading per group
+print-groups	Show items in the console in sections by status, each section having its own heading
+print-groups	For each group print a heading line and then its rows
+print-groups	Print groups of files with a header for each one
+print-groups	Write the orders to stdout under a heading for every status
+print-groups	Print a heading for each city followed by the users in that city
+print-groups	Grouped printout of records by region
+print-groups	Print the groups one after another with a heading line in front of each
+print-groups	Display rows group by group in the terminal with headings
+format-number	Format total with thousands separators and 2 decimals
+format-number	Format the number 1234567.891 with commas and 2 decimal places
+format-number	Show price with a thousands separator and exactly 2 digits after the decimal point
+format-number	Format amount for display like "1,250.50"
+format-number	Apply number formatting to total, grouping digits in thousands and keeping 3 decimals
+format-number	Show 1500000 as "1,500,000.00" with comma separators
+format-number	Format count with comma separators and 0 decimals
+format-number	Add thousands separators to total and keep exactly 1 decimal place
+format-number	Display price with digit grouping and a fixed number of decimals
+format-number	Format a number as "12,345.68"
+format-number	Turn amount into display text with commas between thousands and 2 decimals
+format-number	Format total with a comma every 3 digits and 2 decimal places
+format-size	Format size as a human-readable string like "1.5 MB"
+format-size	Turn a number of bytes into a readable size
+format-size	Convert 1536 bytes to "1.5 KB"
+format-size	Show size in KB, MB or GB instead of raw bytes
+format-size	Humanize a byte count
+format-size	Format bytes as a friendly size with units
+format-size	Pretty print size, for example 2048 becomes "2.0 KB"
+format-size	Make size human readable
+format-size	Convert 5000000 bytes to megabytes with 1 decimal
+format-size	Display a size in bytes using the largest suitable unit, such as "3.2 GB"
+format-size	Bytes to readable size text
+format-size	Convert size from bytes into a compact readable format with a unit suffix
+format-text	Build a label from the prefix "INV-" followed by id zero-padded to 5 digits
+format-text	Format text from the pattern "{name} ({city})" with the values inserted
+format-text	Make a string like "user-007" from a prefix and a zero-padded number
+format-text	Compose the text "Order " and then id padded with leading zeros to width 6
+format-text	Create a file name such as "report-03.txt" by inserting a 2 digit number into a pattern
+format-text	Fill the pattern "{title}: {status}" with title and status
+format-text	Generate an identifier made of "ITEM" and count padded to 4 digits
+format-text	Produce a piece of text by substituting name and date into a format string
+format-text	Text pattern with values: "Hello {name}, you are {age}"
+format-text	Interpolate name and total into "Dear {name}, you owe {total}"
+format-text	Pad id with zeros to 8 characters and put "ID" in front
+format-text	Assemble a string from a format pattern and the values of city and region
+format-grid	Lay the values out as a grid with 4 columns
+format-grid	Arrange items in a grid, 3 per row
+format-grid	Format the names as a grid of 5 columns
+format-grid	Print values in a grid with a fixed number of columns
+format-grid	Show the items in rows of 6 side by side
+format-grid	Grid layout, 4 columns wide
+format-grid	Lay out files in a 3 column grid
+format-grid	Place the values side by side in 8 columns, wrapping to the next row after every 8
+format-grid	Split the list in rows of 5 values each and show them as a grid
+format-grid	Put each title into a grid with 2 columns
+format-grid	Display the values as a matrix with 10 columns per row
+format-grid	Arrange lines into a grid that is 4 columns across
+fill-template	Fill the template "invoice.html" with name, date and total
+fill-template	Insert the values into the page template
+fill-template	Render the template "welcome.txt" with the name and email of the user
+fill-template	Substitute title and text into the document template "page.html"
+fill-template	Fill in the placeholders of "letter.txt" with name and city
+fill-template	Merge the record into the fixed template "report.html"
+fill-template	Take the template "email.txt" and put name and amount into its slots
+fill-template	Produce a page from the template "profile.html" using name, age and city
+fill-template	Template "summary.md" filled with count and total
+fill-template	Apply the values of title and date to the document template
+fill-template	Replace the placeholders in the template "card.html" with the values from the record
+fill-template	Populate the HTML template "index.html" with title and items
+escape-html	Escape text for HTML
+escape-html	Make the title safe to put inside an HTML page
+escape-html	HTML escape name before inserting it into the page
+escape-html	Replace the special characters in text with HTML entities
+escape-html	Sanitize the user text so it can be shown in HTML safely
+escape-html	Encode "<", ">" and "&" in text as HTML entities
+escape-html	Escape angle brackets and ampersands in title
+escape-html	Neutralize HTML in the email value so that tags are displayed as text
+escape-html	Prevent HTML injection by escaping the text
+escape-html	Turn text into text that is safe for HTML
+escape-html	Escape the name for use in a web page
+escape-html	Convert the special characters in city so they cannot act as HTML markup
+lowercase-text	Lowercase the text
+lowercase-text	Convert name to lower case
+lowercase-text	Make email all lowercase
+lowercase-text	Turn the title into small letters
+lowercase-text	Downcase city
+lowercase-text	Change the text to lower-case
+lowercase-text	Lower the case of status
+lowercase-text	Convert every uppercase letter in the text to lowercase
+lowercase-text	Put region in lowercase letters
+lowercase-text	Normalize the email to lowercase so comparisons ignore case
+lowercase-text	Lowercase "Hello World"
+lowercase-text	Get a lower case copy of name
+match-pattern	Match each line against the pattern "(\d+) (\w+)" and pull out the named pieces
+match-pattern	Find the parts of every line that fit the regex "\d{4}-\d{2}-\d{2}"
+match-pattern	Extract the date and status from each line using a regular expression
+match-pattern	Run the regex "(?P<id>\d+)" over lines and capture the named groups
+match-pattern	Pull the email out of each line with the pattern "\S+@\S+"
+match-pattern	Search lines for "ERROR (.*)" and grab the matched part
+match-pattern	Regex match on each line, capturing name and age
+match-pattern	Scan the text line by line for the pattern "id=(\d+)" and collect what it captures
+match-pattern	Use a pattern with named groups to pull the amount and the date out of every line
+match-pattern	Find all matches of "[A-Z]+-\d+" in the lines
+match-pattern	Parse each log line with a regex and return the pieces by name
+match-pattern	Extract every piece of text matching "#\w+" from lines
+check-pattern	Check that email matches the pattern "^\S+@\S+$"
+check-pattern	Validate that the text looks like an email address
+check-pattern	Verify id fits the regex "^[A-Z]{3}\d{4}$"
+check-pattern	Make sure the text has the shape "AA-000"
+check-pattern	Test whether status matches "^(open|closed)$"
+check-pattern	See whether the text conforms to the pattern "\d{5}"
+check-pattern	Ensure the email value is a well-formed email address
+check-pattern	Regex check: the whole text must match "^[a-z0-9_]+$"
+check-pattern	Check the format of id against "^\d{3}-\d{4}$"
+check-pattern	Confirm that title is shaped like "Chapter 12"
+check-pattern	Reject text that does not fit the pattern "^\w+$"
+check-pattern	Check whether the text is in the expected format "000-0000"
+check-text-rule	Check that the text is not empty
+check-text-rule	Validate that name does not contain the character "@"
+check-text-rule	Make sure title is not blank
+check-text-rule	Ensure the text has no spaces in it
+check-text-rule	Check the text obeys the rule that it must not include ";"
+check-text-rule	Verify that path does not start with "/"
+check-text-rule	Text rule: must not be empty and must not contain "<"
+check-text-rule	Reject an empty name
+check-text-rule	Confirm the text follows a simple rule, for example it does not end with "."
+check-text-rule	Fail the check when city contains ","
+check-text-rule	Check that the text is non-empty and free of "#" characters
+check-text-rule	Apply a basic text rule to status, namely that it contains no "!"
+check-url	Check that the text is a valid URL
+check-url	Validate the web address
+check-url	Check whether "https://example.com" is a proper URL
+check-url	Make sure the text is a web address starting with "http" or "https"
+check-url	Verify that the link is well-formed
+check-url	URL validation for the value typed by the user
+check-url	Ensure the text is actually an http link and not something else
+check-url	Confirm the text looks like a web address with a scheme and a host
+check-url	Reject values that are not URLs
+check-url	Check URL
+check-url	Test whether the given string is a legitimate internet address
+check-url	Validate that the text parses as a URL
+check-valid-date	Check that the text is a real date
+check-valid-date	Validate the date "2024-02-30"
+check-valid-date	Make sure date is a valid calendar date
+check-valid-date	Check whether "31/04/2023" is an actual date
+check-valid-date	Verify that the text is a date that really exists
+check-valid-date	Reject dates that do not exist, such as day 30 of month 2
+check-valid-date	Ensure the date the user typed is real
+check-valid-date	Date validation
+check-valid-date	Confirm that the text is a genuine date and not something like month 13
+check-valid-date	Test whether the string parses as a proper date
+check-valid-date	Check date is valid
+check-valid-date	Validate that the day, month and year in the text are a possible calendar date
+check-required	Check that the required field is filled in
+check-required	Make sure the name field of the form is not left empty
+check-required	Validate that the user has entered something in the required email field
+check-required	Required field check for "#email"
+check-required	Ensure the form field "#name" has a value
+check-required	Verify that the mandatory field has been completed
+check-required	Treat the title field as invalid if the user left it blank
+check-required	The city field is required, check that it is filled
+check-required	Confirm a value was typed into the required form input "#phone"
+check-required	Required check on the form field
+check-required	Do not accept the form field "#address" when nothing has been entered
+check-required	Check the required input is present
+check-min-length	Check that the field has at least 8 characters
+check-min-length	Minimum length 6 for the form field "#password"
+check-min-length	Make sure the name field is at least 2 characters long
+check-min-length	Validate that the text typed into "#username" is no shorter than 3 characters
+check-min-length	Ensure the form input has a min length of 10
+check-min-length	Reject the field if it has fewer than 5 characters
+check-min-length	Verify the length of the title field is >= 4
+check-min-length	Require 12 or more characters in the field "#code"
+check-min-length	Field must be at least 3 letters
+check-min-length	Check the minimum number of characters in the email field, which is 5
+check-min-length	Too short check: the form field needs 8 characters or more
+check-min-length	Confirm the value in "#comment" is long enough, at least 20 chars
+check-allowed-values	Check that every status is one of "open", "closed" or "pending"
+check-allowed-values	Validate that all values are in the allowed list
+check-allowed-values	Make sure region is one of the permitted values "north", "south", "east", "west"
+check-allowed-values	Ensure each value belongs to the allowed set
+check-allowed-values	Reject any value that is not in the list "red", "green", "blue"
+check-allowed-values	Verify size is among "S", "M", "L"
+check-allowed-values	Allowed values check for status in orders
+check-allowed-values	Only "yes" and "no" are permitted for done, check the values
+check-allowed-values	Confirm that no city falls outside the approved list
+check-allowed-values	Whitelist check on the values of region
+check-allowed-values	Restrict status to "active" or "inactive" and report anything else
+check-allowed-values	Check the values against an enumeration of the valid ones
+check-required-types	Check that the record has the keys name and age with the expected types
+check-required-types	Validate that name is text and age is a number in each record
+check-required-types	Make sure the keys id, title and done are present and hold a number, a string and a boolean
+check-required-types	Verify the required fields of the record exist and have the correct types
+check-required-types	Type check the record: email must be a string, total must be a number
+check-required-types	Ensure the object contains the keys path and size and that their values are of the proper types
+check-required-types	Required keys and types for a record: id number, name text, date text
+check-required-types	Confirm that status is present in the record and is a string
+check-required-types	Reject the record if price is missing or is not a number
+check-required-types	Check key presence and value types against a schema
+check-required-types	Each of the keys city and region must be present and must be text
+check-required-types	Validate the types of the required keys in the record
+check-list-of-records	Check that the loaded data is a list of records
+check-list-of-records	Validate that the data is an array of objects
+check-list-of-records	Make sure what was loaded is a list and every entry in it is a record
+check-list-of-records	Verify the parsed data is a list of dictionaries
+check-list-of-records	Ensure the top level of the data is a list and each item is an object
+check-list-of-records	Reject the data unless it is a list of records
+check-list-of-records	Confirm the loaded data has the shape of a list of records
+check-list-of-records	Data must be a list whose members are all records
+check-list-of-records	Check the structure of the data: a list containing only objects
+check-list-of-records	Fail if the loaded data is not an array of records
+check-list-of-records	Test whether the data is a list of records
+check-list-of-records	Sanity check that users came in as a list of objects and nothing else
+check-path-exists	Check that the file "config.json" exists
+check-path-exists	Check whether the folder "logs" exists
+check-path-exists	Make sure the path exists
+check-path-exists	Verify that the directory "data" is present on disk
+check-path-exists	Test whether "notes.txt" exists on disk
+check-path-exists	Ensure a file or folder exists at path
+check-path-exists	Fail if "input.csv" cannot be found
+check-path-exists	Check for the existence of the folder "output"
+check-path-exists	Confirm that the path points to an existing file or directory
+check-path-exists	Path exists check
+check-path-exists	See if the file "report.pdf" is present
+check-path-exists	Tell me whether the folder "backup" exists
+read-text-file	Read the file "notes.txt"
+read-text-file	Read the whole contents of the text file "readme.md"
+read-text-file	Load the text of "input.txt" into memory
+read-text-file	Open "log.txt" and read everything in it
+read-text-file	Get the contents of the file at path as a string
+read-text-file	Read "data.txt" as text
+read-text-file	Slurp the entire file "poem.txt"
+read-text-file	Read all the text from "story.txt" in one go
+read-text-file	Return the full contents of the text file "todo.txt"
+read-text-file	Read text file "letter.txt"
+read-text-file	Load the file "list.txt" and give me its text
+read-text-file	Read in the contents of path
+write-text-file	Write the text to "out.txt"
+write-text-file	Save the text to the file "result.txt"
+write-text-file	Write "Hello" into the file "greeting.txt"
+write-text-file	Create the file "summary.txt" containing the text
+write-text-file	Store the string in a text file at path
+write-text-file	Write text file "notes.txt"
+write-text-file	Dump the text into "debug.log"
+write-text-file	Put the contents into a new file called "copy.txt"
+write-text-file	Output the text to a file named "report.md" instead of the screen
+write-text-file	Save the generated text to disk as "page.html"
+write-text-file	Overwrite "config.txt" with the new text
+write-text-file	Write out the string to the file at path
+parse-json	Parse the JSON text
+parse-json	Turn the JSON string into data
+parse-json	Decode JSON
+parse-json	Parse the text as JSON
+parse-json	Convert JSON text into a data structure
+parse-json	Deserialize the JSON in text
+parse-json	Load data from a JSON string
+parse-json	Read the text as JSON and give back the data
+parse-json	JSON parse the text that was read
+parse-json	Interpret text as JSON
+parse-json	Turn a JSON document into a list of records
+parse-json	Get data out of the JSON text
+format-json	Convert the data to JSON
+format-json	Turn users into JSON text
+format-json	Serialize the record as JSON
+format-json	Encode orders as a JSON string
+format-json	Format the data as JSON with an indent of 2
+format-json	Stringify the record
+format-json	Dump the data to JSON
+format-json	Produce JSON text from the list of records
+format-json	Data to JSON
+format-json	Make pretty printed JSON text from items
+format-json	Generate a JSON document from the data
+format-json	Turn the record into a JSON string
+parse-csv	Parse the CSV text into rows
+parse-csv	Turn CSV text into rows
+parse-csv	Read the text as CSV
+parse-csv	Split the CSV string into rows and cells
+parse-csv	Decode comma-separated text into a list of rows
+parse-csv	Parse CSV
+parse-csv	Convert the CSV contents to rows of values
+parse-csv	Break the comma separated lines into fields
+parse-csv	Get rows out of the CSV text
+parse-csv	Load rows from a CSV string
+parse-csv	Interpret the text as comma-separated values and return the rows
+parse-csv	CSV text to rows, one row per line
+format-csv	Turn the rows into CSV text
+format-csv	Format rows as CSV
+format-csv	Convert the rows to a CSV string
+format-csv	Serialize the rows as comma-separated values
+format-csv	Encode the rows as CSV
+format-csv	Produce CSV from the rows
+format-csv	Rows to CSV
+format-csv	Join each row with commas and the rows with line breaks to make CSV text
+format-csv	Generate CSV output from the list of rows
+format-csv	Build a CSV string out of the rows, quoting values where needed
+format-csv	Dump rows to CSV text
+format-csv	Make comma separated text from the rows
+require-columns	Check that the table has the columns name, price and date
+require-columns	Require the columns id and email
+require-columns	Make sure the columns city and region are present in the table
+require-columns	Verify that orders has columns named amount and status
+require-columns	Fail if the table is missing the column total
+require-columns	Ensure the header contains name and age
+require-columns	Required columns: id, title, done
+require-columns	Validate that all the named columns exist in the table
+require-columns	Confirm the table includes a price column and a count column
+require-columns	Column check for path and size
+require-columns	The table must have the columns date and amount, check for them
+require-columns	Reject the table when the column name, email or city is absent
+rows-to-records	Turn the rows into records using the header row
+rows-to-records	Convert rows and a header row into named records
+rows-to-records	Rows to records
+rows-to-records	Make a record from each row with the header names as keys
+rows-to-records	Use the first row as field names and turn the other rows into records
+rows-to-records	Zip each row with the header to get named records
+rows-to-records	Convert the table rows to objects keyed by column name
+rows-to-records	Build records from the rows, naming each value after its column header
+rows-to-records	Map header and rows to a list of dictionaries
+rows-to-records	Give every value in a row the name from the header so the rows become records
+rows-to-records	Turn rows of values into records with named fields
+rows-to-records	Pair the header row with each data row to produce records
+records-to-rows	Turn the records into a header row and rows of values
+records-to-rows	Convert records to rows
+records-to-rows	Records to rows with a header
+records-to-rows	Break the named records into a header row and value rows
+records-to-rows	Make a header row from the field names and one row of values per record
+records-to-rows	Convert the list of objects into a table of rows with the keys as the header
+records-to-rows	Produce rows of plain values from users, with the field names on top
+records-to-rows	Turn each record into a row and put the column names first
+records-to-rows	Extract the values of every record as a row, preceded by a header row
+records-to-rows	From records get a header and rows
+records-to-rows	Change dictionaries into rows of values under a header row
+records-to-rows	Represent the records as rows, with a row of field names at the top
+list-folder	List the files in the folder "docs"
+list-folder	List the files directly inside "src", not in subfolders
+list-folder	Get the names of the files in the directory "images"
+list-folder	Tell me what files are in the folder at path
+list-folder	Read the directory "logs" and return its entries
+list-folder	List folder "data"
+list-folder	Enumerate the files at the top level of "project"
+list-folder	Which files are in "downloads", just that folder itself
+list-folder	Give me a listing of the directory "backup"
+list-folder	Collect the file names directly under "reports"
+list-folder	Directory listing of "photos" without going into subdirectories
+list-folder	Files in the folder "tmp", one level only
+walk-folder	Walk the folder "src" and list every file
+walk-folder	List all files in "docs" and in all the folders beneath it
+walk-folder	Recursively list the files under "project"
+walk-folder	Find every file in the directory tree rooted at "data"
+walk-folder	Traverse "photos" including subfolders and collect the file paths
+walk-folder	Get all files in "logs", going down into subdirectories
+walk-folder	Walk the directory tree at path
+walk-folder	List files recursively in "backup"
+walk-folder	Crawl the folder "music" and every nested folder for files
+walk-folder	Recursive file listing of "site"
+walk-folder	Go through "archive" and all its subfolders and return each file
+walk-folder	Enumerate every file under "home" no matter how deep
+file-size	Get the size of the file "video.mp4" in bytes
+file-size	Tell me how big the file "data.csv" is
+file-size	File size of "photo.jpg"
+file-size	Return the number of bytes in "archive.zip"
+file-size	Look up the size of the file at path
+file-size	Report how large the file "backup.tar" is
+file-size	Size in bytes of "notes.txt"
+file-size	Obtain the byte size of the file "song.mp3"
+file-size	How many bytes does "report.pdf" occupy
+file-size	Get file size
+file-size	Give me the length of the file "dump.bin" in bytes
+file-size	Find out the size on disk of "index.html"
+hash-file	Compute a checksum of the file "setup.exe"
+hash-file	Hash the file "data.bin"
+hash-file	Get the SHA256 of "image.iso"
+hash-file	Calculate the MD5 digest of the contents of "archive.zip"
+hash-file	Checksum "backup.tar"
+hash-file	Work out a hash for the file at path
+hash-file	Fingerprint the contents of "report.pdf"
+hash-file	Produce the SHA-256 checksum of "installer.dmg"
+hash-file	Hash file contents
+hash-file	Generate a digest of the bytes in "notes.txt"
+hash-file	Compute the hash of each file in files
+hash-file	Give me the checksum for "video.mp4"
+split-extension	Split the file name into name and extension
+split-extension	Split "report.final.pdf" into its basename and extension
+split-extension	Get the extension of "photo.jpeg"
+split-extension	Separate the extension from the file name "archive.tar"
+split-extension	Split extension from path
+split-extension	Break "notes.txt" into "notes" and ".txt"
+split-extension	Pull the file name apart into stem and suffix
+split-extension	Strip the extension off "data.csv" and return both parts
+split-extension	File name and extension of "song.mp3" as 2 pieces
+split-extension	Cut the path at the last dot to get the name and the extension
+split-extension	Find the extension of the file "index.html"
+split-extension	Chop the file name "movie.mkv" into the part before the dot and the part after it
+filter-rows	Keep only the rows where age >= 18
+filter-rows	Filter users by city = "Paris"
+filter-rows	Filter orders where total > 100
+filter-rows	Select the items with price < 20
+filter-rows	Keep the records that meet the condition status = "open"
+filter-rows	Only users whose age < 30
+filter-rows	Narrow orders down to those with region = "west" and amount >= 50
+filter-rows	Get the rows that satisfy done = "yes"
+filter-rows	Filter the lines that contain "error"
+filter-rows	Retain the orders with date >= "2024-01-01"
+filter-rows	Keep just the items where count != 0
+filter-rows	Give me only the users that have email != ""
+sort-rows	Sort users by age
+sort-rows	Sort orders by total descending
+sort-rows	Order the rows by date, newest first
+sort-rows	Arrange items by price from lowest to highest
+sort-rows	Rank users by count, highest first
+sort-rows	Sort the records by name A to Z
+sort-rows	Put orders in order by amount, largest to smallest
+sort-rows	Sort files by size in ascending order
+sort-rows	Order by city then by name
+sort-rows	Sort lines alphabetically
+sort-rows	Reorder the items so the smallest price comes first
+sort-rows	Sort users on email in reverse order
+take-first	Take the first 10 rows
+take-first	Keep only the first 5 users
+take-first	Limit orders to 20
+take-first	First 3 items
+take-first	Top 10 records
+take-first	Get the head of lines, 100 rows
+take-first	Return just the first 50 orders
+take-first	Truncate the list to its first 8 entries
+take-first	Cap users at 25 rows
+take-first	Give me the first 15 files only
+take-first	Keep the leading 4 rows of the table
+take-first	Only the 7 rows at the start of records
+group-by-key	Group users by city
+group-by-key	Group the rows by region
+group-by-key	Collect orders into groups that share the same status
+group-by-key	Bucket items by size
+group-by-key	Partition the records by date
+group-by-key	Put users with the same age together
+group-by-key	Group by key status
+group-by-key	Organize orders into groups keyed by region
+group-by-key	Split files into groups by the value of size
+group-by-key	Gather the rows that have the same name into one group each
+group-by-key	Make groups of items sharing a status
+group-by-key	Cluster orders according to city
+group-total	Sum amount by region
+group-total	Total price for each city
+group-total	Add up total per status in orders
+group-total	Group orders by region and sum amount
+group-total	Sum of price grouped by date
+group-total	For each city add up the amount of its orders
+group-total	Subtotals of total by region
+group-total	Compute the total amount per city
+group-total	Give me the sum of price for every region
+group-total	Aggregate amount by status with a sum
+group-total	Roll up orders into one total of price per city
+group-total	Total amount in each group of orders sharing a date
+count-values	Count how many times each status occurs
+count-values	Count orders by region
+count-values	Tally the values of city
+count-values	Frequency of each distinct value of status
+count-values	How many users are there per city
+count-values	Count occurrences of every different region in orders
+count-values	Value counts for size
+count-values	Build a histogram of age
+count-values	Count the number of times each name appears in users
+count-values	Number of items for each status
+count-values	Count each distinct value of date and how often it occurs
+count-values	Get a count per value of region
+count-rows	Count the rows
+count-rows	Count users
+count-rows	How many orders are there
+count-rows	Number of items
+count-rows	Get the row count of the table
+count-rows	Count how many records there are in total
+count-rows	Return the number of lines
+count-rows	Count all the files
+count-rows	Tell me how many users we have
+count-rows	Length of the list of orders
+count-rows	Row count
+count-rows	Count the entries in records
+total	Sum price across all rows
+total	Total amount
+total	Add up total for all orders
+total	Sum of size over files
+total	Get the grand total of price in orders
+total	Add together every amount in the table
+total	Compute the overall sum of count
+total	Total up price for all items
+total	What does amount add up to across all orders
+total	Sum the price column
+total	Add all the size values of files into one number
+total	Give me the sum of amount for the whole table
+distinct-values	List the distinct values of city
+distinct-values	Unique values of status
+distinct-values	Get each different region once
+distinct-values	List every different value found in size
+distinct-values	Distinct region in orders
+distinct-values	List each value of status only once
+distinct-values	Collect the unique values of date from orders
+distinct-values	Give me all the different values of age without repeats
+distinct-values	Enumerate the unique entries of email in users
+distinct-values	Find the distinct values of the field name
+distinct-values	Unique list of region
+distinct-values	List what different values status has
+remove-duplicates	Remove duplicate rows by id
+remove-duplicates	Dedupe users by email
+remove-duplicates	Drop rows whose key has already been seen, keeping the first
+remove-duplicates	Deduplicate orders on id
+remove-duplicates	Remove duplicates from users
+remove-duplicates	Keep only the first row for each email and drop later ones with the same email
+remove-duplicates	Get rid of repeated users, keyed by name
+remove-duplicates	Eliminate duplicate items, keeping the first occurrence of each id
+remove-duplicates	Drop any row whose id was already encountered
+remove-duplicates	Unique rows by key email
+remove-duplicates	Throw away duplicated lines
+remove-duplicates	Make users unique by id, first one wins
+exclude-by-key	Keep the rows whose key does not appear in the second set
+exclude-by-key	Exclude users whose id is in the other list
+exclude-by-key	Remove orders whose id appears in the blocklist
+exclude-by-key	Keep only items with id not in the second table
+exclude-by-key	Anti-join users against orders on id
+exclude-by-key	Drop the records whose email is found in another set
+exclude-by-key	Leave out the users whose name is listed in the second list
+exclude-by-key	Filter out rows whose key exists in the other set
+exclude-by-key	Users except those whose id is in orders
+exclude-by-key	Set difference of users and the other list by id
+exclude-by-key	Exclude by key id using a second list
+exclude-by-key	Keep users that have no matching id in orders
+drop-invalid-rows	Drop the rows that are malformed or have missing values
+drop-invalid-rows	Skip invalid rows instead of stopping
+drop-invalid-rows	Leave out records with missing fields and carry on
+drop-invalid-rows	Ignore bad lines and keep going
+drop-invalid-rows	Discard rows that have empty or broken values
+drop-invalid-rows	Remove the incomplete records rather than failing
+drop-invalid-rows	Skip any row that cannot be parsed
+drop-invalid-rows	Throw out malformed rows silently
+drop-invalid-rows	Filter out rows with missing price or amount without raising an error
+drop-invalid-rows	Drop invalid rows
+drop-invalid-rows	Do not stop on bad rows, just skip them
+drop-invalid-rows	Omit the orders that are missing a value or are not valid
+clean-number-field	Turn text such as "1,250.50" into a number
+clean-number-field	Convert the price text to a number, removing commas
+clean-number-field	Clean the amount field so "1,250.50" becomes 1250.50
+clean-number-field	Parse a number out of the string "$3,400"
+clean-number-field	Strip the thousands separators from total and make it numeric
+clean-number-field	Clean up price and convert it to a number
+clean-number-field	Turn the formatted amount back into a number
+clean-number-field	Remove currency symbols and commas from price, then read it as a number
+clean-number-field	Text to number for the field total
+clean-number-field	Coerce amount from text like "2,000" to a numeric value
+clean-number-field	Normalize count from text with commas into a number
+clean-number-field	Make a number from the total text, dropping "," and spaces
+number-items	Number the items starting from 1
+number-items	Give each row a running number beginning at 100
+number-items	Add a sequence number to every line, starting at 1
+number-items	Enumerate users from 1
+number-items	Attach an index to each record starting at 0
+number-items	Number the lines 1, 2, 3 and so on
+number-items	Assign consecutive numbers to orders starting from 1000
+number-items	Add a row number column going up from 1
+number-items	Label every item with its position, the first one is 1
+number-items	Give the files serial numbers starting at 10
+number-items	Prefix each line with a line number starting from 1
+number-items	Add a counter to the rows, start value 5
+fill-series	Fill in the missing entries of the series with 0
+fill-series	Fill the gaps so every hour of the day has a value, default 0
+fill-series	Add missing days to the series with a count of 0
+fill-series	Every hour from 0 to 23 should appear, use 0 where there is no data
+fill-series	Fill missing dates with the default value 0
+fill-series	Pad the series out so each of the 12 months is present, with total 0 for the missing ones
+fill-series	Fill out the sequence of days, inserting amount 0 for days without records
+fill-series	Insert a default entry for every minute that has no data
+fill-series	Fill gaps in the hourly series with a fallback value
+fill-series	Zero fill the missing hours
+fill-series	For each day of the week with no row add one with count 0
+fill-series	Fill series gaps with 0
+build-record	Build a record from name, age and city
+build-record	Assemble a record from the named values
+build-record	Create an object with the fields id, title and done
+build-record	Make a record with name = "Ann" and age = 30
+build-record	Put email and status together into one record
+build-record	Construct a dictionary from the keys and values
+build-record	Compose a record out of price, amount and date
+build-record	New record with region "north" and total 0
+build-record	Bundle id, name and email into a single record
+build-record	Produce a record whose fields are path and size
+build-record	Build an object holding the named values title and text
+build-record	Record from named values: city, region and count
+first-match	Find the first user where age > 30
+first-match	Get the first of orders with status = "open", or a default if there is none
+first-match	First item that matches price < 10, otherwise use a fallback
+first-match	Find the first record meeting the condition and fall back to a default
+first-match	Return the first line that contains "ERROR" or "" when nothing matches
+first-match	Look for the first file with size > 1000
+first-match	Pick the first of users whose city = "Rome", else nothing
+first-match	Search orders for the first one where total >= 500 and use 0 if none is found
+first-match	First match in items for status = "sold"
+first-match	Locate the first entry in the list that satisfies done = "no", with a fallback value
+first-match	Find one user with email = "a@b.c" or return a default record
+first-match	Give me the first row that passes the test, or the default when no row does
+all-match	Check whether every item meets the condition
+all-match	Check that all users have age >= 18
+all-match	Test whether all orders have status = "paid"
+all-match	Verify that every row satisfies price > 0
+all-match	True if all items match count > 0
+all-match	Check if each and every file in files has size < 1000000
+all-match	Tell me whether every record passes the test done = "yes"
+all-match	All match check on users with city != ""
+all-match	Make sure there is no row in orders where amount <= 0
+all-match	Confirm all of the lines contain ";"
+all-match	See whether the condition total >= 10 holds for all orders
+all-match	Every row of users must have email != "", report true or false
+flatten-lists	Flatten the lists into one list
+flatten-lists	Join several lists into a single list
+flatten-lists	Concatenate the lists
+flatten-lists	Merge the lists of items into one list
+flatten-lists	Flatten a list of lists
+flatten-lists	Combine all the lists into one
+flatten-lists	Chain the lists together end to end
+flatten-lists	Collapse the nested lists into one flat list
+flatten-lists	Put the items of every list into one combined list
+flatten-lists	Flatten lists
+flatten-lists	Glue the lists together into one
+flatten-lists	Unnest the list of lists into a plain list
+get-by-path	Get the value at the dotted path "server.port"
+get-by-path	Follow the path "user.address.city" into the nested data
+get-by-path	Look up "config.db.host" in the data
+get-by-path	Read the nested value "a.b.c" from the record
+get-by-path	Get by path "settings.theme.color"
+get-by-path	Resolve the dotted path "order.items.0.price"
+get-by-path	Drill down into the data along "response.data.total" and return what is there
+get-by-path	Pull the nested field "profile.email" out of the record
+get-by-path	Follow the keys "meta.page.size" one by one down into the data
+get-by-path	Value of "server.tls.enabled" in the nested config
+get-by-path	Access the data by the path "app.window.width"
+get-by-path	Given a path like "a.b" return the value it leads to inside the data
+json-type-of	Say which JSON type the value has
+json-type-of	Get the JSON type of the value
+json-type-of	Tell me whether the value is a string, number, boolean, null, list or object in JSON
+json-type-of	Report what JSON type this value is
+json-type-of	Type of a JSON value
+json-type-of	Classify the value as one of the JSON types
+json-type-of	Determine the JSON kind of the data, such as "array" or "number"
+json-type-of	Name the JSON type of each value
+json-type-of	Return "string", "number", "object", "array", "boolean" or "null" for the value according to its JSON type
+json-type-of	JSON type name of the value
+json-type-of	Find out which of the JSON types the value belongs to
+json-type-of	Inspect the value and report its JSON type
+calculate	Calculate price times amount
+calculate	Work out the value of the formula "price * amount * 1.2"
+calculate	Compute total minus amount
+calculate	Evaluate the expression "(a + b) / 2"
+calculate	Calculate total as price multiplied by count
+calculate	Work out 15 percent of total
+calculate	Do the math on amount divided by count
+calculate	Compute a value from the formula "size / 1024"
+calculate	Add price and amount and multiply by 2
+calculate	Figure out the average of price and total using a formula
+calculate	Apply the formula "total * 0.2" to get the result
+calculate	Calculate the result of price plus 5
+round-number	Round price to 2 decimal places
+round-number	Round the number to 1 decimal
+round-number	Round total to the nearest whole number
+round-number	Round 3.14159 to 3 places
+round-number	Round amount off to 2 decimals
+round-number	Rounding to 0 decimal places
+round-number	Limit total to 2 digits after the decimal point by rounding
+round-number	Round the value half up to 2 decimal places
+round-number	Give me price rounded to the nearest cent
+round-number	Round to 4 dp
+round-number	Trim the number to 2 decimal places with proper rounding
+round-number	Round age to the nearest integer
+split-duration	Split a duration into days, hours, minutes and seconds
+split-duration	Break 100000 seconds down into days, hours, minutes and seconds
+split-duration	Convert a number of seconds to hours, minutes and seconds
+split-duration	Turn the elapsed time into days, hours, minutes and seconds
+split-duration	Split 3725 seconds into hours, minutes and seconds
+split-duration	Show a length of time as its days, hours, minutes and seconds
+split-duration	Decompose the duration into its day, hour, minute and second parts
+split-duration	How many days, hours and minutes are in 500000 seconds
+split-duration	Duration to days, hours, minutes, seconds
+split-duration	Work out the hours and minutes in a time span of 135 minutes
+split-duration	Divide the elapsed seconds into whole days, hours, minutes and leftover seconds
+split-duration	Format a duration as parts: days, hours, minutes, seconds
+current-time	Get the current date and time
+current-time	Tell me what time it is now
+current-time	Current time
+current-time	Get the timestamp for right now
+current-time	Read the system clock
+current-time	Return the date and time at this moment
+current-time	Now
+current-time	Give me the date of today and the time of day
+current-time	Get the current timestamp
+current-time	Find out what the date and time are right now
+current-time	Look at the clock and return the current time
+current-time	Current date
+choose-by-value	Pick one of several actions according to the file extension
+choose-by-value	Choose what to do based on the value of status
+choose-by-value	Switch on the extension: ".csv", ".json" or ".txt"
+choose-by-value	Depending on the value of region run a different action
+choose-by-value	Decide which action to run for the value "pdf"
+choose-by-value	Dispatch on status with one branch for "open" and one for "closed"
+choose-by-value	Run a different function for each file type
+choose-by-value	Map each possible value of size to its own action and run the matching one
+choose-by-value	Branch by the value of city
+choose-by-value	Choose by value: "start", "stop" or "restart"
+choose-by-value	Use the extension of the file to pick which of several actions to run
+choose-by-value	Decide between several actions by looking at the value of status
+http-get	Fetch "https://example.com"
+http-get	Get the contents of the web address "https://example.com/data.json"
+http-get	Download the page at "https://example.org/about"
+http-get	Make an HTTP GET request to "https://api.example.com/users"
+http-get	Fetch the URL and return what comes back
+http-get	Retrieve "https://example.com/feed.xml" over HTTP
+http-get	Load the contents of the link "https://example.net"
+http-get	HTTP GET "https://example.com/api/items"
+http-get	Pull down the text of the web page at "https://example.com/terms"
+http-get	Request "https://example.com/status" and give me what comes back
+http-get	Open the URL "https://example.com/ping" and read its contents
+http-get	Grab the contents from a web address
+retry-with-backoff	Retry the request up to 5 times with exponential backoff
+retry-with-backoff	Try again after a failure, waiting longer each time, up to 3 attempts
+retry-with-backoff	Retry with backoff
+retry-with-backoff	If the fetch fails, wait 1 second, then 2, then 4, and give up after 4 tries
+retry-with-backoff	Repeat the action on error, doubling the delay each time, at most 6 times
+retry-with-backoff	Run the download again with growing pauses until it succeeds or 10 attempts are used
+retry-with-backoff	Retry on failure, max 3 retries, back off between them
+retry-with-backoff	Attempt the call again when it fails, backing off exponentially, limit 5
+retry-with-backoff	Run the action in a retry loop with a delay that grows after every failure
+retry-with-backoff	Retry 4 times, waiting 2 seconds, then 4, then 8
+retry-with-backoff	On failure try once more after a pause, and lengthen the pause on each new attempt up to a limit
+retry-with-backoff	Exponential backoff retries for the request, capped at 8 attempts
+http-server	Start a web server on port 8080
+http-server	Listen on port 3000
+http-server	Run an HTTP server on port 8000
+http-server	Serve HTTP on port 5000
+http-server	Launch the server on port 80
+http-server	Start listening for web requests on port 9000
+http-server	Spin up a web server at port 4000
+http-server	Create an HTTP server and bind it to port 8888
+http-server	Bring up the server on "localhost" port 3001
+http-server	Web server on port 7000
+http-server	Open port 8081 and start serving requests
+http-server	Boot an HTTP server that listens on port 1234
+route-request	Route each incoming request to the handler for its path and method
+route-request	Send GET "/users" to the users handler and POST "/orders" to the orders handler
+route-request	Dispatch web requests by address and method
+route-request	Add a route for GET "/health"
+route-request	Map "/api/items" with method "POST" to its handler
+route-request	Set up routing so every request goes to the matching handler
+route-request	Pick the handler for a request from its URL and HTTP verb
+route-request	Route "/" and "/about" to their handlers
+route-request	Forward incoming web requests to handlers according to the address they ask for
+route-request	Register handlers for the routes "/login" and "/logout"
+route-request	Match the request method and path against the route table and call the handler
+route-request	Router for incoming HTTP requests
+read-request-body	Read the body of the incoming request, up to 1000000 bytes
+read-request-body	Read the request body with a size limit of 1 MB
+read-request-body	Get the body of the web request but refuse anything larger than 2 MB
+read-request-body	Collect the data sent in the request, limited to 500 KB
+read-request-body	Read request body
+read-request-body	Receive the incoming body and stop reading after 4096 bytes
+read-request-body	Read what the client sent in the request, capped at 10 MB
+read-request-body	Load the payload of the HTTP request up to a maximum size
+read-request-body	Body of the incoming request with max size 8192
+read-request-body	Read the uploaded request body and reject it when it is bigger than 5 MB
+read-request-body	Pull in the request body in chunks until the size limit is reached
+read-request-body	Accept a request body of at most 64 KB and read it
+send-json-response	Reply to the request with JSON and status 200
+send-json-response	Send a JSON response with status code 404
+send-json-response	Respond with the record as JSON, status 201
+send-json-response	Return JSON to the client with code 500
+send-json-response	Send back users as JSON
+send-json-response	Answer the web request with a JSON body and a 200 status
+send-json-response	Write a JSON reply with status 400 and the message "bad request"
+send-json-response	JSON response, status 200
+send-json-response	Reply with the data encoded as JSON and set the status code to 202
+send-json-response	Send the client an error in JSON with status 403
+send-json-response	Respond 200 with the list of orders in JSON
+send-json-response	Give the caller a JSON answer and the status 204
+on-signal-shutdown	Shut the program down cleanly when it is asked to stop
+on-signal-shutdown	Handle SIGINT and SIGTERM with a graceful shutdown
+on-signal-shutdown	On "Ctrl+C" stop the server cleanly
+on-signal-shutdown	Exit gracefully on a termination signal
+on-signal-shutdown	When the process receives a stop signal, finish up and quit
+on-signal-shutdown	Graceful shutdown on signal
+on-signal-shutdown	Catch the interrupt signal and close everything down before exiting
+on-signal-shutdown	Stop cleanly when the program is told to terminate
+on-signal-shutdown	Install a signal handler that shuts the server down
+on-signal-shutdown	Trap SIGTERM and shut down in an orderly way
+on-signal-shutdown	Clean shutdown when the user presses "Ctrl+C"
+on-signal-shutdown	Wind down the program in an orderly way when a kill signal arrives
+select-elements	Find the elements matching ".item" on the page
+select-elements	Select all "li" elements
+select-elements	Get the element "#search"
+select-elements	Query the page for "div.card"
+select-elements	Find every button on the web page
+select-elements	Look up the element with the selector "#submit"
+select-elements	Grab all the "a" tags inside "nav"
+select-elements	Select elements by the CSS selector "ul > li"
+select-elements	Locate the nodes on the page that have the class "active"
+select-elements	Get all elements with the tag "p"
+select-elements	Find the form "#signup" in the document
+select-elements	Collect the page elements that match "input[type=text]"
+on-event	Run an action when the button "#save" is clicked
+on-event	When the form "#login" is submitted, call the handler
+on-event	On click of "#menu" run the action
+on-event	Listen for clicks on ".card" and do something
+on-event	Add an event listener for "keydown" on the page
+on-event	Attach a click handler to "#next"
+on-event	React when the user presses a key in "#search"
+on-event	Do something whenever something happens on the page, such as a click or a form being sent
+on-event	Hook up a submit event on "#contact" to an action
+on-event	Trigger the action when "#toggle" changes
+on-event	Handle the "mouseover" event on "img"
+on-event	Call the function each time the link "#more" is clicked
+set-text	Set the text of "#title" to "Welcome"
+set-text	Change the text shown in the element "#status"
+set-text	Update "#count" to show the count
+set-text	Put "Loading" into the element ".message"
+set-text	Replace the contents of "#total" with the total
+set-text	Write the name into "#greeting" on the page
+set-text	Make the element "#result" say "Done"
+set-text	Set text "Saved" on "#notice"
+set-text	Display the price as the text of the element "#price"
+set-text	Change the wording of "#label" to "Email"
+set-text	Update the text content of the heading "h1" to the title
+set-text	Fill the element "#output" with the text
+show-hide	Show the element "#panel"
+show-hide	Hide "#spinner"
+show-hide	Show or hide the element "#details"
+show-hide	Toggle the visibility of ".menu"
+show-hide	Make "#error" visible
+show-hide	Hide the banner on the page
+show-hide	Reveal the element "#answer"
+show-hide	Unhide "#sidebar"
+show-hide	Make the "#popup" invisible
+show-hide	Display the box "#help" when it is hidden and hide it when it is shown
+show-hide	Turn off the display of ".ad"
+show-hide	Flip "#dialog" between shown and hidden
+show-field-message	Show a message beside the form field "#email"
+show-field-message	Display the error "Required" next to the name field
+show-field-message	Put a hint under the field "#password"
+show-field-message	Show "Too short" beside "#username"
+show-field-message	Show a validation message next to the input
+show-field-message	Field message "Invalid date" for "#date"
+show-field-message	Display an inline error on the form field
+show-field-message	Write "Please enter a number" alongside the age field
+show-field-message	Place the warning "Must be unique" near the field "#id"
+show-field-message	Tell the user what is wrong just beside the field
+show-field-message	Show feedback text for the email field of the form
+show-field-message	Next to "#phone" show the message "Digits only"
+block-submit-if-invalid	Stop the form from being sent while any field is invalid
+block-submit-if-invalid	Block submit if the form is invalid
+block-submit-if-invalid	Prevent submission of "#signup" when a field has an error
+block-submit-if-invalid	Do not let the form submit until every field is valid
+block-submit-if-invalid	Disable sending the form while there are invalid fields
+block-submit-if-invalid	Cancel the submit of "#checkout" if validation fails
+block-submit-if-invalid	Only allow the form to be submitted when all fields pass their checks
+block-submit-if-invalid	Block the form "#order" from submitting with bad input
+block-submit-if-invalid	Hold back the submit while the form has errors
+block-submit-if-invalid	Prevent default on submit when any field is invalid
+block-submit-if-invalid	Refuse to send the form if a field is not valid
+block-submit-if-invalid	Stop submit on invalid form
+focus-element	Focus the element "#search"
+focus-element	Move the cursor to "#name"
+focus-element	Put the cursor in the input "#email"
+focus-element	Set focus on "#username"
+focus-element	Give focus to the first field of the form
+focus-element	Focus "#password"
+focus-element	Jump to the element "#comment" so the user can start typing
+focus-element	Place the caret inside "#message"
+focus-element	Make "#title" the active element
+focus-element	Send keyboard focus to the box "#query"
+focus-element	Bring "#city" into focus
+focus-element	Move focus to the next input
+reset-form	Reset the form
+reset-form	Clear the form "#signup" back to its starting state
+reset-form	Empty all the fields of the form
+reset-form	Reset "#contact" to its initial values
+reset-form	Clear form
+reset-form	Wipe everything the user typed into the form "#order"
+reset-form	Restore the form to its original values
+reset-form	Return every field in "#search" to its default
+reset-form	Blank out the form "#feedback" so it can be used again
+reset-form	Reset all inputs of the form to their defaults
+reset-form	Undo all entries in the form and go back to the initial state
+reset-form	Clear out the form after it has been sent
+read-element-data	Read the value stored on the element "#row"
+read-element-data	Get the data attribute "data-id" of "#item"
+read-element-data	Read "data-price" from the element ".product"
+read-element-data	Get the id stored on the clicked element
+read-element-data	Look up the data value "user" saved on "#profile"
+read-element-data	Read element data "status" from "li.active"
+read-element-data	Pull the attribute "data-count" off the element
+read-element-data	Return what is stored in the dataset of "#card" under "title"
+read-element-data	Get the value of the attribute "href" on "a.next"
+read-element-data	Read the extra value carried by the element "#order"
+read-element-data	Look up the custom data "region" on the button "#buy"
+read-element-data	The element "#cell" has a stored value, read it
+render-table	Show the records as a table on the page
+render-table	Render users as an HTML table in "#list"
+render-table	Display orders in a table inside "#orders"
+render-table	Build a table element from items with columns name and price
+render-table	Fill the table "#results" with one row per record
+render-table	Render table of files on the web page
+render-table	Draw an HTML table with a header and a row for each of users
+render-table	Put the records into "#grid" as table rows
+render-table	Show items in a table in the browser with columns title and status
+render-table	Turn the list of orders into a table on the page
+render-table	Create "tr" and "td" elements for every record and add them to the table
+render-table	Populate the page table with the data
+render-list	Show the records as a list on the page, one item each
+render-list	Render users as a list in "#users"
+render-list	Display items as an HTML list
+render-list	Make a list item for each of orders inside "ul"
+render-list	Fill the list "#todo" with one entry per record
+render-list	Render list of files on the web page
+render-list	Add a list item to "#results" for each record
+render-list	Show orders as bullet points on the page
+render-list	Put each of users into the "ul" element "#people" as its own list item
+render-list	Turn the records into a bulleted list in the browser
+render-list	Draw one list element per item in "#menu"
+render-list	Populate the page list with each title
+filter-elements-by-text	Hide the elements that do not contain the text the user typed
+filter-elements-by-text	Filter the list items on the page by the text in "#search"
+filter-elements-by-text	Live search: show only the rows that contain what is typed in "#filter"
+filter-elements-by-text	As the user is typing in "#query" hide every ".card" that does not match
+filter-elements-by-text	Search box filtering of ".item" elements by their text
+filter-elements-by-text	Only show the elements whose text includes the search term
+filter-elements-by-text	Hide page elements not matching the typed keyword
+filter-elements-by-text	Filter "li" elements by the text entered in the input
+filter-elements-by-text	When the user is typing in the search field, hide the entries without that text
+filter-elements-by-text	Text filter for the table rows on the page using "#search"
+filter-elements-by-text	Show the cards that contain the typed text and hide the others
+filter-elements-by-text	Narrow down the visible ".product" elements to those containing the query the user entered
+timer-every	Run the action every 5 seconds
+timer-every	Repeat every 500 ms
+timer-every	Call the function repeatedly at a fixed interval of 1 second
+timer-every	Start a timer that fires every 10 seconds
+timer-every	Every 2 minutes run the task
+timer-every	Set an interval of 250 ms for the action
+timer-every	Do something over and over, once per second
+timer-every	Poll every 30 seconds
+timer-every	Schedule the action to repeat every hour
+timer-every	Tick every 100 ms and run the handler
+timer-every	Periodically run the job with 15 seconds between runs
+timer-every	Repeating timer, interval 3 seconds
+stop-timer	Stop the repeating timer
+stop-timer	Cancel the timer
+stop-timer	Clear the interval
+stop-timer	Stop timer
+stop-timer	Stop running the action every 5 seconds
+stop-timer	Turn off the repeating timer
+stop-timer	Halt the periodic task
+stop-timer	End the interval that was started earlier
+stop-timer	Make the timer stop firing
+stop-timer	Kill the recurring timer
+stop-timer	Cancel the scheduled repeat
+stop-timer	Shut off the timer so the action no longer repeats
+load-from-storage	Load the saved data from browser storage
+load-from-storage	Read "cart" from local storage
+load-from-storage	Get the saved items from storage under the key "todo"
+load-from-storage	Load from storage
+load-from-storage	Restore the saved state from the browser
+load-from-storage	Retrieve what was stored under "settings" in local storage
+load-from-storage	Read back the data that was saved in browser storage
+load-from-storage	Pull the list of records out of localStorage
+load-from-storage	Load users from session storage
+load-from-storage	Get stored data for key "profile"
+load-from-storage	Bring back the previously saved orders from the storage of the browser
+load-from-storage	Look in local storage for "theme" and load it
+save-to-storage	Save the data in browser storage
+save-to-storage	Store "cart" in local storage
+save-to-storage	Write items to storage under the key "todo"
+save-to-storage	Save to storage
+save-to-storage	Persist the records in the browser
+save-to-storage	Put the settings into local storage as "settings"
+save-to-storage	Remember users in localStorage for the next visit
+save-to-storage	Save the list of orders to session storage
+save-to-storage	Set the key "profile" in storage to the record
+save-to-storage	Stash the data in browser storage for later
+save-to-storage	Write the data to the storage of the browser
+save-to-storage	Store data under "theme" in local storage
+append-record	Add a new record to the list with the next free id
+append-record	Append a row to users and give it the next id
+append-record	Add an item to items with a fresh id
+append-record	Insert a new row at the end of orders and assign it an unused id
+append-record	Create a record, assign the next available id and add it to the list
+append-record	Append record with auto id
+append-record	Push a new item onto the list and give it the next id
+append-record	Add the record to users and generate its id automatically
+append-record	New entry in the list with an auto-increment id
+append-record	Add a row to orders whose id follows the last id
+append-record	Append a new record and number it after the current largest id
+append-record	Tack a new row onto users, using the next unused id
+update-where	Update status to "done" where id = 5
+update-where	Set price to 0 for the items where count = 0
+update-where	Change the field status in the records that match id = 12
+update-where	For orders with region = "east" set status to "shipped"
+update-where	Update where age > 65: set status to "senior"
+update-where	Mark the items with id = 3 as done
+update-where	Modify city to "Berlin" on every row of users whose name = "Max"
+update-where	Set done to 1 in the records matching title = "Buy milk"
+update-where	Edit the matching orders so that total = 0 when status = "cancelled"
+update-where	Overwrite email with "" for users where status = "deleted"
+update-where	Change amount to 100 in orders where id = 7
+update-where	Update the records that meet the condition by setting region to "north"
+remove-where	Remove the records where status = "closed"
+remove-where	Delete users where age < 18
+remove-where	Remove items that match price = 0
+remove-where	Delete from orders the one with id = 42
+remove-where	Drop the rows where done = 1
+remove-where	Remove where id = 7
+remove-where	Get rid of every record matching the condition region = "west"
+remove-where	Delete all lines that contain "DEBUG"
+remove-where	Erase the orders whose total = 0 from the list
+remove-where	Take out the users with email = ""
+remove-where	Throw away the items where count < 1
+remove-where	Purge records with date < "2020-01-01"

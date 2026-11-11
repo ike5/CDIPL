@@ -5,7 +5,8 @@ Writes cdipl/library/classifier.json and prints what it did.
 
 The decline threshold is chosen without the held-out test wordings: the training wordings are
 split into 12 folds, each fold is classified by a model trained on the others, and the threshold
-is the smallest margin above which no held-out training wording is classified wrongly, times 1.5.
+is the smallest margin at which no more than 1 in 300 of the accepted wordings is classified
+wrongly. That is the pass mark the product owner approved for wrong choices (criterion C1).
 """
 import csv
 import sys
@@ -18,7 +19,7 @@ from cdipl import classifier, library, words
 
 NAMES = set(["users", "orders", "items", "files", "records", "lines", "name", "age", "price", "city", "id", "date", "status", "email", "total", "amount", "region", "size", "count", "path", "title", "done", "text"])
 FOLDS = 12
-SAFETY = 1.5
+WRONG_ONE_IN = 300
 
 
 def examples(language):
@@ -30,7 +31,11 @@ def examples(language):
     out = []
     with open(path, newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle, delimiter="\t", quoting=csv.QUOTE_NONE):
-            tokens, unknown = words.encode(row["wording"], word_list, NAMES)
+            try:
+                tokens, unknown = words.encode(row["wording"], word_list, NAMES)
+            except words.WordError as problem:
+                out.append((row["block"], [], row["wording"], [str(problem)]))
+                continue
             out.append((row["block"], words.codes(tokens), row["wording"], unknown))
     return out
 
@@ -44,7 +49,7 @@ def main():
         print(f"{language}: {len(found)} training wordings, {len(missing)} with words missing from the word list")
         for wording, unknown in missing[:10]:
             print(f"   missing {unknown}: {wording}")
-        data += [(language, block, features) for block, features, _, _ in found]
+        data += [(language, block, features) for block, features, _, unknown in found if not unknown]
     if not data:
         sys.exit("no training wordings found")
 
@@ -60,11 +65,13 @@ def main():
             if which == fold:
                 ranked, margin = classifier.rank(weights, blocks, features)
                 results.append((margin, ranked[0] == block))
-    wrong_margins = [margin for margin, correct in results if not correct]
-    threshold = int((max(wrong_margins) + 1) * SAFETY) if wrong_margins else 1
+    threshold = max(margin for margin, _ in results) + 1
+    for candidate in sorted({margin for margin, _ in results}, reverse=True):
+        accepted = [correct for margin, correct in results if margin >= candidate]
+        if accepted.count(False) * WRONG_ONE_IN <= len(accepted):
+            threshold = candidate  # keep the lowest margin that still meets the mark
     accepted = [correct for margin, correct in results if margin >= threshold]
-    print(f"cross-validation on training wordings: {sum(c for _, c in results)}/{len(results)} best guesses correct; "
-          f"largest margin of a wrong guess {max(wrong_margins, default=0)}")
+    print(f"cross-validation on training wordings: {sum(c for _, c in results)}/{len(results)} best guesses correct")
     print(f"threshold {threshold}: {len(accepted)}/{len(results)} accepted "
           f"({100 * (1 - len(accepted) / len(results)):.0f}% declined), {accepted.count(False)} accepted wrongly")
 

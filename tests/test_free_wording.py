@@ -22,7 +22,7 @@ ENGLISH = WordList("en", [
     ("group", "group"), ("count", "count"), ("each", "-"), ("show", "show"), ("display", "show"), ("write", "write"),
     ("output", "write"), ("json", "json"), ("as", "-"), ("skip", "skip"), ("ignore", "skip"), ("invalid", "invalid"),
     ("broken", "invalid"), ("rows", "record"), ("if", "-"), ("there", "-"), ("are", "-"), ("none", "empty"),
-    ("say", "say"), ("work out", "calculate"), ("checksum", "hash"), ("file", "file"), ("compute", "-"), ("of", "-"), ("a", "-"), ("and", "and"),
+    ("say", "say"), ("work out", "calculate"), ("checksum", "hash"), ("file", "file"), ("compute", "-"), ("of", "-"), ("a", "-"), ("and", "-"),
 ])
 SPANISH = WordList("es", [
     ("ordenar", "sort"), ("ordena", "sort"), ("descendente", "descending"), ("de mayor a menor", "descending"),

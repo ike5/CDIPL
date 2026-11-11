@@ -15,7 +15,12 @@ VALUE_KINDS = ("name", "newname", "number", "text", "op", "sym")
 
 
 def concepts():
-    return {name: set(codes) for name, codes in json.loads((HERE / "slots.json").read_text(encoding="utf-8")).items()}
+    """Which codes stand for each idea the rules below look for.
+
+    Each entry is a list of alternatives; an alternative is one code, or a list of codes that must all be present.
+    "and-words" lists the words themselves that join conditions, in any human language.
+    """
+    return json.loads((HERE / "slots.json").read_text(encoding="utf-8"))
 
 
 def fill(block, tokens, line, source_name, steps):
@@ -28,7 +33,7 @@ def fill(block, tokens, line, source_name, steps):
     known = concepts()
 
     def has(concept):
-        return bool(found & known[concept])
+        return any(set([option] if isinstance(option, str) else option) <= found for option in known[concept])
 
     def no_values(*kinds):
         present = {"text": texts, "number": numbers, "comparison": comparisons, "field": fields,
@@ -37,6 +42,8 @@ def fill(block, tokens, line, source_name, steps):
             if present[kind]:
                 raise IntentError(line, f"this statement was read as '{block}', which takes no {kind} here")
 
+    if any(token.kind == "decimal" for token in tokens):
+        raise IntentError(line, "only whole numbers are supported, not numbers with a decimal point")
     for number in numbers:
         if abs(number) > MAX_INTEGER:
             raise IntentError(line, f"the number {number} is outside the range of whole numbers the language supports")
@@ -60,7 +67,7 @@ def fill(block, tokens, line, source_name, steps):
                 plain.append(("word", token.value))
             elif token.kind in ("number", "text", "op", "sym"):
                 plain.append((token.kind, token.value))
-            elif token.kind == "word" and token.code in known["and"] and block == "filter-rows":
+            elif token.kind == "word" and token.value.lower() in known["and-words"] and block == "filter-rows":
                 plain.append(("and", "and"))
             elif token.kind == "comma" or (token.kind == "word" and token.code == "-"):
                 continue

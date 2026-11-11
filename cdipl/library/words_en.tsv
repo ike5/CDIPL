@@ -1,0 +1,4392 @@
+form	code
+check	check
+checks	check
+checked	check
+checking	check
+verify	check
+verifies	check
+verified	check
+verifying	check
+validate	check
+validates	check
+validated	check
+validating	check
+ensure	check
+ensures	check
+ensured	check
+ensuring	check
+confirm	check
+confirms	check
+confirmed	check
+confirming	check
+assert	check
+asserts	check
+asserted	check
+asserting	check
+test	check
+tests	check
+tested	check
+testing	check
+inspect	check
+inspects	check
+inspected	check
+inspecting	check
+examine	check
+examines	check
+examined	check
+examining	check
+validation	check
+validations	check
+verification	check
+checker	check
+validator	check
+assertion	check
+assertions	check
+make sure	check
+makes sure	check
+making sure	check
+made sure	check
+make certain	check
+makes certain	check
+making certain	check
+double-check	check
+double check	check
+sanity check	check
+sanity	check
+see if	check
+see whether	check
+guard	check
+guards	check
+guarded	check
+guarding	check
+guard against	check
+whether	whether
+whether or not	whether
+must	must
+has to	must
+have to	must
+require	required
+requires	required
+required	required
+requiring	required
+requirement	required
+requirements	required
+mandatory	required
+compulsory	required
+obligatory	required
+optional	optional
+optionally	optional
+valid	valid
+validity	valid
+validly	valid
+well-formed	valid
+wellformed	valid
+well formed	valid
+correct	valid
+correctly	valid
+proper	valid
+properly	valid
+legitimate	valid
+legit	valid
+genuine	valid
+real	valid
+actual	valid
+sane	valid
+invalid	invalid
+malformed	invalid
+bad	invalid
+broken	invalid
+corrupt	invalid
+corrupted	invalid
+wrong	invalid
+wrongly	invalid
+incorrect	invalid
+incorrectly	invalid
+ill-formed	invalid
+illegal	invalid
+garbage	invalid
+garbled	invalid
+faulty	invalid
+dirty	invalid
+unparseable	invalid
+unparsable	invalid
+junk	invalid
+mangled	invalid
+badly formed	invalid
+not well-formed	invalid
+error	error
+errors	error
+err	error
+exception	error
+exceptions	error
+problem	error
+problems	error
+mistake	error
+mistakes	error
+fatal	error
+issue	error
+issues	error
+fail	fail
+fails	fail
+failed	fail
+failing	fail
+failure	fail
+failures	fail
+unsuccessful	fail
+crash	fail
+crashes	fail
+crashed	fail
+crashing	fail
+succeed	succeed
+succeeds	succeed
+succeeded	succeed
+succeeding	succeed
+success	succeed
+successful	succeed
+successfully	succeed
+works	succeed
+worked	succeed
+not	not
+no	not
+don't	not
+doesn't	not
+didn't	not
+isn't	not
+aren't	not
+wasn't	not
+weren't	not
+can't	not
+cannot	not
+won't	not
+shouldn't	not
+mustn't	not
+never	not
+without	not
+neither	not
+nor	not
+non	not
+free of	not
+no longer	not
+dont	not
+doesnt	not
+isnt	not
+cant	not
+wont	not
+none	nothing
+nothing	nothing
+if	if
+in case	if
+when	when
+whenever	when
+upon	when
+as soon as	when
+each time	when
+every time	when
+unless	unless
+otherwise	otherwise
+else	otherwise
+or else	otherwise
+while	while
+whilst	while
+as long as	while
+so long as	while
+during	while
+until	until
+till	until
+til	until
+each	each
+per	each
+apiece	each
+for each	each
+foreach	each
+every	every
+each and every	every
+all	all
+everything	all
+everyone	all
+any	any
+anything	any
+whole	whole
+entire	whole
+entirely	whole
+full	whole
+fully	whole
+complete	whole
+completely	whole
+in full	whole
+only	only
+just	only
+solely	only
+merely	only
+nothing but	only
+exclusively	only
+one	one
+single	one
+sole	one
+individual	one
+lone	one
+once	once
+one time	once
+a single time	once
+only once	once
+several	several
+multiple	several
+many	several
+various	several
+a few	several
+numerous	several
+a bunch of	several
+first	first
+1st	first
+head	first
+leading	first
+front	first
+last	last
+final	last
+trailing	last
+tail	last
+end	end
+ends	end
+ended	end
+ending	end
+next	next
+subsequent	next
+successor	next
+top	top
+topmost	top
+on top	top
+uppermost	top
+rest	rest
+remaining	rest
+remainder	rest
+others	rest
+leftover	rest
+leftovers	rest
+everything else	rest
+other	other
+another	other
+alternative	other
+alternate	other
+second set	other-set
+other set	other-set
+another set	other-set
+second list	other-set
+other list	other-set
+another list	other-set
+second table	other-set
+other table	other-set
+another table	other-set
+second collection	other-set
+other collection	other-set
+another collection	other-set
+blocklist	blocklist
+blocklists	blocklist
+blacklist	blocklist
+blacklists	blocklist
+denylist	blocklist
+denylists	blocklist
+block list	blocklist
+deny list	blocklist
+black list	blocklist
+exclusion list	blocklist
+ban list	blocklist
+same	same
+identical	same
+share	same
+shares	same
+shared	same
+sharing	same
+in common	same
+alike	same
+same as	same
+equal	equal
+equals	equal
+equal to	equal
+equality	equal
+equalling	equal
+equaling	equal
+eq	equal
+distinct	distinct
+unique	distinct
+uniques	distinct
+uniq	distinct
+different	distinct
+differing	distinct
+uniquely	distinct
+distinctly	distinct
+uniqueness	distinct
+non-repeating	distinct
+nonrepeating	distinct
+duplicate	duplicate
+duplicates	duplicate
+duplicated	duplicate
+duplicating	duplicate
+duplication	duplicate
+dupe	duplicate
+dupes	duplicate
+dup	duplicate
+dups	duplicate
+dedupe	duplicate
+dedupes	duplicate
+deduped	duplicate
+deduping	duplicate
+dedup	duplicate
+deduplicate	duplicate
+deduplicates	duplicate
+deduplicated	duplicate
+deduplicating	duplicate
+deduplication	duplicate
+de-duplicate	duplicate
+de-duplicated	duplicate
+de-duplicates	duplicate
+de-duplicating	duplicate
+de-dupe	duplicate
+de-duped	duplicate
+repeat	repeat
+repeats	repeat
+repeated	repeat
+repeating	repeat
+repeatedly	repeat
+repetition	repeat
+repetitions	repeat
+over and over	repeat
+again and again	repeat
+again	again
+once more	again
+once again	again
+one more time	again
+anew	again
+afresh	again
+seen	seen
+already	seen
+encountered	seen
+encounter	seen
+encounters	seen
+encountering	seen
+compare	compare
+compares	compare
+compared	compare
+comparing	compare
+comparison	compare
+comparisons	compare
+vs	compare
+versus	compare
+periodic	periodic
+periodically	periodic
+regularly	periodic
+regular	periodic
+schedule	periodic
+schedules	periodic
+scheduled	periodic
+scheduling	periodic
+scheduler	periodic
+poll	periodic
+polls	periodic
+polled	periodic
+polling	periodic
+cyclic	periodic
+cyclically	periodic
+recurring	periodic
+recur	periodic
+recurs	periodic
+recurred	periodic
+interval	interval
+intervals	interval
+cadence	interval
+timer	timer
+timers	timer
+tick	timer
+ticks	timer
+ticked	timer
+ticking	timer
+ticker	timer
+setinterval	timer
+settimeout	timer
+second	time-unit
+seconds	time-unit
+sec	time-unit
+secs	time-unit
+minute	time-unit
+minutes	time-unit
+mins	time-unit
+hour	time-unit
+hours	time-unit
+hr	time-unit
+hrs	time-unit
+day	time-unit
+days	time-unit
+week	time-unit
+weeks	time-unit
+month	time-unit
+months	time-unit
+year	time-unit
+years	time-unit
+ms	time-unit
+millisecond	time-unit
+milliseconds	time-unit
+msec	time-unit
+millis	time-unit
+hourly	time-unit
+daily	time-unit
+weekly	time-unit
+monthly	time-unit
+yearly	time-unit
+weekday	time-unit
+weekdays	time-unit
+time	time
+clock	time
+timestamp	time
+timestamps	time
+datetime	time
+time of day	time
+utc	time
+timezone	time
+timezones	time
+epoch	time
+date	date
+dates	date
+iso8601	date
+iso-8601	date
+calendar	calendar
+calendars	calendar
+current	current
+currently	current
+now	current
+right now	current
+today	current
+at this moment	current
+at the moment	current
+this moment	current
+this instant	current
+duration	duration
+durations	duration
+elapsed	duration
+elapsed time	duration
+length of time	duration
+time span	duration
+timespan	duration
+time period	duration
+amount of time	duration
+uptime	duration
+wait	wait
+waits	wait
+waited	wait
+waiting	wait
+delay	wait
+delays	wait
+delayed	wait
+delaying	wait
+pause	wait
+pauses	wait
+paused	wait
+pausing	wait
+sleep	wait
+sleeps	wait
+sleeping	wait
+slept	wait
+timeout	timeout
+timeouts	timeout
+time out	timeout
+times out	timeout
+timed out	timeout
+backoff	backoff
+back off	backoff
+backs off	backoff
+backing off	backoff
+backed off	backoff
+back-off	backoff
+exponential	backoff
+exponentially	backoff
+growing	backoff
+grows	backoff
+grow	backoff
+grew	backoff
+grown	backoff
+lengthen	backoff
+lengthens	backoff
+lengthened	backoff
+lengthening	backoff
+longer each time	backoff
+longer and longer	backoff
+progressively	backoff
+jitter	backoff
+retry	retry
+retries	retry
+retried	retry
+retrying	retry
+try again	retry
+tries again	retry
+trying again	retry
+tried again	retry
+re-try	retry
+re-tries	retry
+reattempt	retry
+reattempts	retry
+reattempted	retry
+reattempting	retry
+re-attempt	retry
+try	try
+tries	try
+tried	try
+trying	try
+attempt	try
+attempts	try
+attempted	try
+attempting	try
+give up	give-up
+gives up	give-up
+giving up	give-up
+gave up	give-up
+given up	give-up
+loop	loop
+loops	loop
+looped	loop
+looping	loop
+iterate	loop
+iterates	loop
+iterated	loop
+iterating	loop
+iteration	loop
+iterations	loop
+limit	limit
+limits	limit
+limited	limit
+limiting	limit
+cap	limit
+caps	limit
+capped	limit
+capping	limit
+truncate	limit
+truncates	limit
+truncated	limit
+truncating	limit
+truncation	limit
+cut off	limit
+cuts off	limit
+cutting off	limit
+cutoff	limit
+ceiling	limit
+maximum	maximum
+max	maximum
+maximal	maximum
+at most	maximum
+no more than	maximum
+not more than	maximum
+up to	maximum
+upper bound	maximum
+upper limit	maximum
+or fewer	maximum
+or less	maximum
+at the most	maximum
+no longer than	maximum
+minimum	minimum
+min	minimum
+minimal	minimum
+at least	minimum
+no less than	minimum
+no fewer than	minimum
+not less than	minimum
+not fewer than	minimum
+lower bound	minimum
+lower limit	minimum
+or more	minimum
+or greater	minimum
+at the least	minimum
+no shorter than	minimum
+above	above
+more than	above
+greater than	above
+bigger than	above
+larger than	above
+higher than	above
+exceed	above
+exceeds	above
+exceeding	above
+exceeded	above
+beyond	above
+below	below
+under	below
+underneath	below
+beneath	below
+less than	below
+fewer than	below
+smaller than	below
+lower than	below
+lesser	below
+between	between
+within	between
+in between	between
+outside	outside
+out of range	outside
+out of bounds	outside
+outside of	outside
+out-of-range	outside
+range	range
+ranges	range
+bounds	range
+large	largest
+larger	largest
+largest	largest
+big	largest
+bigger	largest
+biggest	largest
+high	largest
+higher	largest
+highest	largest
+greatest	largest
+greater	largest
+small	smallest
+smaller	smallest
+smallest	smallest
+low	smallest
+lowest	smallest
+least	smallest
+fewer	smallest
+fewest	smallest
+tiny	smallest
+newest	newest
+latest	newest
+most recent	newest
+recent	newest
+newer	newest
+youngest	newest
+oldest	oldest
+earliest	oldest
+older	oldest
+long	long
+longer	long
+longest	long
+longer than	long
+lengthy	long
+short	short
+shorter	short
+shortest	short
+shorter than	short
+too short	short
+length	length
+lengths	length
+len	length
+sort	sort
+sorts	sort
+sorted	sort
+sorting	sort
+order	sort
+ordered	sort
+ordering	sort
+rank	sort
+ranks	sort
+ranked	sort
+ranking	sort
+rankings	sort
+reorder	sort
+reorders	sort
+reordered	sort
+reordering	sort
+re-order	sort
+re-ordered	sort
+re-sort	sort
+sorter	sort
+in order	sort
+into order	sort
+orderby	sort
+sortby	sort
+order-by	sort
+sort-by	sort
+arrange	arrange
+arranges	arrange
+arranged	arrange
+arranging	arrange
+arrangement	arrange
+organize	arrange
+organizes	arrange
+organized	arrange
+organizing	arrange
+organise	arrange
+organises	arrange
+organised	arrange
+organising	arrange
+ascending	ascending
+asc	ascending
+ascend	ascending
+increasing	ascending
+smallest first	ascending
+lowest first	ascending
+low to high	ascending
+lowest to highest	ascending
+smallest to largest	ascending
+small to large	ascending
+smallest to biggest	ascending
+a to z	ascending
+a-z	ascending
+oldest first	ascending
+earliest first	ascending
+least first	ascending
+fewest first	ascending
+cheapest first	ascending
+shortest first	ascending
+ascending order	ascending
+upward	ascending
+upwards	ascending
+non-decreasing	ascending
+chronological	ascending
+chronologically	ascending
+descending	descending
+desc	descending
+decreasing	descending
+highest first	descending
+largest first	descending
+biggest first	descending
+greatest first	descending
+most first	descending
+high to low	descending
+highest to lowest	descending
+largest to smallest	descending
+large to small	descending
+biggest to smallest	descending
+big to small	descending
+z to a	descending
+z-a	descending
+newest first	descending
+latest first	descending
+most recent first	descending
+longest first	descending
+reverse	descending
+reverses	descending
+reversed	descending
+reversing	descending
+reverse order	descending
+in reverse	descending
+backwards	descending
+backward	descending
+downward	descending
+downwards	descending
+non-increasing	descending
+descending order	descending
+reverse chronological	descending
+reverse alphabetical	descending
+alphabetical	alphabetical
+alphabetically	alphabetical
+alphabetic	alphabetical
+alphabetize	alphabetical
+alphabetise	alphabetical
+alphabetized	alphabetical
+alphabetised	alphabetical
+lexicographic	alphabetical
+lexicographically	alphabetical
+lexical	alphabetical
+by	by
+according to	by
+based on	by
+depending on	by
+on the basis of	by
+as per	by
+according	by
+depending	by
+based	by
+filter	filter
+filters	filter
+filtered	filter
+filtering	filter
+narrow	filter
+narrows	filter
+narrowed	filter
+narrowing	filter
+narrow down	filter
+narrows down	filter
+narrowed down	filter
+narrowing down	filter
+sift	filter
+sifts	filter
+sifted	filter
+sifting	filter
+subset	filter
+keep	keep
+keeps	keep
+keeping	keep
+kept	keep
+retain	keep
+retains	keep
+retained	keep
+retaining	keep
+preserve	keep
+preserves	keep
+preserved	keep
+preserving	keep
+leave	keep
+leaves	keep
+leaving	keep
+where	where
+wherever	where
+whose	where
+for which	where
+in which	where
+such that	where
+on which	where
+condition	condition
+conditions	condition
+criteria	condition
+criterion	condition
+predicate	condition
+predicates	condition
+conditional	condition
+clause	condition
+clauses	condition
+match	match
+matches	match
+matched	match
+matching	match
+fit	match
+fits	match
+fitted	match
+fitting	match
+meet	match
+meets	match
+meeting	match
+met	match
+satisfy	match
+satisfies	match
+satisfied	match
+satisfying	match
+conform	match
+conforms	match
+conformed	match
+conforming	match
+obey	match
+obeys	match
+obeyed	match
+obeying	match
+comply	match
+complies	match
+complied	match
+complying	match
+adhere	match
+adheres	match
+look like	match
+looks like	match
+looking like	match
+looked like	match
+shaped like	match
+resemble	match
+resembles	match
+qualify	match
+qualifies	match
+qualified	match
+qualifying	match
+pass	pass
+passes	pass
+passed	pass
+passing	pass
+follow	follow
+follows	follow
+followed	follow
+following	follow
+select	select
+selects	select
+selected	select
+selecting	select
+selection	select
+selections	select
+getelementbyid	select
+getelementsbyclassname	select
+choose	choose
+chooses	choose
+choosing	choose
+chose	choose
+chosen	choose
+pick	choose
+picks	choose
+picked	choose
+picking	choose
+decide	choose
+decides	choose
+decided	choose
+deciding	choose
+decision	choose
+branch	choose
+branches	choose
+branched	choose
+branching	choose
+switch	choose
+dispatch	dispatch
+dispatches	dispatch
+dispatched	dispatch
+dispatching	dispatch
+dispatcher	dispatch
+case	case
+cases	case
+take	take
+takes	take
+taking	take
+took	take
+taken	take
+exclude	exclude
+excludes	exclude
+excluded	exclude
+excluding	exclude
+exclusion	exclude
+except	exclude
+except for	exclude
+apart from	exclude
+other than	exclude
+omit	exclude
+omits	exclude
+omitted	exclude
+omitting	exclude
+leave out	exclude
+leaves out	exclude
+leaving out	exclude
+left out	exclude
+filter out	exclude
+filters out	exclude
+filtered out	exclude
+filtering out	exclude
+anti-join	exclude
+antijoin	exclude
+anti join	exclude
+set difference	exclude
+weed out	exclude
+weeds out	exclude
+weeded out	exclude
+weeding out	exclude
+screen out	exclude
+screens out	exclude
+screened out	exclude
+screening out	exclude
+remove	remove
+removes	remove
+removed	remove
+removing	remove
+removal	remove
+delete	remove
+deletes	remove
+deleted	remove
+deleting	remove
+deletion	remove
+drop	remove
+drops	remove
+dropped	remove
+dropping	remove
+discard	remove
+discards	remove
+discarded	remove
+discarding	remove
+erase	remove
+erases	remove
+erased	remove
+erasing	remove
+purge	remove
+purges	remove
+purged	remove
+purging	remove
+eliminate	remove
+eliminates	remove
+eliminated	remove
+eliminating	remove
+get rid of	remove
+gets rid of	remove
+getting rid of	remove
+got rid of	remove
+throw away	remove
+throws away	remove
+throwing away	remove
+thrown away	remove
+threw away	remove
+throw out	remove
+throws out	remove
+throwing out	remove
+thrown out	remove
+threw out	remove
+take out	remove
+takes out	remove
+taking out	remove
+taken out	remove
+took out	remove
+toss	remove
+tosses	remove
+tossed	remove
+tossing	remove
+scrap	remove
+scraps	remove
+scrapped	remove
+scrapping	remove
+destroy	remove
+destroys	remove
+destroyed	remove
+destroying	remove
+wipe out	remove
+prune	remove
+prunes	remove
+pruned	remove
+pruning	remove
+ditch	remove
+ditches	remove
+ditched	remove
+ditching	remove
+trash	remove
+trashes	remove
+trashed	remove
+trashing	remove
+strip out	remove
+strips out	remove
+stripped out	remove
+stripping out	remove
+strip	strip
+strips	strip
+stripped	strip
+stripping	strip
+trim	strip
+trims	strip
+trimmed	strip
+trimming	strip
+skip	skip
+skips	skip
+skipped	skip
+skipping	skip
+ignore	skip
+ignores	skip
+ignored	skip
+ignoring	skip
+disregard	skip
+disregards	skip
+disregarded	skip
+disregarding	skip
+bypass	skip
+bypasses	skip
+bypassed	skip
+bypassing	skip
+pass over	skip
+passes over	skip
+passed over	skip
+passing over	skip
+overlook	skip
+overlooks	skip
+overlooked	skip
+overlooking	skip
+silently	silently
+quietly	silently
+silent	silently
+quiet	silently
+continue	continue
+continues	continue
+continued	continue
+continuing	continue
+carry on	continue
+carries on	continue
+carried on	continue
+carrying on	continue
+keep going	continue
+keeps going	continue
+kept going	continue
+go on	continue
+goes on	continue
+going on	continue
+move on	continue
+moves on	continue
+moved on	continue
+moving on	continue
+proceed	continue
+proceeds	continue
+proceeded	continue
+proceeding	continue
+without stopping	continue
+without halting	continue
+instead	instead
+instead of	instead
+rather than	instead
+in place of	instead
+as opposed to	instead
+in lieu of	instead
+stop	stop
+stops	stop
+stopped	stop
+stopping	stop
+halt	stop
+halts	stop
+halted	stop
+halting	stop
+cancel	stop
+cancels	stop
+cancelled	stop
+canceled	stop
+cancelling	stop
+canceling	stop
+cancellation	stop
+kill	stop
+kills	stop
+killed	stop
+killing	stop
+cease	stop
+ceases	stop
+ceased	stop
+ceasing	stop
+suspend	stop
+suspends	stop
+suspended	stop
+suspending	stop
+discontinue	stop
+exit	exit
+exits	exit
+exited	exit
+exiting	exit
+panic	exit
+panics	exit
+quit	exit
+quits	exit
+quitting	exit
+abort	exit
+aborts	exit
+aborted	exit
+aborting	exit
+terminate	exit
+terminates	exit
+terminated	exit
+terminating	exit
+termination	exit
+die	exit
+dies	exit
+dying	exit
+died	exit
+bail	exit
+bails	exit
+bailed	exit
+bailing	exit
+bail out	exit
+bails out	exit
+bailed out	exit
+bailing out	exit
+shutdown	shutdown
+shutdowns	shutdown
+shut down	shutdown
+shuts down	shutdown
+shutting down	shutdown
+shut	shutdown
+shuts	shutdown
+shutting	shutdown
+wind down	shutdown
+winds down	shutdown
+winding down	shutdown
+wound down	shutdown
+power down	shutdown
+powers down	shutdown
+powered down	shutdown
+powering down	shutdown
+tear down	shutdown
+tears down	shutdown
+tearing down	shutdown
+teardown	shutdown
+close down	shutdown
+closes down	shutdown
+closed down	shutdown
+closing down	shutdown
+graceful	graceful
+gracefully	graceful
+cleanly	graceful
+orderly	graceful
+signal	signal
+signals	signal
+ctrl	signal
+sigint	signal
+sigterm	signal
+sighup	signal
+sigkill	signal
+sigquit	signal
+ctrl-c	signal
+ctrl c	signal
+control-c	signal
+interrupt	signal
+interrupts	signal
+interrupted	signal
+interrupting	signal
+interruption	signal
+kill signal	signal
+keyboard interrupt	signal
+ask	ask
+asks	ask
+asked	ask
+asking	ask
+told	ask
+instruct	ask
+instructs	ask
+instructed	ask
+instructing	ask
+requested	ask
+handle	handle
+handles	handle
+handled	handle
+handling	handle
+catch	handle
+catches	handle
+catching	handle
+caught	handle
+trap	handle
+traps	handle
+trapped	handle
+trapping	handle
+intercept	handle
+intercepts	handle
+intercepted	handle
+intercepting	handle
+react	handle
+reacts	handle
+reacted	handle
+reacting	handle
+deal with	handle
+deals with	handle
+dealing with	handle
+dealt with	handle
+handler	handler
+handlers	handler
+controller	handler
+controllers	handler
+finish	finish
+finishes	finish
+finished	finish
+finishing	finish
+wrap up	finish
+wraps up	finish
+wrapped up	finish
+wrapping up	finish
+finish up	finish
+finishes up	finish
+finished up	finish
+finishing up	finish
+close	close
+closes	close
+closed	close
+closing	close
+clean	clean
+cleans	clean
+cleaned	clean
+cleaning	clean
+cleanup	clean
+clean up	clean
+cleans up	clean
+cleaned up	clean
+cleaning up	clean
+normalize	clean
+normalizes	clean
+normalized	clean
+normalizing	clean
+normalise	clean
+normalises	clean
+normalised	clean
+normalising	clean
+normalization	clean
+normalisation	clean
+tidy up	clean
+tidies up	clean
+tidied up	clean
+tidying up	clean
+scrub	clean
+scrubs	clean
+scrubbed	clean
+scrubbing	clean
+cleanse	clean
+cleanses	clean
+cleansed	clean
+cleansing	clean
+fixed	fixed
+constant	fixed
+exactly	fixed
+unchanging	fixed
+fixed-size	fixed
+fixed-width	fixed
+static	fixed
+raise	raise
+raises	raise
+raised	raise
+raising	raise
+throw	raise
+throws	raise
+throwing	raise
+threw	raise
+thrown	raise
+print	print
+prints	print
+printed	print
+printing	print
+printout	print
+printouts	print
+echo	print
+echoes	print
+echoed	print
+echoing	print
+emit	print
+emits	print
+emitted	print
+emitting	print
+println	print
+printf	print
+writeln	print
+log	log
+logs	log
+logged	log
+logging	log
+logger	log
+logfile	log
+output	output
+outputs	output
+outputting	output
+outputted	output
+tell	tell
+tells	tell
+telling	tell
+tell me	tell
+say	tell
+says	tell
+saying	tell
+said	tell
+report	tell
+reports	tell
+reported	tell
+reporting	tell
+announce	tell
+announces	tell
+announced	tell
+announcing	tell
+indicate	tell
+indicates	tell
+indicated	tell
+indicating	tell
+notify	tell
+notifies	tell
+notified	tell
+notifying	tell
+let me know	tell
+console	console
+terminal	console
+stdout	console
+standard output	console
+standard out	console
+screen	console
+on-screen	console
+onscreen	console
+command prompt	console
+shell	console
+tty	console
+stderr	stderr
+standard error	stderr
+error stream	stderr
+error output	stderr
+show	show
+shows	show
+showing	show
+showed	show
+shown	show
+display	show
+displays	show
+displayed	show
+displaying	show
+reveal	show
+reveals	show
+revealed	show
+revealing	show
+unhide	show
+unhides	show
+unhiding	show
+unhid	show
+unhidden	show
+view	show
+views	show
+viewed	show
+viewing	show
+hide	hide
+hides	hide
+hiding	hide
+hid	hide
+hidden	hide
+conceal	hide
+conceals	hide
+concealed	hide
+concealing	hide
+invisible	hide
+visible	visible
+visibility	visible
+visibly	visible
+toggle	toggle
+toggles	toggle
+toggled	toggle
+toggling	toggle
+flip	toggle
+flips	toggle
+flipped	toggle
+flipping	toggle
+turn off	turn-off
+turns off	turn-off
+turned off	turn-off
+turning off	turn-off
+switch off	turn-off
+switches off	turn-off
+switched off	turn-off
+switching off	turn-off
+shut off	turn-off
+shuts off	turn-off
+shutting off	turn-off
+disable	turn-off
+disables	turn-off
+disabled	turn-off
+disabling	turn-off
+deactivate	turn-off
+deactivates	turn-off
+deactivated	turn-off
+deactivating	turn-off
+turn on	turn-on
+turns on	turn-on
+turned on	turn-on
+turning on	turn-on
+enable	turn-on
+enables	turn-on
+enabled	turn-on
+enabling	turn-on
+activate	turn-on
+activates	turn-on
+activated	turn-on
+activating	turn-on
+collapse	collapse
+collapses	collapse
+collapsed	collapse
+collapsing	collapse
+render	render
+renders	render
+rendered	render
+rendering	render
+draw	render
+draws	render
+drawing	render
+drew	render
+drawn	render
+paint	render
+paints	render
+painted	render
+painting	render
+pretty	pretty
+prettily	pretty
+nicely	pretty
+neat	pretty
+neatly	pretty
+tidy	pretty
+pretty-print	pretty
+pretty-printed	pretty
+pretty-printing	pretty
+pretty print	pretty
+pretty printed	pretty
+pretty printing	pretty
+prettify	pretty
+prettified	pretty
+beautify	pretty
+beautified	pretty
+nice	pretty
+nicer	pretty
+align	aligned
+aligns	aligned
+aligned	aligned
+aligning	aligned
+alignment	aligned
+line up	aligned
+lines up	aligned
+lined up	aligned
+lining up	aligned
+left-aligned	aligned
+right-aligned	aligned
+justified	aligned
+justify	aligned
+justifies	aligned
+justifying	aligned
+evenly	aligned
+pad	pad
+pads	pad
+padded	pad
+padding	pad
+left-pad	pad
+leftpad	pad
+lpad	pad
+rpad	pad
+zero-padded	zero-padded
+zero padded	zero-padded
+zero-pad	zero-padded
+zero pad	zero-padded
+leading zeros	zero-padded
+leading zeroes	zero-padded
+leading zero	zero-padded
+zfill	zero-padded
+padded with zeros	zero-padded
+padded with zeroes	zero-padded
+pad with zeros	zero-padded
+pad with zeroes	zero-padded
+zero	zero
+zeros	zero
+zeroes	zero
+width	width
+widths	width
+wide	width
+wider	width
+layout	layout
+layouts	layout
+lay out	layout
+lays out	layout
+laid out	layout
+laying out	layout
+lay	layout
+lays	layout
+laid	layout
+laying	layout
+side by side	layout
+grid	grid
+grids	grid
+matrix	grid
+matrices	grid
+wrap	wrap
+wraps	wrap
+wrapped	wrap
+wrapping	wrap
+table	table
+tables	table
+tabular	table
+tabulate	table
+tabulates	table
+tabulated	table
+tabulating	table
+spreadsheet	table
+spreadsheets	table
+tbody	table
+row	row
+rows	row
+tr	row
+column	column
+columns	column
+col	column
+cols	column
+columnar	column
+cell	cell
+cells	cell
+td	cell
+header	header
+headers	header
+heading	header
+headings	header
+header row	header
+header rows	header
+header line	header
+header lines	header
+heading row	header
+heading line	header
+heading lines	header
+caption	header
+captions	header
+th	header
+thead	header
+subheading	header
+subheadings	header
+group	group
+groups	group
+grouped	group
+grouping	group
+bucket	group
+buckets	group
+bucketed	group
+bucketing	group
+partition	group
+partitions	group
+partitioned	group
+partitioning	group
+cluster	group
+clusters	group
+clustered	group
+clustering	group
+section	group
+sections	group
+group by group	group
+groupby	group
+group-by	group
+together	together
+collect	collect
+collects	collect
+collected	collect
+collecting	collect
+gather	collect
+gathers	collect
+gathered	collect
+gathering	collect
+accumulate	collect
+accumulates	collect
+accumulated	collect
+accumulating	collect
+aggregate	aggregate
+aggregates	aggregate
+aggregated	aggregate
+aggregating	aggregate
+aggregation	aggregate
+roll up	aggregate
+rolls up	aggregate
+rolled up	aggregate
+rolling up	aggregate
+rollup	aggregate
+roll-up	aggregate
+summarize	aggregate
+summarizes	aggregate
+summarized	aggregate
+summarizing	aggregate
+summarise	aggregate
+summarises	aggregate
+summarised	aggregate
+summarising	aggregate
+summary	aggregate
+summaries	aggregate
+subtotal	subtotal
+subtotals	subtotal
+sub-total	subtotal
+sub-totals	subtotal
+group total	subtotal
+group totals	subtotal
+per-group	subtotal
+group sum	subtotal
+group sums	subtotal
+total	total
+totals	total
+totalled	total
+totaled	total
+totalling	total
+totaling	total
+sum	total
+sums	total
+summed	total
+summing	total
+summation	total
+add up	total
+adds up	total
+added up	total
+adding up	total
+add together	total
+adds together	total
+added together	total
+adding together	total
+grand total	total
+sum total	total
+sum up	total
+sums up	total
+summed up	total
+summing up	total
+total up	total
+totals up	total
+overall	overall
+altogether	overall
+in total	overall
+grand	overall
+across all	overall
+across the whole	overall
+count	count
+counts	count
+counted	count
+counting	count
+total count	count
+tally	count
+tallies	count
+tallied	count
+tallying	count
+countby	count
+how many	how-many
+number of	how-many
+numbers of	how-many
+total number of	how-many
+quantity of	how-many
+how much	how-many
+quantity	how-many
+quantities	how-many
+frequency	frequency
+frequencies	frequency
+histogram	frequency
+histograms	frequency
+how often	frequency
+how many times	frequency
+number of times	frequency
+how frequently	frequency
+distribution	frequency
+occur	occur
+occurs	occur
+occurred	occur
+occurring	occur
+occurrence	occur
+occurrences	occur
+appear	occur
+appears	occur
+appeared	occur
+appearing	occur
+appearance	occur
+appearances	occur
+show up	occur
+shows up	occur
+showed up	occur
+showing up	occur
+times	times
+average	average
+averages	average
+averaged	average
+averaging	average
+mean	average
+avg	average
+calculate	calculate
+calculates	calculate
+calculated	calculate
+calculating	calculate
+calculation	calculate
+calculations	calculate
+compute	calculate
+computes	calculate
+computed	calculate
+computing	calculate
+computation	calculate
+work out	calculate
+works out	calculate
+worked out	calculate
+working out	calculate
+evaluate	calculate
+evaluates	calculate
+evaluated	calculate
+evaluating	calculate
+evaluation	calculate
+figure out	calculate
+figures out	calculate
+figured out	calculate
+figuring out	calculate
+derive	calculate
+derives	calculate
+derived	calculate
+deriving	calculate
+calc	calculate
+eval	calculate
+formula	formula
+formulas	formula
+formulae	formula
+expression	formula
+expressions	formula
+equation	formula
+equations	formula
+math	formula
+maths	formula
+mathematical	formula
+arithmetic	formula
+plus	arithmetic
+minus	arithmetic
+multiplied by	arithmetic
+divided by	arithmetic
+multiply	arithmetic
+multiplies	arithmetic
+multiplied	arithmetic
+multiplying	arithmetic
+subtract	arithmetic
+subtracts	arithmetic
+subtracted	arithmetic
+subtracting	arithmetic
+subtraction	arithmetic
+multiplication	arithmetic
+division	arithmetic
+percent	arithmetic
+percentage	arithmetic
+percentages	arithmetic
+pct	arithmetic
+modulo	arithmetic
+squared	arithmetic
+product	arithmetic
+ratio	arithmetic
+double	arithmetic
+doubles	arithmetic
+doubled	arithmetic
+doubling	arithmetic
+divide	divide
+divides	divide
+divided	divide
+dividing	divide
+add	add
+adds	add
+added	add
+adding	add
+addition	add
+round	round
+rounds	round
+rounded	round
+rounding	round
+round off	round
+rounds off	round
+rounded off	round
+rounding off	round
+ceil	round
+floor	round
+nearest	nearest
+closest	nearest
+decimals	decimals
+decimal	decimals
+decimal places	decimals
+decimal place	decimals
+decimal digits	decimals
+decimal point	decimals
+decimal points	decimals
+dp	decimals
+places	decimals
+fraction digits	decimals
+fractional digits	decimals
+precision	decimals
+digit	digit
+digits	digit
+number	number
+numbers	number
+numbered	number
+numbering	number
+numeric	number
+numerical	number
+numerically	number
+integer	number
+integers	number
+int	number
+ints	number
+float	number
+floats	number
+num	number
+nums	number
+whole number	number
+whole numbers	number
+into a number	to-number
+to a number	to-number
+to number	to-number
+into number	to-number
+as a number	to-number
+into numbers	to-number
+to numbers	to-number
+tonumber	to-number
+to_number	to-number
+parsefloat	to-number
+parseint	to-number
+atoi	to-number
+atof	to-number
+to float	to-number
+to a float	to-number
+into a float	to-number
+to int	to-number
+to integer	to-number
+to an integer	to-number
+into an integer	to-number
+thousands	thousands
+thousand	thousands
+thousands separator	thousands
+thousands separators	thousands
+thousand separator	thousands
+thousand separators	thousands
+digit grouping	thousands
+digit groups	thousands
+group digits	thousands
+grouping digits	thousands
+grouped digits	thousands
+separator	separator
+separators	separator
+delimiter	separator
+delimiters	separator
+separated	separator
+delimited	separator
+sep	separator
+comma	comma
+commas	comma
+money	money
+currency	money
+currencies	money
+monetary	money
+dollar	money
+dollars	money
+cent	money
+cents	money
+euro	money
+euros	money
+result	result
+results	result
+resulting	result
+outcome	result
+outcomes	result
+format	format
+formats	format
+formatted	format
+formatting	format
+formatter	format
+reformat	format
+reformats	format
+reformatted	format
+reformatting	format
+sprintf	format
+convert	convert
+converts	convert
+converted	convert
+converting	convert
+conversion	convert
+turn	convert
+turns	convert
+turning	convert
+turned	convert
+transform	convert
+transforms	convert
+transformed	convert
+transforming	convert
+transformation	convert
+translate	convert
+translates	convert
+translated	convert
+translating	convert
+cast	convert
+casts	convert
+casting	convert
+coerce	convert
+coerces	convert
+coerced	convert
+coercing	convert
+coercion	convert
+map	map
+maps	map
+mapped	map
+mapping	map
+mappings	map
+build	build
+builds	build
+building	build
+built	build
+construct	build
+constructs	build
+constructed	build
+constructing	build
+assemble	build
+assembles	build
+assembled	build
+assembling	build
+compose	build
+composes	build
+composed	build
+composing	build
+create	build
+creates	build
+created	build
+creating	build
+creation	build
+make	build
+makes	build
+making	build
+made	build
+generate	build
+generates	build
+generated	build
+generating	build
+generation	build
+produce	build
+produces	build
+produced	build
+producing	build
+put together	build
+puts together	build
+putting together	build
+bundle	build
+bundles	build
+bundled	build
+bundling	build
+prepare	build
+prepares	build
+prepared	build
+preparing	build
+insert	insert
+inserts	insert
+inserted	insert
+inserting	insert
+insertion	insert
+interpolate	insert
+interpolates	insert
+interpolated	insert
+interpolating	insert
+interpolation	insert
+substitute	insert
+substitutes	insert
+substituted	insert
+substituting	insert
+substitution	insert
+embed	insert
+embeds	insert
+embedded	insert
+embedding	insert
+plug in	insert
+plugs in	insert
+plugged in	insert
+plugging in	insert
+put	put
+puts	put
+putting	put
+place	put
+placed	put
+placing	put
+fill	fill
+fills	fill
+filled	fill
+filling	fill
+fill in	fill
+fills in	fill
+filling in	fill
+populate	fill
+populates	fill
+populated	fill
+populating	fill
+fill out	fill
+fills out	fill
+filling out	fill
+fill up	fill
+fillna	fill
+backfill	fill
+impute	fill
+imputes	fill
+imputed	fill
+imputing	fill
+filled in	filled
+filled out	filled
+is filled	filled
+are filled	filled
+been filled	filled
+was filled	filled
+non-empty	filled
+nonempty	filled
+non-blank	filled
+nonblank	filled
+completed	filled
+empty	empty
+empties	empty
+emptied	empty
+emptying	empty
+blank	empty
+blanked	empty
+blank out	empty
+blanks out	empty
+blanked out	empty
+blanking out	empty
+emptiness	empty
+missing	missing
+absent	missing
+lacking	missing
+lacks	missing
+lack	missing
+unset	missing
+not set	missing
+not given	missing
+not provided	missing
+not supplied	missing
+not specified	missing
+unspecified	missing
+undefined	missing
+incomplete	missing
+absence	missing
+present	present
+presence	present
+expected	expected
+expect	expected
+expects	expected
+expecting	expected
+anticipated	expected
+exist	exist
+exists	exist
+existed	exist
+existing	exist
+existence	exist
+template	template
+templates	template
+templating	template
+boilerplate	template
+mail merge	template
+mail-merge	template
+mailmerge	template
+jinja	template
+mustache	template
+handlebars	template
+placeholder	placeholder
+placeholders	placeholder
+slot	placeholder
+slots	placeholder
+marker	placeholder
+markers	placeholder
+pattern	pattern
+patterns	pattern
+wildcard	pattern
+wildcards	pattern
+regex	regex
+regexes	regex
+regexp	regex
+regexps	regex
+regular expression	regex
+regular expressions	regex
+capture group	capture-group
+capture groups	capture-group
+capturing group	capture-group
+capturing groups	capture-group
+named group	capture-group
+named groups	capture-group
+named capture	capture-group
+named captures	capture-group
+extract	extract
+extracts	extract
+extracted	extract
+extracting	extract
+extraction	extract
+pull out	extract
+pulls out	extract
+pulled out	extract
+pulling out	extract
+pull	extract
+pulls	extract
+pulled	extract
+pulling	extract
+capture	extract
+captures	extract
+captured	extract
+capturing	extract
+pick out	extract
+picks out	extract
+picked out	extract
+picking out	extract
+pluck	extract
+plucks	extract
+plucked	extract
+plucking	extract
+grab	extract
+grabs	extract
+grabbed	extract
+grabbing	extract
+isolate	extract
+isolates	extract
+isolated	extract
+isolating	extract
+part	part
+parts	part
+piece	part
+pieces	part
+portion	part
+portions	part
+fragment	part
+fragments	part
+segment	part
+segments	part
+component	part
+components	part
+chunk	part
+chunks	part
+substring	part
+substrings	part
+named	named
+naming	named
+name	name
+names	name
+label	label
+labels	label
+labelled	label
+labeled	label
+labelling	label
+labeling	label
+prefix	prefix
+prefixes	prefix
+prefixed	prefix
+prefixing	prefix
+prepend	prefix
+prepends	prefix
+prepended	prefix
+prepending	prefix
+suffix	suffix
+suffixes	suffix
+suffixed	suffix
+id	id
+ids	id
+identifier	id
+identifiers	id
+index	index
+indexes	index
+indices	index
+indexed	index
+indexing	index
+position	index
+positions	index
+counter	index
+counters	index
+serial	index
+serial number	index
+serial numbers	index
+sequence number	index
+sequence numbers	index
+running number	index
+running numbers	index
+row number	index
+row numbers	index
+line number	index
+line numbers	index
+ordinal	index
+ordinals	index
+rownum	index
+row_number	index
+rownumber	index
+1-based	index
+0-based	index
+zero-based	index
+one-based	index
+sequence	sequence
+sequences	sequence
+sequential	sequence
+sequentially	sequence
+consecutive	sequence
+consecutively	sequence
+successive	sequence
+incrementing	sequence
+incremental	sequence
+increment	sequence
+increments	sequence
+incremented	sequence
+enumerate	enumerate
+enumerates	enumerate
+enumerated	enumerate
+enumerating	enumerate
+assign	assign
+assigns	assign
+assigned	assign
+assigning	assign
+assignment	assign
+give	assign
+gives	assign
+giving	assign
+gave	assign
+allocate	assign
+allocates	assign
+allocated	assign
+allocating	assign
+start	start
+starts	start
+started	start
+starting	start
+begin	start
+begins	start
+beginning	start
+began	start
+begun	start
+launch	start
+launches	start
+launched	start
+launching	start
+boot	start
+boots	start
+booted	start
+booting	start
+spin up	start
+spins up	start
+spinning up	start
+spun up	start
+bring up	start
+brings up	start
+bringing up	start
+brought up	start
+fire up	start
+fires up	start
+fired up	start
+firing up	start
+start up	start
+starts up	start
+started up	start
+starting up	start
+startup	start
+kick off	start
+kicks off	start
+kicked off	start
+kicking off	start
+initiate	start
+initiates	start
+initiated	start
+initiating	start
+initial	initial
+initially	initial
+original	initial
+originally	initial
+pristine	initial
+starting state	initial
+initial state	initial
+original state	initial
+series	series
+timeline	series
+time series	series
+timeseries	series
+gap	gap
+gaps	gap
+hole	gap
+holes	gap
+entry	entry
+entries	entry
+default	default
+defaults	default
+defaulting	default
+defaulted	default
+fallback	default
+fallbacks	default
+fall back	default
+falls back	default
+falling back	default
+fell back	default
+fallen back	default
+by default	default
+free	free
+unused	free
+available	free
+unoccupied	free
+vacant	free
+spare	free
+unassigned	free
+untaken	free
+auto	auto
+automatic	auto
+automatically	auto
+auto-increment	auto
+autoincrement	auto
+auto-incrementing	auto
+auto-generated	auto
+autogenerated	auto
+auto-assigned	auto
+auto-number	auto
+autonumber	auto
+new	new
+fresh	new
+brand-new	new
+newly	new
+append	append
+appends	append
+appended	append
+appending	append
+push	append
+pushes	append
+pushed	append
+pushing	append
+tack	append
+tacks	append
+tacked	append
+tacking	append
+update	update
+updates	update
+updated	update
+updating	update
+change	update
+changes	update
+changed	update
+changing	update
+modify	update
+modifies	update
+modified	update
+modifying	update
+modification	update
+alter	update
+alters	update
+altered	update
+altering	update
+edit	update
+edits	update
+edited	update
+editing	update
+amend	update
+amends	update
+amended	update
+amending	update
+revise	update
+revises	update
+revised	update
+revising	update
+adjust	update
+adjusts	update
+adjusted	update
+adjusting	update
+mark	update
+marks	update
+marked	update
+marking	update
+tweak	update
+tweaks	update
+tweaked	update
+tweaking	update
+set	set
+sets	set
+setting	set
+replace	replace
+replaces	replace
+replaced	replace
+replacing	replace
+replacement	replace
+replacements	replace
+swap	replace
+swaps	replace
+swapped	replace
+swapping	replace
+overwrite	overwrite
+overwrites	overwrite
+overwriting	overwrite
+overwrote	overwrite
+overwritten	overwrite
+clobber	overwrite
+copy	copy
+copies	copy
+copied	copy
+copying	copy
+clone	copy
+clones	copy
+cloned	copy
+cloning	copy
+value	value
+values	value
+val	value
+vals	value
+data	data
+dataset	data
+datasets	data
+info	data
+information	data
+record	record
+records	record
+object	record
+objects	record
+dict	record
+dicts	record
+dictionary	record
+dictionaries	record
+hashmap	record
+struct	record
+structs	record
+item	item
+items	item
+member	item
+members	item
+li	item
+list	list
+lists	list
+listed	list
+listing	list
+listings	list
+array	list
+arrays	list
+collection	list
+collections	list
+arr	list
+ls	list
+ul	list
+ol	list
+listdir	list
+readdir	list
+scandir	list
+sublist	sublist
+sublists	sublist
+list of lists	sublist
+lists of lists	sublist
+nested lists	sublist
+nested list	sublist
+inner lists	sublist
+inner list	sublist
+sub-list	sublist
+sub-lists	sublist
+nested arrays	sublist
+nested array	sublist
+subarray	sublist
+subarrays	sublist
+array of arrays	sublist
+arrays of arrays	sublist
+nested	nested
+nesting	nested
+deep	nested
+deeply	nested
+deeper	nested
+depth	nested
+level	nested
+levels	nested
+dig	nested
+digs	nested
+digging	nested
+dug	nested
+drill	nested
+drills	nested
+drilled	nested
+drilling	nested
+drill down	nested
+drills down	nested
+drilled down	nested
+drilling down	nested
+inner	nested
+direct	direct
+directly	direct
+immediate	direct
+non-recursive	direct
+nonrecursive	direct
+non-recursively	direct
+not recursive	direct
+not recursively	direct
+one level	direct
+single level	direct
+this level	direct
+shallow	direct
+top level	top-level
+top-level	top-level
+toplevel	top-level
+outermost	top-level
+field	field
+fields	field
+property	field
+properties	field
+prop	field
+props	field
+attribute	attribute
+attributes	attribute
+attr	attribute
+attrs	attribute
+getattribute	attribute
+data attribute	attribute
+data attributes	attribute
+data-attribute	attribute
+data-attributes	attribute
+key	key
+keys	key
+keyed	key
+type	type
+types	type
+datatype	type
+datatypes	type
+data type	type
+data types	type
+kind	type
+kinds	type
+typeof	type
+classify	classify
+classifies	classify
+classified	classify
+classifying	classify
+classification	classify
+categorize	classify
+categorizes	classify
+categorized	classify
+categorizing	classify
+categorise	classify
+categorises	classify
+categorised	classify
+categorising	classify
+text	text
+texts	text
+string	text
+strings	text
+str	text
+textual	text
+wording	text
+textcontent	text
+innertext	text
+character	character
+characters	character
+char	character
+chars	character
+letter	character
+letters	character
+line	line
+lines	line
+line by line	line
+newline	newline
+newlines	newline
+line break	newline
+line breaks	newline
+linebreak	newline
+linebreaks	newline
+line feed	newline
+linefeed	newline
+eol	newline
+space	space
+spaces	space
+whitespace	space
+lowercase	lowercase
+lowercased	lowercase
+lowercases	lowercase
+lowercasing	lowercase
+lower case	lowercase
+lower-case	lowercase
+lower-cased	lowercase
+lower cased	lowercase
+downcase	lowercase
+downcases	lowercase
+downcased	lowercase
+downcasing	lowercase
+small letters	lowercase
+lower	lowercase
+lowers	lowercase
+lowered	lowercase
+lowering	lowercase
+tolower	lowercase
+tolowercase	lowercase
+casefold	lowercase
+uppercase	uppercase
+uppercased	uppercase
+upper case	uppercase
+upper-case	uppercase
+upper	uppercase
+capital	uppercase
+capitals	uppercase
+capital letters	uppercase
+all caps	uppercase
+escape	escape
+escapes	escape
+escaped	escape
+escaping	escape
+sanitize	escape
+sanitizes	escape
+sanitized	escape
+sanitizing	escape
+sanitise	escape
+sanitises	escape
+sanitised	escape
+sanitising	escape
+sanitization	escape
+neutralize	escape
+neutralizes	escape
+neutralized	escape
+neutralizing	escape
+neutralise	escape
+neutralises	escape
+neutralised	escape
+neutralising	escape
+html-escape	escape
+html-escaped	escape
+html-encode	escape
+html-encoded	escape
+html-safe	escape
+encode	encode
+encodes	encode
+encoded	encode
+base64	encode
+encoding	encoding
+encodings	encoding
+charset	encoding
+utf-8	encoding
+utf8	encoding
+ascii	encoding
+unicode	encoding
+latin-1	encoding
+safe	safe
+safely	safe
+safer	safe
+harmless	safe
+secure	safe
+securely	safe
+unsafe	unsafe
+dangerous	unsafe
+xss	unsafe
+injection	unsafe
+injections	unsafe
+malicious	unsafe
+harmful	unsafe
+html	html
+markup	html
+innerhtml	html
+entity	entity
+entities	entity
+ampersand	entity
+ampersands	entity
+angle brackets	entity
+angle bracket	entity
+special characters	entity
+special character	entity
+special chars	entity
+special symbols	entity
+tag	tag
+tags	tag
+symbol	symbol
+symbols	symbol
+quote	quote
+quotes	quote
+quoted	quote
+quoting	quote
+indent	indent
+indents	indent
+indented	indent
+indenting	indent
+indentation	indent
+schema	schema
+schemas	schema
+shape	shape
+shapes	shape
+shaped	shape
+shaping	shape
+structure	shape
+structures	shape
+structured	shape
+boolean	boolean
+booleans	boolean
+bool	boolean
+bools	boolean
+true	boolean
+false	boolean
+null	null
+nulls	null
+nil	null
+file	file
+files	file
+filename	filename
+filenames	filename
+file name	filename
+file names	filename
+folder	folder
+folders	folder
+directory	folder
+directories	folder
+dir	folder
+dirs	folder
+subfolder	subfolder
+subfolders	subfolder
+subdirectory	subfolder
+subdirectories	subfolder
+subdir	subfolder
+subdirs	subfolder
+sub-folder	subfolder
+sub-folders	subfolder
+sub-directory	subfolder
+sub-directories	subfolder
+nested folders	subfolder
+nested folder	subfolder
+nested directories	subfolder
+nested directory	subfolder
+child folders	subfolder
+child folder	subfolder
+tree	tree
+trees	tree
+hierarchy	tree
+walk	walk
+walks	walk
+walked	walk
+walking	walk
+traverse	walk
+traverses	walk
+traversed	walk
+traversing	walk
+traversal	walk
+crawl	walk
+crawls	walk
+crawled	walk
+crawling	walk
+go through	walk
+goes through	walk
+going through	walk
+went through	walk
+gone through	walk
+descend	walk
+descends	walk
+descended	walk
+recursive	recursive
+recursively	recursive
+recurse	recursive
+recurses	recursive
+recursed	recursive
+recursing	recursive
+recursion	recursive
+path	path
+paths	path
+pathname	path
+pathnames	path
+filepath	path
+filepaths	path
+file path	path
+file paths	path
+dotted	dotted
+dot-separated	dotted
+dot separated	dotted
+dot notation	dotted
+dot-notation	dotted
+key path	dotted
+keypath	dotted
+dot	dot
+dots	dot
+full stop	dot
+extension	extension
+extensions	extension
+ext	extension
+file type	extension
+file types	extension
+filetype	extension
+filetypes	extension
+splitext	extension
+extname	extension
+stem	stem
+basename	stem
+basenames	stem
+base name	stem
+base names	stem
+size	size
+sizes	size
+how big	size
+how large	size
+occupy	size
+occupies	size
+occupied	size
+occupying	size
+filesize	size
+byte	byte
+bytes	byte
+kb	size-unit
+mb	size-unit
+gb	size-unit
+tb	size-unit
+kib	size-unit
+mib	size-unit
+gib	size-unit
+kilobyte	size-unit
+kilobytes	size-unit
+megabyte	size-unit
+megabytes	size-unit
+gigabyte	size-unit
+gigabytes	size-unit
+terabyte	size-unit
+terabytes	size-unit
+unit	unit
+units	unit
+readable	readable
+human-readable	readable
+human readable	readable
+human-friendly	readable
+human friendly	readable
+friendly	readable
+user-friendly	readable
+legible	readable
+humanize	readable
+humanizes	readable
+humanized	readable
+humanizing	readable
+humanise	readable
+humanises	readable
+humanised	readable
+humanising	readable
+hash	hash
+hashes	hash
+hashed	hash
+hashing	hash
+checksum	hash
+checksums	hash
+digest	hash
+digests	hash
+fingerprint	hash
+fingerprints	hash
+fingerprinted	hash
+fingerprinting	hash
+sha256	hash
+sha-256	hash
+sha1	hash
+sha-1	hash
+sha512	hash
+sha-512	hash
+sha	hash
+md5	hash
+crc	hash
+crc32	hash
+sha256sum	hash
+md5sum	hash
+content	content
+contents	content
+read	read
+reads	read
+reading	read
+reader	read
+readers	read
+slurp	read
+slurps	read
+slurping	read
+slurped	read
+load	load
+loads	load
+loaded	load
+loading	load
+open	open
+opens	open
+opened	open
+opening	open
+write	write
+writes	write
+writing	write
+wrote	write
+written	write
+writer	write
+writers	write
+save	save
+saves	save
+saved	save
+saving	save
+store	save
+stores	save
+stored	save
+storing	save
+persist	save
+persists	save
+persisted	save
+persisting	save
+stash	save
+stashes	save
+stashed	save
+stashing	save
+remember	save
+remembers	save
+remembered	save
+remembering	save
+cache	save
+caches	save
+cached	save
+caching	save
+storage	storage
+localstorage	storage
+sessionstorage	storage
+local storage	storage
+session storage	storage
+browser storage	storage
+web storage	storage
+disk	disk
+disc	disk
+drive	disk
+filesystem	disk
+file system	disk
+dump	dump
+dumps	dump
+dumped	dump
+dumping	dump
+json	json
+csv	csv
+comma-separated	csv
+comma separated	csv
+comma-separated values	csv
+comma separated values	csv
+comma-delimited	csv
+comma delimited	csv
+to json	to-json
+into json	to-json
+to a json	to-json
+into a json	to-json
+to_json	to-json
+tojson	to-json
+from json	from-json
+from a json	from-json
+out of json	from-json
+from_json	from-json
+to csv	to-csv
+into csv	to-csv
+to a csv	to-csv
+into a csv	to-csv
+to_csv	to-csv
+tocsv	to-csv
+from csv	from-csv
+from a csv	from-csv
+out of csv	from-csv
+from_csv	from-csv
+to rows	to-rows
+into rows	to-rows
+as rows	to-rows
+into a row	to-rows
+into a header row	to-rows
+to records	to-records
+into records	to-records
+as records	to-records
+into named records	to-records
+to named records	to-records
+to objects	to-records
+into objects	to-records
+to dictionaries	to-records
+into dictionaries	to-records
+to dicts	to-records
+into dicts	to-records
+from rows	from-rows
+from the rows	from-rows
+from each row	from-rows
+from every row	from-rows
+from records	from-records
+from the records	from-records
+from each record	from-records
+from every record	from-records
+parse	parse
+parses	parse
+parsed	parse
+parsing	parse
+parser	parse
+decode	parse
+decodes	parse
+decoded	parse
+decoding	parse
+deserialize	parse
+deserializes	parse
+deserialized	parse
+deserializing	parse
+deserialise	parse
+deserialises	parse
+deserialised	parse
+deserialising	parse
+interpret	parse
+interprets	parse
+interpreted	parse
+interpreting	parse
+unmarshal	parse
+serialize	serialize
+serializes	serialize
+serialized	serialize
+serializing	serialize
+serialise	serialize
+serialises	serialize
+serialised	serialize
+serialising	serialize
+serialization	serialize
+serialisation	serialize
+stringify	serialize
+stringifies	serialize
+stringified	serialize
+stringifying	serialize
+jsonify	serialize
+marshal	serialize
+pair	pair
+pairs	pair
+paired	pair
+pairing	pair
+zip	pair
+zips	pair
+zipped	pair
+zipping	pair
+flatten	flatten
+flattens	flatten
+flattened	flatten
+flattening	flatten
+flat	flatten
+unnest	flatten
+unnests	flatten
+unnested	flatten
+unnesting	flatten
+flatmap	flatten
+join	join
+joins	join
+joined	join
+joining	join
+merge	join
+merges	join
+merged	join
+merging	join
+combine	join
+combines	join
+combined	join
+combining	join
+combination	join
+concatenate	join
+concatenates	join
+concatenated	join
+concatenating	join
+concatenation	join
+concat	join
+concats	join
+chain	join
+chains	join
+chained	join
+chaining	join
+glue	join
+glues	join
+glued	join
+gluing	join
+union	join
+split	split
+splits	split
+splitting	split
+break	split
+breaks	split
+breaking	split
+broke	split
+break up	split
+break down	split
+break apart	split
+separate	split
+separates	split
+separating	split
+apart	split
+chop	split
+chops	split
+chopped	split
+chopping	split
+cut	split
+cuts	split
+cutting	split
+decompose	split
+decomposes	split
+decomposed	split
+decomposing	split
+config	config
+configs	config
+configuration	config
+configurations	config
+settings	config
+preferences	config
+prefs	config
+fetch	fetch
+fetches	fetch
+fetched	fetch
+fetching	fetch
+download	fetch
+downloads	fetch
+downloaded	fetch
+downloading	fetch
+pull down	fetch
+pulls down	fetch
+pulled down	fetch
+pulling down	fetch
+scrape	fetch
+scrapes	fetch
+scraped	fetch
+scraping	fetch
+curl	fetch
+wget	fetch
+xhr	fetch
+ajax	fetch
+get	get
+gets	get
+getting	get
+got	get
+gotten	get
+obtain	get
+obtains	get
+obtained	get
+obtaining	get
+retrieve	get
+retrieves	get
+retrieved	get
+retrieving	get
+give me	get
+gives me	get
+show me	get
+find out	get
+finds out	get
+finding out	get
+found out	get
+access	get
+accesses	get
+accessed	get
+accessing	get
+resolve	get
+resolves	get
+resolved	get
+resolving	get
+determine	get
+determines	get
+determined	get
+determining	get
+look up	get
+looks up	get
+looked up	get
+looking up	get
+lookup	get
+acquire	get
+acquires	get
+acquired	get
+acquiring	get
+find	find
+finds	find
+finding	find
+found	find
+findall	find
+locate	find
+locates	find
+located	find
+locating	find
+look for	find
+looks for	find
+looked for	find
+looking for	find
+seek	find
+seeks	find
+seeking	find
+sought	find
+detect	find
+detects	find
+detected	find
+detecting	find
+discover	find
+discovers	find
+discovered	find
+discovering	find
+search	search
+searches	search
+searched	search
+searching	search
+scan	search
+scans	search
+scanned	search
+scanning	search
+keyword	keyword
+keywords	keyword
+term	keyword
+terms	keyword
+phrase	keyword
+phrases	keyword
+live	live
+instant	live
+instantly	live
+real-time	live
+realtime	live
+on the fly	live
+as you type	live
+web	web
+internet	web
+online	web
+www	web
+url	url
+urls	url
+uri	url
+uris	url
+web address	url
+web addresses	url
+link	url
+links	url
+href	url
+hrefs	url
+hyperlink	url
+hyperlinks	url
+internet address	url
+internet addresses	url
+http address	url
+website address	url
+address	address
+addresses	address
+email	email
+emails	email
+e-mail	email
+email address	email
+email addresses	email
+e-mail address	email
+http	http
+https	http
+post	http-method
+posts	http-method
+posted	http-method
+posting	http-method
+request	request
+requests	request
+requesting	request
+req	request
+respond	respond
+responds	respond
+responded	respond
+responding	respond
+response	respond
+responses	respond
+resp	respond
+reply	respond
+replies	respond
+replied	respond
+replying	respond
+answer	respond
+answers	respond
+answered	respond
+answering	respond
+send back	respond
+sends back	respond
+sending back	respond
+sent back	respond
+send	send
+sends	send
+sending	send
+sent	send
+forward	send
+forwards	send
+forwarded	send
+forwarding	send
+deliver	send
+delivers	send
+delivered	send
+delivering	send
+transmit	send
+transmits	send
+transmitted	send
+transmitting	send
+upload	upload
+uploads	upload
+uploaded	upload
+uploading	upload
+incoming	incoming
+inbound	incoming
+receive	incoming
+receives	incoming
+received	incoming
+receiving	incoming
+arrive	incoming
+arrives	incoming
+arrived	incoming
+arriving	incoming
+client	client
+clients	client
+caller	client
+callers	client
+browser	browser
+browsers	browser
+server	server
+servers	server
+web server	server
+web servers	server
+http server	server
+http servers	server
+webserver	server
+webservers	server
+serve	server
+serves	server
+served	server
+serving	server
+port	port
+ports	port
+listen	listen
+listens	listen
+listened	listen
+listening	listen
+watch	listen
+watches	listen
+watched	listen
+watching	listen
+observe	listen
+observes	listen
+observed	listen
+observing	listen
+host	host
+hosts	host
+hostname	host
+hostnames	host
+domain	host
+domains	host
+localhost	host
+scheme	scheme
+schemes	scheme
+protocol	scheme
+protocols	scheme
+route	route
+routes	route
+routed	route
+routing	route
+router	route
+routers	route
+endpoint	endpoint
+endpoints	endpoint
+api	endpoint
+apis	endpoint
+method	method
+methods	method
+verb	method
+verbs	method
+body	body
+bodies	body
+payload	body
+payloads	body
+status	status
+statuses	status
+code	status
+codes	status
+exit code	status
+exit codes	status
+exit status	status
+status code	status
+status codes	status
+return code	status
+return codes	status
+error code	status
+error codes	status
+nonzero	nonzero
+non-zero	nonzero
+page	web-page
+pages	web-page
+web page	web-page
+web pages	web-page
+webpage	web-page
+webpages	web-page
+dom	web-page
+website	web-page
+websites	web-page
+site	web-page
+sites	web-page
+document	document
+documents	document
+doc	document
+docs	document
+element	element
+elements	element
+node	element
+nodes	element
+el	element
+els	element
+button	element
+buttons	element
+btn	element
+checkbox	element
+checkboxes	element
+dropdown	element
+dropdowns	element
+div	element
+divs	element
+span	element
+spans	element
+paragraph	element
+paragraphs	element
+image	element
+images	element
+img	element
+icon	element
+icons	element
+panel	element
+panels	element
+box	element
+boxes	element
+banner	element
+banners	element
+menu	element
+menus	element
+dialog	element
+dialogs	element
+modal	element
+modals	element
+popup	element
+popups	element
+sidebar	element
+sidebars	element
+tooltip	element
+tooltips	element
+spinner	element
+spinners	element
+widget	element
+widgets	element
+card	element
+cards	element
+badge	element
+badges	element
+toolbar	element
+toolbars	element
+navbar	element
+footer	element
+overlay	element
+overlays	element
+selector	selector
+selectors	selector
+css selector	selector
+css selectors	selector
+css	selector
+class	class
+classes	class
+classname	class
+class name	class
+query	query
+queries	query
+queried	query
+querying	query
+queryselector	query
+queryselectorall	query
+input	input
+inputs	input
+textbox	input
+textboxes	input
+text box	input
+text boxes	input
+input box	input
+input boxes	input
+textarea	input
+textareas	input
+text field	input
+text fields	input
+input field	input
+input fields	input
+form	form
+forms	form
+submit	submit
+submits	submit
+submitted	submit
+submitting	submit
+submission	submit
+submissions	submit
+onsubmit	submit
+event	event
+events	event
+listener	event
+listeners	event
+hover	event
+hovers	event
+hovered	event
+hovering	event
+scroll	event
+scrolls	event
+scrolled	event
+scrolling	event
+blur	event
+mouseover	event
+mouseout	event
+mouseenter	event
+mouseleave	event
+dblclick	event
+double-click	event
+double click	event
+addeventlistener	event
+onchange	event
+click	click
+clicks	click
+clicked	click
+clicking	click
+tap	click
+taps	click
+tapped	click
+tapping	click
+onclick	click
+press	press
+presses	press
+pressed	press
+pressing	press
+keypress	press
+keydown	press
+keyup	press
+keystroke	press
+keystrokes	press
+happen	happen
+happens	happen
+happened	happen
+happening	happen
+take place	happen
+takes place	happen
+taking place	happen
+took place	happen
+run	run
+runs	run
+running	run
+ran	run
+execute	run
+executes	run
+executed	run
+executing	run
+execution	run
+call	run
+calls	run
+calling	run
+invoke	run
+invokes	run
+invoked	run
+invoking	run
+perform	run
+performs	run
+performed	run
+performing	run
+trigger	run
+triggers	run
+triggered	run
+triggering	run
+fire	run
+fires	run
+fired	run
+firing	run
+carry out	run
+carries out	run
+carrying out	run
+carried out	run
+action	action
+actions	action
+task	action
+tasks	action
+function	action
+functions	action
+callback	action
+callbacks	action
+operation	action
+operations	action
+step	action
+steps	action
+job	action
+jobs	action
+routine	action
+routines	action
+procedure	action
+procedures	action
+what to do	action
+func	action
+fn	action
+attach	attach
+attaches	attach
+attached	attach
+attaching	attach
+bind	attach
+binds	attach
+binding	attach
+bound	attach
+hook	attach
+hooks	attach
+hooked	attach
+hooking	attach
+hook up	attach
+hooks up	attach
+hooked up	attach
+hooking up	attach
+wire	attach
+wires	attach
+wired	attach
+wiring	attach
+wire up	attach
+wires up	attach
+wired up	attach
+wiring up	attach
+subscribe	attach
+subscribes	attach
+subscribed	attach
+subscribing	attach
+beside	beside
+next to	beside
+alongside	beside
+adjacent	beside
+adjacent to	beside
+near	beside
+nearby	beside
+inline	beside
+in-line	beside
+close to	beside
+before	before
+ahead of	before
+in front of	before
+in front	before
+prior to	before
+preceding	before
+preceded by	before
+precede	before
+precedes	before
+after	after
+afterwards	after
+afterward	after
+later	after
+message	message
+messages	message
+msg	message
+msgs	message
+warning	message
+warnings	message
+hint	message
+hints	message
+notice	message
+notices	message
+note	message
+notes	message
+feedback	message
+notification	message
+notifications	message
+alert	message
+alerts	message
+explanation	message
+prevent	prevent
+prevents	prevent
+prevented	prevent
+preventing	prevent
+block	prevent
+blocks	prevent
+blocked	prevent
+blocking	prevent
+forbid	prevent
+forbids	prevent
+forbidding	prevent
+forbade	prevent
+forbidden	prevent
+disallow	prevent
+disallows	prevent
+disallowed	prevent
+disallowing	prevent
+hold back	prevent
+holds back	prevent
+holding back	prevent
+held back	prevent
+inhibit	prevent
+inhibits	prevent
+inhibited	prevent
+inhibiting	prevent
+preventdefault	prevent
+reject	reject
+rejects	reject
+rejected	reject
+rejecting	reject
+rejection	reject
+refuse	reject
+refuses	reject
+refused	reject
+refusing	reject
+refusal	reject
+deny	reject
+denies	reject
+denied	reject
+denying	reject
+decline	reject
+declines	reject
+declined	reject
+declining	reject
+allowed	allowed
+allow	allowed
+allows	allowed
+allowing	allowed
+permit	allowed
+permits	allowed
+permitted	allowed
+permitting	allowed
+permissible	allowed
+acceptable	allowed
+approved	allowed
+approve	allowed
+approves	allowed
+approving	allowed
+whitelist	allowed
+whitelisted	allowed
+allowlist	allowed
+allow list	allowed
+white list	allowed
+legal	allowed
+supported	allowed
+known	allowed
+choice	allowed
+choices	allowed
+enum	allowed
+enums	allowed
+enumeration	allowed
+enumerations	allowed
+restrict	restrict
+restricts	restrict
+restricted	restrict
+restricting	restrict
+restriction	restrict
+restrictions	restrict
+constrain	restrict
+constrains	restrict
+constrained	restrict
+constraining	restrict
+confine	restrict
+confines	restrict
+confined	restrict
+confining	restrict
+one of	one-of
+any of	one-of
+among	one-of
+amongst	one-of
+belong	one-of
+belongs	one-of
+belonged	one-of
+belonging	one-of
+oneof	one-of
+contain	contain
+contains	contain
+contained	contain
+containing	contain
+include	contain
+includes	contain
+included	contain
+including	contain
+start with	start-with
+starts with	start-with
+starting with	start-with
+started with	start-with
+begin with	start-with
+begins with	start-with
+beginning with	start-with
+began with	start-with
+startswith	start-with
+end with	end-with
+ends with	end-with
+ending with	end-with
+ended with	end-with
+endswith	end-with
+rule	rule
+rules	rule
+constraint	rule
+constraints	rule
+focus	focus
+focuses	focus
+focused	focus
+focusing	focus
+focussed	focus
+focussing	focus
+autofocus	focus
+active element	focus
+cursor	cursor
+cursors	cursor
+caret	cursor
+carets	cursor
+insertion point	cursor
+move	move
+moves	move
+moved	move
+moving	move
+jump	move
+jumps	move
+jumped	move
+jumping	move
+reset	reset
+resets	reset
+resetting	reset
+undo	reset
+undoes	reset
+undoing	reset
+undid	reset
+undone	reset
+revert	reset
+reverts	reset
+reverted	reset
+reverting	reset
+start over	reset
+starts over	reset
+starting over	reset
+restore	restore
+restores	restore
+restored	restore
+restoring	restore
+bring back	restore
+brings back	restore
+bringing back	restore
+brought back	restore
+put back	restore
+puts back	restore
+putting back	restore
+clear	clear
+clears	clear
+cleared	clear
+clearing	clear
+wipe	clear
+wipes	clear
+wiped	clear
+wiping	clear
+clear out	clear
+clears out	clear
+cleared out	clear
+clearing out	clear
+typed	typed
+typing	typed
+typed in	typed
+enter	typed
+enters	typed
+entered	typed
+entering	typed
+typed by	typed
+entered by	typed
+keyed in	typed
+user	user
+state	state
+states	state
+refresh	refresh
+refreshes	refresh
+refreshed	refresh
+refreshing	refresh
+reload	refresh
+reloads	refresh
+reloaded	refresh
+reloading	refresh
+bullet	bullet
+bullets	bullet
+bulleted	bullet
+bullet point	bullet
+bullet points	bullet
+program	program
+programs	program
+script	program
+scripts	program
+app	program
+apps	program
+application	program
+applications	program
+tool	program
+tools	program
+process	program
+utility	program
+utilities	program
+daemon	program
+executable	program
+command line	command-line
+command-line	command-line
+commandline	command-line
+cli	command-line
+argv	command-line
+command	command-line
+subcommand	command-line
+subcommands	command-line
+argparse	command-line
+getopt	command-line
+optparse	command-line
+argument	argument
+arguments	argument
+arg	argument
+args	argument
+parameter	argument
+parameters	argument
+param	argument
+params	argument
+option	option
+options	option
+opt	option
+opts	option
+flag	option
+flags	option
+switches	option
+positional	positional
+positionals	positional
+usage	usage
+help text	usage
+help message	usage
+help	usage
+declare	declare
+declares	declare
+declared	declare
+declaring	declare
+declaration	declare
+declarations	declare
+define	declare
+defines	declare
+defined	declare
+defining	declare
+definition	declare
+definitions	declare
+register	declare
+registers	declare
+registered	declare
+registering	declare
+registration	declare
+install	declare
+installs	declare
+installed	declare
+installing	declare
+set up	set-up
+sets up	set-up
+setting up	set-up
+setup	set-up
+configure	set-up
+configures	set-up
+configured	set-up
+configuring	set-up
+initialize	set-up
+initializes	set-up
+initialized	set-up
+initializing	set-up
+initialise	set-up
+initialises	set-up
+initialised	set-up
+initialising	set-up
+init	set-up
+accept	accept
+accepts	accept
+accepted	accept
+accepting	accept
+a	-
+an	-
+the	-
+this	-
+that	-
+these	-
+those	-
+it	-
+its	-
+itself	-
+they	-
+them	-
+their	-
+theirs	-
+themselves	-
+i	-
+me	-
+my	-
+mine	-
+myself	-
+we	-
+us	-
+our	-
+ours	-
+you	-
+your	-
+yours	-
+he	-
+she	-
+him	-
+her	-
+his	-
+hers	-
+please	-
+pls	-
+kindly	-
+thanks	-
+thank	-
+to	-
+of	-
+in	-
+into	-
+onto	-
+on	-
+at	-
+for	-
+from	-
+with	-
+as	-
+is	-
+are	-
+was	-
+were	-
+be	-
+been	-
+being	-
+am	-
+do	-
+does	-
+did	-
+doing	-
+can	-
+could	-
+will	-
+would	-
+shall	-
+should	-
+may	-
+might	-
+want	-
+wants	-
+wanted	-
+wanting	-
+need	-
+needs	-
+needed	-
+needing	-
+like	-
+such	-
+such as	-
+so	-
+so that	-
+then	-
+also	-
+too	-
+and	-
+or	-
+but	-
+both	-
+either	-
+which	-
+who	-
+whom	-
+what	-
+whatever	-
+whichever	-
+there	-
+here	-
+how	-
+why	-
+up	-
+down	-
+out	-
+off	-
+back	-
+away	-
+over	-
+via	-
+through	-
+throughout	-
+using	-
+use	-
+uses	-
+used	-
+about	-
+around	-
+let	-
+lets	-
+let's	-
+go	-
+goes	-
+going	-
+went	-
+gone	-
+come	-
+comes	-
+coming	-
+came	-
+have	-
+has	-
+had	-
+having	-
+hold	-
+holds	-
+holding	-
+held	-
+given	-
+specified	-
+supplied	-
+provided	-
+stated	-
+certain	-
+particular	-
+specific	-
+respective	-
+corresponding	-
+appropriate	-
+suitable	-
+relevant	-
+simple	-
+simply	-
+basic	-
+plain	-
+raw	-
+quick	-
+quickly	-
+easy	-
+easily	-
+compact	-
+eg	-
+ie	-
+etc	-
+example	-
+examples	-
+for example	-
+for instance	-
+instance	-
+namely	-
+actually	-
+really	-
+basically	-
+essentially	-
+immediately	-
+something	-
+someone	-
+somewhere	-
+somehow	-
+thing	-
+things	-
+stuff	-
+way	-
+ways	-
+manner	-
+own	-
+followed by	-
+given by	-
+supplied by	-
+provided by	-
+one by one	-
+step by step	-
+end to end	-
+in order to	-
+so as to	-
+as well	-
+as well as	-
+and so on	-
+and so forth	-
+need to	-
+needs to	-
+want to	-
+wants to	-
+would like	-
+would like to	-
+i want	-
+be able to	-
+able	-
+able to	-
+in one go	-
+at once	-
+at a time	-
+in turn	-
+of course	-
+by means of	-
+help me	-
+give back	-
+gives back	-
+giving back	-
+piece of	-
+a piece of	-
+no matter	-
+ok	-
+okay	-
+even	-
+still	-
+yet	-
+ever	-
+always	-
+maybe	-
+perhaps	-
+possible	-
+possibly	-
+necessary	-
+well	-
+i'd	-
+i'll	-
+we'll	-
+it's	-
+that's	-
+there's	-
+what's	-
+you're	-
+we're	-
+they're	-
+i'm	-
+look	-
+looks	-
+looking	-
+looked	-
+look at	-
+see	-
+sees	-
+seeing	-
+saw	-
+work	-
+working	-
+ones	-
+lies	-
+lie	-
+lying	-
+falls	-
+fall	-
+falling	-
+inside	-
+across	-
+against	-
+along	-
+toward	-
+towards	-
+become	-
+becomes	-
+becoming	-
+became	-
+apply	-
+applies	-
+applied	-
+applying	-
+return	-
+returns	-
+returned	-
+returning	-
+called	-
+some	-
+represent	-
+represents	-
+represented	-
+representing	-
+act	-
+acts	-
+acting	-
+having been	-
+each other	-
+one another	-
+left	-
+memory	-
+system	-
+enough	-
+point	-
+points	-
+pointing	-
+lead	-
+leads	-
+leading to	-
+rooted	-
+matter	-
+wins	-
+win	-
+reached	-
+reach	-
+reaches	-
+extra	-
+custom	-
+visit	-
+previously	-
+earlier	-
+keyboard	-
+carry	-
+carries	-
+carried	-
+carrying	-
+bring	-
+brings	-
+bringing	-
+brought	-
+if any	-
+if needed	-
+as needed	-
+when needed	-
+where needed	-
+half	-
+half up	-
+treat	-
+treats	-
+treated	-
+treating	-
+more	-
+most	-
+much	-
+very	-
+quite	-
+fairly	-
+rather	-
+than	-
+finally	-
+because	-
+since	-
+due	-
+anywhere	-
+manually	-
+approximately	-
+roughly	-
+respectively	-
+accordingly	-
+onward	-
+onwards	-
+two	-
+three	-
+four	-
+five	-
+six	-
+seven	-
+eight	-
+nine	-
+ten	-
+eleven	-
+twelve	-
+twenty	-
+thirty	-
+fifty	-
+hundred	-
+hundreds	-
+million	-
+millions	-
+dozen	-
+couple	-
+third	-
+fourth	-
+fifth	-
+2nd	-
+3rd	-
+4th	-
+inclusive	-
+inclusively	-
+exclusive	-
+transient	-
+file's	file
+folder's	folder
+directory's	folder
+user's	user
+row's	row
+record's	record
+item's	item
+value's	value
+field's	field
+element's	element
+form's	form
+page's	web-page
+table's	table
+list's	list
+group's	group
+program's	program
+server's	server
+request's	request
+line's	line
+column's	column
+key's	key
+string's	text
+number's	number
+timer's	timer
+browser's	browser
+object's	record
+entry's	entry
+button's	element
+input's	input
+document's	document
+template's	template
+script's	program
+app's	program
+client's	client
+array's	list
+cell's	cell
+header's	header
+response's	respond
+tool's	program
+process's	program
+handler's	handler
+action's	action
+event's	event
+path's	path
+url's	url
+text's	text
+message's	message
+series's	series
+grid's	grid
+dictionary's	record
+dict's	record
+function's	action
+task's	action
+option's	option
+argument's	argument

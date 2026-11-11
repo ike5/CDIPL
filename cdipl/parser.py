@@ -30,12 +30,13 @@ from .model import (
 )
 
 IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
-TOKEN = re.compile(r'\s*(?:(?P<text>"(?:[^"\\]|\\["\\])*")|(?P<number>-?\d+)(?![\w.])|(?P<op>>=|<=|!=|=|<|>)|'
+TOKEN = re.compile(r'\s*(?:(?P<text>"(?:[^"\\]|\\.)*")|(?P<number>-?\d+)(?![\w.])|(?P<op>>=|<=|!=|=|<|>)|'
                    r"(?P<sym>[-+*&()])|(?P<comma>,)|(?P<word>[^\W\d]\w*))")
 
 
 def unquote(literal):
-    return re.sub(r"\\(.)", r"\1", literal[1:-1])
+    """Only \\" and \\\\ are escapes; any other backslash stands for itself."""
+    return re.sub(r'\\(["\\])', r"\1", literal[1:-1])
 
 
 def quote(text):
@@ -110,7 +111,7 @@ def _parse_source(numbered, position, words):
     number, line = numbered[position]
     pattern = re.compile(
         rf'{re.escape(words["source"])}\s+(?P<name>\S+)\s+{re.escape(words["from"])}\s+'
-        rf'(?:(?P<path>"(?:[^"\\]|\\["\\])*")|{re.escape(words["argument"])}\s+(?P<argument>\d+))\s*:\s*\Z')
+        rf'(?:(?P<path>"(?:[^"\\]|\\.)*")|{re.escape(words["argument"])}\s+(?P<argument>\d+))\s*:\s*\Z')
     match = pattern.match(line)
     if match is None or line[:1].isspace():
         raise IntentError(number, f"expected a source declaration such as '{words['source']} users {words['from']} "

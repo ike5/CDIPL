@@ -6,7 +6,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 HERE = Path(__file__).parent / "library"
-TOKEN = re.compile(r'(?P<text>"(?:[^"\\]|\\["\\])*")|(?P<number>-?\d+)(?![\w.])|(?P<op>>=|<=|!=|=|<|>)|(?P<comma>,)|'
+TOKEN = re.compile(r'(?P<text>"(?:[^"\\]|\\.)*")|(?P<number>-?\d+)(?![\w.]|,\d)|(?P<decimal>-?\d+(?:[.,]\d+)+)(?!\w)|'
+                   r'(?P<mixed>\d\w*)|(?P<op>>=|<=|!=|=|<|>)|(?P<comma>,)|'
                    r"(?P<word>[^\W\d][\w'’-]*)|(?P<sym>[-+*&()])|(?P<stray>\S)")
 SUFFIXES = {
     "en": (("ies", "y"), ("es", ""), ("s", ""), ("ing", ""), ("ing", "e"), ("ed", ""), ("ed", "e"), ("d", "")),
@@ -19,7 +20,7 @@ FILLER = "-"
 
 @dataclass(frozen=True)
 class Token:
-    kind: str  # text, number, op, comma, name or word
+    kind: str  # text, number, decimal, op, sym, comma, name, newname or word
     value: object
     code: str = ""  # for words: the concept code, "-" for filler, "" if unknown
 
@@ -96,11 +97,13 @@ def split(statement):
                 raise WordError(f"cannot read '{value}'")
             continue
         if kind == "text":
-            value = re.sub(r"\\(.)", r"\1", value[1:-1])
+            value = re.sub(r'\\(["\\])', r"\1", value[1:-1])  # only \" and \\ are escapes; other backslashes stay
         elif kind == "number":
             value = int(value)
         elif kind == "word":
             value = value.strip("-'’") or value
+        elif kind == "mixed":
+            kind = "word"  # digits followed by letters, such as 2nd, are looked up as a word
         found.append((kind, value))
     return found
 
@@ -155,6 +158,6 @@ def codes(tokens):
             if token.code and token.code != FILLER:
                 out.append(token.code)
         elif token.kind != "comma":
-            out.append({"text": "<text>", "number": "<number>", "op": "<comparison>", "name": "<name>",
-                        "newname": "<newname>", "sym": "<arithmetic>"}[token.kind])
+            out.append({"text": "<text>", "number": "<number>", "decimal": "<number>", "op": "<comparison>",
+                        "name": "<name>", "newname": "<newname>", "sym": "<arithmetic>"}[token.kind])
     return out

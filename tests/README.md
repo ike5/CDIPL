@@ -22,3 +22,4 @@ Requirements:
 | `test_diagnostics.py` | G7 | 42 invalid intent files are rejected with the right line |
 | `test_free_wording.py` | C3, C4 | With a small made-up word list: free wording builds the same program as standard phrases; the index is reused without the classifier; unknown words and close calls are reported |
 | `test_library.py` | G8 | Flagged blocks stop a build; ten builds are byte-identical |
+| `test_real_wording.py` | C5 | The real word lists and classifier file are intact; hand-written English and Spanish pairs build the same program whenever both are accepted, and none is accepted as the wrong block |

@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Reviewed** | `outputs/proposal-classifier-driven-intent-programming-language.md` (v0.2) and this repository at commit `194e44b` |
-| **Revision** | 8, dated 2026-11-11. It incorporates six rounds of decisions from the product owner, the result of Stage 1, and progress on Stage 2. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
-| **Status** | Stage 1 is complete and accepted by the owner. Stage 2 is under way: the compiler core (part A) and formulas (part C) are built and tested; the machinery for free wording (part B) is built, but the real word lists and the trained classifier are not finished and the classifier has not yet been measured. See [Stage 2 progress](#stage-2-progress). |
+| **Revision** | 9, dated 2026-11-11. It incorporates seven rounds of decisions from the product owner and the results of Stage 1 and Stage 2. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
+| **Status** | Stage 1 is complete and accepted. Stage 2 is built and measured: the compiler criteria pass, and the classifier misses the owner's marks. A decision on the classifier is needed before Stage 3. See [Stage 2 progress](#stage-2-progress) and decision D2. |
 | **Audience** | Engineers deciding whether to build this, and what to build first |
 
 References such as "§8" point to sections of the proposal. Sections of this plan are referred to by name.
@@ -24,6 +24,8 @@ As decided by the product owner, CDIPL works like this. A developer writes inten
   1. **Block inventory**, with no product code: work out, from sample programs, which blocks a library would need and how many sample programs it could produce in full.
   2. **Pipeline slice**: six blocks from the proposal's own examples, with a classifier, an index and two targets (Python and JavaScript), tested for correct choices in English and Spanish, identical behaviour, every valid combination, conversion back to intent, and tracing.
   3. **Third target**: add C, to measure what each additional language costs.
+
+**Stage 2 is built and measured.** The compiler does what the plan asked: 16 blocks, programs that behave identically in Python and JavaScript, conversion back to intent, formulas, and English and Spanish. The classifier does not meet the marks the owner set: on wording it had not seen, 1 accepted choice in 120 was wrong against a mark of 1 in 300, and it declined 32% of English statements against a mark of 25%. Its first guess is right 93% to 95% of the time, so the difficulty is knowing when a guess can be trusted without anyone looking. See [Stage 2 progress](#stage-2-progress).
 
 **Stage 1 is done.** Between 13 and 16 of 20 sample programs could be built entirely from blocks, which is above the proposed pass mark, but only if blocks may take formulas as parameters; without formulas the figure is 4 to 9. It would take about 90 blocks, 55 of them used by a single program. The full result and its limits are under [Stage 1 result](#stage-1-result).
 
@@ -294,7 +296,22 @@ Stage 2 is being built in three parts.
 
 Limits of part A: the tests were written by the same assistant that wrote the compiler; they were run on one machine (Linux, Python 3.14.6, Node 22.23.4); and `docs/meaning.md` lists cases where the targets may still differ, such as very deeply nested JSON.
 
-**Part B, free wording: machinery built; classifier not yet trained or measured.** The word-list lookup, the classifier, the index and the `explain`, `choose` and `affected` commands are written and tested with a small made-up word list: free wording builds the same program as standard phrases; a complete index is reused without consulting the classifier; replacing the classifier does not change indexed statements; an unknown word or a close call is reported and nothing is guessed; standard phrases never reach the classifier. Still to do: the real English and Spanish word lists and training wordings, training, and one run on the held-out test wordings. The classifier's test wordings (360 per language, four for each of the 90 blocks) were written by separate assistant sessions from the block catalogue alone and committed before any word list or training wording existed (`stage2/wordings/`).
+**Part B, free wording: built and measured. The classifier misses the owner's marks.** The full result, method and limits are in `stage2/classifier_result.md`.
+
+The machinery works as designed: free wording builds the same program as standard phrases; a complete index is reused without consulting the classifier; replacing the classifier does not change indexed statements; an unknown word or a close call is reported and nothing is guessed; standard phrases never reach the classifier; and `explain`, `choose` and `affected` are built.
+
+The classifier was trained on 1,080 wordings per language and frozen, then run once on 360 unseen wordings per language, covering all 90 blocks in the catalogue.
+
+| Criterion | English | Spanish | Result |
+|---|---|---|---|
+| C1 Wrong choices accepted (mark: at most 1 in 300) | 3 in 360, or 1 in 120 | 3 in 360, or 1 in 120 | Not met |
+| C2 Statements declined (mark: at most 25%) | 31.7% | 23.9% | Not met in English; met in Spanish |
+| C3 Standard phrases resolve to their own block | Pass | Pass | Pass: they are read by fixed rules and never reach the classifier |
+| C4 Index | Pass | Pass | Pass |
+| C5 English and Spanish free wording build the same program | 13 of 32 hand-written pairs were accepted in both languages, and all 13 built identical programs; the rest were declined; none was accepted as the wrong block | | Pass where both are accepted |
+| Best guess correct, if the classifier never declined | 93.3% | 95.3% | For information |
+
+Each of the six wrong choices was a close neighbour of the block meant, such as a total where a per-group total was meant, or writing CSV where reading CSV was meant. A program built from them would run and give a plausible, wrong answer. No decline threshold meets both marks in either language.
 
 **Part C, formulas: built and tested.** A formula may be a field, a whole number, text, `+`, `-` or `*` on whole numbers, `&` to join text, or any of these in brackets. Conditions compare two formulas, and `add N = formula` gives every row a calculated field. Every step of a calculation is checked against the integer range in both targets, and a result outside it stops the program with the same error in both. There is no division, no conversion between numbers and text, and no choosing between values by a condition; these are listed in `docs/meaning.md`. The criteria in the table above were re-run with formulas included.
 
@@ -412,6 +429,7 @@ Each has a default that this plan assumes if nobody decides otherwise.
 | ID | Decision | Default assumed here |
 |---|---|---|
 | D1 | Input format for generated programs, given that C cannot read JSON without added code | Decide before Stage 3. Stage 2 uses JSON. |
+| D2 | What to do about the classifier, now that it has missed the marks for wrong choices and, in English, for declining. The options are set out in `stage2/classifier_result.md`: confirm each choice once and remember it in the index; keep silent choosing with a stricter threshold; improve the classifier and test it on new wordings; or accept the measured rates. | Recommended: confirm once and remember, and improve the classifier over time. Until the owner decides, the classifier keeps choosing silently at the tested threshold. |
 
 ## Assumptions
 

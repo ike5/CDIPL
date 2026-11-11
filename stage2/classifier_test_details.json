@@ -1,0 +1,7290 @@
+[
+ {
+  "language": "en",
+  "block": "cli-options",
+  "wording": "accept a \"--region\" option and a \"--count\" option on the command line",
+  "outcome": "correct",
+  "best_guess": "cli-options",
+  "best_guess_correct": true,
+  "margin": 12020,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "cli-options",
+  "wording": "define flags \"--verbose\" and \"--output\"",
+  "outcome": "correct",
+  "best_guess": "cli-options",
+  "best_guess_correct": true,
+  "margin": 6710,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "cli-options",
+  "wording": "let the user pass a path as the first argument plus an optional \"--size\" flag, and read what they gave",
+  "outcome": "correct",
+  "best_guess": "cli-options",
+  "best_guess_correct": true,
+  "margin": 9605,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "cli-options",
+  "wording": "set up the program's command-line arguments: a required path and an optional \"--limit\" number",
+  "outcome": "correct",
+  "best_guess": "cli-options",
+  "best_guess_correct": true,
+  "margin": 9569,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-number-range",
+  "wording": "make sure the count the user gave is between 1 and 100, defaulting to 10 if they left it out",
+  "outcome": "correct",
+  "best_guess": "check-number-range",
+  "best_guess_correct": true,
+  "margin": 15656,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-number-range",
+  "wording": "require size within 1 to 50, default 20",
+  "outcome": "correct",
+  "best_guess": "check-number-range",
+  "best_guess_correct": true,
+  "margin": 6529,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-number-range",
+  "wording": "check that the age entered is from 0 to 120, and fall back to 18 when none was supplied",
+  "outcome": "correct",
+  "best_guess": "check-number-range",
+  "best_guess_correct": true,
+  "margin": 8824,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-number-range",
+  "wording": "verify the amount passed in is at least 1 and at most 1000, or use 100 if it is missing",
+  "outcome": "correct",
+  "best_guess": "check-number-range",
+  "best_guess_correct": true,
+  "margin": 8256,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "exit-on-error",
+  "wording": "abort with the message \"file not found\" and exit status 1",
+  "outcome": "correct",
+  "best_guess": "exit-on-error",
+  "best_guess_correct": true,
+  "margin": 12853,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "exit-on-error",
+  "wording": "quit with error \"missing input\"",
+  "outcome": "correct",
+  "best_guess": "exit-on-error",
+  "best_guess_correct": true,
+  "margin": 5236,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "exit-on-error",
+  "wording": "stop the whole program right here, print \"cannot read orders\" as an error and return a non-zero status",
+  "outcome": "declined: unknown word",
+  "best_guess": "exit-on-error",
+  "best_guess_correct": true,
+  "margin": 12869,
+  "unknown": [
+   "right"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "exit-on-error",
+  "wording": "bail out with status 2, saying \"invalid region\"",
+  "outcome": "correct",
+  "best_guess": "exit-on-error",
+  "best_guess_correct": true,
+  "margin": 4941,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-message",
+  "wording": "print the line \"Total: \" followed by the total",
+  "outcome": "correct",
+  "best_guess": "print-message",
+  "best_guess_correct": true,
+  "margin": 5868,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-message",
+  "wording": "print \"Hello, \" and the name",
+  "outcome": "correct",
+  "best_guess": "print-message",
+  "best_guess_correct": true,
+  "margin": 4216,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-message",
+  "wording": "write a single line to the screen saying how many records were read, like \"Read 40 records\" with the real count filled in",
+  "outcome": "correct",
+  "best_guess": "print-message",
+  "best_guess_correct": true,
+  "margin": 15389,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-message",
+  "wording": "echo one line telling the user where the output went, \"Saved to \" plus the path",
+  "outcome": "correct",
+  "best_guess": "print-message",
+  "best_guess_correct": true,
+  "margin": 11795,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-table",
+  "wording": "print the orders as aligned columns",
+  "outcome": "correct",
+  "best_guess": "print-table",
+  "best_guess_correct": true,
+  "margin": 7906,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-table",
+  "wording": "print users in columns",
+  "outcome": "declined: too close to call",
+  "best_guess": "print-table",
+  "best_guess_correct": true,
+  "margin": 3366,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-table",
+  "wording": "display the items in the terminal in neat columns, with id, name and price lined up",
+  "outcome": "correct",
+  "best_guess": "print-table",
+  "best_guess_correct": true,
+  "margin": 13473,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-table",
+  "wording": "output the records to the console as a text table with padded columns",
+  "outcome": "correct",
+  "best_guess": "print-table",
+  "best_guess_correct": true,
+  "margin": 8633,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-groups",
+  "wording": "print the orders grouped by region, with the region as a heading above each group",
+  "outcome": "correct",
+  "best_guess": "print-groups",
+  "best_guess_correct": true,
+  "margin": 11196,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-groups",
+  "wording": "print users under city headings",
+  "outcome": "correct",
+  "best_guess": "print-groups",
+  "best_guess_correct": true,
+  "margin": 5278,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-groups",
+  "wording": "list the items on screen in sections by status, each section starting with a line that names the status",
+  "outcome": "correct",
+  "best_guess": "print-groups",
+  "best_guess_correct": true,
+  "margin": 8952,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "print-groups",
+  "wording": "write out the records to the console one group per date, putting a header line with the date before each group",
+  "outcome": "correct",
+  "best_guess": "print-groups",
+  "best_guess_correct": true,
+  "margin": 15968,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-number",
+  "wording": "format the total with thousands separators and 2 decimals",
+  "outcome": "correct",
+  "best_guess": "format-number",
+  "best_guess_correct": true,
+  "margin": 8707,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-number",
+  "wording": "format amount with commas, 2 decimals",
+  "outcome": "correct",
+  "best_guess": "format-number",
+  "best_guess_correct": true,
+  "margin": 7387,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-number",
+  "wording": "make the price readable for display by putting a comma between the thousands and keeping exactly 2 digits after the point",
+  "outcome": "correct",
+  "best_guess": "format-number",
+  "best_guess_correct": true,
+  "margin": 14680,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-number",
+  "wording": "present 1250000 for output as \"1,250,000.00\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "exit-on-error",
+  "best_guess_correct": false,
+  "margin": 172,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-size",
+  "wording": "show the size in human-readable form, like \"1.5 MB\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "format-size",
+  "best_guess_correct": true,
+  "margin": 629,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-size",
+  "wording": "turn 1536000 bytes into a readable size",
+  "outcome": "correct",
+  "best_guess": "format-size",
+  "best_guess_correct": true,
+  "margin": 10819,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-size",
+  "wording": "make size human-readable",
+  "outcome": "declined: too close to call",
+  "best_guess": "format-size",
+  "best_guess_correct": true,
+  "margin": 1291,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-size",
+  "wording": "convert the byte count of each of the files into something friendly such as \"2.3 GB\" or \"740 KB\"",
+  "outcome": "correct",
+  "best_guess": "format-size",
+  "best_guess_correct": true,
+  "margin": 7001,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-text",
+  "wording": "build a label from \"INV-\" followed by the id padded with zeros to 5 digits",
+  "outcome": "correct",
+  "best_guess": "format-text",
+  "best_guess_correct": true,
+  "margin": 11829,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-text",
+  "wording": "make \"order-\" plus id, zero-padded to 4",
+  "outcome": "correct",
+  "best_guess": "format-text",
+  "best_guess_correct": true,
+  "margin": 4108,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-text",
+  "wording": "put together a file name made of the prefix \"report-\", then the date, then the ending \".csv\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "format-text",
+  "best_guess_correct": true,
+  "margin": 1864,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-text",
+  "wording": "generate a code for each of the items that is \"IT\" and then the id written with 6 digits, leading zeros included",
+  "outcome": "correct",
+  "best_guess": "format-text",
+  "best_guess_correct": true,
+  "margin": 4607,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-grid",
+  "wording": "lay the values out as a grid 4 columns wide",
+  "outcome": "correct",
+  "best_guess": "format-grid",
+  "best_guess_correct": true,
+  "margin": 15992,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-grid",
+  "wording": "arrange items in 3 columns",
+  "outcome": "correct",
+  "best_guess": "format-grid",
+  "best_guess_correct": true,
+  "margin": 6008,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-grid",
+  "wording": "arrange each title into rows of 5 so that together they form a grid",
+  "outcome": "correct",
+  "best_guess": "format-grid",
+  "best_guess_correct": true,
+  "margin": 6956,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-grid",
+  "wording": "take the list of files and set them out as a grid, 6 to a row, wrapping onto a new row whenever one is full",
+  "outcome": "declined: too close to call",
+  "best_guess": "take-first",
+  "best_guess_correct": false,
+  "margin": 176,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "fill-template",
+  "wording": "fill the page template \"invoice.html\" with the name, date and total",
+  "outcome": "correct",
+  "best_guess": "fill-template",
+  "best_guess_correct": true,
+  "margin": 6254,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "fill-template",
+  "wording": "fill template \"letter.txt\" with name and city",
+  "outcome": "correct",
+  "best_guess": "fill-template",
+  "best_guess_correct": true,
+  "margin": 6915,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "fill-template",
+  "wording": "take the fixed document template \"report.html\" and drop the title and the count into its placeholders",
+  "outcome": "correct",
+  "best_guess": "fill-template",
+  "best_guess_correct": true,
+  "margin": 15018,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "fill-template",
+  "wording": "substitute the name and email into the slots of the \"welcome.html\" template",
+  "outcome": "correct",
+  "best_guess": "fill-template",
+  "best_guess_correct": true,
+  "margin": 9463,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "escape-html",
+  "wording": "escape the title for HTML",
+  "outcome": "correct",
+  "best_guess": "escape-html",
+  "best_guess_correct": true,
+  "margin": 6014,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "escape-html",
+  "wording": "HTML-escape the name",
+  "outcome": "correct",
+  "best_guess": "escape-html",
+  "best_guess_correct": true,
+  "margin": 3878,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "escape-html",
+  "wording": "make the text safe to put inside a web page by replacing characters like \"<\" and \"&\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "escape-html",
+  "best_guess_correct": true,
+  "margin": 3076,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "escape-html",
+  "wording": "neutralise any markup in the text before it goes into the page, so \"<b>\" shows up literally instead of turning things bold",
+  "outcome": "declined: unknown word",
+  "best_guess": "escape-html",
+  "best_guess_correct": true,
+  "margin": 9356,
+  "unknown": [
+   "literally",
+   "bold"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "lowercase-text",
+  "wording": "lowercase the email",
+  "outcome": "correct",
+  "best_guess": "lowercase-text",
+  "best_guess_correct": true,
+  "margin": 4918,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "lowercase-text",
+  "wording": "convert the name to lower case",
+  "outcome": "correct",
+  "best_guess": "lowercase-text",
+  "best_guess_correct": true,
+  "margin": 5459,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "lowercase-text",
+  "wording": "make the city all small letters",
+  "outcome": "correct",
+  "best_guess": "lowercase-text",
+  "best_guess_correct": true,
+  "margin": 5445,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "lowercase-text",
+  "wording": "change every capital letter in the title to its small form, so \"Hello World\" becomes \"hello world\"",
+  "outcome": "correct",
+  "best_guess": "lowercase-text",
+  "best_guess_correct": true,
+  "margin": 3854,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "match-pattern",
+  "wording": "pull the date and status out of each of the lines using the pattern \"(?P<date>\\d{4}-\\d{2}-\\d{2}) (?P<status>\\w+)\"",
+  "outcome": "correct",
+  "best_guess": "match-pattern",
+  "best_guess_correct": true,
+  "margin": 8314,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "match-pattern",
+  "wording": "extract \"(\\d+) ms\" matches from lines",
+  "outcome": "declined: too close to call",
+  "best_guess": "match-pattern",
+  "best_guess_correct": true,
+  "margin": 2510,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "match-pattern",
+  "wording": "find the parts of every one of the lines that fit \"ERROR: (.*)\" and capture what follows as text",
+  "outcome": "correct",
+  "best_guess": "match-pattern",
+  "best_guess_correct": true,
+  "margin": 10866,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "match-pattern",
+  "wording": "scan through the lines one at a time for \"(\\S+) - (\\d+)\" and grab the two pieces as name and count",
+  "outcome": "declined: too close to call",
+  "best_guess": "match-pattern",
+  "best_guess_correct": true,
+  "margin": 3725,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-pattern",
+  "wording": "check that the email fits the pattern \"^[^@]+@[^@]+\\.[^@]+$\"",
+  "outcome": "correct",
+  "best_guess": "check-pattern",
+  "best_guess_correct": true,
+  "margin": 6523,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-pattern",
+  "wording": "validate id against \"^[A-Z]{2}\\d{4}$\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-pattern",
+  "best_guess_correct": true,
+  "margin": 281,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-pattern",
+  "wording": "make sure the status matches the pattern \"^[a-z_]+$\" and complain if it does not",
+  "outcome": "declined: unknown word",
+  "best_guess": "check-pattern",
+  "best_guess_correct": true,
+  "margin": 3762,
+  "unknown": [
+   "complain"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "check-pattern",
+  "wording": "test whether the text the user gave is shaped like an email address, using \"^\\S+@\\S+\\.\\S+$\"",
+  "outcome": "correct",
+  "best_guess": "check-pattern",
+  "best_guess_correct": true,
+  "margin": 4123,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-text-rule",
+  "wording": "check that the title does not contain \"/\"",
+  "outcome": "correct",
+  "best_guess": "check-text-rule",
+  "best_guess_correct": true,
+  "margin": 3916,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-text-rule",
+  "wording": "ensure name has no \"@\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-text-rule",
+  "best_guess_correct": true,
+  "margin": 1531,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-text-rule",
+  "wording": "make sure the text read from the file is not empty",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-text-rule",
+  "best_guess_correct": true,
+  "margin": 2085,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-text-rule",
+  "wording": "verify that there is no \",\" anywhere in the name, since that would break the output later on",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-text-rule",
+  "best_guess_correct": true,
+  "margin": 1719,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-url",
+  "wording": "check that the text is a web address",
+  "outcome": "correct",
+  "best_guess": "check-url",
+  "best_guess_correct": true,
+  "margin": 4617,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-url",
+  "wording": "validate \"https://example.com/data.json\" as a URL",
+  "outcome": "correct",
+  "best_guess": "check-url",
+  "best_guess_correct": true,
+  "margin": 4648,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-url",
+  "wording": "confirm text is a URL",
+  "outcome": "correct",
+  "best_guess": "check-url",
+  "best_guess_correct": true,
+  "margin": 4617,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-url",
+  "wording": "make sure what the user entered is a proper link, something like \"https://example.com/page\", and not just any old text",
+  "outcome": "declined: unknown word",
+  "best_guess": "check-url",
+  "best_guess_correct": true,
+  "margin": 4863,
+  "unknown": [
+   "old"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "check-valid-date",
+  "wording": "check that the date is a real calendar date",
+  "outcome": "correct",
+  "best_guess": "check-valid-date",
+  "best_guess_correct": true,
+  "margin": 5058,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-valid-date",
+  "wording": "validate \"2024-02-30\" as a date",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-pattern",
+  "best_guess_correct": false,
+  "margin": 281,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-valid-date",
+  "wording": "verify date really exists",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-path-exists",
+  "best_guess_correct": false,
+  "margin": 296,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-valid-date",
+  "wording": "make sure the date text is an actual day on the calendar, so that something like \"2023-13-45\" gets rejected",
+  "outcome": "correct",
+  "best_guess": "check-valid-date",
+  "best_guess_correct": true,
+  "margin": 8937,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-required",
+  "wording": "check that the required email field on the form has been filled in",
+  "outcome": "correct",
+  "best_guess": "check-required",
+  "best_guess_correct": true,
+  "margin": 8694,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-required",
+  "wording": "require form field \"#name\"",
+  "outcome": "correct",
+  "best_guess": "check-required",
+  "best_guess_correct": true,
+  "margin": 4097,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-required",
+  "wording": "make sure the user did not leave the mandatory \"#email\" input blank in the form",
+  "outcome": "correct",
+  "best_guess": "check-required",
+  "best_guess_correct": true,
+  "margin": 13691,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-required",
+  "wording": "flag the form's city field if it was left empty, since it is compulsory",
+  "outcome": "correct",
+  "best_guess": "check-required",
+  "best_guess_correct": true,
+  "margin": 7509,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-min-length",
+  "wording": "check that the name field has at least 3 characters",
+  "outcome": "correct",
+  "best_guess": "check-min-length",
+  "best_guess_correct": true,
+  "margin": 11639,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-min-length",
+  "wording": "enforce minimum length 8 on \"#password\"",
+  "outcome": "declined: unknown word",
+  "best_guess": "check-min-length",
+  "best_guess_correct": true,
+  "margin": 8075,
+  "unknown": [
+   "enforce"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "check-min-length",
+  "wording": "make sure whatever is typed into the title field of the form is 5 characters or longer",
+  "outcome": "correct",
+  "best_guess": "check-min-length",
+  "best_guess_correct": true,
+  "margin": 11394,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-min-length",
+  "wording": "reject the city field when fewer than 2 characters were entered",
+  "outcome": "correct",
+  "best_guess": "check-min-length",
+  "best_guess_correct": true,
+  "margin": 7977,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-allowed-values",
+  "wording": "check that every status is one of \"open\", \"closed\" or \"pending\"",
+  "outcome": "correct",
+  "best_guess": "check-allowed-values",
+  "best_guess_correct": true,
+  "margin": 6856,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-allowed-values",
+  "wording": "allow only \"north\", \"south\", \"east\", \"west\" for region",
+  "outcome": "correct",
+  "best_guess": "check-allowed-values",
+  "best_guess_correct": true,
+  "margin": 5654,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-allowed-values",
+  "wording": "make sure no order has a status outside the permitted set \"new\", \"paid\", \"shipped\"",
+  "outcome": "correct",
+  "best_guess": "check-allowed-values",
+  "best_guess_correct": true,
+  "margin": 10330,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-allowed-values",
+  "wording": "confirm that all the size values come from the list \"S\", \"M\", \"L\", \"XL\" and nothing else",
+  "outcome": "correct",
+  "best_guess": "check-allowed-values",
+  "best_guess_correct": true,
+  "margin": 12863,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-required-types",
+  "wording": "check that each record has a name that is text and an age that is a number",
+  "outcome": "correct",
+  "best_guess": "check-required-types",
+  "best_guess_correct": true,
+  "margin": 7311,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-required-types",
+  "wording": "require id as number, title as text",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-required-types",
+  "best_guess_correct": true,
+  "margin": 3226,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-required-types",
+  "wording": "make sure the keys id, email and done are all present in the record, with id a number, email text and done true or false",
+  "outcome": "correct",
+  "best_guess": "check-required-types",
+  "best_guess_correct": true,
+  "margin": 8047,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-required-types",
+  "wording": "verify the record contains price and count and that both of them hold numbers",
+  "outcome": "correct",
+  "best_guess": "check-required-types",
+  "best_guess_correct": true,
+  "margin": 6478,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-list-of-records",
+  "wording": "check that the loaded data is a list of records",
+  "outcome": "correct",
+  "best_guess": "check-list-of-records",
+  "best_guess_correct": true,
+  "margin": 8186,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-list-of-records",
+  "wording": "verify data is a record list",
+  "outcome": "correct",
+  "best_guess": "check-list-of-records",
+  "best_guess_correct": true,
+  "margin": 8072,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-list-of-records",
+  "wording": "make sure what came out of the file is an array of objects and not something else, such as a single object or a bare number",
+  "outcome": "declined: unknown word",
+  "best_guess": "check-list-of-records",
+  "best_guess_correct": true,
+  "margin": 6756,
+  "unknown": [
+   "bare"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "check-list-of-records",
+  "wording": "confirm the parsed users form a list in which every entry is a record",
+  "outcome": "correct",
+  "best_guess": "check-list-of-records",
+  "best_guess_correct": true,
+  "margin": 10366,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-path-exists",
+  "wording": "check that \"data/input.csv\" exists",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-path-exists",
+  "best_guess_correct": true,
+  "margin": 2343,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-path-exists",
+  "wording": "verify path exists",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-path-exists",
+  "best_guess_correct": true,
+  "margin": 296,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-path-exists",
+  "wording": "make sure the folder \"reports\" is there before continuing",
+  "outcome": "correct",
+  "best_guess": "check-path-exists",
+  "best_guess_correct": true,
+  "margin": 4732,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "check-path-exists",
+  "wording": "see whether there is actually a file or directory at the path the user gave",
+  "outcome": "correct",
+  "best_guess": "check-path-exists",
+  "best_guess_correct": true,
+  "margin": 4182,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-text-file",
+  "wording": "read all of \"notes.txt\"",
+  "outcome": "correct",
+  "best_guess": "read-text-file",
+  "best_guess_correct": true,
+  "margin": 4067,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-text-file",
+  "wording": "load the whole contents of the file at path as text",
+  "outcome": "correct",
+  "best_guess": "read-text-file",
+  "best_guess_correct": true,
+  "margin": 9025,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-text-file",
+  "wording": "read \"settings.ini\" into memory in one go as a single piece of text",
+  "outcome": "declined: too close to call",
+  "best_guess": "read-text-file",
+  "best_guess_correct": true,
+  "margin": 920,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-text-file",
+  "wording": "slurp \"README.md\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "read-element-data",
+  "best_guess_correct": false,
+  "margin": 107,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "write-text-file",
+  "wording": "write the text to \"out.txt\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "write-text-file",
+  "best_guess_correct": true,
+  "margin": 912,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "write-text-file",
+  "wording": "save text into \"report.csv\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "write-text-file",
+  "best_guess_correct": true,
+  "margin": 335,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "write-text-file",
+  "wording": "put the finished text into a file called \"summary.md\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "write-text-file",
+  "best_guess_correct": true,
+  "margin": 3503,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "write-text-file",
+  "wording": "dump the text we built to the file at path so it ends up on disk",
+  "outcome": "correct",
+  "best_guess": "write-text-file",
+  "best_guess_correct": true,
+  "margin": 7400,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "parse-json",
+  "wording": "parse the text as JSON",
+  "outcome": "correct",
+  "best_guess": "parse-json",
+  "best_guess_correct": true,
+  "margin": 5360,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "parse-json",
+  "wording": "decode JSON text",
+  "outcome": "correct",
+  "best_guess": "parse-json",
+  "best_guess_correct": true,
+  "margin": 5360,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "parse-json",
+  "wording": "turn the JSON text into data",
+  "outcome": "declined: too close to call",
+  "best_guess": "parse-json",
+  "best_guess_correct": true,
+  "margin": 796,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "parse-json",
+  "wording": "interpret the text as JSON so that we get proper records to work with instead of raw characters",
+  "outcome": "correct",
+  "best_guess": "parse-json",
+  "best_guess_correct": true,
+  "margin": 6686,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-json",
+  "wording": "serialise the users to JSON text",
+  "outcome": "correct",
+  "best_guess": "format-json",
+  "best_guess_correct": true,
+  "margin": 5836,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-json",
+  "wording": "encode orders as JSON",
+  "outcome": "declined: too close to call",
+  "best_guess": "send-json-response",
+  "best_guess_correct": false,
+  "margin": 400,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-json",
+  "wording": "convert the records into a JSON string",
+  "outcome": "correct",
+  "best_guess": "format-json",
+  "best_guess_correct": true,
+  "margin": 3809,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-json",
+  "wording": "turn the data we have built up into JSON text, ready to be written out somewhere",
+  "outcome": "declined: unknown word",
+  "best_guess": "format-json",
+  "best_guess_correct": true,
+  "margin": 10750,
+  "unknown": [
+   "ready"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "parse-csv",
+  "wording": "parse the text as CSV",
+  "outcome": "correct",
+  "best_guess": "parse-csv",
+  "best_guess_correct": true,
+  "margin": 4730,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "parse-csv",
+  "wording": "split CSV text into rows",
+  "outcome": "correct",
+  "best_guess": "parse-csv",
+  "best_guess_correct": true,
+  "margin": 6466,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "parse-csv",
+  "wording": "read the comma-separated text into rows of values",
+  "outcome": "correct",
+  "best_guess": "parse-csv",
+  "best_guess_correct": true,
+  "margin": 7437,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "parse-csv",
+  "wording": "take the raw CSV content and break it up into rows, one per line, each a list of cells",
+  "outcome": "correct",
+  "best_guess": "parse-csv",
+  "best_guess_correct": true,
+  "margin": 13000,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-csv",
+  "wording": "turn the rows into CSV text",
+  "outcome": "correct",
+  "best_guess": "format-csv",
+  "best_guess_correct": true,
+  "margin": 4303,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-csv",
+  "wording": "encode rows as CSV",
+  "outcome": "declined: too close to call",
+  "best_guess": "format-csv",
+  "best_guess_correct": true,
+  "margin": 2737,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-csv",
+  "wording": "convert the rows to comma-separated text, one line per row",
+  "outcome": "declined: too close to call",
+  "best_guess": "parse-csv",
+  "best_guess_correct": false,
+  "margin": 3667,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "format-csv",
+  "wording": "produce CSV text from the rows we have, quoting any value that contains \",\"",
+  "outcome": "correct",
+  "best_guess": "format-csv",
+  "best_guess_correct": true,
+  "margin": 5758,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "require-columns",
+  "wording": "check that the table has the columns name, email and city",
+  "outcome": "correct",
+  "best_guess": "require-columns",
+  "best_guess_correct": true,
+  "margin": 6156,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "require-columns",
+  "wording": "require columns id, price",
+  "outcome": "correct",
+  "best_guess": "require-columns",
+  "best_guess_correct": true,
+  "margin": 5125,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "require-columns",
+  "wording": "make sure the header of the orders table includes id, date and amount, and complain if any of them is missing",
+  "outcome": "declined: unknown word",
+  "best_guess": "require-columns",
+  "best_guess_correct": true,
+  "margin": 11477,
+  "unknown": [
+   "complain"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "require-columns",
+  "wording": "verify the columns date and total are present in the table",
+  "outcome": "correct",
+  "best_guess": "require-columns",
+  "best_guess_correct": true,
+  "margin": 9117,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "rows-to-records",
+  "wording": "turn the rows into records using the header row for the field names",
+  "outcome": "declined: too close to call",
+  "best_guess": "rows-to-records",
+  "best_guess_correct": true,
+  "margin": 554,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "rows-to-records",
+  "wording": "convert rows plus header into named records",
+  "outcome": "declined: too close to call",
+  "best_guess": "rows-to-records",
+  "best_guess_correct": true,
+  "margin": 2368,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "rows-to-records",
+  "wording": "pair each row's values with the column names from the first row, so that every row becomes a record",
+  "outcome": "correct",
+  "best_guess": "rows-to-records",
+  "best_guess_correct": true,
+  "margin": 4273,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "rows-to-records",
+  "wording": "make named records from rows",
+  "outcome": "declined: too close to call",
+  "best_guess": "rows-to-records",
+  "best_guess_correct": true,
+  "margin": 397,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "records-to-rows",
+  "wording": "turn the records into a header row and rows of values",
+  "outcome": "declined: too close to call",
+  "best_guess": "records-to-rows",
+  "best_guess_correct": true,
+  "margin": 2006,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "records-to-rows",
+  "wording": "convert users into a header row plus value rows",
+  "outcome": "declined: too close to call",
+  "best_guess": "records-to-rows",
+  "best_guess_correct": true,
+  "margin": 1768,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "records-to-rows",
+  "wording": "take the named records and produce plain rows from them, with the field names as the first row",
+  "outcome": "declined: too close to call",
+  "best_guess": "rows-to-records",
+  "best_guess_correct": false,
+  "margin": 2364,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "records-to-rows",
+  "wording": "split records into header and rows",
+  "outcome": "declined: too close to call",
+  "best_guess": "records-to-rows",
+  "best_guess_correct": true,
+  "margin": 2590,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "list-folder",
+  "wording": "list the files in \"downloads\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "render-list",
+  "best_guess_correct": false,
+  "margin": 574,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "list-folder",
+  "wording": "list what is directly inside the folder \"src\", without going into its subfolders",
+  "outcome": "correct",
+  "best_guess": "list-folder",
+  "best_guess_correct": true,
+  "margin": 8764,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "list-folder",
+  "wording": "get the files at the top level of the folder at path",
+  "outcome": "correct",
+  "best_guess": "list-folder",
+  "best_guess_correct": true,
+  "margin": 4714,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "list-folder",
+  "wording": "list \"logs\" folder contents",
+  "outcome": "declined: too close to call",
+  "best_guess": "list-folder",
+  "best_guess_correct": true,
+  "margin": 3574,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "walk-folder",
+  "wording": "list every file under \"project\", including all subfolders",
+  "outcome": "correct",
+  "best_guess": "walk-folder",
+  "best_guess_correct": true,
+  "margin": 10547,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "walk-folder",
+  "wording": "walk the \"photos\" tree",
+  "outcome": "correct",
+  "best_guess": "walk-folder",
+  "best_guess_correct": true,
+  "margin": 4726,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "walk-folder",
+  "wording": "find all files in \"src\" recursively",
+  "outcome": "correct",
+  "best_guess": "walk-folder",
+  "best_guess_correct": true,
+  "margin": 5500,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "walk-folder",
+  "wording": "go through the folder at path and every folder nested beneath it, collecting all the files along the way",
+  "outcome": "correct",
+  "best_guess": "walk-folder",
+  "best_guess_correct": true,
+  "margin": 15336,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "file-size",
+  "wording": "get the size of \"video.mp4\" in bytes",
+  "outcome": "declined: too close to call",
+  "best_guess": "file-size",
+  "best_guess_correct": true,
+  "margin": 2776,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "file-size",
+  "wording": "find out how many bytes the file at path takes up",
+  "outcome": "correct",
+  "best_guess": "file-size",
+  "best_guess_correct": true,
+  "margin": 6033,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "file-size",
+  "wording": "get byte size of \"data.bin\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "file-size",
+  "best_guess_correct": true,
+  "margin": 2776,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "file-size",
+  "wording": "look up how big each of the files is on disk, as a plain number of bytes",
+  "outcome": "correct",
+  "best_guess": "file-size",
+  "best_guess_correct": true,
+  "margin": 7358,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "hash-file",
+  "wording": "compute a checksum of \"backup.tar\"",
+  "outcome": "correct",
+  "best_guess": "hash-file",
+  "best_guess_correct": true,
+  "margin": 5626,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "hash-file",
+  "wording": "hash the contents of the file at path",
+  "outcome": "correct",
+  "best_guess": "hash-file",
+  "best_guess_correct": true,
+  "margin": 4479,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "hash-file",
+  "wording": "checksum \"image.iso\"",
+  "outcome": "correct",
+  "best_guess": "hash-file",
+  "best_guess_correct": true,
+  "margin": 5165,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "hash-file",
+  "wording": "work out the SHA-256 digest of \"setup.exe\" so we can compare it with the published one",
+  "outcome": "declined: unknown word",
+  "best_guess": "hash-file",
+  "best_guess_correct": true,
+  "margin": 11561,
+  "unknown": [
+   "published"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "split-extension",
+  "wording": "split \"report.final.pdf\" into its name and extension",
+  "outcome": "correct",
+  "best_guess": "split-extension",
+  "best_guess_correct": true,
+  "margin": 6001,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "split-extension",
+  "wording": "separate the extension from the file name at path",
+  "outcome": "correct",
+  "best_guess": "split-extension",
+  "best_guess_correct": true,
+  "margin": 6816,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "split-extension",
+  "wording": "split off extension of \"photo.jpeg\"",
+  "outcome": "correct",
+  "best_guess": "split-extension",
+  "best_guess_correct": true,
+  "margin": 5941,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "split-extension",
+  "wording": "break the file name into the part before the last \".\" and the ending that comes after it",
+  "outcome": "correct",
+  "best_guess": "split-extension",
+  "best_guess_correct": true,
+  "margin": 14274,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "filter-rows",
+  "wording": "keep only the orders where price > 100",
+  "outcome": "correct",
+  "best_guess": "filter-rows",
+  "best_guess_correct": true,
+  "margin": 8636,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "filter-rows",
+  "wording": "filter users to age >= 18",
+  "outcome": "correct",
+  "best_guess": "filter-rows",
+  "best_guess_correct": true,
+  "margin": 3908,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "filter-rows",
+  "wording": "select the records whose status = \"active\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "filter-rows",
+  "best_guess_correct": true,
+  "margin": 2444,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "filter-rows",
+  "wording": "narrow the items down to just those with count > 0 and leave the rest out of the result",
+  "outcome": "correct",
+  "best_guess": "filter-rows",
+  "best_guess_correct": true,
+  "margin": 4850,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "sort-rows",
+  "wording": "sort the users by age, youngest first",
+  "outcome": "correct",
+  "best_guess": "sort-rows",
+  "best_guess_correct": true,
+  "margin": 5276,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "sort-rows",
+  "wording": "order items by name",
+  "outcome": "correct",
+  "best_guess": "sort-rows",
+  "best_guess_correct": true,
+  "margin": 5752,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "sort-rows",
+  "wording": "arrange the orders from the most recent date to the oldest",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-by-key",
+  "best_guess_correct": false,
+  "margin": 543,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "sort-rows",
+  "wording": "put the records in descending order of total, so the biggest comes at the top",
+  "outcome": "declined: too close to call",
+  "best_guess": "sort-rows",
+  "best_guess_correct": true,
+  "margin": 3009,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "take-first",
+  "wording": "keep only the first 10 orders",
+  "outcome": "correct",
+  "best_guess": "take-first",
+  "best_guess_correct": true,
+  "margin": 5288,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "take-first",
+  "wording": "take the first 5 users",
+  "outcome": "correct",
+  "best_guess": "take-first",
+  "best_guess_correct": true,
+  "margin": 5462,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "take-first",
+  "wording": "limit records to 20",
+  "outcome": "declined: too close to call",
+  "best_guess": "take-first",
+  "best_guess_correct": true,
+  "margin": 1775,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "take-first",
+  "wording": "cut the list of items down to its first 3 entries and ignore everything after that",
+  "outcome": "declined: too close to call",
+  "best_guess": "take-first",
+  "best_guess_correct": true,
+  "margin": 2613,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "group-by-key",
+  "wording": "group the orders by region",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-by-key",
+  "best_guess_correct": true,
+  "margin": 676,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "group-by-key",
+  "wording": "bucket users by city",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-by-key",
+  "best_guess_correct": true,
+  "margin": 676,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "group-by-key",
+  "wording": "collect the items into groups that share the same status",
+  "outcome": "correct",
+  "best_guess": "group-by-key",
+  "best_guess_correct": true,
+  "margin": 6241,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "group-by-key",
+  "wording": "split the records up so that all the ones with the same date end up together in one group",
+  "outcome": "correct",
+  "best_guess": "group-by-key",
+  "best_guess_correct": true,
+  "margin": 7827,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "group-total",
+  "wording": "add up the amount for each region",
+  "outcome": "correct",
+  "best_guess": "group-total",
+  "best_guess_correct": true,
+  "margin": 4916,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "group-total",
+  "wording": "sum price per status",
+  "outcome": "correct",
+  "best_guess": "group-total",
+  "best_guess_correct": true,
+  "margin": 4916,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "group-total",
+  "wording": "total the orders' amount by city",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-total",
+  "best_guess_correct": true,
+  "margin": 426,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "group-total",
+  "wording": "for every date, work out the combined amount of all the orders that fall on that date",
+  "outcome": "wrong",
+  "best_guess": "total",
+  "best_guess_correct": false,
+  "margin": 4438,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "count-values",
+  "wording": "count how many times each status occurs in the orders",
+  "outcome": "correct",
+  "best_guess": "count-values",
+  "best_guess_correct": true,
+  "margin": 8225,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "count-values",
+  "wording": "tally each region",
+  "outcome": "correct",
+  "best_guess": "count-values",
+  "best_guess_correct": true,
+  "margin": 4573,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "count-values",
+  "wording": "count occurrences of every distinct size among the items",
+  "outcome": "declined: too close to call",
+  "best_guess": "count-values",
+  "best_guess_correct": true,
+  "margin": 3177,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "count-values",
+  "wording": "work out how often each different city appears among the users, giving a number for each one",
+  "outcome": "correct",
+  "best_guess": "count-values",
+  "best_guess_correct": true,
+  "margin": 9426,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "count-rows",
+  "wording": "count the orders",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-total",
+  "best_guess_correct": false,
+  "margin": 410,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "count-rows",
+  "wording": "count how many users there are",
+  "outcome": "declined: too close to call",
+  "best_guess": "count-rows",
+  "best_guess_correct": true,
+  "margin": 1458,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "count-rows",
+  "wording": "get the number of rows in items",
+  "outcome": "correct",
+  "best_guess": "count-rows",
+  "best_guess_correct": true,
+  "margin": 3887,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "count-rows",
+  "wording": "work out how many records we ended up with altogether, as a single number",
+  "outcome": "wrong",
+  "best_guess": "total",
+  "best_guess_correct": false,
+  "margin": 7366,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "total",
+  "wording": "add up the price of all the items",
+  "outcome": "correct",
+  "best_guess": "total",
+  "best_guess_correct": true,
+  "margin": 4575,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "total",
+  "wording": "sum amount across orders",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-total",
+  "best_guess_correct": false,
+  "margin": 235,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "total",
+  "wording": "total up the amount over all of the orders",
+  "outcome": "declined: too close to call",
+  "best_guess": "total",
+  "best_guess_correct": true,
+  "margin": 1493,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "total",
+  "wording": "work out the grand sum of the price field for the whole set of records, as one figure and not per group",
+  "outcome": "declined: unknown word",
+  "best_guess": "group-total",
+  "best_guess_correct": false,
+  "margin": 1208,
+  "unknown": [
+   "figure"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "distinct-values",
+  "wording": "list each different city once",
+  "outcome": "correct",
+  "best_guess": "distinct-values",
+  "best_guess_correct": true,
+  "margin": 8790,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "distinct-values",
+  "wording": "get the unique region values from the orders",
+  "outcome": "declined: too close to call",
+  "best_guess": "distinct-values",
+  "best_guess_correct": true,
+  "margin": 1980,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "distinct-values",
+  "wording": "list distinct status values",
+  "outcome": "correct",
+  "best_guess": "distinct-values",
+  "best_guess_correct": true,
+  "margin": 6271,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "distinct-values",
+  "wording": "give me every status that appears in the records, with no repeats",
+  "outcome": "declined: too close to call",
+  "best_guess": "count-values",
+  "best_guess_correct": false,
+  "margin": 1646,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "remove-duplicates",
+  "wording": "drop users whose email has already been seen, keeping the first",
+  "outcome": "correct",
+  "best_guess": "remove-duplicates",
+  "best_guess_correct": true,
+  "margin": 12773,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "remove-duplicates",
+  "wording": "remove duplicate orders by id",
+  "outcome": "correct",
+  "best_guess": "remove-duplicates",
+  "best_guess_correct": true,
+  "margin": 5984,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "remove-duplicates",
+  "wording": "deduplicate records on email",
+  "outcome": "declined: too close to call",
+  "best_guess": "remove-duplicates",
+  "best_guess_correct": true,
+  "margin": 3514,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "remove-duplicates",
+  "wording": "if several items share the same name, keep only the first one encountered and discard the later ones",
+  "outcome": "correct",
+  "best_guess": "remove-duplicates",
+  "best_guess_correct": true,
+  "margin": 16260,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "exclude-by-key",
+  "wording": "keep the users whose id does not appear in the orders",
+  "outcome": "correct",
+  "best_guess": "exclude-by-key",
+  "best_guess_correct": true,
+  "margin": 4342,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "exclude-by-key",
+  "wording": "exclude orders whose id is in records",
+  "outcome": "correct",
+  "best_guess": "exclude-by-key",
+  "best_guess_correct": true,
+  "margin": 4905,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "exclude-by-key",
+  "wording": "subtract records from items by id",
+  "outcome": "declined: too close to call",
+  "best_guess": "calculate",
+  "best_guess_correct": false,
+  "margin": 418,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "exclude-by-key",
+  "wording": "leave out every user whose email shows up in the second list of records, and keep all the others",
+  "outcome": "correct",
+  "best_guess": "exclude-by-key",
+  "best_guess_correct": true,
+  "margin": 12087,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "drop-invalid-rows",
+  "wording": "skip rows that are malformed or have missing values",
+  "outcome": "correct",
+  "best_guess": "drop-invalid-rows",
+  "best_guess_correct": true,
+  "margin": 12857,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "drop-invalid-rows",
+  "wording": "ignore bad rows",
+  "outcome": "correct",
+  "best_guess": "drop-invalid-rows",
+  "best_guess_correct": true,
+  "margin": 8060,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "drop-invalid-rows",
+  "wording": "drop the orders with a missing price or date instead of failing",
+  "outcome": "correct",
+  "best_guess": "drop-invalid-rows",
+  "best_guess_correct": true,
+  "margin": 4230,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "drop-invalid-rows",
+  "wording": "when one of the lines is broken or has blanks where values should be, just leave it out and carry on rather than stopping",
+  "outcome": "correct",
+  "best_guess": "drop-invalid-rows",
+  "best_guess_correct": true,
+  "margin": 11934,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "clean-number-field",
+  "wording": "turn price text like \"1,250.50\" into a number",
+  "outcome": "correct",
+  "best_guess": "clean-number-field",
+  "best_guess_correct": true,
+  "margin": 6509,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "clean-number-field",
+  "wording": "convert \"3,400\" to a number",
+  "outcome": "correct",
+  "best_guess": "clean-number-field",
+  "best_guess_correct": true,
+  "margin": 5542,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "clean-number-field",
+  "wording": "parse the total as a number, stripping out the commas",
+  "outcome": "correct",
+  "best_guess": "clean-number-field",
+  "best_guess_correct": true,
+  "margin": 10890,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "clean-number-field",
+  "wording": "clean up the price field so that values typed as \"2,999.00\" become proper numbers we can add up",
+  "outcome": "correct",
+  "best_guess": "clean-number-field",
+  "best_guess_correct": true,
+  "margin": 4546,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "number-items",
+  "wording": "number the items starting from 1",
+  "outcome": "correct",
+  "best_guess": "number-items",
+  "best_guess_correct": true,
+  "margin": 4446,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "number-items",
+  "wording": "enumerate records from 0",
+  "outcome": "declined: too close to call",
+  "best_guess": "number-items",
+  "best_guess_correct": true,
+  "margin": 2285,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "number-items",
+  "wording": "give each of the lines a running number, beginning at 1",
+  "outcome": "correct",
+  "best_guess": "number-items",
+  "best_guess_correct": true,
+  "margin": 15068,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "number-items",
+  "wording": "add a sequence number to every order, counting upwards from 100 in the order they appear",
+  "outcome": "declined: too close to call",
+  "best_guess": "number-items",
+  "best_guess_correct": true,
+  "margin": 1995,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "fill-series",
+  "wording": "fill in the missing hours of the day with a count of 0",
+  "outcome": "correct",
+  "best_guess": "fill-series",
+  "best_guess_correct": true,
+  "margin": 11207,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "fill-series",
+  "wording": "pad gaps in the series with 0",
+  "outcome": "correct",
+  "best_guess": "fill-series",
+  "best_guess_correct": true,
+  "margin": 8841,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "fill-series",
+  "wording": "make sure every date from \"2024-01-01\" to \"2024-01-31\" has an entry, using 0 where there is none",
+  "outcome": "declined: too close to call",
+  "best_guess": "all-match",
+  "best_guess_correct": false,
+  "margin": 1405,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "fill-series",
+  "wording": "where a month has no total, add an entry for it with total 0 so that all 12 months are present",
+  "outcome": "correct",
+  "best_guess": "fill-series",
+  "best_guess_correct": true,
+  "margin": 14572,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "build-record",
+  "wording": "build a record with name, age and city",
+  "outcome": "declined: too close to call",
+  "best_guess": "build-record",
+  "best_guess_correct": true,
+  "margin": 3360,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "build-record",
+  "wording": "make record from id, title, done",
+  "outcome": "declined: too close to call",
+  "best_guess": "build-record",
+  "best_guess_correct": true,
+  "margin": 3360,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "build-record",
+  "wording": "assemble a record holding the name \"Alice\", the age 30 and the city \"Paris\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "build-record",
+  "best_guess_correct": true,
+  "margin": 3571,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "build-record",
+  "wording": "put the email, status and date together into one record under those names",
+  "outcome": "declined: too close to call",
+  "best_guess": "build-record",
+  "best_guess_correct": true,
+  "margin": 1801,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "first-match",
+  "wording": "find the first order with status = \"pending\", falling back to \"none\"",
+  "outcome": "correct",
+  "best_guess": "first-match",
+  "best_guess_correct": true,
+  "margin": 12672,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "first-match",
+  "wording": "get first item where price < 5, else \"n/a\"",
+  "outcome": "correct",
+  "best_guess": "first-match",
+  "best_guess_correct": true,
+  "margin": 9528,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "first-match",
+  "wording": "find the first user where age > 65, or use a default if there is none",
+  "outcome": "correct",
+  "best_guess": "first-match",
+  "best_guess_correct": true,
+  "margin": 15380,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "first-match",
+  "wording": "look through the records in list order for the first one whose done = \"no\", and if no such record exists use a fallback instead",
+  "outcome": "correct",
+  "best_guess": "first-match",
+  "best_guess_correct": true,
+  "margin": 15134,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "all-match",
+  "wording": "check whether every order has status = \"shipped\"",
+  "outcome": "correct",
+  "best_guess": "all-match",
+  "best_guess_correct": true,
+  "margin": 7080,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "all-match",
+  "wording": "confirm all users have age >= 18",
+  "outcome": "correct",
+  "best_guess": "all-match",
+  "best_guess_correct": true,
+  "margin": 5569,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "all-match",
+  "wording": "test that all items have price > 0",
+  "outcome": "correct",
+  "best_guess": "all-match",
+  "best_guess_correct": true,
+  "margin": 5569,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "all-match",
+  "wording": "tell me if it holds for each and every one of the records that done = \"yes\"",
+  "outcome": "correct",
+  "best_guess": "all-match",
+  "best_guess_correct": true,
+  "margin": 7082,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "flatten-lists",
+  "wording": "join the lists into one list",
+  "outcome": "correct",
+  "best_guess": "flatten-lists",
+  "best_guess_correct": true,
+  "margin": 7330,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "flatten-lists",
+  "wording": "flatten the nested lists",
+  "outcome": "correct",
+  "best_guess": "flatten-lists",
+  "best_guess_correct": true,
+  "margin": 8387,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "flatten-lists",
+  "wording": "merge several lists of items into a single list",
+  "outcome": "correct",
+  "best_guess": "flatten-lists",
+  "best_guess_correct": true,
+  "margin": 9921,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "flatten-lists",
+  "wording": "take the separate lists of files from each folder and combine them end to end into one long list",
+  "outcome": "declined: too close to call",
+  "best_guess": "flatten-lists",
+  "best_guess_correct": true,
+  "margin": 2796,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "get-by-path",
+  "wording": "follow the dotted path \"user.address.city\" into the record",
+  "outcome": "correct",
+  "best_guess": "get-by-path",
+  "best_guess_correct": true,
+  "margin": 6698,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "get-by-path",
+  "wording": "look up \"database.host\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "read-element-data",
+  "best_guess_correct": false,
+  "margin": 62,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "get-by-path",
+  "wording": "get the value at \"server.port\" in the nested data",
+  "outcome": "correct",
+  "best_guess": "get-by-path",
+  "best_guess_correct": true,
+  "margin": 5031,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "get-by-path",
+  "wording": "dig into the nested settings and fetch whatever sits at \"logging.level\"",
+  "outcome": "declined: unknown word",
+  "best_guess": "get-by-path",
+  "best_guess_correct": true,
+  "margin": 6712,
+  "unknown": [
+   "sits"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "json-type-of",
+  "wording": "say which JSON type the value has",
+  "outcome": "correct",
+  "best_guess": "json-type-of",
+  "best_guess_correct": true,
+  "margin": 12297,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "json-type-of",
+  "wording": "get JSON type of value",
+  "outcome": "correct",
+  "best_guess": "json-type-of",
+  "best_guess_correct": true,
+  "margin": 10356,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "json-type-of",
+  "wording": "report whether the value is a string, number, boolean, array, object or null",
+  "outcome": "correct",
+  "best_guess": "json-type-of",
+  "best_guess_correct": true,
+  "margin": 14792,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "json-type-of",
+  "wording": "work out what kind of JSON thing the amount is, for instance \"number\" or \"string\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "json-type-of",
+  "best_guess_correct": true,
+  "margin": 2584,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "calculate",
+  "wording": "work out the total as price times count",
+  "outcome": "declined: too close to call",
+  "best_guess": "calculate",
+  "best_guess_correct": true,
+  "margin": 2714,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "calculate",
+  "wording": "evaluate \"price * count * 1.2\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "calculate",
+  "best_guess_correct": true,
+  "margin": 87,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "calculate",
+  "wording": "compute amount less 10 percent",
+  "outcome": "declined: unknown word",
+  "best_guess": "calculate",
+  "best_guess_correct": true,
+  "margin": 8707,
+  "unknown": [
+   "less"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "calculate",
+  "wording": "figure out the average price by dividing the total by the count",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-total",
+  "best_guess_correct": false,
+  "margin": 1282,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "round-number",
+  "wording": "round the total to 2 decimal places",
+  "outcome": "correct",
+  "best_guess": "round-number",
+  "best_guess_correct": true,
+  "margin": 6458,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "round-number",
+  "wording": "round price to 1 decimal",
+  "outcome": "correct",
+  "best_guess": "round-number",
+  "best_guess_correct": true,
+  "margin": 6458,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "round-number",
+  "wording": "round 3.14159 to 3 places",
+  "outcome": "correct",
+  "best_guess": "round-number",
+  "best_guess_correct": true,
+  "margin": 6565,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "round-number",
+  "wording": "bring the amount to the nearest value with 2 digits after the decimal point",
+  "outcome": "correct",
+  "best_guess": "round-number",
+  "best_guess_correct": true,
+  "margin": 5564,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "split-duration",
+  "wording": "split 93784 seconds into days, hours, minutes and seconds",
+  "outcome": "correct",
+  "best_guess": "split-duration",
+  "best_guess_correct": true,
+  "margin": 10047,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "split-duration",
+  "wording": "break 5400 seconds into hours, minutes, seconds",
+  "outcome": "correct",
+  "best_guess": "split-duration",
+  "best_guess_correct": true,
+  "margin": 8696,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "split-duration",
+  "wording": "break the elapsed time down into days, hours, minutes and seconds",
+  "outcome": "correct",
+  "best_guess": "split-duration",
+  "best_guess_correct": true,
+  "margin": 14517,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "split-duration",
+  "wording": "take a length of time given in seconds and express it as so many days, hours, minutes and leftover seconds",
+  "outcome": "declined: unknown word",
+  "best_guess": "split-duration",
+  "best_guess_correct": true,
+  "margin": 13571,
+  "unknown": [
+   "express"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "current-time",
+  "wording": "get the current date and time",
+  "outcome": "correct",
+  "best_guess": "current-time",
+  "best_guess_correct": true,
+  "margin": 10222,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "current-time",
+  "wording": "get the time now",
+  "outcome": "correct",
+  "best_guess": "current-time",
+  "best_guess_correct": true,
+  "margin": 11289,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "current-time",
+  "wording": "find out what the date and time are right at this moment",
+  "outcome": "declined: unknown word",
+  "best_guess": "current-time",
+  "best_guess_correct": true,
+  "margin": 10222,
+  "unknown": [
+   "right"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "current-time",
+  "wording": "note today's date and the time of day as of right now, so we can stamp the output with it",
+  "outcome": "declined: unknown word",
+  "best_guess": "current-time",
+  "best_guess_correct": true,
+  "margin": 9678,
+  "unknown": [
+   "stamp"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "choose-by-value",
+  "wording": "pick the action based on the file extension: \"csv\", \"json\" or \"txt\"",
+  "outcome": "correct",
+  "best_guess": "choose-by-value",
+  "best_guess_correct": true,
+  "margin": 10610,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "choose-by-value",
+  "wording": "branch on region",
+  "outcome": "declined: too close to call",
+  "best_guess": "choose-by-value",
+  "best_guess_correct": true,
+  "margin": 2259,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "choose-by-value",
+  "wording": "depending on the status, do one of several different things",
+  "outcome": "correct",
+  "best_guess": "choose-by-value",
+  "best_guess_correct": true,
+  "margin": 7021,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "choose-by-value",
+  "wording": "choose what to do according to the extension of the path, with one action for \".csv\", another for \".json\" and a default for anything else",
+  "outcome": "correct",
+  "best_guess": "choose-by-value",
+  "best_guess_correct": true,
+  "margin": 22461,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "http-get",
+  "wording": "fetch \"https://example.com/data.json\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "http-get",
+  "best_guess_correct": true,
+  "margin": 2998,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "http-get",
+  "wording": "download the contents of \"https://api.example.com/users\"",
+  "outcome": "correct",
+  "best_guess": "http-get",
+  "best_guess_correct": true,
+  "margin": 5044,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "http-get",
+  "wording": "make a GET request to \"https://example.com/status\" and take what comes back",
+  "outcome": "declined: too close to call",
+  "best_guess": "http-get",
+  "best_guess_correct": true,
+  "margin": 3442,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "http-get",
+  "wording": "grab the page at \"https://example.org/news\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "select-elements",
+  "best_guess_correct": false,
+  "margin": 830,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "retry-with-backoff",
+  "wording": "retry the download up to 5 times, waiting longer after each failure",
+  "outcome": "correct",
+  "best_guess": "retry-with-backoff",
+  "best_guess_correct": true,
+  "margin": 27161,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "retry-with-backoff",
+  "wording": "retry 3 times with growing waits",
+  "outcome": "correct",
+  "best_guess": "retry-with-backoff",
+  "best_guess_correct": true,
+  "margin": 16527,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "retry-with-backoff",
+  "wording": "if the request fails, try it again after 1 second, then 2, then 4, giving up after 6 tries",
+  "outcome": "correct",
+  "best_guess": "retry-with-backoff",
+  "best_guess_correct": true,
+  "margin": 27713,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "retry-with-backoff",
+  "wording": "keep reattempting the action with a longer and longer pause between attempts, but no more than 4 times",
+  "outcome": "correct",
+  "best_guess": "retry-with-backoff",
+  "best_guess_correct": true,
+  "margin": 25276,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "http-server",
+  "wording": "start a web server on port 8080",
+  "outcome": "correct",
+  "best_guess": "http-server",
+  "best_guess_correct": true,
+  "margin": 10907,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "http-server",
+  "wording": "serve HTTP on 3000",
+  "outcome": "correct",
+  "best_guess": "http-server",
+  "best_guess_correct": true,
+  "margin": 6644,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "http-server",
+  "wording": "listen for web requests on port 5000",
+  "outcome": "correct",
+  "best_guess": "http-server",
+  "best_guess_correct": true,
+  "margin": 8962,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "http-server",
+  "wording": "bring up an HTTP server that accepts connections on port 8000 and keeps running",
+  "outcome": "declined: unknown word",
+  "best_guess": "http-server",
+  "best_guess_correct": true,
+  "margin": 12413,
+  "unknown": [
+   "connections"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "route-request",
+  "wording": "route each incoming request to the handler for its address and method",
+  "outcome": "correct",
+  "best_guess": "route-request",
+  "best_guess_correct": true,
+  "margin": 23097,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "route-request",
+  "wording": "dispatch requests by address and method",
+  "outcome": "correct",
+  "best_guess": "route-request",
+  "best_guess_correct": true,
+  "margin": 10151,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "route-request",
+  "wording": "send GET \"/users\" to one handler and POST \"/users\" to another",
+  "outcome": "correct",
+  "best_guess": "route-request",
+  "best_guess_correct": true,
+  "margin": 7363,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "route-request",
+  "wording": "when a request comes in, look at its method and address and pass it to the matching handler, for example GET \"/orders\" or DELETE \"/orders/5\"",
+  "outcome": "correct",
+  "best_guess": "route-request",
+  "best_guess_correct": true,
+  "margin": 9235,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-request-body",
+  "wording": "read the body of the incoming request, up to 1048576 bytes",
+  "outcome": "correct",
+  "best_guess": "read-request-body",
+  "best_guess_correct": true,
+  "margin": 20195,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-request-body",
+  "wording": "read request body, max 4096 bytes",
+  "outcome": "correct",
+  "best_guess": "read-request-body",
+  "best_guess_correct": true,
+  "margin": 16019,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-request-body",
+  "wording": "collect what the client sent in the body of the POST, refusing anything over 65536 bytes",
+  "outcome": "correct",
+  "best_guess": "read-request-body",
+  "best_guess_correct": true,
+  "margin": 14289,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-request-body",
+  "wording": "get the payload of the web request but stop if it grows past 10000 bytes",
+  "outcome": "declined: unknown word",
+  "best_guess": "read-request-body",
+  "best_guess_correct": true,
+  "margin": 13318,
+  "unknown": [
+   "past"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "send-json-response",
+  "wording": "reply with the users as JSON and status 200",
+  "outcome": "correct",
+  "best_guess": "send-json-response",
+  "best_guess_correct": true,
+  "margin": 7662,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "send-json-response",
+  "wording": "send JSON back, status 201",
+  "outcome": "correct",
+  "best_guess": "send-json-response",
+  "best_guess_correct": true,
+  "margin": 6004,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "send-json-response",
+  "wording": "respond with status 404 and the JSON error \"not found\"",
+  "outcome": "correct",
+  "best_guess": "send-json-response",
+  "best_guess_correct": true,
+  "margin": 7428,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "send-json-response",
+  "wording": "answer the web request by sending the record back as JSON along with a 200 status code",
+  "outcome": "correct",
+  "best_guess": "send-json-response",
+  "best_guess_correct": true,
+  "margin": 21043,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "on-signal-shutdown",
+  "wording": "shut down cleanly when the program is asked to stop",
+  "outcome": "correct",
+  "best_guess": "on-signal-shutdown",
+  "best_guess_correct": true,
+  "margin": 17182,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "on-signal-shutdown",
+  "wording": "exit gracefully on SIGTERM",
+  "outcome": "correct",
+  "best_guess": "on-signal-shutdown",
+  "best_guess_correct": true,
+  "margin": 9716,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "on-signal-shutdown",
+  "wording": "handle Ctrl+C by closing everything and quitting in an orderly way",
+  "outcome": "declined: unknown word",
+  "best_guess": "on-signal-shutdown",
+  "best_guess_correct": true,
+  "margin": 13120,
+  "unknown": [
+   "C"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "on-signal-shutdown",
+  "wording": "when the process receives a stop signal, finish what is in progress, close the server and only then quit",
+  "outcome": "declined: unknown word",
+  "best_guess": "on-signal-shutdown",
+  "best_guess_correct": true,
+  "margin": 18467,
+  "unknown": [
+   "progress"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "select-elements",
+  "wording": "find all elements matching \".item\" on the page",
+  "outcome": "correct",
+  "best_guess": "select-elements",
+  "best_guess_correct": true,
+  "margin": 10263,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "select-elements",
+  "wording": "select \"#results\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "select-elements",
+  "best_guess_correct": true,
+  "margin": 1929,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "select-elements",
+  "wording": "get the elements on the page that match \"ul.menu li\"",
+  "outcome": "correct",
+  "best_guess": "select-elements",
+  "best_guess_correct": true,
+  "margin": 5267,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "select-elements",
+  "wording": "locate every button on the web page with the selector \"button.delete\" so we can work with them",
+  "outcome": "correct",
+  "best_guess": "select-elements",
+  "best_guess_correct": true,
+  "margin": 9933,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "on-event",
+  "wording": "when \"#save\" is clicked, run the save action",
+  "outcome": "correct",
+  "best_guess": "on-event",
+  "best_guess_correct": true,
+  "margin": 10513,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "on-event",
+  "wording": "listen for clicks on \".delete\"",
+  "outcome": "correct",
+  "best_guess": "on-event",
+  "best_guess_correct": true,
+  "margin": 4897,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "on-event",
+  "wording": "run the check when the \"#signup\" form is submitted",
+  "outcome": "declined: too close to call",
+  "best_guess": "on-event",
+  "best_guess_correct": true,
+  "margin": 2132,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "on-event",
+  "wording": "whenever the user types into \"#search\", call the action that refreshes the results",
+  "outcome": "correct",
+  "best_guess": "on-event",
+  "best_guess_correct": true,
+  "margin": 8858,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "set-text",
+  "wording": "set the text of \"#total\" to the total",
+  "outcome": "declined: too close to call",
+  "best_guess": "update-where",
+  "best_guess_correct": false,
+  "margin": 1097,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "set-text",
+  "wording": "set \"#count\" text to 0",
+  "outcome": "wrong",
+  "best_guess": "update-where",
+  "best_guess_correct": false,
+  "margin": 4793,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "set-text",
+  "wording": "change the text shown in \"#status\" to \"Saved\"",
+  "outcome": "correct",
+  "best_guess": "set-text",
+  "best_guess_correct": true,
+  "margin": 4973,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "set-text",
+  "wording": "update the heading \"h1.title\" on the page so that it displays the title",
+  "outcome": "declined: too close to call",
+  "best_guess": "set-text",
+  "best_guess_correct": true,
+  "margin": 3606,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "show-hide",
+  "wording": "hide \"#spinner\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "show-hide",
+  "best_guess_correct": true,
+  "margin": 1772,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "show-hide",
+  "wording": "show the \"#details\" element",
+  "outcome": "declined: too close to call",
+  "best_guess": "show-hide",
+  "best_guess_correct": true,
+  "margin": 1306,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "show-hide",
+  "wording": "make the \"#error\" box visible on the page",
+  "outcome": "declined: too close to call",
+  "best_guess": "show-hide",
+  "best_guess_correct": true,
+  "margin": 3271,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "show-hide",
+  "wording": "hide the \"#empty\" notice on the page when there are items and bring it back when there are none",
+  "outcome": "declined: too close to call",
+  "best_guess": "show-hide",
+  "best_guess_correct": true,
+  "margin": 1393,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "show-field-message",
+  "wording": "show the message \"Email is required\" beside the \"#email\" field",
+  "outcome": "correct",
+  "best_guess": "show-field-message",
+  "best_guess_correct": true,
+  "margin": 13193,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "show-field-message",
+  "wording": "put \"Too short\" next to \"#password\"",
+  "outcome": "correct",
+  "best_guess": "show-field-message",
+  "best_guess_correct": true,
+  "margin": 4225,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "show-field-message",
+  "wording": "display an error by the name field of the form saying \"Please enter your name\"",
+  "outcome": "correct",
+  "best_guess": "show-field-message",
+  "best_guess_correct": true,
+  "margin": 8143,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "show-field-message",
+  "wording": "attach the hint \"Must be a number\" to the age field so the user sees it right by the input",
+  "outcome": "declined: unknown word",
+  "best_guess": "show-field-message",
+  "best_guess_correct": true,
+  "margin": 3623,
+  "unknown": [
+   "right"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "block-submit-if-invalid",
+  "wording": "stop the form from being sent while any field is invalid",
+  "outcome": "correct",
+  "best_guess": "block-submit-if-invalid",
+  "best_guess_correct": true,
+  "margin": 16022,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "block-submit-if-invalid",
+  "wording": "block \"#signup\" submit if invalid",
+  "outcome": "correct",
+  "best_guess": "block-submit-if-invalid",
+  "best_guess_correct": true,
+  "margin": 12571,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "block-submit-if-invalid",
+  "wording": "do not let the \"#order\" form go through until every field passes its check",
+  "outcome": "correct",
+  "best_guess": "block-submit-if-invalid",
+  "best_guess_correct": true,
+  "margin": 5012,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "block-submit-if-invalid",
+  "wording": "prevent submission of the form for as long as one or more of its fields still has an error",
+  "outcome": "correct",
+  "best_guess": "block-submit-if-invalid",
+  "best_guess_correct": true,
+  "margin": 12906,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "focus-element",
+  "wording": "move the cursor to \"#search\"",
+  "outcome": "correct",
+  "best_guess": "focus-element",
+  "best_guess_correct": true,
+  "margin": 8094,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "focus-element",
+  "wording": "focus \"#name\"",
+  "outcome": "correct",
+  "best_guess": "focus-element",
+  "best_guess_correct": true,
+  "margin": 4982,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "focus-element",
+  "wording": "put the keyboard focus on the first invalid field",
+  "outcome": "correct",
+  "best_guess": "focus-element",
+  "best_guess_correct": true,
+  "margin": 6118,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "focus-element",
+  "wording": "place the cursor in the \"#email\" box so the user can start typing straight away",
+  "outcome": "declined: unknown word",
+  "best_guess": "focus-element",
+  "best_guess_correct": true,
+  "margin": 9830,
+  "unknown": [
+   "straight"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "reset-form",
+  "wording": "reset the \"#signup\" form",
+  "outcome": "correct",
+  "best_guess": "reset-form",
+  "best_guess_correct": true,
+  "margin": 5644,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "reset-form",
+  "wording": "restore form defaults",
+  "outcome": "correct",
+  "best_guess": "reset-form",
+  "best_guess_correct": true,
+  "margin": 5793,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "reset-form",
+  "wording": "clear the form back to how it started",
+  "outcome": "declined: too close to call",
+  "best_guess": "reset-form",
+  "best_guess_correct": true,
+  "margin": 3378,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "reset-form",
+  "wording": "wipe everything the user entered in \"#contact\" and put the form back to its original values",
+  "outcome": "correct",
+  "best_guess": "reset-form",
+  "best_guess_correct": true,
+  "margin": 13019,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-element-data",
+  "wording": "get the value of \"data-id\" from \"#row\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "read-element-data",
+  "best_guess_correct": true,
+  "margin": 250,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-element-data",
+  "wording": "read \"data-price\" off \".item\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "read-element-data",
+  "best_guess_correct": true,
+  "margin": 610,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-element-data",
+  "wording": "read the id stored on the clicked element of the page",
+  "outcome": "correct",
+  "best_guess": "read-element-data",
+  "best_guess_correct": true,
+  "margin": 8757,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "read-element-data",
+  "wording": "fetch the piece of data kept on the \"li.selected\" element under \"data-status\", so we know which record it refers to",
+  "outcome": "declined: unknown word",
+  "best_guess": "read-element-data",
+  "best_guess_correct": true,
+  "margin": 2881,
+  "unknown": [
+   "know",
+   "refers"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "render-table",
+  "wording": "show the users as a table on the page",
+  "outcome": "correct",
+  "best_guess": "render-table",
+  "best_guess_correct": true,
+  "margin": 4853,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "render-table",
+  "wording": "render orders into \"#orders\" as a table",
+  "outcome": "correct",
+  "best_guess": "render-table",
+  "best_guess_correct": true,
+  "margin": 5768,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "render-table",
+  "wording": "display items as an HTML table",
+  "outcome": "correct",
+  "best_guess": "render-table",
+  "best_guess_correct": true,
+  "margin": 4274,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "render-table",
+  "wording": "build a table inside \"#list\" on the web page from the records, one row each, with columns for name, email and city",
+  "outcome": "correct",
+  "best_guess": "render-table",
+  "best_guess_correct": true,
+  "margin": 10440,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "render-list",
+  "wording": "show the items as a list on the page, one entry each",
+  "outcome": "correct",
+  "best_guess": "render-list",
+  "best_guess_correct": true,
+  "margin": 8024,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "render-list",
+  "wording": "render users as a \"ul\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "render-table",
+  "best_guess_correct": false,
+  "margin": 301,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "render-list",
+  "wording": "fill \"#todo\" with one list item per record, showing its title",
+  "outcome": "correct",
+  "best_guess": "render-list",
+  "best_guess_correct": true,
+  "margin": 9090,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "render-list",
+  "wording": "display the orders on the web page as a bulleted list, with one bullet for every order",
+  "outcome": "correct",
+  "best_guess": "render-list",
+  "best_guess_correct": true,
+  "margin": 8218,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "filter-elements-by-text",
+  "wording": "hide the \".item\" elements that do not contain what the user typed in \"#search\"",
+  "outcome": "correct",
+  "best_guess": "filter-elements-by-text",
+  "best_guess_correct": true,
+  "margin": 13257,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "filter-elements-by-text",
+  "wording": "filter \"li\" elements by typed text",
+  "outcome": "correct",
+  "best_guess": "filter-elements-by-text",
+  "best_guess_correct": true,
+  "margin": 7742,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "filter-elements-by-text",
+  "wording": "as the user types in \"#filter\", show only the rows on the page whose text includes it and hide the rest",
+  "outcome": "correct",
+  "best_guess": "filter-elements-by-text",
+  "best_guess_correct": true,
+  "margin": 14775,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "filter-elements-by-text",
+  "wording": "narrow the cards shown on the page to those containing the search text the user entered, hiding the others",
+  "outcome": "correct",
+  "best_guess": "filter-elements-by-text",
+  "best_guess_correct": true,
+  "margin": 22612,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "timer-every",
+  "wording": "run the refresh every 5 seconds",
+  "outcome": "correct",
+  "best_guess": "timer-every",
+  "best_guess_correct": true,
+  "margin": 6243,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "timer-every",
+  "wording": "repeat the check every 60 seconds",
+  "outcome": "correct",
+  "best_guess": "timer-every",
+  "best_guess_correct": true,
+  "margin": 4668,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "timer-every",
+  "wording": "call the update action again and again at an interval of 1000 milliseconds",
+  "outcome": "correct",
+  "best_guess": "timer-every",
+  "best_guess_correct": true,
+  "margin": 4986,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "timer-every",
+  "wording": "set up a repeating timer that fires every 30 seconds and runs the save each time",
+  "outcome": "correct",
+  "best_guess": "timer-every",
+  "best_guess_correct": true,
+  "margin": 4781,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "stop-timer",
+  "wording": "halt the repeating timer",
+  "outcome": "correct",
+  "best_guess": "stop-timer",
+  "best_guess_correct": true,
+  "margin": 7101,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "stop-timer",
+  "wording": "cancel the refresh timer",
+  "outcome": "correct",
+  "best_guess": "stop-timer",
+  "best_guess_correct": true,
+  "margin": 6426,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "stop-timer",
+  "wording": "clear the timer",
+  "outcome": "correct",
+  "best_guess": "stop-timer",
+  "best_guess_correct": true,
+  "margin": 3920,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "stop-timer",
+  "wording": "stop the interval that was started earlier so the action no longer runs every few seconds",
+  "outcome": "declined: unknown word",
+  "best_guess": "stop-timer",
+  "best_guess_correct": true,
+  "margin": 3421,
+  "unknown": [
+   "few"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "load-from-storage",
+  "wording": "load the saved items from the browser's storage",
+  "outcome": "declined: too close to call",
+  "best_guess": "load-from-storage",
+  "best_guess_correct": true,
+  "margin": 3672,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "load-from-storage",
+  "wording": "read \"todos\" from local storage",
+  "outcome": "declined: too close to call",
+  "best_guess": "load-from-storage",
+  "best_guess_correct": true,
+  "margin": 3505,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "load-from-storage",
+  "wording": "restore the users that were stored in the browser under \"users\" last time",
+  "outcome": "declined: too close to call",
+  "best_guess": "load-from-storage",
+  "best_guess_correct": true,
+  "margin": 2196,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "load-from-storage",
+  "wording": "get whatever was saved under the key \"settings\" in the browser storage, if anything",
+  "outcome": "declined: too close to call",
+  "best_guess": "load-from-storage",
+  "best_guess_correct": true,
+  "margin": 3600,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "save-to-storage",
+  "wording": "save the items in the browser's storage",
+  "outcome": "declined: too close to call",
+  "best_guess": "save-to-storage",
+  "best_guess_correct": true,
+  "margin": 771,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "save-to-storage",
+  "wording": "store records in local storage",
+  "outcome": "declined: too close to call",
+  "best_guess": "save-to-storage",
+  "best_guess_correct": true,
+  "margin": 882,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "save-to-storage",
+  "wording": "write the users to browser storage under \"users\"",
+  "outcome": "correct",
+  "best_guess": "save-to-storage",
+  "best_guess_correct": true,
+  "margin": 4176,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "save-to-storage",
+  "wording": "persist the orders in the browser so they are still there after the page is reloaded",
+  "outcome": "correct",
+  "best_guess": "save-to-storage",
+  "best_guess_correct": true,
+  "margin": 3783,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "append-record",
+  "wording": "add a new record to the items, giving it the next free id",
+  "outcome": "correct",
+  "best_guess": "append-record",
+  "best_guess_correct": true,
+  "margin": 18094,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "append-record",
+  "wording": "append a user with the next id",
+  "outcome": "correct",
+  "best_guess": "append-record",
+  "best_guess_correct": true,
+  "margin": 5313,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "append-record",
+  "wording": "add a new order to the list and assign it an id 1 higher than the highest existing one",
+  "outcome": "correct",
+  "best_guess": "append-record",
+  "best_guess_correct": true,
+  "margin": 7165,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "append-record",
+  "wording": "insert a fresh record with title \"Buy milk\" at the end of records, with the next unused id",
+  "outcome": "correct",
+  "best_guess": "append-record",
+  "best_guess_correct": true,
+  "margin": 13176,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "update-where",
+  "wording": "set status to \"shipped\" on the orders where id = 42",
+  "outcome": "correct",
+  "best_guess": "update-where",
+  "best_guess_correct": true,
+  "margin": 4956,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "update-where",
+  "wording": "set done to \"yes\" where id = 7",
+  "outcome": "correct",
+  "best_guess": "update-where",
+  "best_guess_correct": true,
+  "margin": 4730,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "update-where",
+  "wording": "change the city to \"Rome\" for every user whose name = \"Marco\"",
+  "outcome": "correct",
+  "best_guess": "update-where",
+  "best_guess_correct": true,
+  "margin": 5727,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "update-where",
+  "wording": "for the items with price > 100, update their status so that it reads \"premium\"",
+  "outcome": "correct",
+  "best_guess": "update-where",
+  "best_guess_correct": true,
+  "margin": 6043,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "remove-where",
+  "wording": "remove the records where done = \"yes\"",
+  "outcome": "correct",
+  "best_guess": "remove-where",
+  "best_guess_correct": true,
+  "margin": 5028,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "remove-where",
+  "wording": "delete orders where status = \"cancelled\"",
+  "outcome": "correct",
+  "best_guess": "remove-where",
+  "best_guess_correct": true,
+  "margin": 5028,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "remove-where",
+  "wording": "delete the user with id = 12",
+  "outcome": "correct",
+  "best_guess": "remove-where",
+  "best_guess_correct": true,
+  "margin": 4157,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "remove-where",
+  "wording": "get rid of every item whose count = 0, taking those entries out of the list for good",
+  "outcome": "declined: unknown word",
+  "best_guess": "remove-where",
+  "best_guess_correct": true,
+  "margin": 6614,
+  "unknown": [
+   "good"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "cli-options",
+  "wording": "declarar argumentos y opciones de consola",
+  "outcome": "correct",
+  "best_guess": "cli-options",
+  "best_guess_correct": true,
+  "margin": 11508,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "cli-options",
+  "wording": "define qué acepta el programa por línea de comandos: una ruta obligatoria y la opción \"--salida\"",
+  "outcome": "correct",
+  "best_guess": "cli-options",
+  "best_guess_correct": true,
+  "margin": 15276,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "cli-options",
+  "wording": "el programa tiene que admitir al lanzarlo un argumento con la carpeta y una opción \"--limite\", y leer lo que haya pasado el usuario",
+  "outcome": "correct",
+  "best_guess": "cli-options",
+  "best_guess_correct": true,
+  "margin": 18211,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "cli-options",
+  "wording": "recoge los valores de los argumentos y opciones con los que se invocó el programa, entre ellos \"--formato\" y \"--detalle\"",
+  "outcome": "correct",
+  "best_guess": "cli-options",
+  "best_guess_correct": true,
+  "margin": 12415,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-number-range",
+  "wording": "validar rango 1 a 65535, por defecto 8080",
+  "outcome": "correct",
+  "best_guess": "check-number-range",
+  "best_guess_correct": true,
+  "margin": 10071,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-number-range",
+  "wording": "comprueba que el número que pasa el usuario esté entre 1 y 100, y si no lo pasa usa 10",
+  "outcome": "correct",
+  "best_guess": "check-number-range",
+  "best_guess_correct": true,
+  "margin": 10068,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-number-range",
+  "wording": "asegúrate de que el valor de \"--limite\" no se salga del intervalo de 1 a 500; cuando el usuario no lo indique, toma 25",
+  "outcome": "correct",
+  "best_guess": "check-number-range",
+  "best_guess_correct": true,
+  "margin": 14386,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-number-range",
+  "wording": "verificar que el count indicado por el usuario cae entre 0 y 1000, usando 100 si no viene",
+  "outcome": "correct",
+  "best_guess": "check-number-range",
+  "best_guess_correct": true,
+  "margin": 14076,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "exit-on-error",
+  "wording": "salir con error \"no se encontró el archivo\"",
+  "outcome": "correct",
+  "best_guess": "exit-on-error",
+  "best_guess_correct": true,
+  "margin": 5236,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "exit-on-error",
+  "wording": "termina el programa con el mensaje \"configuración inválida\" y código de salida 1",
+  "outcome": "correct",
+  "best_guess": "exit-on-error",
+  "best_guess_correct": true,
+  "margin": 13614,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "exit-on-error",
+  "wording": "así no se puede seguir: aborta la ejecución mostrando \"faltan datos de entrada\" y devuelve un estado de error",
+  "outcome": "correct",
+  "best_guess": "exit-on-error",
+  "best_guess_correct": true,
+  "margin": 11059,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "exit-on-error",
+  "wording": "abortar con estado 2 y el aviso \"formato no reconocido\"",
+  "outcome": "correct",
+  "best_guess": "exit-on-error",
+  "best_guess_correct": true,
+  "margin": 8892,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-message",
+  "wording": "imprime \"Hola, \" seguido del name",
+  "outcome": "correct",
+  "best_guess": "print-message",
+  "best_guess_correct": true,
+  "margin": 4216,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-message",
+  "wording": "escribir en la consola el mensaje \"Importe: \" con el amount al final",
+  "outcome": "correct",
+  "best_guess": "print-message",
+  "best_guess_correct": true,
+  "margin": 4869,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-message",
+  "wording": "muestra por pantalla una línea que diga \"Procesados\" y a continuación el count",
+  "outcome": "correct",
+  "best_guess": "print-message",
+  "best_guess_correct": true,
+  "margin": 9747,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-message",
+  "wording": "quiero que saque por la salida una sola línea del tipo \"Listo, se guardaron 12 registros\", metiendo el count donde va el número",
+  "outcome": "correct",
+  "best_guess": "print-message",
+  "best_guess_correct": true,
+  "margin": 6374,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-table",
+  "wording": "imprimir users en tabla",
+  "outcome": "correct",
+  "best_guess": "print-table",
+  "best_guess_correct": true,
+  "margin": 4339,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-table",
+  "wording": "imprime los orders por consola en columnas alineadas",
+  "outcome": "correct",
+  "best_guess": "print-table",
+  "best_guess_correct": true,
+  "margin": 4071,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-table",
+  "wording": "saca por pantalla los items con name y price, cada columna bien alineada con la de arriba",
+  "outcome": "correct",
+  "best_guess": "print-table",
+  "best_guess_correct": true,
+  "margin": 6753,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-table",
+  "wording": "muéstrame en la terminal las filas de records como una tabla de texto, con las columnas id, status y date bien encuadradas",
+  "outcome": "correct",
+  "best_guess": "print-table",
+  "best_guess_correct": true,
+  "margin": 13985,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-groups",
+  "wording": "imprimir users por grupos con cabecera",
+  "outcome": "correct",
+  "best_guess": "print-groups",
+  "best_guess_correct": true,
+  "margin": 8497,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-groups",
+  "wording": "imprime los orders agrupados por region, con una línea de encabezado antes de cada grupo",
+  "outcome": "correct",
+  "best_guess": "print-groups",
+  "best_guess_correct": true,
+  "margin": 12988,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-groups",
+  "wording": "saca por consola los items por bloques según su status, poniendo el status como título encima de cada bloque",
+  "outcome": "correct",
+  "best_guess": "print-groups",
+  "best_guess_correct": true,
+  "margin": 11771,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "print-groups",
+  "wording": "quiero ver en pantalla los records separados por date: primero una línea con la date y debajo las filas que le corresponden",
+  "outcome": "correct",
+  "best_guess": "print-groups",
+  "best_guess_correct": true,
+  "margin": 3927,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-number",
+  "wording": "formatear amount: miles y 2 decimales",
+  "outcome": "correct",
+  "best_guess": "format-number",
+  "best_guess_correct": true,
+  "margin": 8707,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-number",
+  "wording": "formatea el price con separador de miles y 2 decimales fijos",
+  "outcome": "correct",
+  "best_guess": "format-number",
+  "best_guess_correct": true,
+  "margin": 12800,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-number",
+  "wording": "para mostrarlo, pon el count con puntos de millar y sin decimales, o sea 0",
+  "outcome": "correct",
+  "best_guess": "format-number",
+  "best_guess_correct": true,
+  "margin": 10016,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-number",
+  "wording": "deja 1234567.891 listo para enseñar al usuario: con sus separadores de miles y exactamente 3 decimales",
+  "outcome": "correct",
+  "best_guess": "format-number",
+  "best_guess_correct": true,
+  "margin": 11287,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-size",
+  "wording": "pasar bytes a tamaño legible",
+  "outcome": "correct",
+  "best_guess": "format-size",
+  "best_guess_correct": true,
+  "margin": 8247,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-size",
+  "wording": "convierte el size en bytes a algo legible como \"1.5 MB\"",
+  "outcome": "correct",
+  "best_guess": "format-size",
+  "best_guess_correct": true,
+  "margin": 8889,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-size",
+  "wording": "muestra 1048576 bytes como un tamaño que entienda una persona, en KB, MB o GB según toque",
+  "outcome": "correct",
+  "best_guess": "format-size",
+  "best_guess_correct": true,
+  "margin": 12799,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-size",
+  "wording": "expresar el size de cada uno de los files en unidades cómodas de leer en lugar de bytes a secas",
+  "outcome": "declined: unknown word",
+  "best_guess": "format-size",
+  "best_guess_correct": true,
+  "margin": 7146,
+  "unknown": [
+   "secas"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "format-text",
+  "wording": "componer \"PED-\" más id con 5 cifras",
+  "outcome": "correct",
+  "best_guess": "format-text",
+  "best_guess_correct": true,
+  "margin": 5210,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-text",
+  "wording": "arma un texto con el prefijo \"FAC-\" y el id rellenado con ceros hasta 6 dígitos",
+  "outcome": "correct",
+  "best_guess": "format-text",
+  "best_guess_correct": true,
+  "margin": 16152,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-text",
+  "wording": "compón una etiqueta con el name, un guion y la city, siguiendo siempre ese mismo patrón",
+  "outcome": "declined: too close to call",
+  "best_guess": "format-text",
+  "best_guess_correct": true,
+  "margin": 2254,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-text",
+  "wording": "necesito montar el nombre de cada archivo a partir de un patrón: \"informe_\", luego el id con ceros a la izquierda hasta 3 dígitos y al final \".txt\"",
+  "outcome": "correct",
+  "best_guess": "format-text",
+  "best_guess_correct": true,
+  "margin": 10624,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-grid",
+  "wording": "title en rejilla de 3 columnas",
+  "outcome": "correct",
+  "best_guess": "format-grid",
+  "best_guess_correct": true,
+  "margin": 7428,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-grid",
+  "wording": "coloca los name de los items en una cuadrícula de 4 columnas",
+  "outcome": "correct",
+  "best_guess": "format-grid",
+  "best_guess_correct": true,
+  "margin": 8488,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-grid",
+  "wording": "distribuir los valores de city en una rejilla con 5 columnas fijas",
+  "outcome": "correct",
+  "best_guess": "format-grid",
+  "best_guess_correct": true,
+  "margin": 16739,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-grid",
+  "wording": "quiero los name de los users dispuestos en forma de cuadrícula, con 6 por fila y tantas filas como hagan falta",
+  "outcome": "correct",
+  "best_guess": "format-grid",
+  "best_guess_correct": true,
+  "margin": 4840,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "fill-template",
+  "wording": "rellenar plantilla \"carta.txt\" con name y date",
+  "outcome": "correct",
+  "best_guess": "fill-template",
+  "best_guess_correct": true,
+  "margin": 6915,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "fill-template",
+  "wording": "rellena la plantilla \"informe.html\" con el title y el amount",
+  "outcome": "correct",
+  "best_guess": "fill-template",
+  "best_guess_correct": true,
+  "margin": 6915,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "fill-template",
+  "wording": "sustituye en la plantilla \"factura.html\" los huecos por el name, la date y el amount de cada uno de los orders",
+  "outcome": "correct",
+  "best_guess": "fill-template",
+  "best_guess_correct": true,
+  "margin": 7275,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "fill-template",
+  "wording": "tenemos una plantilla fija de página en \"base.html\"; mete dentro el title y el text donde correspondan",
+  "outcome": "correct",
+  "best_guess": "fill-template",
+  "best_guess_correct": true,
+  "margin": 5776,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "escape-html",
+  "wording": "escapar HTML del title",
+  "outcome": "correct",
+  "best_guess": "escape-html",
+  "best_guess_correct": true,
+  "margin": 6014,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "escape-html",
+  "wording": "escapa el text para poder meterlo en una página HTML",
+  "outcome": "correct",
+  "best_guess": "escape-html",
+  "best_guess_correct": true,
+  "margin": 6399,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "escape-html",
+  "wording": "convierte los caracteres especiales del name en entidades para que sea seguro ponerlo dentro de HTML",
+  "outcome": "correct",
+  "best_guess": "escape-html",
+  "best_guess_correct": true,
+  "margin": 15002,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "escape-html",
+  "wording": "antes de insertar el text en la página, neutraliza símbolos como \"<\" y \">\" para que no se interpreten como etiquetas",
+  "outcome": "correct",
+  "best_guess": "escape-html",
+  "best_guess_correct": true,
+  "margin": 13299,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "lowercase-text",
+  "wording": "convertir city a minúsculas",
+  "outcome": "correct",
+  "best_guess": "lowercase-text",
+  "best_guess_correct": true,
+  "margin": 5459,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "lowercase-text",
+  "wording": "pasa el email a minúsculas",
+  "outcome": "correct",
+  "best_guess": "lowercase-text",
+  "best_guess_correct": true,
+  "margin": 5459,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "lowercase-text",
+  "wording": "pon todo el text en letra minúscula",
+  "outcome": "correct",
+  "best_guess": "lowercase-text",
+  "best_guess_correct": true,
+  "margin": 6384,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "lowercase-text",
+  "wording": "quiero el title sin ninguna mayúscula, todo en minúsculas, para poder compararlo después",
+  "outcome": "correct",
+  "best_guess": "lowercase-text",
+  "best_guess_correct": true,
+  "margin": 6091,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "match-pattern",
+  "wording": "extraer coincidencias de \"[A-Z]+-\\d+\" en lines",
+  "outcome": "declined: too close to call",
+  "best_guess": "match-pattern",
+  "best_guess_correct": true,
+  "margin": 2510,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "match-pattern",
+  "wording": "busca en cada una de las lines lo que encaje con \"ERROR (\\d+): (.*)\" y saca de ahí el id y el text",
+  "outcome": "correct",
+  "best_guess": "match-pattern",
+  "best_guess_correct": true,
+  "margin": 9871,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "match-pattern",
+  "wording": "saca de cada línea de lines la parte que cumpla el patrón \"(\\d+) bytes\" y guarda el número capturado como size",
+  "outcome": "correct",
+  "best_guess": "match-pattern",
+  "best_guess_correct": true,
+  "margin": 16947,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "match-pattern",
+  "wording": "recorre las lines del archivo de log y, donde aparezca algo con la forma \"usuario=(\\w+) estado=(\\w+)\", quédate con esos dos pedazos llamándolos name y status",
+  "outcome": "declined: too close to call",
+  "best_guess": "match-pattern",
+  "best_guess_correct": true,
+  "margin": 1860,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-pattern",
+  "wording": "validar formato del email",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-pattern",
+  "best_guess_correct": true,
+  "margin": 3649,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-pattern",
+  "wording": "verifica que el id cumpla el patrón \"^[A-Z]{3}-\\d{4}$\"",
+  "outcome": "correct",
+  "best_guess": "check-pattern",
+  "best_guess_correct": true,
+  "margin": 6523,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-pattern",
+  "wording": "comprueba que el email tenga forma de dirección de correo, algo como \"^[^@]+@[^@]+\\.[a-z]+$\"",
+  "outcome": "correct",
+  "best_guess": "check-pattern",
+  "best_guess_correct": true,
+  "margin": 5694,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-pattern",
+  "wording": "asegúrate de que el text encaja entero con la expresión \"^\\d{5}$\", es decir, que tiene pinta de código postal",
+  "outcome": "correct",
+  "best_guess": "check-pattern",
+  "best_guess_correct": true,
+  "margin": 5858,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-text-rule",
+  "wording": "comprobar name no vacío",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-required",
+  "best_guess_correct": false,
+  "margin": 520,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-text-rule",
+  "wording": "verificar que el title no contenga el carácter \"/\"",
+  "outcome": "correct",
+  "best_guess": "check-text-rule",
+  "best_guess_correct": true,
+  "margin": 7675,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-text-rule",
+  "wording": "valida que el text no lleve ningún espacio en blanco",
+  "outcome": "correct",
+  "best_guess": "check-text-rule",
+  "best_guess_correct": true,
+  "margin": 5185,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-text-rule",
+  "wording": "asegúrate de que el name de cada uno de los users cumple la regla de siempre: que no venga vacío ni tenga una \",\" dentro",
+  "outcome": "correct",
+  "best_guess": "check-text-rule",
+  "best_guess_correct": true,
+  "margin": 11886,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-url",
+  "wording": "validar URL \"https://example.com/datos.json\"",
+  "outcome": "correct",
+  "best_guess": "check-url",
+  "best_guess_correct": true,
+  "margin": 4648,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-url",
+  "wording": "comprueba que el text sea una dirección web",
+  "outcome": "correct",
+  "best_guess": "check-url",
+  "best_guess_correct": true,
+  "margin": 4617,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-url",
+  "wording": "verifica que lo que hay en text es una URL bien formada, con su \"http\" o \"https\" delante",
+  "outcome": "correct",
+  "best_guess": "check-url",
+  "best_guess_correct": true,
+  "margin": 4810,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-url",
+  "wording": "mira si lo que escribió el usuario en text es de verdad una dirección de internet y no cualquier otra cosa",
+  "outcome": "correct",
+  "best_guess": "check-url",
+  "best_guess_correct": true,
+  "margin": 4775,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-valid-date",
+  "wording": "validar fecha \"2024-02-30\"",
+  "outcome": "correct",
+  "best_guess": "check-valid-date",
+  "best_guess_correct": true,
+  "margin": 3773,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-valid-date",
+  "wording": "comprueba que la date sea una fecha real",
+  "outcome": "correct",
+  "best_guess": "check-valid-date",
+  "best_guess_correct": true,
+  "margin": 5558,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-valid-date",
+  "wording": "verifica que el text corresponda a un día que existe en el calendario",
+  "outcome": "correct",
+  "best_guess": "check-valid-date",
+  "best_guess_correct": true,
+  "margin": 7226,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-valid-date",
+  "wording": "antes de seguir, confirma que la date de cada uno de los orders es una fecha de verdad y no algo como \"31/02/2023\"",
+  "outcome": "correct",
+  "best_guess": "check-valid-date",
+  "best_guess_correct": true,
+  "margin": 4151,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-required",
+  "wording": "campo name obligatorio relleno",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-required",
+  "best_guess_correct": true,
+  "margin": 2158,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-required",
+  "wording": "comprueba que el campo obligatorio email del formulario esté rellenado",
+  "outcome": "correct",
+  "best_guess": "check-required",
+  "best_guess_correct": true,
+  "margin": 8694,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-required",
+  "wording": "valida que el usuario haya completado el campo \"#telefono\" del formulario, que es obligatorio",
+  "outcome": "correct",
+  "best_guess": "check-required",
+  "best_guess_correct": true,
+  "margin": 12243,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-required",
+  "wording": "el campo city del formulario no se puede dejar sin contestar: mira si el usuario ha puesto algo en él",
+  "outcome": "correct",
+  "best_guess": "check-required",
+  "best_guess_correct": true,
+  "margin": 10799,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-min-length",
+  "wording": "campo name: mínimo 3 caracteres",
+  "outcome": "correct",
+  "best_guess": "check-min-length",
+  "best_guess_correct": true,
+  "margin": 10792,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-min-length",
+  "wording": "comprueba que el campo \"#clave\" tenga al menos 8 caracteres",
+  "outcome": "correct",
+  "best_guess": "check-min-length",
+  "best_guess_correct": true,
+  "margin": 14549,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-min-length",
+  "wording": "validar que lo escrito en el campo title del formulario no baje de 5 caracteres",
+  "outcome": "correct",
+  "best_guess": "check-min-length",
+  "best_guess_correct": true,
+  "margin": 7168,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-min-length",
+  "wording": "la contraseña del formulario, campo \"#password\", tiene que medir como poco 10 caracteres; verifícalo",
+  "outcome": "correct",
+  "best_guess": "check-min-length",
+  "best_guess_correct": true,
+  "margin": 16921,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-allowed-values",
+  "wording": "verificar status entre \"activo\" e \"inactivo\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-allowed-values",
+  "best_guess_correct": true,
+  "margin": 2489,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-allowed-values",
+  "wording": "comprueba que todos los status sean \"pendiente\", \"enviado\" o \"entregado\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-allowed-values",
+  "best_guess_correct": true,
+  "margin": 2725,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-allowed-values",
+  "wording": "valida que cada region esté dentro de la lista permitida: \"norte\", \"sur\", \"este\", \"oeste\"",
+  "outcome": "correct",
+  "best_guess": "check-allowed-values",
+  "best_guess_correct": true,
+  "margin": 13279,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-allowed-values",
+  "wording": "revisa los orders y asegúrate de que ningún status se sale de los valores admitidos, que son \"nuevo\", \"pagado\" y \"cancelado\"",
+  "outcome": "correct",
+  "best_guess": "check-allowed-values",
+  "best_guess_correct": true,
+  "margin": 9024,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-required-types",
+  "wording": "validar claves y tipos: id número, email texto",
+  "outcome": "correct",
+  "best_guess": "check-required-types",
+  "best_guess_correct": true,
+  "margin": 12662,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-required-types",
+  "wording": "comprueba que el registro tenga name como texto y age como número",
+  "outcome": "correct",
+  "best_guess": "check-required-types",
+  "best_guess_correct": true,
+  "margin": 4252,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-required-types",
+  "wording": "verifica que en cada uno de los records existan las claves title y done, la primera de tipo texto y la segunda booleana",
+  "outcome": "correct",
+  "best_guess": "check-required-types",
+  "best_guess_correct": true,
+  "margin": 13909,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-required-types",
+  "wording": "asegúrate de que al registro no le falta ni price ni count y de que los dos son numéricos, y que name viene como cadena",
+  "outcome": "correct",
+  "best_guess": "check-required-types",
+  "best_guess_correct": true,
+  "margin": 5361,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-list-of-records",
+  "wording": "verificar lista de registros",
+  "outcome": "correct",
+  "best_guess": "check-list-of-records",
+  "best_guess_correct": true,
+  "margin": 5986,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-list-of-records",
+  "wording": "comprueba que los datos cargados sean una lista de registros",
+  "outcome": "correct",
+  "best_guess": "check-list-of-records",
+  "best_guess_correct": true,
+  "margin": 11575,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-list-of-records",
+  "wording": "asegúrate de que lo que se leyó de \"datos.json\" es una lista y que cada elemento es un registro con sus claves",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-list-of-records",
+  "best_guess_correct": true,
+  "margin": 679,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-list-of-records",
+  "wording": "después de cargar el archivo, confirma que el contenido tiene la forma esperada: una lista cuyos elementos son todos registros, no valores sueltos",
+  "outcome": "correct",
+  "best_guess": "check-list-of-records",
+  "best_guess_correct": true,
+  "margin": 13344,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-path-exists",
+  "wording": "verificar que existe \"datos/entrada.csv\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-path-exists",
+  "best_guess_correct": true,
+  "margin": 2343,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-path-exists",
+  "wording": "comprueba que exista el archivo \"config.json\"",
+  "outcome": "correct",
+  "best_guess": "check-path-exists",
+  "best_guess_correct": true,
+  "margin": 7068,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-path-exists",
+  "wording": "valida que la carpeta \"informes\" esté ahí antes de continuar",
+  "outcome": "correct",
+  "best_guess": "check-path-exists",
+  "best_guess_correct": true,
+  "margin": 4732,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "check-path-exists",
+  "wording": "mira si el path apunta a algo que de verdad está en el disco, sea archivo o carpeta",
+  "outcome": "correct",
+  "best_guess": "check-path-exists",
+  "best_guess_correct": true,
+  "margin": 7202,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "read-text-file",
+  "wording": "leer archivo \"entrada.txt\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "read-text-file",
+  "best_guess_correct": true,
+  "margin": 3007,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "read-text-file",
+  "wording": "lee todo el contenido de \"notas.txt\"",
+  "outcome": "correct",
+  "best_guess": "read-text-file",
+  "best_guess_correct": true,
+  "margin": 5404,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "read-text-file",
+  "wording": "carga en memoria el texto completo del archivo que está en path",
+  "outcome": "correct",
+  "best_guess": "read-text-file",
+  "best_guess_correct": true,
+  "margin": 7652,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "read-text-file",
+  "wording": "abre \"registro.log\" y tráete de una vez todo lo que tiene escrito dentro, como texto",
+  "outcome": "declined: too close to call",
+  "best_guess": "read-text-file",
+  "best_guess_correct": true,
+  "margin": 2216,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "write-text-file",
+  "wording": "guardar texto en \"resultado.txt\"",
+  "outcome": "correct",
+  "best_guess": "write-text-file",
+  "best_guess_correct": true,
+  "margin": 4149,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "write-text-file",
+  "wording": "escribe el text en el archivo \"salida.txt\"",
+  "outcome": "correct",
+  "best_guess": "write-text-file",
+  "best_guess_correct": true,
+  "margin": 5007,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "write-text-file",
+  "wording": "vuelca el contenido de text al archivo indicado por path",
+  "outcome": "declined: too close to call",
+  "best_guess": "write-text-file",
+  "best_guess_correct": true,
+  "margin": 2244,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "write-text-file",
+  "wording": "cuando tengas el informe generado, grábalo como texto en el archivo \"informe.md\"",
+  "outcome": "correct",
+  "best_guess": "write-text-file",
+  "best_guess_correct": true,
+  "margin": 7706,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "parse-json",
+  "wording": "parsea el JSON de text",
+  "outcome": "correct",
+  "best_guess": "parse-json",
+  "best_guess_correct": true,
+  "margin": 5360,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "parse-json",
+  "wording": "convierte el text JSON en datos",
+  "outcome": "declined: too close to call",
+  "best_guess": "parse-json",
+  "best_guess_correct": true,
+  "margin": 796,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "parse-json",
+  "wording": "toma la cadena JSON que hay en text y transfórmala en datos con los que se pueda trabajar",
+  "outcome": "declined: unknown word",
+  "best_guess": "parse-json",
+  "best_guess_correct": true,
+  "margin": 1561,
+  "unknown": [
+   "trabajar"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "parse-json",
+  "wording": "lo que llega en text es JSON en crudo; analízalo para obtener la estructura de datos que representa",
+  "outcome": "correct",
+  "best_guess": "parse-json",
+  "best_guess_correct": true,
+  "margin": 10691,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-json",
+  "wording": "serializar records a JSON",
+  "outcome": "correct",
+  "best_guess": "format-json",
+  "best_guess_correct": true,
+  "margin": 5856,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-json",
+  "wording": "convierte los users a texto JSON",
+  "outcome": "correct",
+  "best_guess": "format-json",
+  "best_guess_correct": true,
+  "margin": 4240,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-json",
+  "wording": "pasa los datos de orders a una cadena en formato JSON",
+  "outcome": "correct",
+  "best_guess": "format-json",
+  "best_guess_correct": true,
+  "margin": 4281,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-json",
+  "wording": "necesito los items como texto JSON para poder escribirlos después; genera esa cadena a partir de los datos",
+  "outcome": "declined: too close to call",
+  "best_guess": "format-json",
+  "best_guess_correct": true,
+  "margin": 3633,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "parse-csv",
+  "wording": "parsear CSV de text",
+  "outcome": "correct",
+  "best_guess": "parse-csv",
+  "best_guess_correct": true,
+  "margin": 4730,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "parse-csv",
+  "wording": "convierte el text CSV en filas",
+  "outcome": "correct",
+  "best_guess": "parse-csv",
+  "best_guess_correct": true,
+  "margin": 5887,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "parse-csv",
+  "wording": "separa el contenido CSV de text en filas, cada una con sus valores",
+  "outcome": "correct",
+  "best_guess": "parse-csv",
+  "best_guess_correct": true,
+  "margin": 6597,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "parse-csv",
+  "wording": "el text viene en formato CSV, con comas entre valores y una fila por línea; pásalo a una lista de filas",
+  "outcome": "wrong",
+  "best_guess": "format-csv",
+  "best_guess_correct": false,
+  "margin": 4836,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-csv",
+  "wording": "filas a texto CSV",
+  "outcome": "correct",
+  "best_guess": "format-csv",
+  "best_guess_correct": true,
+  "margin": 5208,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-csv",
+  "wording": "convierte las filas en una cadena CSV",
+  "outcome": "correct",
+  "best_guess": "format-csv",
+  "best_guess_correct": true,
+  "margin": 4982,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-csv",
+  "wording": "pasa las filas de orders a texto CSV, con los valores separados por comas",
+  "outcome": "correct",
+  "best_guess": "format-csv",
+  "best_guess_correct": true,
+  "margin": 4382,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "format-csv",
+  "wording": "con las filas ya preparadas, móntame el texto en formato CSV para luego poder guardarlo",
+  "outcome": "correct",
+  "best_guess": "format-csv",
+  "best_guess_correct": true,
+  "margin": 6253,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "require-columns",
+  "wording": "exigir columnas id y price",
+  "outcome": "correct",
+  "best_guess": "require-columns",
+  "best_guess_correct": true,
+  "margin": 5125,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "require-columns",
+  "wording": "comprueba que la tabla tenga las columnas name, email y age",
+  "outcome": "correct",
+  "best_guess": "require-columns",
+  "best_guess_correct": true,
+  "margin": 6156,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "require-columns",
+  "wording": "verifica que en orders estén presentes las columnas date, amount y status",
+  "outcome": "correct",
+  "best_guess": "require-columns",
+  "best_guess_correct": true,
+  "margin": 6239,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "require-columns",
+  "wording": "antes de procesar la tabla de users, asegúrate de que no le falta ninguna de estas columnas: id, name, city",
+  "outcome": "correct",
+  "best_guess": "require-columns",
+  "best_guess_correct": true,
+  "margin": 14244,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "rows-to-records",
+  "wording": "filas con cabecera a registros",
+  "outcome": "correct",
+  "best_guess": "rows-to-records",
+  "best_guess_correct": true,
+  "margin": 4565,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "rows-to-records",
+  "wording": "convierte las filas en registros usando la primera fila como encabezado",
+  "outcome": "correct",
+  "best_guess": "rows-to-records",
+  "best_guess_correct": true,
+  "margin": 4553,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "rows-to-records",
+  "wording": "toma la fila de encabezados y el resto de filas y arma registros con nombre para cada valor",
+  "outcome": "declined: too close to call",
+  "best_guess": "rows-to-records",
+  "best_guess_correct": true,
+  "margin": 1810,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "rows-to-records",
+  "wording": "tengo las filas tal cual salieron del CSV, con los nombres de columna en la primera; quiero que cada fila pase a ser un registro con sus campos nombrados",
+  "outcome": "declined: unknown word",
+  "best_guess": "rows-to-records",
+  "best_guess_correct": true,
+  "margin": 2200,
+  "unknown": [
+   "salieron"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "records-to-rows",
+  "wording": "pasar users a cabecera y filas",
+  "outcome": "declined: too close to call",
+  "best_guess": "parse-csv",
+  "best_guess_correct": false,
+  "margin": 297,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "records-to-rows",
+  "wording": "convierte los records en una fila de encabezado y filas de valores",
+  "outcome": "declined: too close to call",
+  "best_guess": "rows-to-records",
+  "best_guess_correct": false,
+  "margin": 444,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "records-to-rows",
+  "wording": "descompón los orders en filas sueltas de valores, poniendo antes una fila con los nombres de los campos",
+  "outcome": "correct",
+  "best_guess": "records-to-rows",
+  "best_guess_correct": true,
+  "margin": 11575,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "records-to-rows",
+  "wording": "para poder exportarlos, deja los items como una fila con los nombres de campo seguida de una fila de valores por cada registro",
+  "outcome": "declined: too close to call",
+  "best_guess": "records-to-rows",
+  "best_guess_correct": true,
+  "margin": 2426,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "list-folder",
+  "wording": "listar \"fotos\" sin subcarpetas",
+  "outcome": "declined: too close to call",
+  "best_guess": "list-folder",
+  "best_guess_correct": true,
+  "margin": 3528,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "list-folder",
+  "wording": "lista los archivos que hay directamente en la carpeta \"documentos\"",
+  "outcome": "correct",
+  "best_guess": "list-folder",
+  "best_guess_correct": true,
+  "margin": 5587,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "list-folder",
+  "wording": "dame los files de la carpeta indicada en path, solo los del primer nivel",
+  "outcome": "correct",
+  "best_guess": "list-folder",
+  "best_guess_correct": true,
+  "margin": 5961,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "list-folder",
+  "wording": "enumera lo que hay dentro de \"descargas\", pero únicamente los archivos que cuelgan directamente de ella, sin bajar a las carpetas interiores",
+  "outcome": "correct",
+  "best_guess": "list-folder",
+  "best_guess_correct": true,
+  "margin": 12795,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "walk-folder",
+  "wording": "recorrer \"datos\" recursivamente",
+  "outcome": "correct",
+  "best_guess": "walk-folder",
+  "best_guess_correct": true,
+  "margin": 5224,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "walk-folder",
+  "wording": "lista todos los archivos de \"proyecto\" incluyendo los de sus subcarpetas",
+  "outcome": "correct",
+  "best_guess": "walk-folder",
+  "best_guess_correct": true,
+  "margin": 5853,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "walk-folder",
+  "wording": "recorre la carpeta de path y todas las que tenga por debajo, y devuelve cada archivo que encuentres",
+  "outcome": "correct",
+  "best_guess": "walk-folder",
+  "best_guess_correct": true,
+  "margin": 13202,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "walk-folder",
+  "wording": "necesito el listado completo de files que hay bajo \"src\", bajando por todas las subcarpetas hasta el fondo",
+  "outcome": "correct",
+  "best_guess": "walk-folder",
+  "best_guess_correct": true,
+  "margin": 11436,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "file-size",
+  "wording": "tamaño en bytes de \"datos.bin\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "file-size",
+  "best_guess_correct": true,
+  "margin": 1677,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "file-size",
+  "wording": "obtén el tamaño en bytes de \"video.mp4\"",
+  "outcome": "correct",
+  "best_guess": "file-size",
+  "best_guess_correct": true,
+  "margin": 4163,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "file-size",
+  "wording": "averigua cuántos bytes ocupa el archivo que está en path",
+  "outcome": "correct",
+  "best_guess": "file-size",
+  "best_guess_correct": true,
+  "margin": 6939,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "file-size",
+  "wording": "para cada uno de los files quiero saber cuánto pesa en disco, expresado en bytes",
+  "outcome": "correct",
+  "best_guess": "file-size",
+  "best_guess_correct": true,
+  "margin": 3776,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "hash-file",
+  "wording": "calcular hash de \"paquete.zip\"",
+  "outcome": "correct",
+  "best_guess": "hash-file",
+  "best_guess_correct": true,
+  "margin": 5626,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "hash-file",
+  "wording": "calcula la suma de verificación de \"imagen.iso\"",
+  "outcome": "correct",
+  "best_guess": "hash-file",
+  "best_guess_correct": true,
+  "margin": 5626,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "hash-file",
+  "wording": "obtener el checksum del contenido del archivo indicado en path",
+  "outcome": "correct",
+  "best_guess": "hash-file",
+  "best_guess_correct": true,
+  "margin": 4627,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "hash-file",
+  "wording": "saca una huella del contenido de \"respaldo.tar\" para poder comprobar más adelante que el archivo no ha cambiado",
+  "outcome": "correct",
+  "best_guess": "hash-file",
+  "best_guess_correct": true,
+  "margin": 5274,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "split-extension",
+  "wording": "separar nombre y extensión",
+  "outcome": "correct",
+  "best_guess": "split-extension",
+  "best_guess_correct": true,
+  "margin": 7573,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "split-extension",
+  "wording": "separa \"informe.final.pdf\" en nombre y extensión",
+  "outcome": "correct",
+  "best_guess": "split-extension",
+  "best_guess_correct": true,
+  "margin": 10358,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "split-extension",
+  "wording": "divide el nombre de archivo de path en dos partes: lo que va antes del último punto y la extensión",
+  "outcome": "correct",
+  "best_guess": "split-extension",
+  "best_guess_correct": true,
+  "margin": 21025,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "split-extension",
+  "wording": "de cada uno de los files necesito por un lado el nombre sin la extensión y por otro la extensión sola",
+  "outcome": "wrong",
+  "best_guess": "choose-by-value",
+  "best_guess_correct": false,
+  "margin": 4708,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "filter-rows",
+  "wording": "filtrar orders con status = \"pagado\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "filter-rows",
+  "best_guess_correct": true,
+  "margin": 3716,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "filter-rows",
+  "wording": "quédate solo con los users con age >= 18",
+  "outcome": "correct",
+  "best_guess": "filter-rows",
+  "best_guess_correct": true,
+  "margin": 6020,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "filter-rows",
+  "wording": "deja únicamente los items cuyo price < 50",
+  "outcome": "correct",
+  "best_guess": "filter-rows",
+  "best_guess_correct": true,
+  "margin": 8636,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "filter-rows",
+  "wording": "de todos los orders me interesan nada más los de region = \"norte\"; conserva esos y descarta el resto",
+  "outcome": "declined: unknown word",
+  "best_guess": "remove-where",
+  "best_guess_correct": false,
+  "margin": 3242,
+  "unknown": [
+   "interesan"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "sort-rows",
+  "wording": "ordenar items por name",
+  "outcome": "correct",
+  "best_guess": "sort-rows",
+  "best_guess_correct": true,
+  "margin": 5752,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "sort-rows",
+  "wording": "ordena los users por age de menor a mayor",
+  "outcome": "correct",
+  "best_guess": "sort-rows",
+  "best_guess_correct": true,
+  "margin": 10184,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "sort-rows",
+  "wording": "pon los orders en orden descendente según date",
+  "outcome": "correct",
+  "best_guess": "sort-rows",
+  "best_guess_correct": true,
+  "margin": 11405,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "sort-rows",
+  "wording": "quiero los records colocados por amount, con los más grandes primero y los más pequeños al final",
+  "outcome": "correct",
+  "best_guess": "sort-rows",
+  "best_guess_correct": true,
+  "margin": 8238,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "take-first",
+  "wording": "tomar los 5 primeros users",
+  "outcome": "correct",
+  "best_guess": "take-first",
+  "best_guess_correct": true,
+  "margin": 5462,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "take-first",
+  "wording": "quédate con los primeros 10 orders",
+  "outcome": "correct",
+  "best_guess": "take-first",
+  "best_guess_correct": true,
+  "margin": 5148,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "take-first",
+  "wording": "conserva solo las 20 primeras filas de records",
+  "outcome": "correct",
+  "best_guess": "take-first",
+  "best_guess_correct": true,
+  "margin": 5829,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "take-first",
+  "wording": "no hace falta la lista entera de items, me basta con los 3 que aparecen al principio",
+  "outcome": "declined: unknown word",
+  "best_guess": "take-first",
+  "best_guess_correct": true,
+  "margin": 474,
+  "unknown": [
+   "basta"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "group-by-key",
+  "wording": "agrupar orders por status",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-by-key",
+  "best_guess_correct": true,
+  "margin": 676,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "group-by-key",
+  "wording": "agrupa los users por city",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-by-key",
+  "best_guess_correct": true,
+  "margin": 676,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "group-by-key",
+  "wording": "junta los items en grupos según su region, de modo que cada grupo tenga los que comparten el mismo valor",
+  "outcome": "correct",
+  "best_guess": "group-by-key",
+  "best_guess_correct": true,
+  "margin": 6259,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "group-by-key",
+  "wording": "reúne los records que tengan la misma date en un mismo montón, un grupo por cada date distinta",
+  "outcome": "declined: unknown word",
+  "best_guess": "group-by-key",
+  "best_guess_correct": true,
+  "margin": 4535,
+  "unknown": [
+   "montón"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "group-total",
+  "wording": "sumar amount por status",
+  "outcome": "correct",
+  "best_guess": "group-total",
+  "best_guess_correct": true,
+  "margin": 4750,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "group-total",
+  "wording": "suma el amount de los orders por region",
+  "outcome": "correct",
+  "best_guess": "group-total",
+  "best_guess_correct": true,
+  "margin": 4989,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "group-total",
+  "wording": "calcula para cada city cuánto suman los price de sus items",
+  "outcome": "correct",
+  "best_guess": "group-total",
+  "best_guess_correct": true,
+  "margin": 4766,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "group-total",
+  "wording": "quiero saber cuánto se ha vendido en cada region: agrupa los orders por region y suma el amount de cada grupo",
+  "outcome": "declined: unknown word",
+  "best_guess": "group-total",
+  "best_guess_correct": true,
+  "margin": 12823,
+  "unknown": [
+   "vendido"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "count-values",
+  "wording": "contar apariciones de cada city",
+  "outcome": "correct",
+  "best_guess": "count-values",
+  "best_guess_correct": true,
+  "margin": 7806,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "count-values",
+  "wording": "cuenta cuántas veces aparece cada status en los orders",
+  "outcome": "correct",
+  "best_guess": "count-values",
+  "best_guess_correct": true,
+  "margin": 13021,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "count-values",
+  "wording": "dime cuántos users hay de cada region",
+  "outcome": "declined: too close to call",
+  "best_guess": "count-values",
+  "best_guess_correct": true,
+  "margin": 483,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "count-values",
+  "wording": "haz un recuento de los valores de status en records, indicando para cada valor distinto el número de veces que sale",
+  "outcome": "correct",
+  "best_guess": "count-values",
+  "best_guess_correct": true,
+  "margin": 8480,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "count-rows",
+  "wording": "contar filas de records",
+  "outcome": "correct",
+  "best_guess": "count-rows",
+  "best_guess_correct": true,
+  "margin": 5079,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "count-rows",
+  "wording": "cuenta cuántos orders hay",
+  "outcome": "declined: too close to call",
+  "best_guess": "count-rows",
+  "best_guess_correct": true,
+  "margin": 1731,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "count-rows",
+  "wording": "dime el número de filas que tiene items",
+  "outcome": "correct",
+  "best_guess": "count-rows",
+  "best_guess_correct": true,
+  "margin": 6502,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "count-rows",
+  "wording": "necesito saber cuántos registros hay en users, todos juntos, sin distinguir por nada",
+  "outcome": "declined: unknown word",
+  "best_guess": "count-rows",
+  "best_guess_correct": true,
+  "margin": 3214,
+  "unknown": [
+   "distinguir"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "total",
+  "wording": "sumar price de items",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-total",
+  "best_guess_correct": false,
+  "margin": 235,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "total",
+  "wording": "suma el amount de todos los orders",
+  "outcome": "correct",
+  "best_guess": "total",
+  "best_guess_correct": true,
+  "margin": 4575,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "total",
+  "wording": "calcula la suma global de total en records",
+  "outcome": "correct",
+  "best_guess": "total",
+  "best_guess_correct": true,
+  "margin": 4416,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "total",
+  "wording": "quiero una única cifra con todo lo que suman los price de los items, sin separar por grupos",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-total",
+  "best_guess_correct": false,
+  "margin": 710,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "distinct-values",
+  "wording": "valores únicos de status",
+  "outcome": "declined: too close to call",
+  "best_guess": "distinct-values",
+  "best_guess_correct": true,
+  "margin": 1678,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "distinct-values",
+  "wording": "lista las city distintas de los users",
+  "outcome": "correct",
+  "best_guess": "distinct-values",
+  "best_guess_correct": true,
+  "margin": 5192,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "distinct-values",
+  "wording": "dame cada region que aparece en orders, sin repetir ninguna",
+  "outcome": "wrong",
+  "best_guess": "count-values",
+  "best_guess_correct": false,
+  "margin": 3964,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "distinct-values",
+  "wording": "saca la lista de los status diferentes que hay en records, cada uno una sola vez",
+  "outcome": "correct",
+  "best_guess": "distinct-values",
+  "best_guess_correct": true,
+  "margin": 11210,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "remove-duplicates",
+  "wording": "quitar orders duplicados por id",
+  "outcome": "correct",
+  "best_guess": "remove-duplicates",
+  "best_guess_correct": true,
+  "margin": 5984,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "remove-duplicates",
+  "wording": "elimina los users con email repetido, dejando el primero",
+  "outcome": "correct",
+  "best_guess": "remove-duplicates",
+  "best_guess_correct": true,
+  "margin": 7891,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "remove-duplicates",
+  "wording": "descarta las filas de records cuyo id ya haya salido antes",
+  "outcome": "correct",
+  "best_guess": "remove-duplicates",
+  "best_guess_correct": true,
+  "margin": 6286,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "remove-duplicates",
+  "wording": "si hay varios users con el mismo email, quédate solo con el que aparece primero y tira los demás",
+  "outcome": "correct",
+  "best_guess": "remove-duplicates",
+  "best_guess_correct": true,
+  "margin": 6192,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "exclude-by-key",
+  "wording": "excluir de users los id de records",
+  "outcome": "declined: too close to call",
+  "best_guess": "exclude-by-key",
+  "best_guess_correct": true,
+  "margin": 3387,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "exclude-by-key",
+  "wording": "quédate con los users cuyo id no aparezca en orders",
+  "outcome": "correct",
+  "best_guess": "exclude-by-key",
+  "best_guess_correct": true,
+  "margin": 4342,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "exclude-by-key",
+  "wording": "deja fuera de orders todas las filas cuyo email esté entre los de users",
+  "outcome": "declined: too close to call",
+  "best_guess": "exclude-by-key",
+  "best_guess_correct": true,
+  "margin": 3144,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "exclude-by-key",
+  "wording": "tengo dos conjuntos, items y records; quiero los items cuyo id no figure en ningún registro de records",
+  "outcome": "declined: too close to call",
+  "best_guess": "exclude-by-key",
+  "best_guess_correct": true,
+  "margin": 2562,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "drop-invalid-rows",
+  "wording": "descartar filas inválidas de orders",
+  "outcome": "correct",
+  "best_guess": "drop-invalid-rows",
+  "best_guess_correct": true,
+  "margin": 3893,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "drop-invalid-rows",
+  "wording": "omite las filas mal formadas o con valores vacíos y sigue adelante",
+  "outcome": "correct",
+  "best_guess": "drop-invalid-rows",
+  "best_guess_correct": true,
+  "margin": 15914,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "drop-invalid-rows",
+  "wording": "ignora los records a los que les falte algún valor, sin detener el proceso",
+  "outcome": "correct",
+  "best_guess": "drop-invalid-rows",
+  "best_guess_correct": true,
+  "margin": 10940,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "drop-invalid-rows",
+  "wording": "si alguna fila de orders viene rota o incompleta, no pares el programa: simplemente déjala fuera y continúa con las demás",
+  "outcome": "correct",
+  "best_guess": "drop-invalid-rows",
+  "best_guess_correct": true,
+  "margin": 12046,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "clean-number-field",
+  "wording": "pasar amount de texto a número",
+  "outcome": "correct",
+  "best_guess": "clean-number-field",
+  "best_guess_correct": true,
+  "margin": 5007,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "clean-number-field",
+  "wording": "convierte el texto \"1,250.50\" en número",
+  "outcome": "correct",
+  "best_guess": "clean-number-field",
+  "best_guess_correct": true,
+  "margin": 6243,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "clean-number-field",
+  "wording": "el price viene como texto con separadores de miles, por ejemplo \"3,499.00\"; déjalo como número",
+  "outcome": "correct",
+  "best_guess": "clean-number-field",
+  "best_guess_correct": true,
+  "margin": 6344,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "clean-number-field",
+  "wording": "en orders el amount llega escrito como cadena con comas, tipo \"12,800.75\", y hay que transformarlo en un valor numérico con el que se pueda operar",
+  "outcome": "declined: unknown word",
+  "best_guess": "clean-number-field",
+  "best_guess_correct": true,
+  "margin": 8198,
+  "unknown": [
+   "operar"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "number-items",
+  "wording": "numerar lines desde 1",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-number-range",
+  "best_guess_correct": false,
+  "margin": 22,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "number-items",
+  "wording": "numera los items empezando en 1",
+  "outcome": "correct",
+  "best_guess": "number-items",
+  "best_guess_correct": true,
+  "margin": 4446,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "number-items",
+  "wording": "asigna a cada uno de los orders un número correlativo a partir de 100",
+  "outcome": "correct",
+  "best_guess": "number-items",
+  "best_guess_correct": true,
+  "margin": 10867,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "number-items",
+  "wording": "ponle a cada elemento de records su número de posición consecutivo, comenzando la cuenta en 0",
+  "outcome": "correct",
+  "best_guess": "number-items",
+  "best_guess_correct": true,
+  "margin": 13669,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "fill-series",
+  "wording": "completar horas faltantes con 0",
+  "outcome": "correct",
+  "best_guess": "fill-series",
+  "best_guess_correct": true,
+  "margin": 9225,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "fill-series",
+  "wording": "rellena con 0 los días del mes que falten en la serie",
+  "outcome": "correct",
+  "best_guess": "fill-series",
+  "best_guess_correct": true,
+  "margin": 12579,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "fill-series",
+  "wording": "completa los meses que no aparezcan entre 1 y 12 poniendo 0 en count",
+  "outcome": "correct",
+  "best_guess": "fill-series",
+  "best_guess_correct": true,
+  "margin": 9793,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "fill-series",
+  "wording": "tenemos el count por hora pero hay horas sin datos; quiero las 24 horas, de la 0 a la 23, y que las que falten salgan con 0",
+  "outcome": "correct",
+  "best_guess": "fill-series",
+  "best_guess_correct": true,
+  "margin": 12397,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "build-record",
+  "wording": "armar registro con id y title",
+  "outcome": "declined: too close to call",
+  "best_guess": "build-record",
+  "best_guess_correct": true,
+  "margin": 3067,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "build-record",
+  "wording": "crea un registro con name \"Ana\", age 30 y city \"Madrid\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "build-record",
+  "best_guess_correct": true,
+  "margin": 3571,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "build-record",
+  "wording": "construye un registro juntando estos valores con nombre: email, status y date",
+  "outcome": "correct",
+  "best_guess": "build-record",
+  "best_guess_correct": true,
+  "margin": 6948,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "build-record",
+  "wording": "con el id, el amount y la region que ya tenemos calculados, monta un único registro que los contenga bajo esos mismos nombres",
+  "outcome": "declined: too close to call",
+  "best_guess": "build-record",
+  "best_guess_correct": true,
+  "margin": 1763,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "first-match",
+  "wording": "primero de items con price < 10",
+  "outcome": "declined: too close to call",
+  "best_guess": "first-match",
+  "best_guess_correct": true,
+  "margin": 2631,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "first-match",
+  "wording": "busca el primero de los users con age > 65, o nada si no hay",
+  "outcome": "correct",
+  "best_guess": "first-match",
+  "best_guess_correct": true,
+  "margin": 9957,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "first-match",
+  "wording": "encuentra el primer registro de orders con status = \"pendiente\" y, si no hay ninguno, devuelve \"ninguno\"",
+  "outcome": "correct",
+  "best_guess": "first-match",
+  "best_guess_correct": true,
+  "margin": 12565,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "first-match",
+  "wording": "recorre los records hasta dar con uno cuyo id = 42; en cuanto lo encuentres quédate con ese, y si no aparece usa un valor por defecto",
+  "outcome": "correct",
+  "best_guess": "first-match",
+  "best_guess_correct": true,
+  "margin": 3823,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "all-match",
+  "wording": "verificar si todos cumplen age >= 18",
+  "outcome": "correct",
+  "best_guess": "all-match",
+  "best_guess_correct": true,
+  "margin": 9316,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "all-match",
+  "wording": "comprueba si todos los items tienen price > 0",
+  "outcome": "correct",
+  "best_guess": "all-match",
+  "best_guess_correct": true,
+  "margin": 7986,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "all-match",
+  "wording": "dime si se cumple status = \"cerrado\" en cada uno de los orders, sin excepción",
+  "outcome": "correct",
+  "best_guess": "all-match",
+  "best_guess_correct": true,
+  "margin": 10989,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "all-match",
+  "wording": "necesito un sí o un no: ¿están todos los records con amount >= 100, o hay alguno que no llega?",
+  "outcome": "correct",
+  "best_guess": "all-match",
+  "best_guess_correct": true,
+  "margin": 9127,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "flatten-lists",
+  "wording": "aplanar lista de listas",
+  "outcome": "correct",
+  "best_guess": "flatten-lists",
+  "best_guess_correct": true,
+  "margin": 8387,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "flatten-lists",
+  "wording": "une varias listas en una sola",
+  "outcome": "correct",
+  "best_guess": "flatten-lists",
+  "best_guess_correct": true,
+  "margin": 10430,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "flatten-lists",
+  "wording": "combina las listas de lines de cada archivo en una única lista",
+  "outcome": "declined: too close to call",
+  "best_guess": "flatten-lists",
+  "best_guess_correct": true,
+  "margin": 2103,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "flatten-lists",
+  "wording": "tengo una lista cuyos elementos son a su vez listas de files; quiero una sola lista plana con todos los files seguidos",
+  "outcome": "correct",
+  "best_guess": "flatten-lists",
+  "best_guess_correct": true,
+  "margin": 8205,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "get-by-path",
+  "wording": "valor en \"usuario.direccion.ciudad\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "check-allowed-values",
+  "best_guess_correct": false,
+  "margin": 84,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "get-by-path",
+  "wording": "obtén el valor de \"servidor.puerto\" dentro de la configuración",
+  "outcome": "declined: too close to call",
+  "best_guess": "get-by-path",
+  "best_guess_correct": true,
+  "margin": 3104,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "get-by-path",
+  "wording": "sigue la ruta con puntos \"base.conexion.host\" dentro de los datos anidados y devuelve lo que haya al final",
+  "outcome": "correct",
+  "best_guess": "get-by-path",
+  "best_guess_correct": true,
+  "margin": 16423,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "get-by-path",
+  "wording": "la configuración tiene varios niveles; baja por \"registro.salida.nivel\" paso a paso hasta llegar al valor que hay ahí",
+  "outcome": "correct",
+  "best_guess": "get-by-path",
+  "best_guess_correct": true,
+  "margin": 5045,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "json-type-of",
+  "wording": "tipo JSON de amount",
+  "outcome": "declined: too close to call",
+  "best_guess": "json-type-of",
+  "best_guess_correct": true,
+  "margin": 3501,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "json-type-of",
+  "wording": "dime qué tipo JSON tiene el valor",
+  "outcome": "correct",
+  "best_guess": "json-type-of",
+  "best_guess_correct": true,
+  "margin": 12297,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "json-type-of",
+  "wording": "indica si status es en JSON una cadena, un número, un booleano, una lista, un objeto o nulo",
+  "outcome": "correct",
+  "best_guess": "json-type-of",
+  "best_guess_correct": true,
+  "margin": 8487,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "json-type-of",
+  "wording": "necesito saber de qué tipo es, en términos de JSON, lo que hay guardado en text",
+  "outcome": "declined: too close to call",
+  "best_guess": "json-type-of",
+  "best_guess_correct": true,
+  "margin": 3413,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "calculate",
+  "wording": "calcular price por count",
+  "outcome": "declined: too close to call",
+  "best_guess": "group-total",
+  "best_guess_correct": false,
+  "margin": 1263,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "calculate",
+  "wording": "calcula el importe multiplicando price por count",
+  "outcome": "declined: too close to call",
+  "best_guess": "calculate",
+  "best_guess_correct": true,
+  "margin": 3457,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "calculate",
+  "wording": "aplica la fórmula amount más el 21 por ciento de amount para sacar el importe final",
+  "outcome": "correct",
+  "best_guess": "calculate",
+  "best_guess_correct": true,
+  "margin": 6251,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "calculate",
+  "wording": "saca el valor que resulta de restarle a price el 10 por ciento de descuento y sumarle después 5 de envío",
+  "outcome": "declined: unknown word",
+  "best_guess": "calculate",
+  "best_guess_correct": true,
+  "margin": 5771,
+  "unknown": [
+   "descuento"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "round-number",
+  "wording": "redondear amount a 1 decimal",
+  "outcome": "correct",
+  "best_guess": "round-number",
+  "best_guess_correct": true,
+  "margin": 6458,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "round-number",
+  "wording": "redondea el price a 2 decimales",
+  "outcome": "correct",
+  "best_guess": "round-number",
+  "best_guess_correct": true,
+  "margin": 6458,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "round-number",
+  "wording": "deja 3.14159 redondeado a 3 cifras decimales",
+  "outcome": "correct",
+  "best_guess": "round-number",
+  "best_guess_correct": true,
+  "margin": 5822,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "round-number",
+  "wording": "el total sale con un montón de decimales; redondéalo para que se quede en 2 nada más",
+  "outcome": "correct",
+  "best_guess": "round-number",
+  "best_guess_correct": true,
+  "margin": 6594,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "split-duration",
+  "wording": "desglosar duración de 3725 segundos",
+  "outcome": "correct",
+  "best_guess": "split-duration",
+  "best_guess_correct": true,
+  "margin": 9511,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "split-duration",
+  "wording": "descompón 93784 segundos en días, horas, minutos y segundos",
+  "outcome": "correct",
+  "best_guess": "split-duration",
+  "best_guess_correct": true,
+  "margin": 10047,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "split-duration",
+  "wording": "separa el tiempo transcurrido en sus días, horas, minutos y segundos",
+  "outcome": "correct",
+  "best_guess": "split-duration",
+  "best_guess_correct": true,
+  "margin": 14517,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "split-duration",
+  "wording": "tengo una duración en segundos, 200000, y quiero saber a cuántos días, horas, minutos y segundos equivale",
+  "outcome": "correct",
+  "best_guess": "split-duration",
+  "best_guess_correct": true,
+  "margin": 13934,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "current-time",
+  "wording": "fecha y hora actuales",
+  "outcome": "correct",
+  "best_guess": "current-time",
+  "best_guess_correct": true,
+  "margin": 11296,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "current-time",
+  "wording": "obtén la fecha y la hora de ahora mismo",
+  "outcome": "correct",
+  "best_guess": "current-time",
+  "best_guess_correct": true,
+  "margin": 15642,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "current-time",
+  "wording": "consulta qué día y qué hora es en este momento",
+  "outcome": "correct",
+  "best_guess": "current-time",
+  "best_guess_correct": true,
+  "margin": 8507,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "current-time",
+  "wording": "necesito el instante actual, con su fecha y su hora, para ponerlo luego en la date del registro",
+  "outcome": "correct",
+  "best_guess": "current-time",
+  "best_guess_correct": true,
+  "margin": 6858,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "choose-by-value",
+  "wording": "elegir acción según status",
+  "outcome": "correct",
+  "best_guess": "choose-by-value",
+  "best_guess_correct": true,
+  "margin": 6719,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "choose-by-value",
+  "wording": "dependiendo del valor de region, ejecuta una acción u otra de entre varias",
+  "outcome": "correct",
+  "best_guess": "choose-by-value",
+  "best_guess_correct": true,
+  "margin": 17103,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "choose-by-value",
+  "wording": "según la extensión del archivo, decide qué hacer: una cosa para \".csv\", otra para \".json\" y otra para \".txt\"",
+  "outcome": "correct",
+  "best_guess": "choose-by-value",
+  "best_guess_correct": true,
+  "margin": 17170,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "choose-by-value",
+  "wording": "mira en qué termina path y escoge el camino: con \".png\" va por un lado, con \".pdf\" por otro, y para cualquier otra extensión se toma la opción por defecto",
+  "outcome": "correct",
+  "best_guess": "choose-by-value",
+  "best_guess_correct": true,
+  "margin": 11381,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "http-get",
+  "wording": "petición GET a \"https://example.com/api\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "http-get",
+  "best_guess_correct": true,
+  "margin": 1164,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "http-get",
+  "wording": "descarga el contenido de \"https://example.com/datos.json\"",
+  "outcome": "correct",
+  "best_guess": "http-get",
+  "best_guess_correct": true,
+  "margin": 5044,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "http-get",
+  "wording": "trae lo que devuelve la dirección \"https://example.com/informe.csv\"",
+  "outcome": "correct",
+  "best_guess": "http-get",
+  "best_guess_correct": true,
+  "margin": 5110,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "http-get",
+  "wording": "haz una petición a \"https://example.com/estado\" y quédate con lo que responda el servidor",
+  "outcome": "declined: too close to call",
+  "best_guess": "http-get",
+  "best_guess_correct": true,
+  "margin": 618,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "retry-with-backoff",
+  "wording": "reintentar con espera creciente, máximo 3",
+  "outcome": "correct",
+  "best_guess": "retry-with-backoff",
+  "best_guess_correct": true,
+  "margin": 10681,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "retry-with-backoff",
+  "wording": "reintenta la descarga hasta 5 veces, esperando cada vez más entre intentos",
+  "outcome": "correct",
+  "best_guess": "retry-with-backoff",
+  "best_guess_correct": true,
+  "margin": 26841,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "retry-with-backoff",
+  "wording": "si la operación falla, vuelve a probar duplicando la espera en cada intento, con un tope de 4 intentos",
+  "outcome": "correct",
+  "best_guess": "retry-with-backoff",
+  "best_guess_correct": true,
+  "margin": 27964,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "retry-with-backoff",
+  "wording": "cuando la petición no salga a la primera no te rindas: inténtalo de nuevo tras 1 segundo, luego tras 2, luego tras 4, y déjalo después de 6 intentos fallidos",
+  "outcome": "declined: unknown word",
+  "best_guess": "retry-with-backoff",
+  "best_guess_correct": true,
+  "margin": 21548,
+  "unknown": [
+   "rindas"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "http-server",
+  "wording": "servidor web en puerto 3000",
+  "outcome": "correct",
+  "best_guess": "http-server",
+  "best_guess_correct": true,
+  "margin": 10683,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "http-server",
+  "wording": "arranca un servidor web en el puerto 8080",
+  "outcome": "correct",
+  "best_guess": "http-server",
+  "best_guess_correct": true,
+  "margin": 10907,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "http-server",
+  "wording": "pon a escuchar un servidor HTTP en el puerto 5000",
+  "outcome": "correct",
+  "best_guess": "http-server",
+  "best_guess_correct": true,
+  "margin": 14561,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "http-server",
+  "wording": "necesito que el programa se quede atendiendo peticiones web por el puerto 8000, así que levanta ahí un servidor",
+  "outcome": "correct",
+  "best_guess": "http-server",
+  "best_guess_correct": true,
+  "margin": 14547,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "route-request",
+  "wording": "enrutar peticiones por ruta y método",
+  "outcome": "correct",
+  "best_guess": "route-request",
+  "best_guess_correct": true,
+  "margin": 13800,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "route-request",
+  "wording": "dirige cada petición entrante al manejador que corresponda según su dirección y su método",
+  "outcome": "correct",
+  "best_guess": "route-request",
+  "best_guess_correct": true,
+  "margin": 25140,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "route-request",
+  "wording": "las peticiones GET a \"/users\" van a un manejador y las POST a \"/orders\" a otro; repártelas así",
+  "outcome": "correct",
+  "best_guess": "route-request",
+  "best_guess_correct": true,
+  "margin": 6589,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "route-request",
+  "wording": "cuando llegue una petición al servidor, mira a qué ruta va y con qué método, y pásasela a la función encargada de ese caso",
+  "outcome": "declined: unknown word",
+  "best_guess": "route-request",
+  "best_guess_correct": true,
+  "margin": 7907,
+  "unknown": [
+   "pásasela",
+   "encargada"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "read-request-body",
+  "wording": "leer cuerpo de la petición, límite 65536 bytes",
+  "outcome": "correct",
+  "best_guess": "read-request-body",
+  "best_guess_correct": true,
+  "margin": 15734,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "read-request-body",
+  "wording": "lee el cuerpo de la petición entrante, con un máximo de 1048576 bytes",
+  "outcome": "correct",
+  "best_guess": "read-request-body",
+  "best_guess_correct": true,
+  "margin": 20195,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "read-request-body",
+  "wording": "recoge los datos que el cliente envió en el cuerpo de la petición, sin aceptar más de 2000000 bytes",
+  "outcome": "correct",
+  "best_guess": "read-request-body",
+  "best_guess_correct": true,
+  "margin": 12740,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "read-request-body",
+  "wording": "en las peticiones POST hay que leer lo que viene en el cuerpo, pero cortando si pasa de 10000 bytes para que nadie nos mande algo enorme",
+  "outcome": "declined: unknown word",
+  "best_guess": "read-request-body",
+  "best_guess_correct": true,
+  "margin": 14175,
+  "unknown": [
+   "nadie"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "send-json-response",
+  "wording": "responder JSON con estado 404",
+  "outcome": "correct",
+  "best_guess": "send-json-response",
+  "best_guess_correct": true,
+  "margin": 11448,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "send-json-response",
+  "wording": "responde a la petición con JSON y código 200",
+  "outcome": "correct",
+  "best_guess": "send-json-response",
+  "best_guess_correct": true,
+  "margin": 15310,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "send-json-response",
+  "wording": "devuelve al cliente los users en formato JSON con el código de estado 200",
+  "outcome": "correct",
+  "best_guess": "send-json-response",
+  "best_guess_correct": true,
+  "margin": 8469,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "send-json-response",
+  "wording": "contesta la petición enviando un JSON con el mensaje \"no encontrado\" y pon 404 como código de estado",
+  "outcome": "correct",
+  "best_guess": "send-json-response",
+  "best_guess_correct": true,
+  "margin": 14735,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "on-signal-shutdown",
+  "wording": "apagado ordenado por señal",
+  "outcome": "correct",
+  "best_guess": "on-signal-shutdown",
+  "best_guess_correct": true,
+  "margin": 4919,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "on-signal-shutdown",
+  "wording": "cierra el programa limpiamente cuando reciba la señal de parada",
+  "outcome": "correct",
+  "best_guess": "on-signal-shutdown",
+  "best_guess_correct": true,
+  "margin": 20092,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "on-signal-shutdown",
+  "wording": "cuando pidan detener el servidor, termina lo que esté en curso y sal de forma ordenada",
+  "outcome": "correct",
+  "best_guess": "on-signal-shutdown",
+  "best_guess_correct": true,
+  "margin": 15828,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "on-signal-shutdown",
+  "wording": "si alguien pulsa Ctrl+C o el sistema manda la orden de terminar, no cortes de golpe: cierra las conexiones abiertas y luego finaliza",
+  "outcome": "declined: unknown word",
+  "best_guess": "on-signal-shutdown",
+  "best_guess_correct": true,
+  "margin": 13777,
+  "unknown": [
+   "C",
+   "conexiones"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "select-elements",
+  "wording": "seleccionar elementos \"#menu li\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "select-elements",
+  "best_guess_correct": true,
+  "margin": 3742,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "select-elements",
+  "wording": "busca en la página los elementos \".producto\"",
+  "outcome": "correct",
+  "best_guess": "select-elements",
+  "best_guess_correct": true,
+  "margin": 5172,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "select-elements",
+  "wording": "localiza todos los elementos de la página que coincidan con el selector \"input.obligatorio\"",
+  "outcome": "correct",
+  "best_guess": "select-elements",
+  "best_guess_correct": true,
+  "margin": 12206,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "select-elements",
+  "wording": "necesito tener a mano todas las filas de la tabla de la página, las que responden a \"table.listado tr\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "render-table",
+  "best_guess_correct": false,
+  "margin": 3195,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "on-event",
+  "wording": "acción al pulsar \"#buscar\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "on-event",
+  "best_guess_correct": true,
+  "margin": 3363,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "on-event",
+  "wording": "cuando se haga clic en \"#guardar\", ejecuta la acción de guardado",
+  "outcome": "correct",
+  "best_guess": "on-event",
+  "best_guess_correct": true,
+  "margin": 10513,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "on-event",
+  "wording": "al enviarse el formulario \"#registro\", lanza la función que lo procesa",
+  "outcome": "correct",
+  "best_guess": "on-event",
+  "best_guess_correct": true,
+  "margin": 7738,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "on-event",
+  "wording": "quiero que cada vez que el usuario cambie la opción de \"#idioma\" se dispare la acción correspondiente",
+  "outcome": "correct",
+  "best_guess": "on-event",
+  "best_guess_correct": true,
+  "margin": 9795,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "set-text",
+  "wording": "poner \"Guardado\" en \"#estado\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "focus-element",
+  "best_guess_correct": false,
+  "margin": 148,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "set-text",
+  "wording": "cambia el texto de \"#titulo\" a \"Bienvenido\"",
+  "outcome": "correct",
+  "best_guess": "set-text",
+  "best_guess_correct": true,
+  "margin": 4992,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "set-text",
+  "wording": "actualiza lo que se lee en el elemento \"#contador\" con el count",
+  "outcome": "declined: too close to call",
+  "best_guess": "set-text",
+  "best_guess_correct": true,
+  "margin": 2297,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "set-text",
+  "wording": "en la página hay un elemento \"#saludo\"; haz que su texto pase a ser \"Hola, \" seguido del name",
+  "outcome": "declined: too close to call",
+  "best_guess": "set-text",
+  "best_guess_correct": true,
+  "margin": 3028,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "show-hide",
+  "wording": "mostrar \"#ayuda\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "show-hide",
+  "best_guess_correct": true,
+  "margin": 682,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "show-hide",
+  "wording": "oculta el elemento \"#panel\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "show-hide",
+  "best_guess_correct": true,
+  "margin": 2051,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "show-hide",
+  "wording": "haz visible el elemento \"#resultados\" de la página",
+  "outcome": "declined: too close to call",
+  "best_guess": "show-hide",
+  "best_guess_correct": true,
+  "margin": 2294,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "show-hide",
+  "wording": "el aviso \"#cargando\" tiene que dejar de verse cuando terminen de llegar los datos, así que escóndelo",
+  "outcome": "declined: unknown word",
+  "best_guess": "on-signal-shutdown",
+  "best_guess_correct": false,
+  "margin": 3822,
+  "unknown": [
+   "verse"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "show-field-message",
+  "wording": "aviso \"Demasiado corto\" junto a \"#clave\"",
+  "outcome": "correct",
+  "best_guess": "show-field-message",
+  "best_guess_correct": true,
+  "margin": 6894,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "show-field-message",
+  "wording": "muestra el mensaje \"Este campo es obligatorio\" junto al campo email",
+  "outcome": "correct",
+  "best_guess": "show-field-message",
+  "best_guess_correct": true,
+  "margin": 11212,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "show-field-message",
+  "wording": "pon al lado del campo \"#telefono\" del formulario el texto \"Número no válido\"",
+  "outcome": "correct",
+  "best_guess": "show-field-message",
+  "best_guess_correct": true,
+  "margin": 8001,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "show-field-message",
+  "wording": "cuando el campo age del formulario tenga un valor incorrecto, enséñale al usuario justo al lado un mensaje que diga \"Introduce una edad válida\"",
+  "outcome": "declined: unknown word",
+  "best_guess": "show-field-message",
+  "best_guess_correct": true,
+  "margin": 14027,
+  "unknown": [
+   "justo"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "block-submit-if-invalid",
+  "wording": "bloquear envío con campos inválidos",
+  "outcome": "correct",
+  "best_guess": "block-submit-if-invalid",
+  "best_guess_correct": true,
+  "margin": 10699,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "block-submit-if-invalid",
+  "wording": "impide que se envíe el formulario mientras haya algún campo inválido",
+  "outcome": "correct",
+  "best_guess": "block-submit-if-invalid",
+  "best_guess_correct": true,
+  "margin": 18666,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "block-submit-if-invalid",
+  "wording": "no dejes enviar \"#registro\" hasta que todos sus campos sean válidos",
+  "outcome": "correct",
+  "best_guess": "block-submit-if-invalid",
+  "best_guess_correct": true,
+  "margin": 9156,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "block-submit-if-invalid",
+  "wording": "si al pulsar enviar queda algún campo del formulario que no pasa la validación, cancela el envío y que no salga nada",
+  "outcome": "correct",
+  "best_guess": "block-submit-if-invalid",
+  "best_guess_correct": true,
+  "margin": 18091,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "focus-element",
+  "wording": "enfocar \"#usuario\"",
+  "outcome": "correct",
+  "best_guess": "focus-element",
+  "best_guess_correct": true,
+  "margin": 4982,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "focus-element",
+  "wording": "pon el foco en \"#buscar\"",
+  "outcome": "correct",
+  "best_guess": "focus-element",
+  "best_guess_correct": true,
+  "margin": 5684,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "focus-element",
+  "wording": "mueve el cursor al campo \"#nombre\" de la página",
+  "outcome": "correct",
+  "best_guess": "focus-element",
+  "best_guess_correct": true,
+  "margin": 7135,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "focus-element",
+  "wording": "al abrir la página quiero que el cursor ya esté colocado dentro de \"#correo\", listo para escribir",
+  "outcome": "declined: too close to call",
+  "best_guess": "render-list",
+  "best_guess_correct": false,
+  "margin": 603,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "reset-form",
+  "wording": "limpiar formulario \"#alta\"",
+  "outcome": "correct",
+  "best_guess": "reset-form",
+  "best_guess_correct": true,
+  "margin": 4177,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "reset-form",
+  "wording": "restablece el formulario \"#contacto\" a su estado inicial",
+  "outcome": "correct",
+  "best_guess": "reset-form",
+  "best_guess_correct": true,
+  "margin": 10365,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "reset-form",
+  "wording": "vacía todos los campos del formulario y déjalo como estaba al cargar la página",
+  "outcome": "correct",
+  "best_guess": "reset-form",
+  "best_guess_correct": true,
+  "margin": 11366,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "reset-form",
+  "wording": "después de guardar, el formulario \"#nuevo\" tiene que volver a quedar en blanco, con sus valores de partida",
+  "outcome": "correct",
+  "best_guess": "reset-form",
+  "best_guess_correct": true,
+  "margin": 12952,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "read-element-data",
+  "wording": "leer dato guardado en \"#tarjeta\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "read-element-data",
+  "best_guess_correct": true,
+  "margin": 967,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "read-element-data",
+  "wording": "lee el dato id que lleva guardado el elemento pulsado",
+  "outcome": "declined: too close to call",
+  "best_guess": "read-element-data",
+  "best_guess_correct": true,
+  "margin": 3712,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "read-element-data",
+  "wording": "obtén el valor del atributo de datos \"categoria\" del elemento \"#ficha\"",
+  "outcome": "correct",
+  "best_guess": "read-element-data",
+  "best_guess_correct": true,
+  "margin": 9637,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "read-element-data",
+  "wording": "cada botón \".borrar\" tiene asociado en la propia etiqueta el id del registro; recupera ese valor del elemento",
+  "outcome": "declined: too close to call",
+  "best_guess": "read-element-data",
+  "best_guess_correct": true,
+  "margin": 2510,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "render-table",
+  "wording": "pintar orders en tabla dentro de \"#listado\"",
+  "outcome": "correct",
+  "best_guess": "render-table",
+  "best_guess_correct": true,
+  "margin": 5768,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "render-table",
+  "wording": "muestra los users como una tabla en la página",
+  "outcome": "correct",
+  "best_guess": "render-table",
+  "best_guess_correct": true,
+  "margin": 4853,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "render-table",
+  "wording": "dibuja en \"#contenido\" una tabla HTML con una fila por cada uno de los items",
+  "outcome": "correct",
+  "best_guess": "render-table",
+  "best_guess_correct": true,
+  "margin": 8898,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "render-table",
+  "wording": "quiero ver los records en la página web en forma de tabla, con una columna por campo: id, name y status",
+  "outcome": "correct",
+  "best_guess": "render-table",
+  "best_guess_correct": true,
+  "margin": 4142,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "render-list",
+  "wording": "pintar users como lista en \"#personas\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "render-list",
+  "best_guess_correct": true,
+  "margin": 2580,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "render-list",
+  "wording": "muestra los items como una lista en la página, un elemento por cada uno",
+  "outcome": "correct",
+  "best_guess": "render-list",
+  "best_guess_correct": true,
+  "margin": 5369,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "render-list",
+  "wording": "genera dentro de \"#tareas\" un elemento de lista por cada registro de records, con su title",
+  "outcome": "correct",
+  "best_guess": "render-list",
+  "best_guess_correct": true,
+  "margin": 4343,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "render-list",
+  "wording": "en la página, debajo de \"#pendientes\", tiene que salir una lista con viñetas donde cada uno de los orders ocupe una entrada",
+  "outcome": "correct",
+  "best_guess": "render-list",
+  "best_guess_correct": true,
+  "margin": 9965,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "filter-elements-by-text",
+  "wording": "filtrar \".tarjeta\" por texto tecleado",
+  "outcome": "correct",
+  "best_guess": "filter-elements-by-text",
+  "best_guess_correct": true,
+  "margin": 8437,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "filter-elements-by-text",
+  "wording": "oculta los elementos \".fila\" que no contengan el texto que escribió el usuario",
+  "outcome": "correct",
+  "best_guess": "filter-elements-by-text",
+  "best_guess_correct": true,
+  "margin": 15371,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "filter-elements-by-text",
+  "wording": "según lo que se teclee en \"#buscar\", deja visibles solo los elementos \"#lista li\" que lo incluyan",
+  "outcome": "correct",
+  "best_guess": "filter-elements-by-text",
+  "best_guess_correct": true,
+  "margin": 11495,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "filter-elements-by-text",
+  "wording": "es un buscador en vivo: a medida que el usuario escribe en \"#filtro\", desaparecen de la página las entradas \".producto\" que no lleven ese texto",
+  "outcome": "correct",
+  "best_guess": "filter-elements-by-text",
+  "best_guess_correct": true,
+  "margin": 22143,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "timer-every",
+  "wording": "repetir acción cada 30 segundos",
+  "outcome": "correct",
+  "best_guess": "timer-every",
+  "best_guess_correct": true,
+  "margin": 6009,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "timer-every",
+  "wording": "ejecuta la actualización cada 5 segundos",
+  "outcome": "correct",
+  "best_guess": "timer-every",
+  "best_guess_correct": true,
+  "margin": 5385,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "timer-every",
+  "wording": "programa un temporizador que lance la comprobación una y otra vez, cada 60 segundos",
+  "outcome": "correct",
+  "best_guess": "timer-every",
+  "best_guess_correct": true,
+  "margin": 5041,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "timer-every",
+  "wording": "quiero que el reloj de la página se refresque solo, así que vuelve a llamar a la acción cada 1 segundo de forma indefinida",
+  "outcome": "declined: too close to call",
+  "best_guess": "timer-every",
+  "best_guess_correct": true,
+  "margin": 2061,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "stop-timer",
+  "wording": "parar el temporizador",
+  "outcome": "correct",
+  "best_guess": "stop-timer",
+  "best_guess_correct": true,
+  "margin": 6426,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "stop-timer",
+  "wording": "detén el temporizador que se repite",
+  "outcome": "correct",
+  "best_guess": "stop-timer",
+  "best_guess_correct": true,
+  "margin": 7101,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "stop-timer",
+  "wording": "cancela la ejecución periódica que estaba en marcha",
+  "outcome": "correct",
+  "best_guess": "stop-timer",
+  "best_guess_correct": true,
+  "margin": 4484,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "stop-timer",
+  "wording": "ya no hace falta seguir refrescando cada pocos segundos; para el intervalo que habíamos puesto a correr",
+  "outcome": "declined: unknown word",
+  "best_guess": "timer-every",
+  "best_guess_correct": false,
+  "margin": 1024,
+  "unknown": [
+   "habíamos"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "load-from-storage",
+  "wording": "leer \"tareas\" del almacenamiento local",
+  "outcome": "declined: too close to call",
+  "best_guess": "load-from-storage",
+  "best_guess_correct": true,
+  "margin": 3505,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "load-from-storage",
+  "wording": "carga los datos guardados en el almacenamiento del navegador",
+  "outcome": "correct",
+  "best_guess": "load-from-storage",
+  "best_guess_correct": true,
+  "margin": 3854,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "load-from-storage",
+  "wording": "recupera del almacenamiento del navegador lo que se guardó bajo la clave \"preferencias\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "load-from-storage",
+  "best_guess_correct": true,
+  "margin": 3736,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "load-from-storage",
+  "wording": "al abrir la página, mira si en el navegador quedó guardada la lista de items de la última vez y, si está, tráela",
+  "outcome": "declined: too close to call",
+  "best_guess": "load-from-storage",
+  "best_guess_correct": true,
+  "margin": 793,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "save-to-storage",
+  "wording": "guardar \"tareas\" en almacenamiento local",
+  "outcome": "declined: too close to call",
+  "best_guess": "save-to-storage",
+  "best_guess_correct": true,
+  "margin": 390,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "save-to-storage",
+  "wording": "guarda los items en el almacenamiento del navegador",
+  "outcome": "declined: too close to call",
+  "best_guess": "save-to-storage",
+  "best_guess_correct": true,
+  "margin": 882,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "save-to-storage",
+  "wording": "almacena en el navegador, bajo la clave \"carrito\", la lista de orders",
+  "outcome": "declined: too close to call",
+  "best_guess": "save-to-storage",
+  "best_guess_correct": true,
+  "margin": 951,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "save-to-storage",
+  "wording": "para que no se pierdan al recargar la página, deja los records guardados en el almacenamiento local del navegador",
+  "outcome": "declined: unknown word",
+  "best_guess": "save-to-storage",
+  "best_guess_correct": true,
+  "margin": 975,
+  "unknown": [
+   "pierdan"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "append-record",
+  "wording": "agregar a items con id siguiente",
+  "outcome": "correct",
+  "best_guess": "append-record",
+  "best_guess_correct": true,
+  "margin": 5120,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "append-record",
+  "wording": "añade un nuevo registro a users con el siguiente id libre",
+  "outcome": "correct",
+  "best_guess": "append-record",
+  "best_guess_correct": true,
+  "margin": 14038,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "append-record",
+  "wording": "inserta al final de orders un registro nuevo y asígnale el id que toque a continuación",
+  "outcome": "correct",
+  "best_guess": "append-record",
+  "best_guess_correct": true,
+  "margin": 12654,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "append-record",
+  "wording": "el usuario ha creado una tarea con title \"Comprar pan\"; métela en records dándole un id que no esté usado, el siguiente al mayor que haya",
+  "outcome": "correct",
+  "best_guess": "append-record",
+  "best_guess_correct": true,
+  "margin": 4305,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "update-where",
+  "wording": "actualizar status a \"cerrado\" donde id = 12",
+  "outcome": "correct",
+  "best_guess": "update-where",
+  "best_guess_correct": true,
+  "margin": 5817,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "update-where",
+  "wording": "cambia el status a \"enviado\" en los orders con id = 7",
+  "outcome": "correct",
+  "best_guess": "update-where",
+  "best_guess_correct": true,
+  "margin": 6283,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "update-where",
+  "wording": "pon el price a 0 en todos los items cuyo count = 0",
+  "outcome": "declined: too close to call",
+  "best_guess": "update-where",
+  "best_guess_correct": true,
+  "margin": 1967,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "update-where",
+  "wording": "a los users que tengan city = \"Sevilla\" hay que ponerles region con el valor \"sur\"; modifica ese campo en los que cumplan",
+  "outcome": "correct",
+  "best_guess": "update-where",
+  "best_guess_correct": true,
+  "margin": 10878,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "remove-where",
+  "wording": "borrar items con count = 0",
+  "outcome": "correct",
+  "best_guess": "remove-where",
+  "best_guess_correct": true,
+  "margin": 5178,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "remove-where",
+  "wording": "elimina los orders con status = \"cancelado\"",
+  "outcome": "correct",
+  "best_guess": "remove-where",
+  "best_guess_correct": true,
+  "margin": 4788,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "remove-where",
+  "wording": "quita de users todos los registros cuyo age < 18",
+  "outcome": "correct",
+  "best_guess": "remove-where",
+  "best_guess_correct": true,
+  "margin": 6942,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "remove-where",
+  "wording": "hay que limpiar records: todo registro que cumpla date < \"2020-01-01\" se borra de la lista",
+  "outcome": "correct",
+  "best_guess": "remove-where",
+  "best_guess_correct": true,
+  "margin": 7541,
+  "unknown": []
+ }
+]

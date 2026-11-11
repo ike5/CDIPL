@@ -29,8 +29,9 @@ function readBody(req) {
     req.on('data', (chunk) => {
       size += chunk.length;
       if (size > MAX_BODY_BYTES) {
+        // Stop buffering but keep draining, so the client can read the 413 reply.
+        chunks.length = 0;
         reject(Object.assign(new Error('Request body too large'), { status: 413 }));
-        req.destroy();
         return;
       }
       chunks.push(chunk);
@@ -80,7 +81,8 @@ async function handleRequest(req, res) {
     await route.handler(req, res);
   } catch (err) {
     if (!res.headersSent) {
-      sendJson(res, err.status ?? 500, { error: err.status ? err.message : 'Internal server error' });
+      const message = err.status ? err.message : 'Internal server error';
+      sendJson(res, err.status ?? 500, { error: message }, { Connection: 'close' });
     }
   }
 }

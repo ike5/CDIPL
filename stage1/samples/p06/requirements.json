@@ -1,0 +1,9 @@
+{
+  "name": "string",
+  "debug": "boolean",
+  "server.host": "string",
+  "server.port": "integer",
+  "server.timeout": "number",
+  "database.url": "string",
+  "allowed_hosts": "array"
+}

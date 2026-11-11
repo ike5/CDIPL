@@ -1,0 +1,7 @@
+{
+  "name": "demo-app",
+  "debug": false,
+  "server": {"host": "localhost", "port": 8080, "timeout": 2.5},
+  "database": {"url": "sqlite:///demo.db"},
+  "allowed_hosts": ["localhost", "example.org"]
+}

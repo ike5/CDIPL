@@ -1,0 +1,10 @@
+[
+  { "name": "Espresso cup", "category": "Kitchen", "price": "6.50" },
+  { "name": "Desk lamp", "category": "Office", "price": "24.00" },
+  { "name": "Notebook", "category": "Office", "price": "3.20" },
+  { "name": "Frying pan", "category": "Kitchen", "price": "18.90" },
+  { "name": "Garden hose", "category": "Garden", "price": "21.75" },
+  { "name": "Watering can", "category": "Garden", "price": "9.40" },
+  { "name": "Stapler", "category": "Office", "price": "7.10" },
+  { "name": "Tea towel", "category": "Kitchen", "price": "4.00" }
+]

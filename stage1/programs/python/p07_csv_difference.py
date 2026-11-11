@@ -49,13 +49,12 @@ def write_difference(first_path, exclude, key, out_path):
 
     Returns (rows_read, rows_written).
     """
-    # Opening the output truncates it, so it must not be one of the inputs.
-    if os.path.exists(out_path) and os.path.samefile(first_path, out_path):
-        raise CsvError("the output file must not be the same as the first file")
-
     with open_csv(first_path) as source:
         reader = csv.DictReader(source)
         require_key(reader, key, first_path)
+        # Opening the output truncates it, so it must not be the input.
+        if os.path.exists(out_path) and os.path.samefile(first_path, out_path):
+            raise CsvError("the output file must not be the same as the first file")
         try:
             target = open(out_path, "w", newline="", encoding="utf-8")
         except OSError as exc:

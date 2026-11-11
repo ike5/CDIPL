@@ -116,8 +116,9 @@ def main(argv=None):
         note = "  (unchanged)" if old == new else ""
         print(f"{old} -> {new}{note}")
 
+    changed = sum(old != new for old, new in plan)
     if args.dry_run:
-        print(f"Dry run: {len(plan)} file(s) would be renamed; nothing changed.")
+        print(f"Dry run: {changed} file(s) would be renamed; nothing changed.")
         return 0
 
     try:
@@ -125,7 +126,7 @@ def main(argv=None):
     except OSError as exc:
         print(f"error: rename failed part-way: {exc}", file=sys.stderr)
         return 1
-    print(f"Renamed {len(plan)} file(s).")
+    print(f"Renamed {changed} file(s).")
     return 0
 
 

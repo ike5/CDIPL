@@ -1,0 +1,10 @@
+region,product,amount
+North,Widget,120.50
+South,Gadget,75.00
+North,Gadget,30.25
+East,Widget,200.00
+West,Widget,49.99
+South,Widget,310.10
+East,Gizmo,15.75
+West,Gadget,oops
+North,Gizmo,"1,000.00"

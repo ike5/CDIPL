@@ -1,0 +1,15 @@
+# Release notes
+
+This is the first paragraph,
+continued on a second line.
+
+## What's new
+- Faster start-up
+- Fixed <b>bold</b> & "quote" handling
+- Smaller download
+
+## Known issues
+Nothing serious yet.
+-not a bullet (no space)
+### Details
+- One item

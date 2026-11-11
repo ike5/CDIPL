@@ -9,6 +9,7 @@ Usage: p05_fetch_json.py URL [-o output.json] [--delay SECONDS]
 """
 
 import argparse
+import http.client
 import json
 import sys
 import time
@@ -46,8 +47,10 @@ def fetch_with_retries(url, timeout, base_delay, retries=MAX_RETRIES):
     for attempt in range(retries + 1):
         try:
             return fetch_once(url, timeout)
-        # URLError covers HTTPError; OSError covers timeouts and resets.
-        except (urllib.error.URLError, OSError) as exc:
+        # URLError covers HTTPError; OSError covers timeouts and resets;
+        # HTTPException covers replies that are cut short or garbled.
+        except (urllib.error.URLError, OSError,
+                http.client.HTTPException) as exc:
             reason = getattr(exc, "reason", None) or exc
             if isinstance(exc, urllib.error.HTTPError):
                 reason = f"HTTP {exc.code} {exc.reason}"

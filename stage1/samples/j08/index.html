@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>To-do list</title>
+  <style>
+    .done span { text-decoration: line-through; }
+  </style>
+  <script src="../../programs/javascript/j08_todo_list.js" defer></script>
+</head>
+<body>
+  <h1>To-do list</h1>
+
+  <form id="todo-form">
+    <label for="todo-input">New item</label>
+    <input id="todo-input" type="text" autocomplete="off" required>
+    <button type="submit">Add</button>
+  </form>
+
+  <ul id="todo-list"></ul>
+</body>
+</html>

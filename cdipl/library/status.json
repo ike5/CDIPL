@@ -1,0 +1,17 @@
+{
+  "check-list-of-records": "draft",
+  "check-required-types": "draft",
+  "cli-options": "draft",
+  "count-values": "draft",
+  "drop-invalid-rows": "draft",
+  "exit-on-error": "draft",
+  "filter-rows": "draft",
+  "format-json": "draft",
+  "group-by-key": "draft",
+  "parse-json": "draft",
+  "print-message": "draft",
+  "print-table": "draft",
+  "read-text-file": "draft",
+  "sort-rows": "draft",
+  "take-first": "draft"
+}

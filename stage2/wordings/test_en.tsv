@@ -1,0 +1,361 @@
+block	wording
+cli-options	accept a "--region" option and a "--count" option on the command line
+cli-options	define flags "--verbose" and "--output"
+cli-options	let the user pass a path as the first argument plus an optional "--size" flag, and read what they gave
+cli-options	set up the program's command-line arguments: a required path and an optional "--limit" number
+check-number-range	make sure the count the user gave is between 1 and 100, defaulting to 10 if they left it out
+check-number-range	require size within 1 to 50, default 20
+check-number-range	check that the age entered is from 0 to 120, and fall back to 18 when none was supplied
+check-number-range	verify the amount passed in is at least 1 and at most 1000, or use 100 if it is missing
+exit-on-error	abort with the message "file not found" and exit status 1
+exit-on-error	quit with error "missing input"
+exit-on-error	stop the whole program right here, print "cannot read orders" as an error and return a non-zero status
+exit-on-error	bail out with status 2, saying "invalid region"
+print-message	print the line "Total: " followed by the total
+print-message	print "Hello, " and the name
+print-message	write a single line to the screen saying how many records were read, like "Read 40 records" with the real count filled in
+print-message	echo one line telling the user where the output went, "Saved to " plus the path
+print-table	print the orders as aligned columns
+print-table	print users in columns
+print-table	display the items in the terminal in neat columns, with id, name and price lined up
+print-table	output the records to the console as a text table with padded columns
+print-groups	print the orders grouped by region, with the region as a heading above each group
+print-groups	print users under city headings
+print-groups	list the items on screen in sections by status, each section starting with a line that names the status
+print-groups	write out the records to the console one group per date, putting a header line with the date before each group
+format-number	format the total with thousands separators and 2 decimals
+format-number	format amount with commas, 2 decimals
+format-number	make the price readable for display by putting a comma between the thousands and keeping exactly 2 digits after the point
+format-number	present 1250000 for output as "1,250,000.00"
+format-size	show the size in human-readable form, like "1.5 MB"
+format-size	turn 1536000 bytes into a readable size
+format-size	make size human-readable
+format-size	convert the byte count of each of the files into something friendly such as "2.3 GB" or "740 KB"
+format-text	build a label from "INV-" followed by the id padded with zeros to 5 digits
+format-text	make "order-" plus id, zero-padded to 4
+format-text	put together a file name made of the prefix "report-", then the date, then the ending ".csv"
+format-text	generate a code for each of the items that is "IT" and then the id written with 6 digits, leading zeros included
+format-grid	lay the values out as a grid 4 columns wide
+format-grid	arrange items in 3 columns
+format-grid	arrange each title into rows of 5 so that together they form a grid
+format-grid	take the list of files and set them out as a grid, 6 to a row, wrapping onto a new row whenever one is full
+fill-template	fill the page template "invoice.html" with the name, date and total
+fill-template	fill template "letter.txt" with name and city
+fill-template	take the fixed document template "report.html" and drop the title and the count into its placeholders
+fill-template	substitute the name and email into the slots of the "welcome.html" template
+escape-html	escape the title for HTML
+escape-html	HTML-escape the name
+escape-html	make the text safe to put inside a web page by replacing characters like "<" and "&"
+escape-html	neutralise any markup in the text before it goes into the page, so "<b>" shows up literally instead of turning things bold
+lowercase-text	lowercase the email
+lowercase-text	convert the name to lower case
+lowercase-text	make the city all small letters
+lowercase-text	change every capital letter in the title to its small form, so "Hello World" becomes "hello world"
+match-pattern	pull the date and status out of each of the lines using the pattern "(?P<date>\d{4}-\d{2}-\d{2}) (?P<status>\w+)"
+match-pattern	extract "(\d+) ms" matches from lines
+match-pattern	find the parts of every one of the lines that fit "ERROR: (.*)" and capture what follows as text
+match-pattern	scan through the lines one at a time for "(\S+) - (\d+)" and grab the two pieces as name and count
+check-pattern	check that the email fits the pattern "^[^@]+@[^@]+\.[^@]+$"
+check-pattern	validate id against "^[A-Z]{2}\d{4}$"
+check-pattern	make sure the status matches the pattern "^[a-z_]+$" and complain if it does not
+check-pattern	test whether the text the user gave is shaped like an email address, using "^\S+@\S+\.\S+$"
+check-text-rule	check that the title does not contain "/"
+check-text-rule	ensure name has no "@"
+check-text-rule	make sure the text read from the file is not empty
+check-text-rule	verify that there is no "," anywhere in the name, since that would break the output later on
+check-url	check that the text is a web address
+check-url	validate "https://example.com/data.json" as a URL
+check-url	confirm text is a URL
+check-url	make sure what the user entered is a proper link, something like "https://example.com/page", and not just any old text
+check-valid-date	check that the date is a real calendar date
+check-valid-date	validate "2024-02-30" as a date
+check-valid-date	verify date really exists
+check-valid-date	make sure the date text is an actual day on the calendar, so that something like "2023-13-45" gets rejected
+check-required	check that the required email field on the form has been filled in
+check-required	require form field "#name"
+check-required	make sure the user did not leave the mandatory "#email" input blank in the form
+check-required	flag the form's city field if it was left empty, since it is compulsory
+check-min-length	check that the name field has at least 3 characters
+check-min-length	enforce minimum length 8 on "#password"
+check-min-length	make sure whatever is typed into the title field of the form is 5 characters or longer
+check-min-length	reject the city field when fewer than 2 characters were entered
+check-allowed-values	check that every status is one of "open", "closed" or "pending"
+check-allowed-values	allow only "north", "south", "east", "west" for region
+check-allowed-values	make sure no order has a status outside the permitted set "new", "paid", "shipped"
+check-allowed-values	confirm that all the size values come from the list "S", "M", "L", "XL" and nothing else
+check-required-types	check that each record has a name that is text and an age that is a number
+check-required-types	require id as number, title as text
+check-required-types	make sure the keys id, email and done are all present in the record, with id a number, email text and done true or false
+check-required-types	verify the record contains price and count and that both of them hold numbers
+check-list-of-records	check that the loaded data is a list of records
+check-list-of-records	verify data is a record list
+check-list-of-records	make sure what came out of the file is an array of objects and not something else, such as a single object or a bare number
+check-list-of-records	confirm the parsed users form a list in which every entry is a record
+check-path-exists	check that "data/input.csv" exists
+check-path-exists	verify path exists
+check-path-exists	make sure the folder "reports" is there before continuing
+check-path-exists	see whether there is actually a file or directory at the path the user gave
+read-text-file	read all of "notes.txt"
+read-text-file	load the whole contents of the file at path as text
+read-text-file	read "settings.ini" into memory in one go as a single piece of text
+read-text-file	slurp "README.md"
+write-text-file	write the text to "out.txt"
+write-text-file	save text into "report.csv"
+write-text-file	put the finished text into a file called "summary.md"
+write-text-file	dump the text we built to the file at path so it ends up on disk
+parse-json	parse the text as JSON
+parse-json	decode JSON text
+parse-json	turn the JSON text into data
+parse-json	interpret the text as JSON so that we get proper records to work with instead of raw characters
+format-json	serialise the users to JSON text
+format-json	encode orders as JSON
+format-json	convert the records into a JSON string
+format-json	turn the data we have built up into JSON text, ready to be written out somewhere
+parse-csv	parse the text as CSV
+parse-csv	split CSV text into rows
+parse-csv	read the comma-separated text into rows of values
+parse-csv	take the raw CSV content and break it up into rows, one per line, each a list of cells
+format-csv	turn the rows into CSV text
+format-csv	encode rows as CSV
+format-csv	convert the rows to comma-separated text, one line per row
+format-csv	produce CSV text from the rows we have, quoting any value that contains ","
+require-columns	check that the table has the columns name, email and city
+require-columns	require columns id, price
+require-columns	make sure the header of the orders table includes id, date and amount, and complain if any of them is missing
+require-columns	verify the columns date and total are present in the table
+rows-to-records	turn the rows into records using the header row for the field names
+rows-to-records	convert rows plus header into named records
+rows-to-records	pair each row's values with the column names from the first row, so that every row becomes a record
+rows-to-records	make named records from rows
+records-to-rows	turn the records into a header row and rows of values
+records-to-rows	convert users into a header row plus value rows
+records-to-rows	take the named records and produce plain rows from them, with the field names as the first row
+records-to-rows	split records into header and rows
+list-folder	list the files in "downloads"
+list-folder	list what is directly inside the folder "src", without going into its subfolders
+list-folder	get the files at the top level of the folder at path
+list-folder	list "logs" folder contents
+walk-folder	list every file under "project", including all subfolders
+walk-folder	walk the "photos" tree
+walk-folder	find all files in "src" recursively
+walk-folder	go through the folder at path and every folder nested beneath it, collecting all the files along the way
+file-size	get the size of "video.mp4" in bytes
+file-size	find out how many bytes the file at path takes up
+file-size	get byte size of "data.bin"
+file-size	look up how big each of the files is on disk, as a plain number of bytes
+hash-file	compute a checksum of "backup.tar"
+hash-file	hash the contents of the file at path
+hash-file	checksum "image.iso"
+hash-file	work out the SHA-256 digest of "setup.exe" so we can compare it with the published one
+split-extension	split "report.final.pdf" into its name and extension
+split-extension	separate the extension from the file name at path
+split-extension	split off extension of "photo.jpeg"
+split-extension	break the file name into the part before the last "." and the ending that comes after it
+filter-rows	keep only the orders where price > 100
+filter-rows	filter users to age >= 18
+filter-rows	select the records whose status = "active"
+filter-rows	narrow the items down to just those with count > 0 and leave the rest out of the result
+sort-rows	sort the users by age, youngest first
+sort-rows	order items by name
+sort-rows	arrange the orders from the most recent date to the oldest
+sort-rows	put the records in descending order of total, so the biggest comes at the top
+take-first	keep only the first 10 orders
+take-first	take the first 5 users
+take-first	limit records to 20
+take-first	cut the list of items down to its first 3 entries and ignore everything after that
+group-by-key	group the orders by region
+group-by-key	bucket users by city
+group-by-key	collect the items into groups that share the same status
+group-by-key	split the records up so that all the ones with the same date end up together in one group
+group-total	add up the amount for each region
+group-total	sum price per status
+group-total	total the orders' amount by city
+group-total	for every date, work out the combined amount of all the orders that fall on that date
+count-values	count how many times each status occurs in the orders
+count-values	tally each region
+count-values	count occurrences of every distinct size among the items
+count-values	work out how often each different city appears among the users, giving a number for each one
+count-rows	count the orders
+count-rows	count how many users there are
+count-rows	get the number of rows in items
+count-rows	work out how many records we ended up with altogether, as a single number
+total	add up the price of all the items
+total	sum amount across orders
+total	total up the amount over all of the orders
+total	work out the grand sum of the price field for the whole set of records, as one figure and not per group
+distinct-values	list each different city once
+distinct-values	get the unique region values from the orders
+distinct-values	list distinct status values
+distinct-values	give me every status that appears in the records, with no repeats
+remove-duplicates	drop users whose email has already been seen, keeping the first
+remove-duplicates	remove duplicate orders by id
+remove-duplicates	deduplicate records on email
+remove-duplicates	if several items share the same name, keep only the first one encountered and discard the later ones
+exclude-by-key	keep the users whose id does not appear in the orders
+exclude-by-key	exclude orders whose id is in records
+exclude-by-key	subtract records from items by id
+exclude-by-key	leave out every user whose email shows up in the second list of records, and keep all the others
+drop-invalid-rows	skip rows that are malformed or have missing values
+drop-invalid-rows	ignore bad rows
+drop-invalid-rows	drop the orders with a missing price or date instead of failing
+drop-invalid-rows	when one of the lines is broken or has blanks where values should be, just leave it out and carry on rather than stopping
+clean-number-field	turn price text like "1,250.50" into a number
+clean-number-field	convert "3,400" to a number
+clean-number-field	parse the total as a number, stripping out the commas
+clean-number-field	clean up the price field so that values typed as "2,999.00" become proper numbers we can add up
+number-items	number the items starting from 1
+number-items	enumerate records from 0
+number-items	give each of the lines a running number, beginning at 1
+number-items	add a sequence number to every order, counting upwards from 100 in the order they appear
+fill-series	fill in the missing hours of the day with a count of 0
+fill-series	pad gaps in the series with 0
+fill-series	make sure every date from "2024-01-01" to "2024-01-31" has an entry, using 0 where there is none
+fill-series	where a month has no total, add an entry for it with total 0 so that all 12 months are present
+build-record	build a record with name, age and city
+build-record	make record from id, title, done
+build-record	assemble a record holding the name "Alice", the age 30 and the city "Paris"
+build-record	put the email, status and date together into one record under those names
+first-match	find the first order with status = "pending", falling back to "none"
+first-match	get first item where price < 5, else "n/a"
+first-match	find the first user where age > 65, or use a default if there is none
+first-match	look through the records in list order for the first one whose done = "no", and if no such record exists use a fallback instead
+all-match	check whether every order has status = "shipped"
+all-match	confirm all users have age >= 18
+all-match	test that all items have price > 0
+all-match	tell me if it holds for each and every one of the records that done = "yes"
+flatten-lists	join the lists into one list
+flatten-lists	flatten the nested lists
+flatten-lists	merge several lists of items into a single list
+flatten-lists	take the separate lists of files from each folder and combine them end to end into one long list
+get-by-path	follow the dotted path "user.address.city" into the record
+get-by-path	look up "database.host"
+get-by-path	get the value at "server.port" in the nested data
+get-by-path	dig into the nested settings and fetch whatever sits at "logging.level"
+json-type-of	say which JSON type the value has
+json-type-of	get JSON type of value
+json-type-of	report whether the value is a string, number, boolean, array, object or null
+json-type-of	work out what kind of JSON thing the amount is, for instance "number" or "string"
+calculate	work out the total as price times count
+calculate	evaluate "price * count * 1.2"
+calculate	compute amount less 10 percent
+calculate	figure out the average price by dividing the total by the count
+round-number	round the total to 2 decimal places
+round-number	round price to 1 decimal
+round-number	round 3.14159 to 3 places
+round-number	bring the amount to the nearest value with 2 digits after the decimal point
+split-duration	split 93784 seconds into days, hours, minutes and seconds
+split-duration	break 5400 seconds into hours, minutes, seconds
+split-duration	break the elapsed time down into days, hours, minutes and seconds
+split-duration	take a length of time given in seconds and express it as so many days, hours, minutes and leftover seconds
+current-time	get the current date and time
+current-time	get the time now
+current-time	find out what the date and time are right at this moment
+current-time	note today's date and the time of day as of right now, so we can stamp the output with it
+choose-by-value	pick the action based on the file extension: "csv", "json" or "txt"
+choose-by-value	branch on region
+choose-by-value	depending on the status, do one of several different things
+choose-by-value	choose what to do according to the extension of the path, with one action for ".csv", another for ".json" and a default for anything else
+http-get	fetch "https://example.com/data.json"
+http-get	download the contents of "https://api.example.com/users"
+http-get	make a GET request to "https://example.com/status" and take what comes back
+http-get	grab the page at "https://example.org/news"
+retry-with-backoff	retry the download up to 5 times, waiting longer after each failure
+retry-with-backoff	retry 3 times with growing waits
+retry-with-backoff	if the request fails, try it again after 1 second, then 2, then 4, giving up after 6 tries
+retry-with-backoff	keep reattempting the action with a longer and longer pause between attempts, but no more than 4 times
+http-server	start a web server on port 8080
+http-server	serve HTTP on 3000
+http-server	listen for web requests on port 5000
+http-server	bring up an HTTP server that accepts connections on port 8000 and keeps running
+route-request	route each incoming request to the handler for its address and method
+route-request	dispatch requests by address and method
+route-request	send GET "/users" to one handler and POST "/users" to another
+route-request	when a request comes in, look at its method and address and pass it to the matching handler, for example GET "/orders" or DELETE "/orders/5"
+read-request-body	read the body of the incoming request, up to 1048576 bytes
+read-request-body	read request body, max 4096 bytes
+read-request-body	collect what the client sent in the body of the POST, refusing anything over 65536 bytes
+read-request-body	get the payload of the web request but stop if it grows past 10000 bytes
+send-json-response	reply with the users as JSON and status 200
+send-json-response	send JSON back, status 201
+send-json-response	respond with status 404 and the JSON error "not found"
+send-json-response	answer the web request by sending the record back as JSON along with a 200 status code
+on-signal-shutdown	shut down cleanly when the program is asked to stop
+on-signal-shutdown	exit gracefully on SIGTERM
+on-signal-shutdown	handle Ctrl+C by closing everything and quitting in an orderly way
+on-signal-shutdown	when the process receives a stop signal, finish what is in progress, close the server and only then quit
+select-elements	find all elements matching ".item" on the page
+select-elements	select "#results"
+select-elements	get the elements on the page that match "ul.menu li"
+select-elements	locate every button on the web page with the selector "button.delete" so we can work with them
+on-event	when "#save" is clicked, run the save action
+on-event	listen for clicks on ".delete"
+on-event	run the check when the "#signup" form is submitted
+on-event	whenever the user types into "#search", call the action that refreshes the results
+set-text	set the text of "#total" to the total
+set-text	set "#count" text to 0
+set-text	change the text shown in "#status" to "Saved"
+set-text	update the heading "h1.title" on the page so that it displays the title
+show-hide	hide "#spinner"
+show-hide	show the "#details" element
+show-hide	make the "#error" box visible on the page
+show-hide	hide the "#empty" notice on the page when there are items and bring it back when there are none
+show-field-message	show the message "Email is required" beside the "#email" field
+show-field-message	put "Too short" next to "#password"
+show-field-message	display an error by the name field of the form saying "Please enter your name"
+show-field-message	attach the hint "Must be a number" to the age field so the user sees it right by the input
+block-submit-if-invalid	stop the form from being sent while any field is invalid
+block-submit-if-invalid	block "#signup" submit if invalid
+block-submit-if-invalid	do not let the "#order" form go through until every field passes its check
+block-submit-if-invalid	prevent submission of the form for as long as one or more of its fields still has an error
+focus-element	move the cursor to "#search"
+focus-element	focus "#name"
+focus-element	put the keyboard focus on the first invalid field
+focus-element	place the cursor in the "#email" box so the user can start typing straight away
+reset-form	reset the "#signup" form
+reset-form	restore form defaults
+reset-form	clear the form back to how it started
+reset-form	wipe everything the user entered in "#contact" and put the form back to its original values
+read-element-data	get the value of "data-id" from "#row"
+read-element-data	read "data-price" off ".item"
+read-element-data	read the id stored on the clicked element of the page
+read-element-data	fetch the piece of data kept on the "li.selected" element under "data-status", so we know which record it refers to
+render-table	show the users as a table on the page
+render-table	render orders into "#orders" as a table
+render-table	display items as an HTML table
+render-table	build a table inside "#list" on the web page from the records, one row each, with columns for name, email and city
+render-list	show the items as a list on the page, one entry each
+render-list	render users as a "ul"
+render-list	fill "#todo" with one list item per record, showing its title
+render-list	display the orders on the web page as a bulleted list, with one bullet for every order
+filter-elements-by-text	hide the ".item" elements that do not contain what the user typed in "#search"
+filter-elements-by-text	filter "li" elements by typed text
+filter-elements-by-text	as the user types in "#filter", show only the rows on the page whose text includes it and hide the rest
+filter-elements-by-text	narrow the cards shown on the page to those containing the search text the user entered, hiding the others
+timer-every	run the refresh every 5 seconds
+timer-every	repeat the check every 60 seconds
+timer-every	call the update action again and again at an interval of 1000 milliseconds
+timer-every	set up a repeating timer that fires every 30 seconds and runs the save each time
+stop-timer	halt the repeating timer
+stop-timer	cancel the refresh timer
+stop-timer	clear the timer
+stop-timer	stop the interval that was started earlier so the action no longer runs every few seconds
+load-from-storage	load the saved items from the browser's storage
+load-from-storage	read "todos" from local storage
+load-from-storage	restore the users that were stored in the browser under "users" last time
+load-from-storage	get whatever was saved under the key "settings" in the browser storage, if anything
+save-to-storage	save the items in the browser's storage
+save-to-storage	store records in local storage
+save-to-storage	write the users to browser storage under "users"
+save-to-storage	persist the orders in the browser so they are still there after the page is reloaded
+append-record	add a new record to the items, giving it the next free id
+append-record	append a user with the next id
+append-record	add a new order to the list and assign it an id 1 higher than the highest existing one
+append-record	insert a fresh record with title "Buy milk" at the end of records, with the next unused id
+update-where	set status to "shipped" on the orders where id = 42
+update-where	set done to "yes" where id = 7
+update-where	change the city to "Rome" for every user whose name = "Marco"
+update-where	for the items with price > 100, update their status so that it reads "premium"
+remove-where	remove the records where done = "yes"
+remove-where	delete orders where status = "cancelled"
+remove-where	delete the user with id = 12
+remove-where	get rid of every item whose count = 0, taking those entries out of the list for good

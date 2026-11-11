@@ -1,0 +1,13 @@
+language: en
+
+source users from argument 1:
+    name: text
+    age: integer
+
+get users
+skip invalid records
+keep where age >= 18
+sort by name ascending ignoring case
+limit 10
+if none say "No adult users found."
+show name, age

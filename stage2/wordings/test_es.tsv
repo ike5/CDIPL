@@ -1,0 +1,361 @@
+block	wording
+cli-options	declarar argumentos y opciones de consola
+cli-options	define qué acepta el programa por línea de comandos: una ruta obligatoria y la opción "--salida"
+cli-options	el programa tiene que admitir al lanzarlo un argumento con la carpeta y una opción "--limite", y leer lo que haya pasado el usuario
+cli-options	recoge los valores de los argumentos y opciones con los que se invocó el programa, entre ellos "--formato" y "--detalle"
+check-number-range	validar rango 1 a 65535, por defecto 8080
+check-number-range	comprueba que el número que pasa el usuario esté entre 1 y 100, y si no lo pasa usa 10
+check-number-range	asegúrate de que el valor de "--limite" no se salga del intervalo de 1 a 500; cuando el usuario no lo indique, toma 25
+check-number-range	verificar que el count indicado por el usuario cae entre 0 y 1000, usando 100 si no viene
+exit-on-error	salir con error "no se encontró el archivo"
+exit-on-error	termina el programa con el mensaje "configuración inválida" y código de salida 1
+exit-on-error	así no se puede seguir: aborta la ejecución mostrando "faltan datos de entrada" y devuelve un estado de error
+exit-on-error	abortar con estado 2 y el aviso "formato no reconocido"
+print-message	imprime "Hola, " seguido del name
+print-message	escribir en la consola el mensaje "Importe: " con el amount al final
+print-message	muestra por pantalla una línea que diga "Procesados" y a continuación el count
+print-message	quiero que saque por la salida una sola línea del tipo "Listo, se guardaron 12 registros", metiendo el count donde va el número
+print-table	imprimir users en tabla
+print-table	imprime los orders por consola en columnas alineadas
+print-table	saca por pantalla los items con name y price, cada columna bien alineada con la de arriba
+print-table	muéstrame en la terminal las filas de records como una tabla de texto, con las columnas id, status y date bien encuadradas
+print-groups	imprimir users por grupos con cabecera
+print-groups	imprime los orders agrupados por region, con una línea de encabezado antes de cada grupo
+print-groups	saca por consola los items por bloques según su status, poniendo el status como título encima de cada bloque
+print-groups	quiero ver en pantalla los records separados por date: primero una línea con la date y debajo las filas que le corresponden
+format-number	formatear amount: miles y 2 decimales
+format-number	formatea el price con separador de miles y 2 decimales fijos
+format-number	para mostrarlo, pon el count con puntos de millar y sin decimales, o sea 0
+format-number	deja 1234567.891 listo para enseñar al usuario: con sus separadores de miles y exactamente 3 decimales
+format-size	pasar bytes a tamaño legible
+format-size	convierte el size en bytes a algo legible como "1.5 MB"
+format-size	muestra 1048576 bytes como un tamaño que entienda una persona, en KB, MB o GB según toque
+format-size	expresar el size de cada uno de los files en unidades cómodas de leer en lugar de bytes a secas
+format-text	componer "PED-" más id con 5 cifras
+format-text	arma un texto con el prefijo "FAC-" y el id rellenado con ceros hasta 6 dígitos
+format-text	compón una etiqueta con el name, un guion y la city, siguiendo siempre ese mismo patrón
+format-text	necesito montar el nombre de cada archivo a partir de un patrón: "informe_", luego el id con ceros a la izquierda hasta 3 dígitos y al final ".txt"
+format-grid	title en rejilla de 3 columnas
+format-grid	coloca los name de los items en una cuadrícula de 4 columnas
+format-grid	distribuir los valores de city en una rejilla con 5 columnas fijas
+format-grid	quiero los name de los users dispuestos en forma de cuadrícula, con 6 por fila y tantas filas como hagan falta
+fill-template	rellenar plantilla "carta.txt" con name y date
+fill-template	rellena la plantilla "informe.html" con el title y el amount
+fill-template	sustituye en la plantilla "factura.html" los huecos por el name, la date y el amount de cada uno de los orders
+fill-template	tenemos una plantilla fija de página en "base.html"; mete dentro el title y el text donde correspondan
+escape-html	escapar HTML del title
+escape-html	escapa el text para poder meterlo en una página HTML
+escape-html	convierte los caracteres especiales del name en entidades para que sea seguro ponerlo dentro de HTML
+escape-html	antes de insertar el text en la página, neutraliza símbolos como "<" y ">" para que no se interpreten como etiquetas
+lowercase-text	convertir city a minúsculas
+lowercase-text	pasa el email a minúsculas
+lowercase-text	pon todo el text en letra minúscula
+lowercase-text	quiero el title sin ninguna mayúscula, todo en minúsculas, para poder compararlo después
+match-pattern	extraer coincidencias de "[A-Z]+-\d+" en lines
+match-pattern	busca en cada una de las lines lo que encaje con "ERROR (\d+): (.*)" y saca de ahí el id y el text
+match-pattern	saca de cada línea de lines la parte que cumpla el patrón "(\d+) bytes" y guarda el número capturado como size
+match-pattern	recorre las lines del archivo de log y, donde aparezca algo con la forma "usuario=(\w+) estado=(\w+)", quédate con esos dos pedazos llamándolos name y status
+check-pattern	validar formato del email
+check-pattern	verifica que el id cumpla el patrón "^[A-Z]{3}-\d{4}$"
+check-pattern	comprueba que el email tenga forma de dirección de correo, algo como "^[^@]+@[^@]+\.[a-z]+$"
+check-pattern	asegúrate de que el text encaja entero con la expresión "^\d{5}$", es decir, que tiene pinta de código postal
+check-text-rule	comprobar name no vacío
+check-text-rule	verificar que el title no contenga el carácter "/"
+check-text-rule	valida que el text no lleve ningún espacio en blanco
+check-text-rule	asegúrate de que el name de cada uno de los users cumple la regla de siempre: que no venga vacío ni tenga una "," dentro
+check-url	validar URL "https://example.com/datos.json"
+check-url	comprueba que el text sea una dirección web
+check-url	verifica que lo que hay en text es una URL bien formada, con su "http" o "https" delante
+check-url	mira si lo que escribió el usuario en text es de verdad una dirección de internet y no cualquier otra cosa
+check-valid-date	validar fecha "2024-02-30"
+check-valid-date	comprueba que la date sea una fecha real
+check-valid-date	verifica que el text corresponda a un día que existe en el calendario
+check-valid-date	antes de seguir, confirma que la date de cada uno de los orders es una fecha de verdad y no algo como "31/02/2023"
+check-required	campo name obligatorio relleno
+check-required	comprueba que el campo obligatorio email del formulario esté rellenado
+check-required	valida que el usuario haya completado el campo "#telefono" del formulario, que es obligatorio
+check-required	el campo city del formulario no se puede dejar sin contestar: mira si el usuario ha puesto algo en él
+check-min-length	campo name: mínimo 3 caracteres
+check-min-length	comprueba que el campo "#clave" tenga al menos 8 caracteres
+check-min-length	validar que lo escrito en el campo title del formulario no baje de 5 caracteres
+check-min-length	la contraseña del formulario, campo "#password", tiene que medir como poco 10 caracteres; verifícalo
+check-allowed-values	verificar status entre "activo" e "inactivo"
+check-allowed-values	comprueba que todos los status sean "pendiente", "enviado" o "entregado"
+check-allowed-values	valida que cada region esté dentro de la lista permitida: "norte", "sur", "este", "oeste"
+check-allowed-values	revisa los orders y asegúrate de que ningún status se sale de los valores admitidos, que son "nuevo", "pagado" y "cancelado"
+check-required-types	validar claves y tipos: id número, email texto
+check-required-types	comprueba que el registro tenga name como texto y age como número
+check-required-types	verifica que en cada uno de los records existan las claves title y done, la primera de tipo texto y la segunda booleana
+check-required-types	asegúrate de que al registro no le falta ni price ni count y de que los dos son numéricos, y que name viene como cadena
+check-list-of-records	verificar lista de registros
+check-list-of-records	comprueba que los datos cargados sean una lista de registros
+check-list-of-records	asegúrate de que lo que se leyó de "datos.json" es una lista y que cada elemento es un registro con sus claves
+check-list-of-records	después de cargar el archivo, confirma que el contenido tiene la forma esperada: una lista cuyos elementos son todos registros, no valores sueltos
+check-path-exists	verificar que existe "datos/entrada.csv"
+check-path-exists	comprueba que exista el archivo "config.json"
+check-path-exists	valida que la carpeta "informes" esté ahí antes de continuar
+check-path-exists	mira si el path apunta a algo que de verdad está en el disco, sea archivo o carpeta
+read-text-file	leer archivo "entrada.txt"
+read-text-file	lee todo el contenido de "notas.txt"
+read-text-file	carga en memoria el texto completo del archivo que está en path
+read-text-file	abre "registro.log" y tráete de una vez todo lo que tiene escrito dentro, como texto
+write-text-file	guardar texto en "resultado.txt"
+write-text-file	escribe el text en el archivo "salida.txt"
+write-text-file	vuelca el contenido de text al archivo indicado por path
+write-text-file	cuando tengas el informe generado, grábalo como texto en el archivo "informe.md"
+parse-json	parsea el JSON de text
+parse-json	convierte el text JSON en datos
+parse-json	toma la cadena JSON que hay en text y transfórmala en datos con los que se pueda trabajar
+parse-json	lo que llega en text es JSON en crudo; analízalo para obtener la estructura de datos que representa
+format-json	serializar records a JSON
+format-json	convierte los users a texto JSON
+format-json	pasa los datos de orders a una cadena en formato JSON
+format-json	necesito los items como texto JSON para poder escribirlos después; genera esa cadena a partir de los datos
+parse-csv	parsear CSV de text
+parse-csv	convierte el text CSV en filas
+parse-csv	separa el contenido CSV de text en filas, cada una con sus valores
+parse-csv	el text viene en formato CSV, con comas entre valores y una fila por línea; pásalo a una lista de filas
+format-csv	filas a texto CSV
+format-csv	convierte las filas en una cadena CSV
+format-csv	pasa las filas de orders a texto CSV, con los valores separados por comas
+format-csv	con las filas ya preparadas, móntame el texto en formato CSV para luego poder guardarlo
+require-columns	exigir columnas id y price
+require-columns	comprueba que la tabla tenga las columnas name, email y age
+require-columns	verifica que en orders estén presentes las columnas date, amount y status
+require-columns	antes de procesar la tabla de users, asegúrate de que no le falta ninguna de estas columnas: id, name, city
+rows-to-records	filas con cabecera a registros
+rows-to-records	convierte las filas en registros usando la primera fila como encabezado
+rows-to-records	toma la fila de encabezados y el resto de filas y arma registros con nombre para cada valor
+rows-to-records	tengo las filas tal cual salieron del CSV, con los nombres de columna en la primera; quiero que cada fila pase a ser un registro con sus campos nombrados
+records-to-rows	pasar users a cabecera y filas
+records-to-rows	convierte los records en una fila de encabezado y filas de valores
+records-to-rows	descompón los orders en filas sueltas de valores, poniendo antes una fila con los nombres de los campos
+records-to-rows	para poder exportarlos, deja los items como una fila con los nombres de campo seguida de una fila de valores por cada registro
+list-folder	listar "fotos" sin subcarpetas
+list-folder	lista los archivos que hay directamente en la carpeta "documentos"
+list-folder	dame los files de la carpeta indicada en path, solo los del primer nivel
+list-folder	enumera lo que hay dentro de "descargas", pero únicamente los archivos que cuelgan directamente de ella, sin bajar a las carpetas interiores
+walk-folder	recorrer "datos" recursivamente
+walk-folder	lista todos los archivos de "proyecto" incluyendo los de sus subcarpetas
+walk-folder	recorre la carpeta de path y todas las que tenga por debajo, y devuelve cada archivo que encuentres
+walk-folder	necesito el listado completo de files que hay bajo "src", bajando por todas las subcarpetas hasta el fondo
+file-size	tamaño en bytes de "datos.bin"
+file-size	obtén el tamaño en bytes de "video.mp4"
+file-size	averigua cuántos bytes ocupa el archivo que está en path
+file-size	para cada uno de los files quiero saber cuánto pesa en disco, expresado en bytes
+hash-file	calcular hash de "paquete.zip"
+hash-file	calcula la suma de verificación de "imagen.iso"
+hash-file	obtener el checksum del contenido del archivo indicado en path
+hash-file	saca una huella del contenido de "respaldo.tar" para poder comprobar más adelante que el archivo no ha cambiado
+split-extension	separar nombre y extensión
+split-extension	separa "informe.final.pdf" en nombre y extensión
+split-extension	divide el nombre de archivo de path en dos partes: lo que va antes del último punto y la extensión
+split-extension	de cada uno de los files necesito por un lado el nombre sin la extensión y por otro la extensión sola
+filter-rows	filtrar orders con status = "pagado"
+filter-rows	quédate solo con los users con age >= 18
+filter-rows	deja únicamente los items cuyo price < 50
+filter-rows	de todos los orders me interesan nada más los de region = "norte"; conserva esos y descarta el resto
+sort-rows	ordenar items por name
+sort-rows	ordena los users por age de menor a mayor
+sort-rows	pon los orders en orden descendente según date
+sort-rows	quiero los records colocados por amount, con los más grandes primero y los más pequeños al final
+take-first	tomar los 5 primeros users
+take-first	quédate con los primeros 10 orders
+take-first	conserva solo las 20 primeras filas de records
+take-first	no hace falta la lista entera de items, me basta con los 3 que aparecen al principio
+group-by-key	agrupar orders por status
+group-by-key	agrupa los users por city
+group-by-key	junta los items en grupos según su region, de modo que cada grupo tenga los que comparten el mismo valor
+group-by-key	reúne los records que tengan la misma date en un mismo montón, un grupo por cada date distinta
+group-total	sumar amount por status
+group-total	suma el amount de los orders por region
+group-total	calcula para cada city cuánto suman los price de sus items
+group-total	quiero saber cuánto se ha vendido en cada region: agrupa los orders por region y suma el amount de cada grupo
+count-values	contar apariciones de cada city
+count-values	cuenta cuántas veces aparece cada status en los orders
+count-values	dime cuántos users hay de cada region
+count-values	haz un recuento de los valores de status en records, indicando para cada valor distinto el número de veces que sale
+count-rows	contar filas de records
+count-rows	cuenta cuántos orders hay
+count-rows	dime el número de filas que tiene items
+count-rows	necesito saber cuántos registros hay en users, todos juntos, sin distinguir por nada
+total	sumar price de items
+total	suma el amount de todos los orders
+total	calcula la suma global de total en records
+total	quiero una única cifra con todo lo que suman los price de los items, sin separar por grupos
+distinct-values	valores únicos de status
+distinct-values	lista las city distintas de los users
+distinct-values	dame cada region que aparece en orders, sin repetir ninguna
+distinct-values	saca la lista de los status diferentes que hay en records, cada uno una sola vez
+remove-duplicates	quitar orders duplicados por id
+remove-duplicates	elimina los users con email repetido, dejando el primero
+remove-duplicates	descarta las filas de records cuyo id ya haya salido antes
+remove-duplicates	si hay varios users con el mismo email, quédate solo con el que aparece primero y tira los demás
+exclude-by-key	excluir de users los id de records
+exclude-by-key	quédate con los users cuyo id no aparezca en orders
+exclude-by-key	deja fuera de orders todas las filas cuyo email esté entre los de users
+exclude-by-key	tengo dos conjuntos, items y records; quiero los items cuyo id no figure en ningún registro de records
+drop-invalid-rows	descartar filas inválidas de orders
+drop-invalid-rows	omite las filas mal formadas o con valores vacíos y sigue adelante
+drop-invalid-rows	ignora los records a los que les falte algún valor, sin detener el proceso
+drop-invalid-rows	si alguna fila de orders viene rota o incompleta, no pares el programa: simplemente déjala fuera y continúa con las demás
+clean-number-field	pasar amount de texto a número
+clean-number-field	convierte el texto "1,250.50" en número
+clean-number-field	el price viene como texto con separadores de miles, por ejemplo "3,499.00"; déjalo como número
+clean-number-field	en orders el amount llega escrito como cadena con comas, tipo "12,800.75", y hay que transformarlo en un valor numérico con el que se pueda operar
+number-items	numerar lines desde 1
+number-items	numera los items empezando en 1
+number-items	asigna a cada uno de los orders un número correlativo a partir de 100
+number-items	ponle a cada elemento de records su número de posición consecutivo, comenzando la cuenta en 0
+fill-series	completar horas faltantes con 0
+fill-series	rellena con 0 los días del mes que falten en la serie
+fill-series	completa los meses que no aparezcan entre 1 y 12 poniendo 0 en count
+fill-series	tenemos el count por hora pero hay horas sin datos; quiero las 24 horas, de la 0 a la 23, y que las que falten salgan con 0
+build-record	armar registro con id y title
+build-record	crea un registro con name "Ana", age 30 y city "Madrid"
+build-record	construye un registro juntando estos valores con nombre: email, status y date
+build-record	con el id, el amount y la region que ya tenemos calculados, monta un único registro que los contenga bajo esos mismos nombres
+first-match	primero de items con price < 10
+first-match	busca el primero de los users con age > 65, o nada si no hay
+first-match	encuentra el primer registro de orders con status = "pendiente" y, si no hay ninguno, devuelve "ninguno"
+first-match	recorre los records hasta dar con uno cuyo id = 42; en cuanto lo encuentres quédate con ese, y si no aparece usa un valor por defecto
+all-match	verificar si todos cumplen age >= 18
+all-match	comprueba si todos los items tienen price > 0
+all-match	dime si se cumple status = "cerrado" en cada uno de los orders, sin excepción
+all-match	necesito un sí o un no: ¿están todos los records con amount >= 100, o hay alguno que no llega?
+flatten-lists	aplanar lista de listas
+flatten-lists	une varias listas en una sola
+flatten-lists	combina las listas de lines de cada archivo en una única lista
+flatten-lists	tengo una lista cuyos elementos son a su vez listas de files; quiero una sola lista plana con todos los files seguidos
+get-by-path	valor en "usuario.direccion.ciudad"
+get-by-path	obtén el valor de "servidor.puerto" dentro de la configuración
+get-by-path	sigue la ruta con puntos "base.conexion.host" dentro de los datos anidados y devuelve lo que haya al final
+get-by-path	la configuración tiene varios niveles; baja por "registro.salida.nivel" paso a paso hasta llegar al valor que hay ahí
+json-type-of	tipo JSON de amount
+json-type-of	dime qué tipo JSON tiene el valor
+json-type-of	indica si status es en JSON una cadena, un número, un booleano, una lista, un objeto o nulo
+json-type-of	necesito saber de qué tipo es, en términos de JSON, lo que hay guardado en text
+calculate	calcular price por count
+calculate	calcula el importe multiplicando price por count
+calculate	aplica la fórmula amount más el 21 por ciento de amount para sacar el importe final
+calculate	saca el valor que resulta de restarle a price el 10 por ciento de descuento y sumarle después 5 de envío
+round-number	redondear amount a 1 decimal
+round-number	redondea el price a 2 decimales
+round-number	deja 3.14159 redondeado a 3 cifras decimales
+round-number	el total sale con un montón de decimales; redondéalo para que se quede en 2 nada más
+split-duration	desglosar duración de 3725 segundos
+split-duration	descompón 93784 segundos en días, horas, minutos y segundos
+split-duration	separa el tiempo transcurrido en sus días, horas, minutos y segundos
+split-duration	tengo una duración en segundos, 200000, y quiero saber a cuántos días, horas, minutos y segundos equivale
+current-time	fecha y hora actuales
+current-time	obtén la fecha y la hora de ahora mismo
+current-time	consulta qué día y qué hora es en este momento
+current-time	necesito el instante actual, con su fecha y su hora, para ponerlo luego en la date del registro
+choose-by-value	elegir acción según status
+choose-by-value	dependiendo del valor de region, ejecuta una acción u otra de entre varias
+choose-by-value	según la extensión del archivo, decide qué hacer: una cosa para ".csv", otra para ".json" y otra para ".txt"
+choose-by-value	mira en qué termina path y escoge el camino: con ".png" va por un lado, con ".pdf" por otro, y para cualquier otra extensión se toma la opción por defecto
+http-get	petición GET a "https://example.com/api"
+http-get	descarga el contenido de "https://example.com/datos.json"
+http-get	trae lo que devuelve la dirección "https://example.com/informe.csv"
+http-get	haz una petición a "https://example.com/estado" y quédate con lo que responda el servidor
+retry-with-backoff	reintentar con espera creciente, máximo 3
+retry-with-backoff	reintenta la descarga hasta 5 veces, esperando cada vez más entre intentos
+retry-with-backoff	si la operación falla, vuelve a probar duplicando la espera en cada intento, con un tope de 4 intentos
+retry-with-backoff	cuando la petición no salga a la primera no te rindas: inténtalo de nuevo tras 1 segundo, luego tras 2, luego tras 4, y déjalo después de 6 intentos fallidos
+http-server	servidor web en puerto 3000
+http-server	arranca un servidor web en el puerto 8080
+http-server	pon a escuchar un servidor HTTP en el puerto 5000
+http-server	necesito que el programa se quede atendiendo peticiones web por el puerto 8000, así que levanta ahí un servidor
+route-request	enrutar peticiones por ruta y método
+route-request	dirige cada petición entrante al manejador que corresponda según su dirección y su método
+route-request	las peticiones GET a "/users" van a un manejador y las POST a "/orders" a otro; repártelas así
+route-request	cuando llegue una petición al servidor, mira a qué ruta va y con qué método, y pásasela a la función encargada de ese caso
+read-request-body	leer cuerpo de la petición, límite 65536 bytes
+read-request-body	lee el cuerpo de la petición entrante, con un máximo de 1048576 bytes
+read-request-body	recoge los datos que el cliente envió en el cuerpo de la petición, sin aceptar más de 2000000 bytes
+read-request-body	en las peticiones POST hay que leer lo que viene en el cuerpo, pero cortando si pasa de 10000 bytes para que nadie nos mande algo enorme
+send-json-response	responder JSON con estado 404
+send-json-response	responde a la petición con JSON y código 200
+send-json-response	devuelve al cliente los users en formato JSON con el código de estado 200
+send-json-response	contesta la petición enviando un JSON con el mensaje "no encontrado" y pon 404 como código de estado
+on-signal-shutdown	apagado ordenado por señal
+on-signal-shutdown	cierra el programa limpiamente cuando reciba la señal de parada
+on-signal-shutdown	cuando pidan detener el servidor, termina lo que esté en curso y sal de forma ordenada
+on-signal-shutdown	si alguien pulsa Ctrl+C o el sistema manda la orden de terminar, no cortes de golpe: cierra las conexiones abiertas y luego finaliza
+select-elements	seleccionar elementos "#menu li"
+select-elements	busca en la página los elementos ".producto"
+select-elements	localiza todos los elementos de la página que coincidan con el selector "input.obligatorio"
+select-elements	necesito tener a mano todas las filas de la tabla de la página, las que responden a "table.listado tr"
+on-event	acción al pulsar "#buscar"
+on-event	cuando se haga clic en "#guardar", ejecuta la acción de guardado
+on-event	al enviarse el formulario "#registro", lanza la función que lo procesa
+on-event	quiero que cada vez que el usuario cambie la opción de "#idioma" se dispare la acción correspondiente
+set-text	poner "Guardado" en "#estado"
+set-text	cambia el texto de "#titulo" a "Bienvenido"
+set-text	actualiza lo que se lee en el elemento "#contador" con el count
+set-text	en la página hay un elemento "#saludo"; haz que su texto pase a ser "Hola, " seguido del name
+show-hide	mostrar "#ayuda"
+show-hide	oculta el elemento "#panel"
+show-hide	haz visible el elemento "#resultados" de la página
+show-hide	el aviso "#cargando" tiene que dejar de verse cuando terminen de llegar los datos, así que escóndelo
+show-field-message	aviso "Demasiado corto" junto a "#clave"
+show-field-message	muestra el mensaje "Este campo es obligatorio" junto al campo email
+show-field-message	pon al lado del campo "#telefono" del formulario el texto "Número no válido"
+show-field-message	cuando el campo age del formulario tenga un valor incorrecto, enséñale al usuario justo al lado un mensaje que diga "Introduce una edad válida"
+block-submit-if-invalid	bloquear envío con campos inválidos
+block-submit-if-invalid	impide que se envíe el formulario mientras haya algún campo inválido
+block-submit-if-invalid	no dejes enviar "#registro" hasta que todos sus campos sean válidos
+block-submit-if-invalid	si al pulsar enviar queda algún campo del formulario que no pasa la validación, cancela el envío y que no salga nada
+focus-element	enfocar "#usuario"
+focus-element	pon el foco en "#buscar"
+focus-element	mueve el cursor al campo "#nombre" de la página
+focus-element	al abrir la página quiero que el cursor ya esté colocado dentro de "#correo", listo para escribir
+reset-form	limpiar formulario "#alta"
+reset-form	restablece el formulario "#contacto" a su estado inicial
+reset-form	vacía todos los campos del formulario y déjalo como estaba al cargar la página
+reset-form	después de guardar, el formulario "#nuevo" tiene que volver a quedar en blanco, con sus valores de partida
+read-element-data	leer dato guardado en "#tarjeta"
+read-element-data	lee el dato id que lleva guardado el elemento pulsado
+read-element-data	obtén el valor del atributo de datos "categoria" del elemento "#ficha"
+read-element-data	cada botón ".borrar" tiene asociado en la propia etiqueta el id del registro; recupera ese valor del elemento
+render-table	pintar orders en tabla dentro de "#listado"
+render-table	muestra los users como una tabla en la página
+render-table	dibuja en "#contenido" una tabla HTML con una fila por cada uno de los items
+render-table	quiero ver los records en la página web en forma de tabla, con una columna por campo: id, name y status
+render-list	pintar users como lista en "#personas"
+render-list	muestra los items como una lista en la página, un elemento por cada uno
+render-list	genera dentro de "#tareas" un elemento de lista por cada registro de records, con su title
+render-list	en la página, debajo de "#pendientes", tiene que salir una lista con viñetas donde cada uno de los orders ocupe una entrada
+filter-elements-by-text	filtrar ".tarjeta" por texto tecleado
+filter-elements-by-text	oculta los elementos ".fila" que no contengan el texto que escribió el usuario
+filter-elements-by-text	según lo que se teclee en "#buscar", deja visibles solo los elementos "#lista li" que lo incluyan
+filter-elements-by-text	es un buscador en vivo: a medida que el usuario escribe en "#filtro", desaparecen de la página las entradas ".producto" que no lleven ese texto
+timer-every	repetir acción cada 30 segundos
+timer-every	ejecuta la actualización cada 5 segundos
+timer-every	programa un temporizador que lance la comprobación una y otra vez, cada 60 segundos
+timer-every	quiero que el reloj de la página se refresque solo, así que vuelve a llamar a la acción cada 1 segundo de forma indefinida
+stop-timer	parar el temporizador
+stop-timer	detén el temporizador que se repite
+stop-timer	cancela la ejecución periódica que estaba en marcha
+stop-timer	ya no hace falta seguir refrescando cada pocos segundos; para el intervalo que habíamos puesto a correr
+load-from-storage	leer "tareas" del almacenamiento local
+load-from-storage	carga los datos guardados en el almacenamiento del navegador
+load-from-storage	recupera del almacenamiento del navegador lo que se guardó bajo la clave "preferencias"
+load-from-storage	al abrir la página, mira si en el navegador quedó guardada la lista de items de la última vez y, si está, tráela
+save-to-storage	guardar "tareas" en almacenamiento local
+save-to-storage	guarda los items en el almacenamiento del navegador
+save-to-storage	almacena en el navegador, bajo la clave "carrito", la lista de orders
+save-to-storage	para que no se pierdan al recargar la página, deja los records guardados en el almacenamiento local del navegador
+append-record	agregar a items con id siguiente
+append-record	añade un nuevo registro a users con el siguiente id libre
+append-record	inserta al final de orders un registro nuevo y asígnale el id que toque a continuación
+append-record	el usuario ha creado una tarea con title "Comprar pan"; métela en records dándole un id que no esté usado, el siguiente al mayor que haya
+update-where	actualizar status a "cerrado" donde id = 12
+update-where	cambia el status a "enviado" en los orders con id = 7
+update-where	pon el price a 0 en todos los items cuyo count = 0
+update-where	a los users que tengan city = "Sevilla" hay que ponerles region con el valor "sur"; modifica ese campo en los que cumplan
+remove-where	borrar items con count = 0
+remove-where	elimina los orders con status = "cancelado"
+remove-where	quita de users todos los registros cuyo age < 18
+remove-where	hay que limpiar records: todo registro que cumpla date < "2020-01-01" se borra de la lista

@@ -1,0 +1,91 @@
+block	description
+cli-options	Declare the command-line arguments and options the program accepts, and read their values
+check-number-range	Check that a number given by the user lies within a stated range, using a default when it is absent
+exit-on-error	Stop the program with an error message and an error status
+print-message	Print one line of text, with values inserted
+print-table	Print rows as aligned columns
+print-groups	Print rows in groups, with a heading line before each group
+format-number	Format a number for display, with thousands separators and a fixed number of decimals
+format-size	Turn a number of bytes into a readable size such as 1.5 MB
+format-text	Build a piece of text from a pattern with values inserted, such as a prefix followed by a zero-padded number
+format-grid	Lay values out as a grid with a fixed number of columns
+fill-template	Insert values into a fixed page or document template
+escape-html	Make text safe to place inside an HTML page
+lowercase-text	Convert text to lower case
+match-pattern	Find the parts of each line of text that fit a pattern, and pull out named pieces
+check-pattern	Check that a piece of text fits a pattern, such as the shape of an email address
+check-text-rule	Check that a piece of text obeys a simple rule, such as not being empty or not containing a given character
+check-url	Check that a piece of text is a web address
+check-valid-date	Check that a piece of text is a real date
+check-required	Check that a required form field has been filled in
+check-min-length	Check that a form field has at least a given number of characters
+check-allowed-values	Check that every value is one of an allowed list
+check-required-types	Check that given keys are present in a record and hold values of the expected types
+check-list-of-records	Check that loaded data is a list of records
+check-path-exists	Check that a file or folder exists
+read-text-file	Read the whole contents of a text file
+write-text-file	Write text to a file
+parse-json	Turn JSON text into data
+format-json	Turn data into JSON text
+parse-csv	Turn CSV text into rows
+format-csv	Turn rows into CSV text
+require-columns	Check that a table has the named columns
+rows-to-records	Turn rows of values plus a header row into named records
+records-to-rows	Turn named records into a header row and rows of values
+list-folder	List the files directly inside a folder
+walk-folder	List every file in a folder and in all the folders beneath it
+file-size	Get the size of a file in bytes
+hash-file	Compute a checksum of a file's contents
+split-extension	Split a file name into its name and its extension
+filter-rows	Keep only the rows that meet a condition
+sort-rows	Put rows in order by a field, ascending or descending
+take-first	Keep only the first so many rows
+group-by-key	Collect rows into groups that share the same value of a field
+group-total	Add up a field for each group of rows that share a value
+count-values	Count how many times each distinct value occurs
+count-rows	Count the rows
+total	Add up a field across all rows
+distinct-values	List each different value of a field once
+remove-duplicates	Drop rows whose key has already been seen, keeping the first
+exclude-by-key	Keep the rows whose key does not appear in a second set
+drop-invalid-rows	Leave out the rows that are malformed or have missing values, instead of stopping
+clean-number-field	Turn text such as "1,250.50" into a number
+number-items	Give each item a running number, starting from a given value
+fill-series	Fill in the missing entries of a series, such as every hour of the day, with a default value
+build-record	Assemble a record from named values
+first-match	Find the first item that meets a condition, or use a fallback
+all-match	Check whether every item meets a condition
+flatten-lists	Join several lists into one list
+get-by-path	Follow a dotted path such as server.port into nested data
+json-type-of	Say which JSON type a value has
+calculate	Work out a value from a formula
+round-number	Round a number to a given number of decimal places
+split-duration	Split a length of time into days, hours, minutes and seconds
+current-time	Get the current date and time
+choose-by-value	Pick one of several actions according to a value, such as a file extension
+http-get	Fetch the contents of a web address
+retry-with-backoff	Try an action again after a failure, waiting longer each time, up to a limit
+http-server	Start a web server on a port
+route-request	Send each incoming web request to the handler for its address and method
+read-request-body	Read the body of an incoming web request, up to a size limit
+send-json-response	Reply to a web request with JSON and a status code
+on-signal-shutdown	Shut the program down cleanly when it is asked to stop
+select-elements	Find elements on a web page
+on-event	Run an action when something happens on a web page, such as a click or a form being sent
+set-text	Change the text shown in an element on a web page
+show-hide	Show or hide an element on a web page
+show-field-message	Show a message beside a form field
+block-submit-if-invalid	Stop a form from being sent while any field is invalid
+focus-element	Move the cursor to an element on a web page
+reset-form	Clear a form back to its starting state
+read-element-data	Read a value stored on an element of a web page
+render-table	Show records as a table on a web page
+render-list	Show records as a list on a web page, one item each
+filter-elements-by-text	Hide the elements on a web page that do not contain the text the user typed
+timer-every	Run an action repeatedly at a fixed interval
+stop-timer	Stop a repeating timer
+load-from-storage	Load saved data from the browser's storage
+save-to-storage	Save data in the browser's storage
+append-record	Add a new record to a list, giving it the next free id
+update-where	Change a field in the records that match a condition
+remove-where	Remove the records that match a condition

@@ -4,7 +4,7 @@
 |---|---|
 | **Reviewed** | `outputs/proposal-classifier-driven-intent-programming-language.md` (v0.2) and this repository at commit `194e44b` |
 | **Revision** | 8, dated 2026-11-11. It incorporates six rounds of decisions from the product owner, the result of Stage 1, and progress on Stage 2. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
-| **Status** | Stage 1 is complete and accepted by the owner. Stage 2 is under way: the compiler core is built and tested (part A); the classifier, word lists and index (part B) and formulas (part C) are not yet built. See [Stage 2 progress](#stage-2-progress). |
+| **Status** | Stage 1 is complete and accepted by the owner. Stage 2 is under way: the compiler core (part A) and formulas (part C) are built and tested; the machinery for free wording (part B) is built, but the real word lists and the trained classifier are not finished and the classifier has not yet been measured. See [Stage 2 progress](#stage-2-progress). |
 | **Audience** | Engineers deciding whether to build this, and what to build first |
 
 References such as "§8" point to sections of the proposal. Sections of this plan are referred to by name.
@@ -54,8 +54,9 @@ The owner has asked the AI assistant that wrote this plan to build the compiler 
 | Sample material for Stage 1 | The assistant drafted 20 program briefs, the owner approved them, and the assistant generates the programs | Changes what Stage 1 can show (critique point 12) |
 | Implementation language | Python is not required | The compiler is written in Python, since the repository was already set up for it |
 | Stage 1 result | Accepted as a pass | Stage 2 started |
-| Formulas | The intent language allows formulas as parameters | Built as part C of Stage 2, after the classifier, so that each operator gets a written meaning first |
+| Formulas | The intent language allows formulas as parameters | Built as part C of Stage 2, with a written meaning for each operator |
 | Plumbing blocks | Stage 2 includes the blocks needed to generate a whole program, with sample J1 as an acceptance test | Done in part A |
+| Formatter and linter for generated code | ruff for Python; prettier and eslint for JavaScript; default rules; line length 320, so the formatters never re-wrap a generated line | Used for criterion G6 |
 | Pace | Generate a small amount, review, then generate more | Three stages with a review after each; Stage 2 is delivered in three parts |
 
 ## Basis and limits of this review
@@ -275,17 +276,17 @@ Also record, for ten test intents, the generated program beside a hand-written e
 
 Stage 2 is being built in three parts.
 
-**Part A, the compiler core: built and tested.** Intent is written in standard phrases, in English or Spanish. There are 15 blocks: the six pipeline blocks, plus the plumbing needed for a whole program. The meanings are in `docs/meaning.md`, the code in `cdipl/`, the tests in `tests/`, and an example in `examples/adult_users.intent`. All blocks are marked draft, because no person has reviewed them yet.
+**Part A, the compiler core: built and tested.** Intent is written in standard phrases, in English or Spanish. There are 16 blocks: the six pipeline blocks, the plumbing needed for a whole program, and a block for calculations (part C). The meanings are in `docs/meaning.md`, the code in `cdipl/`, the tests in `tests/`, and an example in `examples/adult_users.intent`. All blocks are marked draft, because no person has reviewed them yet.
 
 | Criterion | Result | Evidence |
 |---|---|---|
 | G1 Equivalence | Pass | 240 pairs of intent and dataset give byte-identical output, status and error category in Python and JavaScript. Known results on known data are also checked, so that both targets cannot be wrong in the same way unnoticed. |
-| G2 Combination | Pass | All 781 chains of up to four blocks: the 156 whose types fit build in both targets and agree; the 625 whose types do not fit are rejected with a message naming the mismatch. |
+| G2 Combination | Pass | All 1,555 chains of up to four blocks, now including the block that adds a calculated field: the 399 whose types fit build in both targets and agree; the 1,156 whose types do not fit are rejected with a message naming the mismatch. |
 | G3 Round trip | Pass | 120 programs, in English and Spanish, in both targets: lifting the built program gives the intent in standard phrases, and rebuilding the lifted intent reproduces the file. Generated code holds no comments and no copy of the intent. |
-| G4 Edited code | Pass | 58 hand edits and 10 whole-file changes: 25 edits are lifted to an intent that regenerates the edited file exactly, and the rest are refused. |
+| G4 Edited code | Pass | 69 hand edits and 10 whole-file changes: 31 edits are lifted to an intent that regenerates the edited file exactly, and the rest are refused. |
 | G5 Trace | Pass | Every generated line maps to an intent line or to the block whose support code it is. |
-| G6 Quality | Pass, with the configuration in D2 | No findings from ruff, prettier or eslint on 40 generated programs per target. |
-| G7 Diagnostics | Pass | 33 invalid intent files are each rejected with a message naming the right line. |
+| G6 Quality | Pass | No findings from ruff, prettier or eslint on 40 generated programs per target, with the configuration the owner accepted (default rules, line length 320). |
+| G7 Diagnostics | Pass | 42 invalid intent files are each rejected with a message naming the right line. |
 | G8 Flagging and determinism | Pass | Flagging any block stops every build that uses it; ten builds are byte-identical. Listing the affected programs through the index is part B. |
 | G9 Meanings written first | Not met as worded | `docs/meaning.md` was written alongside the two targets, not before the second. Every difference between targets was resolved in the generated code and the meanings, and none by changing a test. |
 | C5 Language parity | Pass for standard phrases | 120 programs written in English and in Spanish build byte-identical programs. Free wording is part B. |
@@ -293,9 +294,9 @@ Stage 2 is being built in three parts.
 
 Limits of part A: the tests were written by the same assistant that wrote the compiler; they were run on one machine (Linux, Python 3.14.6, Node 22.23.4); and `docs/meaning.md` lists cases where the targets may still differ, such as very deeply nested JSON.
 
-**Part B, free wording: not yet built.** Word lists for English and Spanish, the classifier, the index, and the `explain` and `choose` commands. The classifier's test wordings (360 per language, four for each of the 90 blocks) were written by separate assistant sessions from the block catalogue alone and committed before any word list or training wording existed (`stage2/wordings/`).
+**Part B, free wording: machinery built; classifier not yet trained or measured.** The word-list lookup, the classifier, the index and the `explain`, `choose` and `affected` commands are written and tested with a small made-up word list: free wording builds the same program as standard phrases; a complete index is reused without consulting the classifier; replacing the classifier does not change indexed statements; an unknown word or a close call is reported and nothing is guessed; standard phrases never reach the classifier. Still to do: the real English and Spanish word lists and training wordings, training, and one run on the held-out test wordings. The classifier's test wordings (360 per language, four for each of the 90 blocks) were written by separate assistant sessions from the block catalogue alone and committed before any word list or training wording existed (`stage2/wordings/`).
 
-**Part C, formulas: not yet built.**
+**Part C, formulas: built and tested.** A formula may be a field, a whole number, text, `+`, `-` or `*` on whole numbers, `&` to join text, or any of these in brackets. Conditions compare two formulas, and `add N = formula` gives every row a calculated field. Every step of a calculation is checked against the integer range in both targets, and a result outside it stops the program with the same error in both. There is no division, no conversion between numbers and text, and no choosing between values by a condition; these are listed in `docs/meaning.md`. The criteria in the table above were re-run with formulas included.
 
 ### Stage 3: third target
 
@@ -411,7 +412,6 @@ Each has a default that this plan assumes if nobody decides otherwise.
 | ID | Decision | Default assumed here |
 |---|---|---|
 | D1 | Input format for generated programs, given that C cannot read JSON without added code | Decide before Stage 3. Stage 2 uses JSON. |
-| D2 | Formatter and linter configuration for generated code (criterion G6) | Python: ruff format and ruff check with default rules. JavaScript: prettier with defaults and eslint with its recommended rules. Line length 320 in both, so the formatters never re-wrap a generated line. Used in part A; awaiting the owner's confirmation. |
 
 ## Assumptions
 

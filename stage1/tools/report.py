@@ -59,6 +59,18 @@ def main():
           f"{sum(1 for b in ranked if len(by_programs[b]) > 1)}; used in one program only: "
           f"{sum(1 for b in ranked if len(by_programs[b]) == 1)}")
 
+    shared = {b for b in ranked if len(by_programs[b]) > 1}
+    per_program = {p: set().union(*(blocks[k] for k in units if k[0] == p)) for p in programs}
+    print(f"blocks per program: mean {sum(len(s) for s in per_program.values()) / len(programs):.1f}, "
+          f"of which used by no other program: mean "
+          f"{sum(len(s - shared) for s in per_program.values()) / len(programs):.1f}")
+    no_open = [p for p in programs if all(level[k] != "C" for k in units if k[0] == p)]
+    from_shared = [p for p in no_open if per_program[p] <= shared]
+    print(f"programs with no open unit that need only blocks shared by 2+ programs: "
+          f"{len(from_shared)}/{len(programs)} ({', '.join(from_shared) or 'none'})")
+    formula = sorted({k[0] for k in units if level[k] == "B"})
+    print(f"programs with at least one level B unit (needs formulas): {len(formula)}/{len(programs)}")
+
     closed = [k for k in units if level[k] in "AB"]
     for share in (0.5, 0.8, 1.0):
         chosen = set()

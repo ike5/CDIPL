@@ -94,10 +94,11 @@ class TypeMismatch(Exception):
     """A step cannot follow the steps before it."""
 
 
-def check_chain(source, steps):
+def check_chain(source, steps, complete=True):
     """Check that each step fits the one before it. Returns the final field types.
 
     Raises TypeMismatch with a message that names what was expected and found.
+    With complete=False the chain may stop before the step that produces output.
     """
     schema = dict(source.fields)
     state = "start"  # start -> rows <-> groups -> done
@@ -142,7 +143,7 @@ def check_chain(source, steps):
             state = "done"
         elif isinstance(step, WriteJson):
             state = "done"
-    if state != "done":
+    if state != "done" and complete:
         found = "groups" if state == "groups" else "rows"
         raise TypeMismatch(f"the program ends with {found} and produces no output")
     return schema

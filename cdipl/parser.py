@@ -1,6 +1,7 @@
 """Read an intent file written in standard phrases and check it."""
 import re
 
+from . import slots
 from .languages import HEADERS, PHRASES
 from .model import (
     COMPARISONS,
@@ -56,8 +57,12 @@ def tokens(text, line):
     return found
 
 
-def parse(text):
-    """Turn intent text into a checked Program. Raises IntentError."""
+def parse(text, resolver=None):
+    """Turn intent text into a checked Program. Raises IntentError.
+
+    Statements written in standard phrases are read by fixed rules. Any other statement is
+    passed to the resolver, if one is given, which chooses the block it means.
+    """
     lines = text.split("\n")
     numbered = [(number, line) for number, line in enumerate(lines, start=1) if line.strip()]
     if not numbered:
@@ -73,11 +78,11 @@ def parse(text):
     for number, line in numbered[position:]:
         if line[:1].isspace():
             raise IntentError(number, "a statement must not be indented")
-        new_steps = _parse_statement(line.strip(), number, words, source, steps)
+        new_steps = _parse_statement(line.strip(), number, words, source, steps, resolver)
         for step in new_steps:
             candidate = steps + [step] if not isinstance(step, Read) or not steps else _replace_read(steps, step)
             try:
-                _check_prefix(source, candidate)
+                check_chain(source, candidate, complete=False)
             except TypeMismatch as problem:
                 raise IntentError(number, str(problem)) from None
             steps = candidate
@@ -91,15 +96,6 @@ def parse(text):
 
 def _replace_read(steps, read):
     return [read] + steps[1:]
-
-
-def _check_prefix(source, steps):
-    """Check a chain that may not be finished yet."""
-    try:
-        check_chain(source, steps)
-    except TypeMismatch as problem:
-        if "produces no output" not in str(problem):
-            raise
 
 
 def _parse_source(numbered, position, words):
@@ -152,17 +148,48 @@ def _strip_phrase(line, phrase):
     return " ".join(parts[len(wanted):])
 
 
-def _parse_statement(line, number, words, source, steps):
+def _skip(number, words, steps):
+    only_read = len(steps) >= 1 and isinstance(steps[0], Read) and all(
+        isinstance(step, Filter) and step.line == steps[0].line for step in steps[1:])
+    if not only_read:
+        raise IntentError(number, f"'{words['skip']}' must come directly after the step that reads the source")
+    if steps[0].skip_invalid:
+        raise IntentError(number, f"'{words['skip']}' is written twice")
+    return [Read(skip_invalid=True, line=steps[0].line, skip_line=number)]
+
+
+def _parse_statement(line, number, words, source, steps, resolver=None):
+    """Read one statement: by the fixed rules if it is a standard phrase, otherwise through the resolver."""
+    reads_source = _strip_phrase(line, words["get"]) is not None
+    try:
+        result = _parse_standard(line, number, words, source, steps)
+    except IntentError:
+        if resolver is None or reads_source:
+            raise
+        result = None
+    if result is not None:
+        return result
+    if resolver is None:
+        raise IntentError(number, f"'{line}' is not a statement the language knows")
+    if not steps:
+        raise IntentError(number, f"the first statement must read the source, written as '{words['get']} {source.name}'")
+    try:
+        names = set(check_chain(source, steps, complete=False)) | {source.name}
+    except TypeMismatch as problem:
+        raise IntentError(number, str(problem)) from None
+    block, found = resolver.resolve(line, number, names)
+    step = slots.fill(block, found, number, source.name, steps)
+    if isinstance(step, Read):
+        return _skip(number, words, steps)
+    return [step]
+
+
+def _parse_standard(line, number, words, source, steps):
+    """Read a statement written in standard phrases. Returns None if it does not start with one."""
     rest = _strip_phrase(line, words["skip"])
     if rest is not None:
         _nothing_after(rest, number)
-        only_read = len(steps) >= 1 and isinstance(steps[0], Read) and all(
-            isinstance(step, Filter) and step.line == steps[0].line for step in steps[1:])
-        if not only_read:
-            raise IntentError(number, f"'{words['skip']}' must come directly after the step that reads the source")
-        if steps[0].skip_invalid:
-            raise IntentError(number, f"'{words['skip']}' is written twice")
-        return [Read(skip_invalid=True, line=steps[0].line, skip_line=number)]
+        return _skip(number, words, steps)
     rest = _strip_phrase(line, words["keep"])
     if rest is not None:
         return [Filter(conditions=_conditions(tokens(rest, number), number, words), line=number)]
@@ -213,7 +240,7 @@ def _parse_statement(line, number, words, source, steps):
                 raise IntentError(number, f"after the source name, expected '{words['where']}' or nothing")
             result.append(Filter(conditions=_conditions(found[2:], number, words), line=number))
         return result
-    raise IntentError(number, f"'{line}' is not a statement the language knows")
+    return None
 
 
 def _nothing_after(rest, number):

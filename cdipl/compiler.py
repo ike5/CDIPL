@@ -2,8 +2,10 @@
 import json
 
 from . import library
+from .languages import HEADERS
 from .model import IntentError
 from .parser import parse, render
+from .resolve import Resolver
 from .targets import TARGETS
 from .targets.common import NotGenerated, blocks_used
 
@@ -18,8 +20,20 @@ def build(intent_text, target, statuses=None):
     Returns a dict of file name -> file text: the program and its trace file.
     Raises IntentError for a problem in the intent, BuildError for a flagged block.
     """
-    program = parse(intent_text)
-    return build_program(program, target, statuses)
+    return build_with_index(intent_text, target, None, statuses)[0]
+
+
+def read_intent(intent_text, index=None, classifier=None, word_list=None):
+    """Parse intent text, resolving freely worded statements. Returns (program, resolver)."""
+    language = HEADERS.get(" ".join(intent_text.lstrip("\n").split("\n", 1)[0].split()), "en")
+    resolver = Resolver(language, index, classifier, word_list)
+    return parse(intent_text, resolver), resolver
+
+
+def build_with_index(intent_text, target, index, statuses=None, classifier=None, word_list=None):
+    """Like build, but reuses and returns the index of block choices. Returns (files, new index)."""
+    program, resolver = read_intent(intent_text, index, classifier, word_list)
+    return build_program(program, target, statuses), resolver.new_index()
 
 
 def build_program(program, target, statuses=None):

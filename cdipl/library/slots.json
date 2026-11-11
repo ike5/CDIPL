@@ -1,0 +1,6 @@
+{
+  "ascending": ["ascending"],
+  "descending": ["descending"],
+  "ignore-case": ["ignore-case"],
+  "empty": ["empty"]
+}

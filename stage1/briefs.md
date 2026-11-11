@@ -1,6 +1,6 @@
 # Stage 1 program briefs
 
-**Status:** drafted by the AI assistant, awaiting the product owner's approval. No program has been generated yet.
+**Status:** drafted by the AI assistant and approved by the product owner on 2026-11-11. The programs are in `stage1/programs/` and the results are in `stage1/inventory.md`.
 
 These are the 20 sample programs for Stage 1 of `PLAN.md` (the block inventory). Once the list is approved, the assistant generates each program, splits it into units, and records which units could be built entirely from reusable blocks and which contain logic particular to that program.
 
@@ -47,7 +47,3 @@ These are the 20 sample programs for Stage 1 of `PLAN.md` (the block inventory).
 | J8 | Browser | To-do list | A list where the user can add an item, mark it done and delete it. The list is saved in the browser so that it is still there after the page is reloaded. |
 | J9 | Node | Format conversion | Convert a CSV file to JSON or a JSON file to CSV, deciding the direction from the input file's extension. |
 | J10 | Node | Game | Tic-tac-toe for two players in the terminal. Players take turns entering a square; the program detects a win or a draw. |
-
-## To approve
-
-Reply with "approved", or name the briefs to change, remove or add. The count should stay at ten per language so that the two halves are comparable.

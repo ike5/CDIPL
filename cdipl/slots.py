@@ -6,11 +6,12 @@ field names, numbers, text in quotes and comparisons are taken exactly as writte
 import json
 from pathlib import Path
 
-from .model import MAX_INTEGER, Condition, Count, Filter, Group, IfNone, IntentError, Limit, Read, Show, Sort, WriteJson
+from .model import MAX_INTEGER, Count, Filter, Group, IfNone, IntentError, Limit, Read, Show, Sort, WriteJson
 
 HERE = Path(__file__).parent / "library"
-BUILT = ("drop-invalid-rows", "filter-rows", "sort-rows", "take-first", "group-by-key", "count-values",
+BUILT = ("drop-invalid-rows", "filter-rows", "calculate", "sort-rows", "take-first", "group-by-key", "count-values",
          "print-message", "print-table", "format-json")
+VALUE_KINDS = ("name", "newname", "number", "text", "op", "sym")
 
 
 def concepts():
@@ -19,7 +20,7 @@ def concepts():
 
 def fill(block, tokens, line, source_name, steps):
     """Return the step a statement stands for. Raises IntentError when the values do not fit the block."""
-    fields = [token.value for token in tokens if token.kind == "name" and token.value != source_name]
+    fields = [token.value for token in tokens if token.kind in ("name", "newname") and token.value != source_name]
     texts = [token.value for token in tokens if token.kind == "text"]
     numbers = [token.value for token in tokens if token.kind == "number"]
     comparisons = [token.value for token in tokens if token.kind == "op"]
@@ -30,7 +31,8 @@ def fill(block, tokens, line, source_name, steps):
         return bool(found & known[concept])
 
     def no_values(*kinds):
-        present = {"text": texts, "number": numbers, "comparison": comparisons, "field": fields}
+        present = {"text": texts, "number": numbers, "comparison": comparisons, "field": fields,
+                   "formula": [token for token in tokens if token.kind == "sym"]}
         for kind in kinds:
             if present[kind]:
                 raise IntentError(line, f"this statement was read as '{block}', which takes no {kind} here")
@@ -42,20 +44,36 @@ def fill(block, tokens, line, source_name, steps):
         if any(ord(ch) < 32 for ch in text):
             raise IntentError(line, "the text must not contain control characters")
 
-    if block == "filter-rows":
-        conditions, used = [], set()
-        for index in range(len(tokens) - 2):
-            first, second, third = tokens[index:index + 3]
-            if first.kind == "name" and second.kind == "op" and third.kind in ("number", "text") and index not in used:
-                conditions.append(Condition(field=first.value, op=second.value, value=third.value))
-                used.update((index, index + 1, index + 2))
-        stray = [token for index, token in enumerate(tokens) if index not in used
-                 and (token.kind in ("op", "number", "text") or (token.kind == "name" and token.value != source_name))]
-        if not conditions or stray:
-            raise IntentError(line, "write each condition as a field, a comparison and a value, such as age >= 18")
-        return Filter(conditions=tuple(conditions), line=line)
+    if block in ("filter-rows", "calculate"):
+        from .parser import _added_field, _conditions  # imported here because the parser imports this module
+
+        positions = [index for index, token in enumerate(tokens)
+                     if token.kind in VALUE_KINDS and not (token.kind == "name" and token.value == source_name)]
+        example = ("write the new field, an equals sign and a formula, such as total = price * 2" if block == "calculate"
+                   else "write each condition as a field, a comparison and a value, such as age >= 18")
+        if not positions:
+            raise IntentError(line, example)
+        span = tokens[positions[0]:positions[-1] + 1]
+        plain = []
+        for token in span:
+            if token.kind in ("name", "newname"):
+                plain.append(("word", token.value))
+            elif token.kind in ("number", "text", "op", "sym"):
+                plain.append((token.kind, token.value))
+            elif token.kind == "word" and token.code in known["and"] and block == "filter-rows":
+                plain.append(("and", "and"))
+            elif token.kind == "comma" or (token.kind == "word" and token.code == "-"):
+                continue
+            else:
+                raise IntentError(line, example)
+        try:
+            if block == "calculate":
+                return _added_field(plain, line, {"add": "add"})
+            return Filter(conditions=_conditions(plain, line, {"and": "and"}, joiner=("and", "and")), line=line)
+        except IntentError:
+            raise IntentError(line, example) from None
     if block == "sort-rows":
-        no_values("text", "number", "comparison")
+        no_values("text", "number", "comparison", "formula")
         if len(fields) != 1:
             raise IntentError(line, "name exactly one field to sort by")
         if has("ascending") == has("descending"):

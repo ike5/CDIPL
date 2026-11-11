@@ -8,7 +8,7 @@ import unittest
 from cdipl import classifier
 from cdipl.compiler import build_with_index
 from cdipl.languages import PHRASES
-from cdipl.model import IntentError
+from cdipl.model import IntentError, compare
 from cdipl.parser import parse, render
 from cdipl.resolve import Resolver, empty_index
 from cdipl.words import WordList
@@ -22,7 +22,7 @@ ENGLISH = WordList("en", [
     ("group", "group"), ("count", "count"), ("each", "-"), ("show", "show"), ("display", "show"), ("write", "write"),
     ("output", "write"), ("json", "json"), ("as", "-"), ("skip", "skip"), ("ignore", "skip"), ("invalid", "invalid"),
     ("broken", "invalid"), ("rows", "record"), ("if", "-"), ("there", "-"), ("are", "-"), ("none", "empty"),
-    ("say", "say"), ("checksum", "hash"), ("file", "file"), ("compute", "-"), ("of", "-"), ("a", "-"), ("and", "-"),
+    ("say", "say"), ("work out", "calculate"), ("checksum", "hash"), ("file", "file"), ("compute", "-"), ("of", "-"), ("a", "-"), ("and", "and"),
 ])
 SPANISH = WordList("es", [
     ("ordenar", "sort"), ("ordena", "sort"), ("descendente", "descending"), ("de mayor a menor", "descending"),
@@ -33,7 +33,7 @@ SPANISH = WordList("es", [
     ("hay", "-"), ("ninguno", "empty"), ("decir", "say"),
 ])
 BLOCKS = ["sort-rows", "filter-rows", "take-first", "group-by-key", "count-values", "print-table", "format-json",
-          "drop-invalid-rows", "print-message", "hash-file"]
+          "drop-invalid-rows", "print-message", "hash-file", "calculate"]
 TRAINING = [
     ("sort-rows", ["sort", "<name>", "descending"]), ("sort-rows", ["sort", "<name>", "ascending"]),
     ("filter-rows", ["keep", "<name>", "<comparison>", "<number>"]), ("filter-rows", ["keep", "<name>", "<comparison>", "<text>"]),
@@ -42,6 +42,8 @@ TRAINING = [
     ("print-table", ["show", "<name>", "<name>"]), ("print-table", ["show", "<name>"]),
     ("format-json", ["write", "json"]), ("drop-invalid-rows", ["skip", "invalid", "record"]),
     ("print-message", ["empty", "say", "<text>"]), ("hash-file", ["hash", "file"]),
+    ("calculate", ["calculate", "<newname>", "<comparison>", "<name>", "<arithmetic>", "<number>"]),
+    ("filter-rows", ["keep", "<name>", "<arithmetic>", "<name>", "<comparison>", "<number>"]),
 ]
 MODEL = classifier.Classifier(classifier.make_model(classifier.train(TRAINING, BLOCKS), BLOCKS, threshold=500))
 LISTS = {"en": ENGLISH, "es": SPANISH}
@@ -136,7 +138,12 @@ class FreeWordingTest(unittest.TestCase):
         text = HEAD + 'only keep age >= 18 and name != "the top"\nplease arrange them by name, a to z\ndisplay name\n'
         program = parse(text, Resolver("en", classifier=MODEL, word_list=ENGLISH))
         conditions = program.steps[1].conditions
-        self.assertEqual([(c.field, c.op, c.value) for c in conditions], [("age", ">=", 18), ("name", "!=", "the top")])
+        self.assertEqual(conditions, (compare("age", ">=", 18), compare("name", "!=", "the top")))
+
+    def test_formulas_in_free_wording(self):
+        free = HEAD + 'work out double = age * 2 + 1\nonly keep double - age > 20 and name & "!" != "x!"\ndisplay name, double\n'
+        standard = HEAD + 'add double = age * 2 + 1\nkeep where double - age > 20 and name & "!" != "x!"\nshow name, double\n'
+        self.assertEqual(build_free(free)[0], build_free(standard)[0])
 
     def test_missing_or_contradictory_values_are_reported(self):
         for statement, expected in (("sort by name", "ascending or descending"),

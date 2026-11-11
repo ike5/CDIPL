@@ -2,20 +2,30 @@
 import re
 
 from .common import (
+    Add,
+    Arith,
+    Concat,
     Condition,
     Count,
+    Field,
     Filter,
     Group,
     IfNone,
     Limit,
     NotGenerated,
+    Number,
     Read,
+    Scanner,
     Show,
     Sort,
     Source,
+    Text,
     WriteJson,
     assemble,
     blocks_used,
+    formula_type,
+    formulas,
+    has_arithmetic,
     schemas,
 )
 
@@ -118,6 +128,14 @@ function keepValid(records) {
   return records.map(toRow).filter((row) => row !== null);
 }
 '''),
+    ("calculate", "whole", '''\
+function whole(value) {
+  if (!Number.isSafeInteger(value)) {
+    fail(7, "out-of-range", "a calculation gave a number outside the supported range");
+  }
+  return value === 0 ? 0 : value;
+}
+'''),
     ("sort-rows", "compare", '''\
 function compareText(left, right) {
   const a = Array.from(left, (ch) => ch.codePointAt(0));
@@ -201,6 +219,7 @@ FORMS = {
     "check-required-types": "let rows = requireValid(records);",
     "drop-invalid-rows": "let rows = keepValid(records);",
     "filter-rows": "rows = rows.filter((row) => CONDITIONS);",
+    "calculate": "rows = rows.map((row) => ({ ...row, NAME: FORMULA })); whole(A + B); A + B",
     "sort-rows": "rows = [...rows].sort((a, b) => COMPARE);",
     "take-first": "rows = rows.slice(0, N);",
     "group-by-key": "let groups = groupRows(rows, FIELD);",
@@ -260,7 +279,7 @@ def needs(program):
             if program.source.argument is not None:
                 flags.add("argument")
         elif isinstance(step, Filter):
-            if any(isinstance(cond.value, str) and cond.op in ORDER for cond in step.conditions):
+            if any(cond.op in ORDER and formula_type(schema, cond.left) == "text" for cond in step.conditions):
                 flags.add("compare")
         elif isinstance(step, Sort):
             if schema[step.field] == "text":
@@ -275,15 +294,29 @@ def needs(program):
             flags.add("show")
         elif isinstance(step, WriteJson):
             flags.add("json")
+        if any(has_arithmetic(value) for value in formulas(step)):
+            flags.add("whole")
     return flags
 
 
-def condition(cond):
-    if isinstance(cond.value, int):
-        return f"row.{cond.field} {NUMBER_OPERATORS[cond.op]} {cond.value}"
-    if cond.op in ORDER:
-        return f"compareText(row.{cond.field}, {quote(cond.value)}) {ORDER[cond.op]}"
-    return f"row.{cond.field} {NUMBER_OPERATORS[cond.op]} {quote(cond.value)}"
+def formula(value):
+    """Write a formula as JavaScript."""
+    if isinstance(value, Field):
+        return f"row.{value.name}"
+    if isinstance(value, Number):
+        return str(value.value)
+    if isinstance(value, Text):
+        return quote(value.value)
+    if isinstance(value, Arith):
+        return f"whole({formula(value.left)} {value.op} {formula(value.right)})"
+    return " + ".join(formula(part) for part in value.parts)
+
+
+def condition(cond, schema):
+    left, right = formula(cond.left), formula(cond.right)
+    if cond.op in ORDER and formula_type(schema, cond.left) == "text":
+        return f"compareText({left}, {right}) {ORDER[cond.op]}"
+    return f"{left} {NUMBER_OPERATORS[cond.op]} {right}"
 
 
 def main_lines(program):
@@ -300,8 +333,10 @@ def main_lines(program):
             else:
                 out.append(("  let rows = requireValid(records);", step.line))
         elif isinstance(step, Filter):
-            joined = " && ".join(condition(cond) for cond in step.conditions)
+            joined = " && ".join(condition(cond, schema) for cond in step.conditions)
             out.append((f"  rows = rows.filter((row) => {joined});", step.line))
+        elif isinstance(step, Add):
+            out.append((f"  rows = rows.map((row) => ({{ ...row, {step.name}: {formula(step.formula)} }}));", step.line))
         elif isinstance(step, Sort):
             first, second = ("b", "a") if step.descending else ("a", "b")
             if schema[step.field] == "integer":
@@ -390,6 +425,12 @@ def lift(text):
             index += 2
         elif match := re.fullmatch(r"  rows = rows\.filter\(\(row\) => (.*)\);", line):
             steps.append(Filter(conditions=_conditions(match[1])))
+        elif match := re.fullmatch(rf"  rows = rows\.map\(\(row\) => \(\{{ \.\.\.row, {NAME}: (.*) \}}\)\);", line):
+            scanner = Scanner(match[2])
+            value = _formula(scanner)
+            if not scanner.done():
+                raise NotGenerated("a formula cannot be read")
+            steps.append(Add(name=match[1], formula=value))
         elif match := re.fullmatch(r"  rows = \[\.\.\.rows\]\.sort\(\(a, b\) => (.*)\);", line):
             steps.append(_sort(match[1]))
         elif match := re.fullmatch(r"  rows = rows\.slice\(0, (\d+)\);", line):
@@ -438,28 +479,60 @@ def _sort(text):
     raise NotGenerated("a sort cannot be read")
 
 
-NUMBER_CONDITION = re.compile(rf"row\.{NAME} (===|!==|<=|>=|<|>) (-?\d+)")
-TEXT_EQUALITY = re.compile(rf"row\.{NAME} (===|!==) ({STRING})")
-TEXT_ORDER = re.compile(rf"compareText\(row\.{NAME}, ({STRING})\) (<= 0|>= 0|< 0|> 0)")
+FIELD_VALUE = re.compile(rf"row\.{NAME}")
+STRING_VALUE = re.compile(STRING)
+NUMBER_VALUE = re.compile(r"-?\d+")
+ARITHMETIC = re.compile(r" ([-+*]) ")
+COMPARISON = re.compile(r" (===|!==|<=|>=|<|>) ")
+ORDER_TEST = re.compile(r" (<= 0|>= 0|< 0|> 0)")
+
+
+def _atom(scanner):
+    if match := scanner.match(FIELD_VALUE):
+        return Field(match[1])
+    if match := scanner.match(STRING_VALUE):
+        return Text(unquote(match[0]))
+    if match := scanner.match(NUMBER_VALUE):
+        return Number(int(match[0]))
+    if scanner.take("whole("):
+        left = _atom(scanner)
+        op = scanner.match(ARITHMETIC)
+        if op is None:
+            raise NotGenerated("a calculation cannot be read")
+        right = _atom(scanner)
+        scanner.expect(")")
+        return Arith(op[1], left, right)
+    raise NotGenerated("a formula cannot be read")
+
+
+def _formula(scanner):
+    parts = [_atom(scanner)]
+    while scanner.take(" + "):
+        parts.append(_atom(scanner))
+    return parts[0] if len(parts) == 1 else Concat(tuple(parts))
 
 
 def _conditions(text):
-    conditions, position = [], 0
+    scanner, conditions = Scanner(text), []
     while True:
-        if match := NUMBER_CONDITION.match(text, position):
-            conditions.append(Condition(field=match[1], op=FROM_NUMBER[match[2]], value=int(match[3])))
-        elif match := TEXT_EQUALITY.match(text, position):
-            conditions.append(Condition(field=match[1], op=FROM_NUMBER[match[2]], value=unquote(match[3])))
-        elif match := TEXT_ORDER.match(text, position):
-            conditions.append(Condition(field=match[1], op=FROM_ORDER[match[3]], value=unquote(match[2])))
+        if scanner.take("compareText("):
+            left = _formula(scanner)
+            scanner.expect(", ")
+            right = _formula(scanner)
+            scanner.expect(")")
+            test = scanner.match(ORDER_TEST)
+            if test is None:
+                raise NotGenerated("a comparison of text cannot be read")
+            conditions.append(Condition(left, FROM_ORDER[test[1]], right))
         else:
-            raise NotGenerated("a condition cannot be read")
-        position = match.end()
-        if position == len(text):
+            left = _formula(scanner)
+            op = scanner.match(COMPARISON)
+            if op is None:
+                raise NotGenerated("a condition cannot be read")
+            conditions.append(Condition(left, FROM_NUMBER[op[1]], _formula(scanner)))
+        if scanner.done():
             return tuple(conditions)
-        if not text.startswith(" && ", position):
-            raise NotGenerated("conditions are not joined as generated")
-        position += 4
+        scanner.expect(" && ")
 
 
 __all__ = ["FILE_NAME", "SUPPORT", "blocks_used", "generate", "lift", "schemas"]

@@ -14,10 +14,9 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-from cdipl import classifier, library, words  # noqa: E402
+from cdipl import classifier, library, words
 
-NAMES = set("users orders items files records lines name age price city id date status email total amount region "
-            "size count path title done text".split())
+NAMES = set(["users", "orders", "items", "files", "records", "lines", "name", "age", "price", "city", "id", "date", "status", "email", "total", "amount", "region", "size", "count", "path", "title", "done", "text"])
 FOLDS = 12
 SAFETY = 1.5
 

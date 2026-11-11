@@ -2,20 +2,29 @@
 import re
 
 from .common import (
+    Add,
+    Arith,
+    Concat,
     Condition,
     Count,
+    Field,
     Filter,
     Group,
     IfNone,
     Limit,
     NotGenerated,
+    Number,
     Read,
+    Scanner,
     Show,
     Sort,
     Source,
+    Text,
     WriteJson,
     assemble,
     blocks_used,
+    formulas,
+    has_arithmetic,
     schemas,
 )
 
@@ -113,6 +122,12 @@ def require_valid(records):
 def keep_valid(records):
     return [row for row in map(to_row, records) if row is not None]
 '''),
+    ("calculate", "whole", '''\
+def whole(value):
+    if abs(value) > MAX_INTEGER:
+        fail(7, "out-of-range", "a calculation gave a number outside the supported range")
+    return value
+'''),
     ("sort-rows", "fold", '''\
 def fold_case(text):
     return "".join(chr(ord(ch) + 32) if "A" <= ch <= "Z" else ch for ch in text)
@@ -158,6 +173,7 @@ FORMS = {
     "check-required-types": "rows = require_valid(records)",
     "drop-invalid-rows": "rows = keep_valid(records)",
     "filter-rows": "rows = [row for row in rows if CONDITIONS]",
+    "calculate": 'rows = [{**row, NAME: FORMULA} for row in rows]; whole(A + B); A + B',
     "sort-rows": "rows = sorted(rows, key=lambda row: KEY, reverse=True)",
     "take-first": "rows = rows[:N]",
     "group-by-key": "groups = group_rows(rows, FIELD)",
@@ -217,6 +233,8 @@ def needs(program):
                 flags.add("argument")
         elif isinstance(step, Sort) and step.ignore_case:
             flags.add("fold")
+        if any(has_arithmetic(formula) for formula in formulas(step)):
+            flags.add("whole")
         elif isinstance(step, Group):
             flags.add("group")
         elif isinstance(step, Count):
@@ -228,9 +246,21 @@ def needs(program):
     return flags
 
 
+def formula(value):
+    """Write a formula as Python."""
+    if isinstance(value, Field):
+        return f"row[{quote(value.name)}]"
+    if isinstance(value, Number):
+        return str(value.value)
+    if isinstance(value, Text):
+        return quote(value.value)
+    if isinstance(value, Arith):
+        return f"whole({formula(value.left)} {value.op} {formula(value.right)})"
+    return " + ".join(formula(part) for part in value.parts)
+
+
 def condition(cond):
-    value = quote(cond.value) if isinstance(cond.value, str) else str(cond.value)
-    return f'row[{quote(cond.field)}] {OPERATORS[cond.op]} {value}'
+    return f"{formula(cond.left)} {OPERATORS[cond.op]} {formula(cond.right)}"
 
 
 def main_lines(program):
@@ -249,6 +279,8 @@ def main_lines(program):
         elif isinstance(step, Filter):
             joined = " and ".join(condition(cond) for cond in step.conditions)
             out.append((f"    rows = [row for row in rows if {joined}]", step.line))
+        elif isinstance(step, Add):
+            out.append((f"    rows = [{{**row, {quote(step.name)}: {formula(step.formula)}}} for row in rows]", step.line))
         elif isinstance(step, Sort):
             key = f"row[{quote(step.field)}]"
             if step.ignore_case:
@@ -295,7 +327,11 @@ def generate(program):
 
 
 FIELD_NAME = r'"([A-Za-z_][A-Za-z0-9_]*)"'
-CONDITION = re.compile(rf'row\[{FIELD_NAME}\] (==|!=|<=|>=|<|>) ({STRING}|-?\d+)')
+FIELD_VALUE = re.compile(rf"row\[{FIELD_NAME}\]")
+STRING_VALUE = re.compile(STRING)
+NUMBER_VALUE = re.compile(r"-?\d+")
+ARITHMETIC = re.compile(r" ([-+*]) ")
+COMPARISON = re.compile(r" (==|!=|<=|>=|<|>) ")
 
 
 def lift(text):
@@ -332,6 +368,12 @@ def lift(text):
             index += 2
         elif match := re.fullmatch(r"    rows = \[row for row in rows if (.*)\]", line):
             steps.append(Filter(conditions=_conditions(match[1])))
+        elif match := re.fullmatch(rf"    rows = \[\{{\*\*row, {FIELD_NAME}: (.*)\}} for row in rows\]", line):
+            scanner = Scanner(match[2])
+            value = _formula(scanner)
+            if not scanner.done():
+                raise NotGenerated("a formula cannot be read")
+            steps.append(Add(name=match[1], formula=value))
         elif match := re.fullmatch(rf"    rows = sorted\(rows, key=lambda row: (fold_case\()?row\[{FIELD_NAME}\]\)?(, reverse=True)?\)", line):
             steps.append(Sort(field=match[2], descending=bool(match[3]), ignore_case=bool(match[1])))
         elif match := re.fullmatch(r"    rows = rows\[:(\d+)\]", line):
@@ -369,21 +411,42 @@ def _only(matches):
     return found[0]
 
 
+def _atom(scanner):
+    if match := scanner.match(FIELD_VALUE):
+        return Field(match[1])
+    if match := scanner.match(STRING_VALUE):
+        return Text(unquote(match[0]))
+    if match := scanner.match(NUMBER_VALUE):
+        return Number(int(match[0]))
+    if scanner.take("whole("):
+        left = _atom(scanner)
+        op = scanner.match(ARITHMETIC)
+        if op is None:
+            raise NotGenerated("a calculation cannot be read")
+        right = _atom(scanner)
+        scanner.expect(")")
+        return Arith(op[1], left, right)
+    raise NotGenerated("a formula cannot be read")
+
+
+def _formula(scanner):
+    parts = [_atom(scanner)]
+    while scanner.take(" + "):
+        parts.append(_atom(scanner))
+    return parts[0] if len(parts) == 1 else Concat(tuple(parts))
+
+
 def _conditions(text):
-    conditions, position = [], 0
+    scanner, conditions = Scanner(text), []
     while True:
-        match = CONDITION.match(text, position)
-        if match is None:
+        left = _formula(scanner)
+        op = scanner.match(COMPARISON)
+        if op is None:
             raise NotGenerated("a condition cannot be read")
-        raw = match[3]
-        value = unquote(raw) if raw.startswith('"') else int(raw)
-        conditions.append(Condition(field=match[1], op=FROM_OPERATORS[match[2]], value=value))
-        position = match.end()
-        if position == len(text):
+        conditions.append(Condition(left, FROM_OPERATORS[op[1]], _formula(scanner)))
+        if scanner.done():
             return tuple(conditions)
-        if not text.startswith(" and ", position):
-            raise NotGenerated("conditions are not joined as generated")
-        position += 5
+        scanner.expect(" and ")
 
 
 __all__ = ["FILE_NAME", "SUPPORT", "blocks_used", "generate", "lift", "schemas"]

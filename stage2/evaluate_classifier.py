@@ -14,8 +14,8 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-from cdipl import classifier, words  # noqa: E402
-from stage2.train_classifier import NAMES  # noqa: E402
+from cdipl import classifier, words
+from stage2.train_classifier import NAMES
 
 
 def evaluate(language, model):

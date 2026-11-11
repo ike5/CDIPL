@@ -9,7 +9,7 @@ from .support import Workspace, run
 from .test_equivalence import DATASETS
 
 HEADER = "language: en\n\nsource people from argument 1:\n    name: text\n    age: integer\n    city: text\n\nget people\n"
-KINDS = ("filter", "sort", "limit", "group", "count")
+KINDS = ("filter", "sort", "limit", "group", "count", "add")
 
 
 def chain_text(kinds):
@@ -18,7 +18,7 @@ def chain_text(kinds):
     Returns (text, fits): whether the block types fit together.
     """
     fields = {"name": "text", "age": "integer", "city": "text"}
-    lines, state, fits, grouped = [], "rows", True, "city"
+    lines, state, fits, grouped, added = [], "rows", True, "city", 0
     for kind in kinds:
         if kind == "count":
             lines.append("count each group")
@@ -32,8 +32,13 @@ def chain_text(kinds):
             fits = False
         number_field = "count" if "count" in fields else "age"
         text_field = next((name for name, kind_ in fields.items() if kind_ == "text"), None)
-        if kind == "filter":
-            lines.append(f"keep where {number_field} >= 1")
+        if kind == "add":
+            added += 1
+            lines.append(f"add extra{added} = {number_field} * 2 - 1")
+            if state != "groups":
+                fields[f"extra{added}"] = "integer"
+        elif kind == "filter":
+            lines.append(f"keep where {number_field} + 1 >= 2")
         elif kind == "sort":
             lines.append(f"sort by {number_field} descending")
         elif kind == "limit":
@@ -77,8 +82,8 @@ class CombinationTest(unittest.TestCase):
                     self.assertEqual(results[0], results[1])
                     self.assertEqual(results[0][0], 0, results[0])
                     fitting += 1
-        self.assertEqual(fitting + rejected, 781)
-        self.assertEqual(fitting, 156)
+        self.assertEqual(fitting + rejected, sum(len(KINDS) ** length for length in range(5)))
+        self.assertEqual(fitting, 399)  # chains that end in rows: 1 + 4 + 17 + 72 + 305
 
 
 if __name__ == "__main__":

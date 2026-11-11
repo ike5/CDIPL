@@ -106,9 +106,7 @@ def declared_names(intent_text):
     """The source and field names declared in an intent file, plus the field that counting adds."""
     names = {"count"}
     for line in intent_text.split("\n"):
-        if match := re.match(r"\s+([A-Za-z_][A-Za-z0-9_]*)\s*:", line):
-            names.add(match[1])
-        elif (match := re.match(r"\S+\s+([A-Za-z_][A-Za-z0-9_]*)\s+\S+.*:\s*$", line)) and len(names) == 1:
+        if (match := re.match(r"\s+([A-Za-z_][A-Za-z0-9_]*)\s*:", line)) or (match := re.match(r"\S+\s+([A-Za-z_][A-Za-z0-9_]*)\s+\S+.*:\s*$", line)) and len(names) == 1:
             names.add(match[1])
     return names
 

@@ -30,13 +30,27 @@ Text is ordered by comparing Unicode code points from left to right. A shorter t
 
 **Ignoring case** means that the letters A to Z are treated as a to z before comparing. No other characters are changed.
 
+## Formulas
+
+A formula works out a value from the fields of one row. It is one of:
+
+- a field, a whole number, or text in double quotes;
+- `A + B`, `A - B` or `A * B`, where both sides are integers. The result is an integer. If the result of any step of a calculation is outside the integer range, the program stops with the error `out-of-range`. There is no division yet.
+- `A & B`, where both sides are text. The result is the two pieces of text joined end to end.
+- a formula in brackets.
+
+`*` is worked out before `+` and `-`; otherwise formulas are worked out from left to right. There is no conversion between integers and text. A minus sign directly before digits is part of the number, so write `0 - age` to negate a field.
+
+A condition must involve at least one field, and must not compare a formula with itself.
+
 ## The blocks
 
 | Statement | Takes | Gives | Meaning |
 |---|---|---|---|
 | `get S` | nothing | rows | Read the source as described above. |
 | `skip invalid records` | rows | rows | Changes how the source is read: invalid records are left out. Must come directly after `get`. |
-| `keep where C and C` | rows | rows | Keep the rows for which every condition holds, in their original order. A condition compares a field with a value of the same type. `=` and `!=` test whether the values are identical. |
+| `keep where C and C` | rows | rows | Keep the rows for which every condition holds, in their original order. A condition compares two formulas of the same type. `=` and `!=` test whether the values are identical. Conditions are tested from left to right, and testing stops at the first that does not hold. |
+| `add N = formula` | rows | rows | Give every row a new field N holding the value of the formula for that row. N must not already be a field. The new field comes after the existing ones. |
 | `sort by F ascending` or `descending` | rows | rows | Order the rows by the field. Rows with equal values keep their original order, in both directions. With `ignoring case` (text only), two values that differ only in the case of A to Z count as equal. |
 | `limit N` | rows | rows | Keep the first N rows. If there are fewer, keep them all. N may be 0. |
 | `group by F` | rows | groups | Collect the rows into groups with identical values of the field. Groups are in the order in which their value first appears. |
@@ -64,6 +78,7 @@ A program that fails writes one line to the error stream, beginning `error: <cat
 | `bad-json` | 4 | The file is not valid UTF-8 or not valid JSON |
 | `not-a-list` | 5 | The top-level JSON value is not a list |
 | `invalid-record` | 6 | A record is invalid and the intent does not say to skip invalid records |
+| `out-of-range` | 7 | A calculation gave a number outside the integer range |
 
 ## Known limits
 
@@ -72,4 +87,4 @@ These are cases where the targets may behave differently, or where the rules abo
 - **Very deeply nested JSON.** Python refuses JSON nested more than about a thousand levels deep, which is reported as `bad-json`. Node accepts far deeper nesting. A file nested that deeply inside a field that was not declared would be accepted by one target and refused by the other.
 - **Very large files.** Each program reads the whole file into memory. Limits on size differ between targets and were not measured.
 - **Platforms.** The tests were run on Linux only, with Python 3.14.6 and Node 22.23.4.
-- **Formulas.** Conditions compare a field with a fixed value. Arithmetic and other formulas are not part of this family yet.
+- **Formulas.** There is no division, no conversion between integers and text, and no way to choose between values by a condition.

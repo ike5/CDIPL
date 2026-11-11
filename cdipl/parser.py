@@ -6,18 +6,24 @@ from .languages import HEADERS, PHRASES
 from .model import (
     COMPARISONS,
     MAX_INTEGER,
+    Add,
+    Arith,
+    Concat,
     Condition,
     Count,
+    Field,
     Filter,
     Group,
     IfNone,
     IntentError,
     Limit,
+    Number,
     Program,
     Read,
     Show,
     Sort,
     Source,
+    Text,
     TypeMismatch,
     WriteJson,
     check_chain,
@@ -25,7 +31,7 @@ from .model import (
 
 IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
 TOKEN = re.compile(r'\s*(?:(?P<text>"(?:[^"\\]|\\["\\])*")|(?P<number>-?\d+)(?![\w.])|(?P<op>>=|<=|!=|=|<|>)|'
-                   r"(?P<comma>,)|(?P<word>[^\W\d]\w*))")
+                   r"(?P<sym>[-+*&()])|(?P<comma>,)|(?P<word>[^\W\d]\w*))")
 
 
 def unquote(literal):
@@ -127,7 +133,7 @@ def _parse_source(numbered, position, words):
         if match is None:
             raise IntentError(field_number, f"expected a field such as 'name: {words['text']}'")
         field_name, kind = match.groups()
-        if not IDENTIFIER.match(field_name):
+        if not IDENTIFIER.match(field_name) or field_name == "__proto__":
             raise IntentError(field_number, f"'{field_name}' is not a valid field name")
         if kind not in types:
             raise IntentError(field_number, f"unknown type '{kind}'; use {' or '.join(types)}")
@@ -216,6 +222,9 @@ def _parse_standard(line, number, words, source, steps):
     if rest is not None:
         _nothing_after(rest, number)
         return [WriteJson(line=number)]
+    rest = _strip_phrase(line, words["add"])
+    if rest is not None:
+        return [_added_field(tokens(rest, number), number, words)]
     rest = _strip_phrase(line, words["limit"])
     if rest is not None:
         found = tokens(rest, number)
@@ -270,22 +279,114 @@ def _field_list(found, number):
     return tuple(names)
 
 
-def _conditions(found, number, words):
-    conditions, index = [], 0
+class Formula:
+    """Reads formulas from a list of tokens: fields, numbers, text, + - * & and brackets."""
+
+    def __init__(self, found, number, start=0):
+        self.found = found
+        self.number = number
+        self.index = start
+
+    def peek(self):
+        return self.found[self.index] if self.index < len(self.found) else (None, None)
+
+    def formula(self):
+        left = self.term()
+        while True:
+            kind, value = self.peek()
+            if kind == "sym" and value in ("+", "-", "&"):
+                self.index += 1
+                right = self.term()
+                left = _join(left, right) if value == "&" else Arith(value, left, right)
+            elif kind == "number" and value < 0:  # "a -5" written without a space after the minus sign
+                self.index += 1
+                left = Arith("-", left, Number(-value))
+            else:
+                return left
+
+    def term(self):
+        left = self.atom()
+        while self.peek() == ("sym", "*"):
+            self.index += 1
+            left = Arith("*", left, self.atom())
+        return left
+
+    def atom(self):
+        kind, value = self.peek()
+        self.index += 1
+        if kind == "number":
+            return Number(value)
+        if kind == "text":
+            if any(ord(ch) < 32 for ch in value):
+                raise IntentError(self.number, "the text must not contain control characters")
+            return Text(value)
+        if kind == "word":
+            return Field(value)
+        if (kind, value) == ("sym", "("):
+            inner = self.formula()
+            if self.peek() != ("sym", ")"):
+                raise IntentError(self.number, "a bracket is opened but not closed")
+            self.index += 1
+            return inner
+        raise IntentError(self.number, "expected a field, a number, text in double quotes or a formula")
+
+
+def _join(left, right):
+    parts = (left.parts if isinstance(left, Concat) else (left,)) + (right.parts if isinstance(right, Concat) else (right,))
+    return Concat(parts)
+
+
+def _conditions(found, number, words, joiner=None):
+    """Read conditions joined by the word for 'and'. joiner is the token that stands for it."""
+    joiner = joiner or ("word", words["and"])
+    conditions, reader = [], Formula(found, number)
+    example = "expected a condition such as 'age >= 18' or 'city = \"Lima\"'"
     while True:
-        part = found[index:index + 3]
-        if len(part) != 3 or part[0][0] != "word" or part[1][0] != "op" or part[2][0] not in ("number", "text"):
-            raise IntentError(number, "expected a condition such as 'age >= 18' or 'city = \"Lima\"'")
-        if part[2][0] == "text" and any(ord(ch) < 32 for ch in part[2][1]):
-            raise IntentError(number, "the text must not contain control characters")
-        assert part[1][1] in COMPARISONS
-        conditions.append(Condition(field=part[0][1], op=part[1][1], value=part[2][1]))
-        index += 3
-        if index == len(found):
+        if reader.peek() == (None, None):
+            raise IntentError(number, example)
+        left = reader.formula()
+        kind, op = reader.peek()
+        if kind != "op":
+            raise IntentError(number, example)
+        reader.index += 1
+        right = reader.formula()
+        assert op in COMPARISONS
+        conditions.append(Condition(left, op, right))
+        if reader.peek() == (None, None):
             return tuple(conditions)
-        if found[index] != ("word", words["and"]):
+        if reader.peek() != joiner:
             raise IntentError(number, f"conditions must be joined by '{words['and']}'")
-        index += 1
+        reader.index += 1
+
+
+def _added_field(found, number, words):
+    """Read 'name = formula'."""
+    if len(found) < 3 or found[0][0] != "word" or found[1] != ("op", "="):
+        raise IntentError(number, f"expected a new field and a formula, such as '{words['add']} total = price * 2'")
+    if not IDENTIFIER.match(found[0][1]) or found[0][1] == "__proto__":
+        raise IntentError(number, f"'{found[0][1]}' is not a valid field name")
+    reader = Formula(found, number, start=2)
+    formula = reader.formula()
+    if reader.peek() != (None, None):
+        raise IntentError(number, "unexpected text after the formula")
+    return Add(name=found[0][1], formula=formula, line=number)
+
+
+def formula_text(formula, parent=0, on_right=False):
+    """Write a formula with as few brackets as its meaning allows."""
+    if isinstance(formula, Field):
+        return formula.name
+    if isinstance(formula, Number):
+        return str(formula.value)
+    if isinstance(formula, Text):
+        return quote(formula.value)
+    if isinstance(formula, Concat):
+        level = 1
+        body = " & ".join(formula_text(part, level, index > 0) for index, part in enumerate(formula.parts))
+    else:
+        level = 2 if formula.op == "*" else 1
+        body = f"{formula_text(formula.left, level)} {formula.op} {formula_text(formula.right, level, True)}"
+    return f"({body})" if level < parent or (level == parent and on_right) else body
 
 
 def _sort(rest, number, words):
@@ -324,8 +425,10 @@ def render(program, language=None):
                 out.append(words["skip"])
         elif isinstance(step, Filter):
             joined = f" {words['and']} ".join(
-                f"{c.field} {c.op} {quote(c.value) if isinstance(c.value, str) else c.value}" for c in step.conditions)
+                f"{formula_text(c.left)} {c.op} {formula_text(c.right)}" for c in step.conditions)
             out.append(f"{words['keep']} {joined}")
+        elif isinstance(step, Add):
+            out.append(f"{words['add']} {step.name} = {formula_text(step.formula)}")
         elif isinstance(step, Sort):
             direction = words["descending"] if step.descending else words["ascending"]
             suffix = f" {words['ignoring_case']}" if step.ignore_case else ""

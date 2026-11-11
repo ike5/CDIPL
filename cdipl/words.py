@@ -7,12 +7,13 @@ from pathlib import Path
 
 HERE = Path(__file__).parent / "library"
 TOKEN = re.compile(r'(?P<text>"(?:[^"\\]|\\["\\])*")|(?P<number>-?\d+)(?![\w.])|(?P<op>>=|<=|!=|=|<|>)|(?P<comma>,)|'
-                   r"(?P<word>[^\W\d][\w'’-]*)|(?P<stray>\S)")
+                   r"(?P<word>[^\W\d][\w'’-]*)|(?P<sym>[-+*&()])|(?P<stray>\S)")
 SUFFIXES = {
     "en": (("ies", "y"), ("es", ""), ("s", ""), ("ing", ""), ("ing", "e"), ("ed", ""), ("ed", "e"), ("d", "")),
     "es": (("es", ""), ("s", "")),
 }
-IGNORED = set(".:;()?!¿¡/")
+IGNORED = set(".:;?!¿¡/")
+IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
 FILLER = "-"
 
 
@@ -123,6 +124,10 @@ def encode(statement, words, names):
             tokens.append(Token("name", value))
             index += 1
             continue
+        if raw[index + 1:index + 2] == [("op", "=")] and IDENTIFIER.match(value):
+            tokens.append(Token("newname", value))  # a word just before an equals sign names a new field
+            index += 1
+            continue
         run = []
         for other_kind, other in raw[index:]:
             if other_kind != "word" or other in names:
@@ -150,5 +155,6 @@ def codes(tokens):
             if token.code and token.code != FILLER:
                 out.append(token.code)
         elif token.kind != "comma":
-            out.append({"text": "<text>", "number": "<number>", "op": "<comparison>", "name": "<name>"}[token.kind])
+            out.append({"text": "<text>", "number": "<number>", "op": "<comparison>", "name": "<name>",
+                        "newname": "<newname>", "sym": "<arithmetic>"}[token.kind])
     return out

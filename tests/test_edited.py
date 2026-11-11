@@ -14,6 +14,7 @@ source users from "users.json":
 
 get users
 skip invalid records
+add double = age * 2 + 1
 keep where age >= 18 and city != "Lima"
 sort by name ascending ignoring case
 limit 10
@@ -40,6 +41,12 @@ PYTHON_EDITS = [
     ("move the limit before the sort",
      '    rows = sorted(rows, key=lambda row: fold_case(row["name"]))\n    rows = rows[:10]\n',
      '    rows = rows[:10]\n    rows = sorted(rows, key=lambda row: fold_case(row["name"]))\n', LIFTED),
+    ("change a number in a formula", 'whole(row["age"] * 2)', 'whole(row["age"] * 3)', LIFTED),
+    ("change an operator in a formula", 'whole(row["age"] * 2) + 1)', 'whole(row["age"] * 2) - 1)', LIFTED),
+    ("rename the added field", '"double":', '"twice":', LIFTED),
+    ("remove the range check from a formula", 'whole(whole(row["age"] * 2) + 1)', 'whole(row["age"] * 2) + 1', REFUSED),
+    ("use division in a formula", 'whole(row["age"] * 2)', 'whole(row["age"] // 2)', REFUSED),
+    ("add a field that already exists", '"double":', '"age":', REFUSED),
     ("switch to strict reading without its support code", "rows = keep_valid(records)", "rows = require_valid(records)", REFUSED),
     ("add a foreign statement", "    rows = rows[:10]\n", '    rows = rows[:10]\n    print("debug")\n', REFUSED),
     ("add a comment", "def main():\n", "def main():\n    # check this\n", REFUSED),
@@ -76,6 +83,11 @@ JAVASCRIPT_EDITS = [
     ("change the message", '"Nobody.\\n"', '"Nadie.\\n"', LIFTED),
     ("rename the source", 'const SOURCE = "users";', 'const SOURCE = "people";', LIFTED),
     ("delete the limit step", "  rows = rows.slice(0, 10);\n", "", LIFTED),
+    ("change a number in a formula", "whole(row.age * 2)", "whole(row.age * 3)", LIFTED),
+    ("change an operator in a formula", "whole(row.age * 2) + 1)", "whole(row.age * 2) - 1)", LIFTED),
+    ("rename the added field", "double:", "twice:", LIFTED),
+    ("remove the range check from a formula", "whole(whole(row.age * 2) + 1)", "whole(row.age * 2) + 1", REFUSED),
+    ("use division in a formula", "whole(row.age * 2)", "whole(row.age / 2)", REFUSED),
     ("delete the sort step but leave its support code",
      "  rows = [...rows].sort((a, b) => compareText(foldCase(a.name), foldCase(b.name)));\n", "", REFUSED),
     ("sort fields that do not match", "compareText(foldCase(a.name), foldCase(b.name))",

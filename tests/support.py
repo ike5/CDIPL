@@ -6,7 +6,27 @@ import tempfile
 from pathlib import Path
 
 from cdipl.compiler import build_program
-from cdipl.model import Condition, Count, Filter, Group, IfNone, Limit, Program, Read, Show, Sort, Source, WriteJson
+from cdipl.model import (
+    Add,
+    Arith,
+    Concat,
+    Condition,
+    Count,
+    Field,
+    Filter,
+    Group,
+    IfNone,
+    Limit,
+    Number,
+    Program,
+    Read,
+    Show,
+    Sort,
+    Source,
+    Text,
+    WriteJson,
+    uses_field,
+)
 from cdipl.targets import TARGETS
 
 REPO = Path(__file__).resolve().parent.parent
@@ -52,11 +72,31 @@ def run(target, program_path, *arguments):
     return done.returncode, done.stdout, category
 
 
+def random_formula(rng, schema, kind, depth=0):
+    """A random formula of the given type over the fields in force."""
+    fields = [name for name, field_kind in schema.items() if field_kind == kind]
+    roll = rng.random()
+    if depth >= 2 or roll < 0.45 or not fields:
+        if fields and rng.random() < 0.6:
+            return Field(rng.choice(fields))
+        return Text(rng.choice(TEXTS)) if kind == "text" else Number(rng.choice(NUMBERS))
+    if kind == "text":
+        return Concat(tuple(random_formula(rng, schema, "text", 2) for _ in range(rng.randint(2, 3))))
+    return Arith(rng.choice("+-*"), random_formula(rng, schema, "integer", depth + 1),
+                 random_formula(rng, schema, "integer", depth + 1))
+
+
 def random_condition(rng, schema):
     name = rng.choice(list(schema))
     op = rng.choice(["=", "!=", "<", "<=", ">", ">="])
-    value = rng.choice(TEXTS) if schema[name] == "text" else rng.choice(NUMBERS)
-    return Condition(field=name, op=op, value=value)
+    if rng.random() < 0.6:  # the plain case: a field compared with a fixed value
+        value = Text(rng.choice(TEXTS)) if schema[name] == "text" else Number(rng.choice(NUMBERS))
+        return Condition(Field(name), op, value)
+    kind = schema[name]
+    left, right = random_formula(rng, schema, kind), random_formula(rng, schema, kind)
+    if left == right or not (uses_field(left) or uses_field(right)):
+        left, right = Field(name), Text("q") if kind == "text" else Number(7)
+    return Condition(left, op, right)
 
 
 def random_program(rng, source=None, max_steps=4):
@@ -72,8 +112,13 @@ def random_program(rng, source=None, max_steps=4):
             schema = {grouped: schema[grouped], "count": "integer"}
             grouped = None
             continue
-        kind = rng.choice(["filter", "filter", "sort", "sort", "limit", "group"])
-        if kind == "filter":
+        kind = rng.choice(["filter", "filter", "sort", "sort", "limit", "group", "add"])
+        if kind == "add":
+            name = next(candidate for candidate in ("extra", "more", "third", "fourth", "fifth") if candidate not in schema)
+            added = rng.choice(["text", "integer"])
+            steps.append(Add(name=name, formula=random_formula(rng, schema, added)))
+            schema = dict(schema, **{name: added})
+        elif kind == "filter":
             steps.append(Filter(conditions=tuple(random_condition(rng, schema) for _ in range(rng.randint(1, 2)))))
         elif kind == "sort":
             name = rng.choice(list(schema))

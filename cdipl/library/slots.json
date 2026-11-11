@@ -1,4 +1,5 @@
 {
+  "and": ["and"],
   "ascending": ["ascending"],
   "descending": ["descending"],
   "ignore-case": ["ignore-case"],

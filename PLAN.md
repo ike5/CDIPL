@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Reviewed** | `outputs/proposal-classifier-driven-intent-programming-language.md` (v0.2) and this repository at commit `194e44b` |
-| **Revision** | 4, dated 2026-11-11. It incorporates three rounds of decisions from the product owner. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
+| **Revision** | 5, dated 2026-11-11. It incorporates four rounds of decisions from the product owner. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
 | **Status** | Recommendation for the development team. Nothing in this plan has been built. |
 | **Audience** | Engineers deciding whether to build this, and what to build first |
 
@@ -11,7 +11,7 @@ References such as "§8" point to sections of the proposal. Sections of this pla
 
 ## Conclusion
 
-As decided by the product owner, CDIPL works like this. A developer writes intent in a file, in their own wording. A fast classifier chooses, for each statement, the matching block from a library of code blocks that were tested and reviewed in advance. The compiler records each choice in an index, joins the blocks like Lego, and writes out a complete program as folders of code in the chosen language. No LLM writes code. Generated code can be converted back to intent and traced to it. The aim is to make programming enjoyable again by leaving the developer in control.
+As decided by the product owner, CDIPL works like this. A developer writes intent in a file, in their own wording and their own human language, starting with English and Spanish. A fast classifier chooses, for each statement, the matching block from a library of code blocks that were tested and reviewed in advance. The compiler records each choice in an index, joins the blocks like Lego, and writes out a complete program as folders of code in the chosen language. No LLM writes code. Generated code can be converted back to intent and traced to it. The aim is to make programming enjoyable again by leaving the developer in control.
 
 - **Coherent?** Yes, with five conditions.
   - **Reproducible is not the same as correct.** The index makes a build repeatable: once a choice is recorded, the same intent file always produces the same program. It does not make the choice right. A classifier is a statistical tool and will sometimes choose the wrong block. How often, and how the developer finds out, become central questions.
@@ -22,10 +22,12 @@ As decided by the product owner, CDIPL works like this. A developer writes inten
 - **Worth pursuing?** Yes, as a staged experiment with a review after each stage. The compiler mechanics are established engineering and I expect them to work. Two things are uncertain. One is usefulness: the first version generates complete programs and allows no hand-written code, so a program can be generated only if every part of it is in the library. The other is classifier accuracy as the library grows.
 - **Smallest proof of concept:**
   1. **Block inventory**, with no product code: work out, from sample programs, which blocks a library would need and how many sample programs it could produce in full.
-  2. **Pipeline slice**: six blocks from the proposal's own examples, with a classifier, an index and two targets (Python and JavaScript), tested for correct choices, identical behaviour, every valid combination, conversion back to intent, and tracing.
+  2. **Pipeline slice**: six blocks from the proposal's own examples, with a classifier, an index and two targets (Python and JavaScript), tested for correct choices in English and Spanish, identical behaviour, every valid combination, conversion back to intent, and tracing.
   3. **Third target**: add C, to measure what each additional language costs.
 
 One caution about what Stage 2 can show. Small blocks in Python and JavaScript are the right place to prove the mechanics and the wrong place to prove value: the hand-written equivalent of the first example is one line. The value is in large blocks such as framework code, which the roadmap reaches later, and that is also where keeping targets equivalent is hardest.
+
+The owner has asked the AI assistant that wrote this plan to build the compiler and the blocks, and to write the classifier's example wordings. By the owner's own definition, a block is verified only after a person has reviewed it, so blocks written by the assistant are drafts until then (D2).
 
 ## Product decisions made by the owner
 
@@ -36,13 +38,17 @@ One caution about what Stage 2 can show. Small blocks in Python and JavaScript a
 | Building blocks | Tested, listed and formatted, with human review; easy to flag when an error is found; assembled like Lego | The library is the product; Stage 2 is built around it |
 | Classifier | It chooses the blocks from the intent. It does not ask the developer to confirm. | Now part of Stage 2; accuracy becomes a success criterion |
 | Index | The compiler records chosen blocks in an index for fast lookup. Entries need not be readable, so the intent file never has to name components. | Designed in Stage 2; see critique points 7 and 8 |
+| Seeing and correcting a choice | The `explain` and `choose` commands are accepted | Built in Stage 2 |
+| Classifier pass marks | At most 1 accepted wrong choice in 300 unseen wordings; at most 25% of statements declined | Criteria C1 and C2 are ratified |
+| Human languages | Intent may be written in several human languages, English and Spanish first. Words may be mapped to language-independent codes that the classifier works with. | A word list per language is added to Stage 2 (critique point 10) |
+| Who builds | The AI assistant builds the compiler and the blocks for each target, and writes the classifier's example wordings | Checking must not rest on the builder alone (critique point 11) |
 | Output | Complete programs, written out as folders of code | Coverage is all or nothing (critique point 1) |
 | Hand edits to generated code | Allowed only if they convert back to intent | Tested in Stage 2 |
 | Existing code CDIPL did not generate | Not supported | The edit engine is out of scope |
 | Hand-written code inside intent files | Not in the first version | With "complete programs", makes coverage central |
 | Order of targets | Python and JavaScript; then C, then Java; HTML with CSS; then FastAPI and Django; then React with CSS | See [Roadmap](#roadmap-after-the-proof-of-concept) |
-| Sample material for Stage 1 | Generated by an AI assistant, not taken from real requests or open-source code | Changes what Stage 1 can show (critique point 10) |
-| Implementation language | Python is not required | Open (D6) |
+| Sample material for Stage 1 | The assistant drafts 20 program briefs, the owner approves them, and the assistant generates the programs | Changes what Stage 1 can show (critique point 12) |
+| Implementation language | Python is not required | Open (D5) |
 | Pace | Generate a small amount, review, then generate more | Three stages with a review after each |
 
 ## Basis and limits of this review
@@ -57,6 +63,7 @@ What was examined:
 What was not done:
 
 - No part of the proposed system was implemented. No classifier was trained or measured.
+- Tools present in the environment used for this review: Python 3.13.18, Node 22.23.4 and GCC 13.3.0. Python 3.14, which `pyproject.toml` requires, is not installed but is offered for download by the `uv` tool that is present.
 - The probe covered Python and JavaScript only. C, Java and every framework are untested.
 - No search of prior art or competing tools was performed. Statements about existing tools, about classifiers in general and about the history of similar efforts come from general knowledge and are marked as assumptions.
 - `main.py` was not run. This checkout has no `.venv`, and the container's Python is 3.13.18, below the declared minimum.
@@ -90,21 +97,32 @@ What was not done:
    - The developer can see what was chosen (point 8).
    - Wrong-choice rate is measured on wording the classifier has not seen, with a pass mark set in advance.
 
-   What remains is a residual error rate greater than zero. Whether that is acceptable for a product described as deterministic is the owner's call (D2).
+   What remains is a residual error rate greater than zero. The owner has accepted the pass marks set out in the success criteria.
 
-8. **Unreadable index entries and developer control pull against each other.** The owner wants developers in control and does not want them to name components. If the classifier chooses silently and the record of its choice is unreadable, the developer has two ways to find a wrong choice: read the generated code, or notice wrong behaviour. They have one way to fix it: reword the intent and try again, which is the trial and error that makes prompting an LLM frustrating. The plan therefore proposes two tool commands that keep the intent file free of component names: one that shows, in plain words, which block was chosen for each statement, and one that lets the developer pick a different block from a list when the choice was wrong, writing the result to the index (D1).
+8. **Unreadable index entries and developer control pull against each other.** The owner wants developers in control and does not want them to name components. If the classifier chooses silently and the record of its choice is unreadable, the developer has two ways to find a wrong choice: read the generated code, or notice wrong behaviour. They have one way to fix it: reword the intent and try again, which is the trial and error that makes prompting an LLM frustrating. The plan therefore proposes two tool commands that keep the intent file free of component names: one that shows, in plain words, which block was chosen for each statement, and one that lets the developer pick a different block from a list when the choice was wrong, writing the result to the index. The owner has accepted both.
 
-9. **The classifier needs example wordings, and gets harder as the library grows.** A classifier learns from labelled examples: many wordings for each block. Someone has to write them (D4). *Assumption, from general knowledge: accuracy falls as the number of blocks rises and as blocks become more alike.* Six blocks will be easy and prove little. Stage 2 therefore measures the classifier against the whole inventory from Stage 1, not only the six blocks that are implemented.
+9. **The classifier needs example wordings, and gets harder as the library grows.** A classifier learns from labelled examples: many wordings for each block. The owner has decided that the assistant writes them. *Assumption, from general knowledge: accuracy falls as the number of blocks rises and as blocks become more alike.* Six blocks will be easy and prove little. Stage 2 therefore measures the classifier against the whole inventory from Stage 1, not only the six blocks that are implemented.
 
-10. **Generated sample programs are a favourable case, not a representative one.** The owner has decided that Stage 1 uses programs generated by an AI assistant. Such programs are regular and tutorial-like, and the same assistant that writes them would be judging how block-like they are. Stage 1 can therefore show which blocks to build first, and a poor result on this favourable material would be strong evidence against the idea. A good result would not show that real programs can be covered. That question stays open, and is carried as a risk.
+10. **Word codes are a sound way to support several human languages, with known weak spots.** The owner proposes mapping each word, in whatever language, to a language-independent code, and having the classifier work on codes. One classifier then serves every language, a new language needs only a new word list, and much of the choosing becomes a plain lookup, which is more predictable than statistics. The weak spots are:
+    - one word with several meanings (`order` as an instruction and as a purchase; Spanish `por`);
+    - word forms (`ordenar`, `ordena`, `ordenados`);
+    - phrases that only mean something together (`at most`, `como máximo`);
+    - differences in word order between languages;
+    - missing accents (`más` typed as `mas`).
 
-11. **Reversibility returns the standard wording, not the developer's.** Many wordings lead to one block, so the original wording cannot be recovered from code. Each block therefore has one standard phrase. Converting code back gives the intent in standard phrases, and each standard phrase must always resolve to its own block. The rule is: converting a file back either returns an intent that regenerates that file exactly, or refuses. *Assumption, from general knowledge: earlier model-driven tools that promised round trips between models and code struggled once developers edited the generated code.* The owner's rule avoids that by refusing such edits.
+    The word list therefore needs entries for set phrases and word forms, and must report a word it does not know instead of ignoring it. Field names, data values and generated code are never translated.
+
+11. **The builder should not be the only checker.** The owner has asked the assistant to write the briefs, the sample programs, the compiler, the blocks, the example wordings and the tests. A single author tends to test for the mistakes it can imagine. The owner's definition of a verified block includes human review, so a block written by the assistant is a draft until a person has reviewed it (D2). The wordings that test the classifier should come from someone else (D1).
+
+12. **Generated sample programs are a favourable case, not a representative one.** The owner has decided that Stage 1 uses programs generated by the assistant, from briefs the assistant drafts and the owner approves. Such programs are regular and tutorial-like, and the same assistant that writes them would be judging how block-like they are. Stage 1 can therefore show which blocks to build first, and a poor result on this favourable material would be strong evidence against the idea. A good result would not show that real programs can be covered. That question stays open, and is carried as a risk.
+
+13. **Reversibility returns the standard wording, not the developer's.** Many wordings lead to one block, so the original wording cannot be recovered from code. Each block therefore has one standard phrase in each human language. Converting code back gives the intent in standard phrases, and each standard phrase must always resolve to its own block. The rule is: converting a file back either returns an intent that regenerates that file exactly, or refuses. *Assumption, from general knowledge: earlier model-driven tools that promised round trips between models and code struggled once developers edited the generated code.* The owner's rule avoids that by refusing such edits.
 
 ### The proposal document
 
-12. **No shared representation is shown.** The two examples in §5 have no fields in common. The representation is called typed, but the examples carry no types and do not say where `users` is bound. Block interfaces with declared types, as required in point 3, would supply what is missing.
+14. **No shared representation is shown.** The two examples in §5 have no fields in common. The representation is called typed, but the examples carry no types and do not say where `users` is bound. Block interfaces with declared types, as required in point 3, would supply what is missing.
 
-13. **The proof of concept in §12 is superseded.** It tests the editing of an existing React project, which the owner has ruled out for the first version.
+15. **The proof of concept in §12 is superseded.** It tests the editing of an existing React project, which the owner has ruled out for the first version.
 
 ### Probe: the same operation in two languages
 
@@ -130,6 +148,8 @@ Reading: two straightforward translations of one intent are not the same program
 7. **Every target declares which blocks it supports.** The compiler refuses an unsupported block for that target; it never approximates.
 8. **Use flags.** When a block is flagged as faulty, the compiler refuses to build with it, and the index shows which programs are affected.
 9. **Review after each stage,** as the owner asked.
+10. **Put a word list in front of the classifier.** For each human language, a list maps words and set phrases to language-independent codes. The classifier sees only codes. Each intent file declares its human language.
+11. **Keep building and checking apart.** A person reviews each block before it is marked verified, and the classifier is tested on wordings its author did not write.
 
 ## Proof of concept
 
@@ -141,8 +161,8 @@ For one family of intents: a classifier can choose the right block from freely w
 
 No product code.
 
-1. Write short briefs for at least 20 small programs, half for Python and half for JavaScript: one or two sentences each on what the program should do. The owner or the team writes or approves the list before any code is generated (D8), so that the choice of programs is theirs.
-2. An AI assistant generates each program from its brief, as the owner decided.
+1. Write short briefs for 20 small programs, half for Python and half for JavaScript: one or two sentences each on what the program should do. The assistant has drafted them in `stage1/briefs.md`. The owner approves or changes the list before any code is generated.
+2. The assistant generates each program from its brief, as the owner decided.
 3. Split each program into units: its functions, or the whole script if it has none.
 4. Classify each unit:
    - **Closed:** it could be stated entirely as a chain of named operations with parameters.
@@ -152,7 +172,7 @@ No product code.
 
 The block list is the main product of this stage. It sets the order in which blocks are built and gives the classifier in Stage 2 a realistic number of blocks to choose among.
 
-Limit: see critique point 10. The result describes generated sample programs.
+Limit: see critique point 12. The result describes generated sample programs.
 
 ### Stage 2: pipeline slice
 
@@ -170,6 +190,8 @@ Limit: see critique point 10. The result describes generated sample programs.
 **Intent file.** The source declaration has a fixed form. Each statement after it is free wording for the operation, with exact expressions for its parameters. For example:
 
 ```text
+language: en
+
 source users from "users.json":
     name: text
     age: integer
@@ -180,29 +202,32 @@ sort by name ascending
 limit 10
 ```
 
-The second statement might equally be written "order by name ascending". Fields have declared types, `integer` and `text`. Comparisons use `=`, `!=`, `<`, `<=`, `>`, `>=`, joined by `and`, and are read exactly.
+The second statement might equally be written "order by name ascending". The first line declares the human language of the file (D3). In a Spanish file the same statements might read `obtener users donde age >= 18`, `ordenar por name ascendente` and `limitar 10`: the wording is Spanish, and the field names stay as declared. Fields have declared types, `integer` and `text`. Comparisons use `=`, `!=`, `<`, `<=`, `>`, `>=`, joined by `and`, and are read exactly.
 
-**Classifier.** Start with the simplest kind that works and record what was used. It is stored as a fixed file with a version. It is trained on example wordings for every block in the Stage 1 inventory, including blocks that are not implemented, and tested on wordings written by people who did not write the training examples (D4).
+**Word lists.** One per human language, English and Spanish to begin with. Each maps words and set phrases to language-independent codes, and names the filler words that may be ignored. Field names, values and comparisons pass through unchanged. Any other word the list does not know causes a diagnostic.
+
+**Classifier.** It works on codes, not words. Start with the simplest kind that works and record what was used. It is stored as a fixed file with a version. It is trained on example wordings, written by the assistant in English and Spanish, for every block in the Stage 1 inventory, including blocks that are not implemented. It is tested on wordings from someone other than the assistant (D1).
 
 **Index.** A file written beside the intent file and committed with it. Entries use block identifiers, not names.
 
 **Written meanings.** One page that fixes, independently of any target: the ordering of text, the range of integers, what happens when a field is missing or has the wrong type, the order of groups, and the order of rows that tie in a sort.
 
-**Targets.** Python and JavaScript. Each build produces a complete program that reads a data file and writes its result. Generated programs contain plain code and depend on nothing supplied by CDIPL. The input format is an open decision (D5).
+**Targets.** Python and JavaScript. Each build produces a complete program that reads a data file and writes its result. Generated programs contain plain code and depend on nothing supplied by CDIPL. The input format is an open decision (D4).
 
 **Commands.**
 
 - `build`: reads an intent file and its index, classifies any new statements, updates the index, and writes a folder containing the program and a trace file mapping each generated line to an intent statement.
-- `lift`: reads a generated program and returns the intent in standard phrases, or refuses.
+- `lift`: reads a generated program and returns the intent in the standard phrases of a chosen human language, or refuses.
 - `explain`: shows, in plain words, which block was chosen for each statement.
-- `choose`: lets the developer replace a wrong choice by picking from a list, and records it in the index (D1).
+- `choose`: lets the developer replace a wrong choice by picking from a list, and records it in the index.
 
 **Tests.**
 
 | Test | What is checked |
 |---|---|
-| Classifier | At least 300 unseen wordings across the whole inventory. Count correct choices, wrong choices and declined statements. Record how many wrong choices the type check catches. |
-| Standard phrases | Every block's standard phrase resolves to that block without declining. |
+| Classifier | At least 300 unseen wordings in each human language, across the whole inventory. Count correct choices, wrong choices and declined statements. Record how many wrong choices the type check catches. |
+| Standard phrases | Every block has one standard phrase in each human language, and each resolves to that block without declining. |
+| Language parity | At least 100 intent files written in both English and Spanish. Each pair must resolve to the same blocks and build byte-identical programs. |
 | Index | A build with a complete index never consults the classifier. Replacing the classifier with a different version does not change the output for indexed statements. Deleting the index and rebuilding recreates it identically. |
 | Equivalence | A fixed set of at least 200 pairs of intent and dataset, including the edge cases from the probe, empty input, ties, and a limit larger than the data. Every target produces byte-identical output, or every target reports the same category of error. |
 | Combination | Every chain of up to four blocks after the source is enumerated. Each chain whose types fit must build in every target and pass equivalence. Each chain whose types do not fit, such as counting groups that were never formed, must be rejected with a message naming the mismatch. |
@@ -220,7 +245,7 @@ Also record, for ten test intents, the generated program beside a hand-written e
 
 Add C, as the owner decided. Java follows later.
 
-C will show the cost of a target more sharply than any other choice. *From general knowledge, not checked in this review:* C's standard library does not read JSON; C has no built-in growable lists or records, so memory is managed by hand; and its standard text comparison works on bytes. Since generated programs must be complete and depend on nothing from CDIPL, the C output will either carry a large amount of fixed support code or the input format must be one C can read simply. That choice (D5) should be made before Stage 2, because it affects all targets.
+C will show the cost of a target more sharply than any other choice. *From general knowledge, not checked in this review:* C's standard library does not read JSON; C has no built-in growable lists or records, so memory is managed by hand; and its standard text comparison works on bytes. Since generated programs must be complete and depend on nothing from CDIPL, the C output will either carry a large amount of fixed support code or the input format must be one C can read simply. That choice (D4) should be made before Stage 2, because it affects all targets.
 
 Record the effort relative to the second target, which written meanings needed special handling, how much of each generated C program is fixed support code, and any dependency required. The same tests apply. If C cannot meet the written meaning for a block, the target must declare it and the compiler must refuse that block for C.
 
@@ -230,11 +255,11 @@ Editing of existing code, hand-written code inside intent files, markup and fram
 
 ### Suggested time budget
 
-*My estimates, not validated:* about one week for Stage 1, three to four weeks for Stage 2, and one to two weeks for Stage 3, for one engineer. Agree a hard stop for each stage before starting it (D7).
+*My estimates, not validated, and made for one engineer:* about one week for Stage 1, three to four weeks for Stage 2, and one to two weeks for Stage 3. With the assistant building, elapsed time will depend mostly on how quickly briefs, blocks and results are reviewed. Each stage ends with a review by the owner before the next begins.
 
 ## Evidence that would count as success
 
-Fix these before any result is seen. The numbers are proposals for the owner and team to ratify. They are judgment calls with no empirical basis.
+Fix these before any result is seen. The owner has ratified the classifier pass marks C1 and C2. The other numbers are proposals (D6). All are judgment calls with no empirical basis.
 
 **Stage 1.**
 
@@ -246,12 +271,13 @@ Fix these before any result is seen. The numbers are proposals for the owner and
 
 **Stage 2, classifier.**
 
-| ID | Criterion | Proposed pass mark |
+| ID | Criterion | Pass mark |
 |---|---|---|
-| C1 | Wrong choices that are accepted, meaning not declined and not caught by the type check | At most 1 in 300 unseen wordings |
+| C1 | Wrong choices that are accepted, meaning not declined and not caught by the type check | At most 1 in 300 unseen wordings, in each human language |
 | C2 | Statements declined | At most 25% |
 | C3 | Standard phrases | All resolve to their own block |
 | C4 | Index | All three index checks hold |
+| C5 | Language parity | Every English and Spanish pair resolves to the same blocks and builds the same program |
 
 C1 is strict because an accepted wrong choice produces a wrong program with no warning.
 
@@ -279,7 +305,7 @@ C1 is strict because an accepted wrong choice produces a wrong program with no w
 | Outcome | Next step |
 |---|---|
 | All stages pass | Start the roadmap below, one step at a time, taking the next blocks from the Stage 1 inventory. Check coverage on real programs before the framework tier. |
-| C1 fails | Revisit how the classifier's choices are checked (D1, D2) before going further |
+| C1 or C5 fails | Revisit the decision that the classifier chooses without confirmation, and the word lists, before going further |
 | G1 or G2 fails | Reduce to one target language and re-examine the claim that failed |
 | Stage 1 fails | Stop before writing the compiler, or revisit the decision on hand-written code |
 
@@ -307,14 +333,16 @@ For the record, revision 1 of this plan examined it and ran a browser probe on n
 
 | Risk | Why it matters | Mitigation |
 |---|---|---|
-| The classifier accepts a wrong block | A wrong program is produced with no warning | Declining; type check; `explain`; criterion C1. A residual rate remains (D2). |
+| The classifier accepts a wrong block | A wrong program is produced with no warning | Declining; type check; `explain`; criterion C1. A residual rate remains, which the owner has accepted. |
 | Classifier accuracy falls as the library grows | Six blocks prove little | Test against the whole Stage 1 inventory; repeat at every tier |
 | Too few real programs consist entirely of blocks | Complete programs with no hand-written code means partial coverage is no coverage | Stage 1 gives a one-sided check only; test on real programs before the framework tier |
-| Developers cannot see or correct a choice | Undermines the goal of control | The `explain` and `choose` commands (D1) |
-| Cost grows with kinds of intent multiplied by targets | Every block is written per target and must stay equivalent | Stage 3 measures one added target; one roadmap step at a time |
+| Developers cannot see or correct a choice | Undermines the goal of control | The `explain` and `choose` commands |
+| A word means different things in different contexts | One code per word loses the distinction, in any human language | Entries for set phrases and word forms; unknown words reported; the parity test (C5) |
+| The builder checks its own work | The assistant writes the briefs, sample programs, blocks, example wordings and tests | Owner approval of briefs; human review before a block is verified (D2); test wordings from someone else (D1) |
+| Cost grows with kinds of intent multiplied by targets | Every block is written per target and must stay equivalent; every human language needs a word list and standard phrases | Stage 3 measures one added target; one roadmap step at a time |
 | Targets drift apart in meaning | The probe found four differences in two operations | Written meanings; equivalence tests on every change (G1, G9) |
 | Blocks interact badly when combined | Tests of single blocks do not cover joins | Typed interfaces; the combination test (G2) |
-| C makes complete, dependency-free programs expensive | Large fixed support code in every program | Decide the input format before Stage 2 (D5) |
+| C makes complete, dependency-free programs expensive | Large fixed support code in every program | Decide the input format before Stage 2 (D4) |
 | Developers cannot adjust generated code | Edits that do not convert back are refused, by the owner's rule | Accepted for the first version; watch for it in early use |
 | Existing tools already do this well | Not evaluated in this review | A prior-art survey before Stage 2 is recommended |
 | Scope returns to "everything at once" | The proposal's breadth is its main delivery risk (§10.9) | The roadmap's one-step rule and a review after each stage |
@@ -325,20 +353,18 @@ Each has a default that this plan assumes if nobody decides otherwise.
 
 | ID | Decision | Default assumed here |
 |---|---|---|
-| D1 | How does a developer see and correct a wrong choice by the classifier, without naming components in the intent file? | Two tool commands: `explain` shows the choices in plain words; `choose` picks a replacement from a list and records it in the index |
-| D2 | What rate of accepted wrong choices is tolerable, and how many statements may the classifier decline? | At most 1 in 300 wrong; at most 25% declined |
-| D3 | Who writes the compiler and the blocks? The owner answered "no" to an LLM drafting them with human verification, and also said an AI assistant should "generate the code". These need reconciling. | People write the compiler and the blocks. An AI assistant generates only the Stage 1 sample programs. |
-| D4 | Who writes the example wordings that train and test the classifier? | People on the team. Test wordings come from people who did not write the training wordings. |
-| D5 | Input format for generated programs, given that C cannot read JSON without added code | Decide before Stage 2. Until then, JSON, with fixed support code written out in full where a target needs it. |
-| D6 | Language the compiler is written in | Python, because the repository is already set up for it. *Assumption: converting generated JavaScript and C back to intent is practical from Python; not tested.* |
-| D7 | Ratify the pass marks and the time budget per stage | The values proposed above |
-| D8 | Who writes or approves the Stage 1 program briefs | The owner |
+| D1 | Who writes the wordings that test the classifier? The assistant writes the training wordings, so a test on its own wordings would show little. | The owner or team supplies at least 100 test wordings per human language, the Spanish ones from a fluent speaker. If none are supplied, the assistant writes them before the word lists are designed, and the result is reported as weaker evidence. |
+| D2 | Who reviews each block before it is marked verified? | The owner, or someone the owner names. Until then a block is marked draft. |
+| D3 | Is the human language of an intent file declared on its first line, or detected? | Declared, with one language per file. Detection would be a second classifier that can be wrong. |
+| D4 | Input format for generated programs, given that C cannot read JSON without added code | Decide before Stage 2. Until then, JSON, with fixed support code written out in full where a target needs it. |
+| D5 | Language the compiler is written in | Python, because the repository is already set up for it. *Assumption: converting generated JavaScript and C back to intent is practical from Python; not tested.* |
+| D6 | Ratify the Stage 1 pass marks and the compiler criteria | The values proposed above |
 
 ## Assumptions
 
 - No implementation exists beyond what is in the repository at commit `194e44b`. Verified for this checkout only.
 - The proposal and the owner's answers are the only statements of intent.
-- "No LLM generates the code" applies to what runs when a developer builds. Whether it also applies to how the team builds the product is decision D3.
+- "No LLM generates the code" applies to what runs when a developer builds. The owner has confirmed that an AI assistant may build the compiler, the blocks and the example wordings.
 - A classifier that is not an LLM is acceptable, including one that uses a small language model internally, provided it only selects among existing blocks.
 - Statements about existing tools, classifiers, C and the history of similar efforts are general knowledge, not the result of a survey or test.
 - Effort estimates are unvalidated.

@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Reviewed** | `outputs/proposal-classifier-driven-intent-programming-language.md` (v0.2) and this repository at commit `194e44b` |
-| **Revision** | 6, dated 2026-11-11. It incorporates five rounds of decisions from the product owner. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
-| **Status** | Recommendation for the development team. Nothing in this plan has been built. |
+| **Revision** | 7, dated 2026-11-11. It incorporates five rounds of decisions from the product owner and the result of Stage 1. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
+| **Status** | Stage 1 is complete and awaits the owner's review (`stage1/inventory.md`). The compiler, blocks and classifier have not been started. |
 | **Audience** | Engineers deciding whether to build this, and what to build first |
 
 References such as "§8" point to sections of the proposal. Sections of this plan are referred to by name.
@@ -24,6 +24,8 @@ As decided by the product owner, CDIPL works like this. A developer writes inten
   1. **Block inventory**, with no product code: work out, from sample programs, which blocks a library would need and how many sample programs it could produce in full.
   2. **Pipeline slice**: six blocks from the proposal's own examples, with a classifier, an index and two targets (Python and JavaScript), tested for correct choices in English and Spanish, identical behaviour, every valid combination, conversion back to intent, and tracing.
   3. **Third target**: add C, to measure what each additional language costs.
+
+**Stage 1 is done.** Between 13 and 16 of 20 sample programs could be built entirely from blocks, which is above the proposed pass mark, but only if blocks may take formulas as parameters; without formulas the figure is 4 to 9. It would take about 90 blocks, 55 of them used by a single program. The full result and its limits are under [Stage 1 result](#stage-1-result).
 
 One caution about what Stage 2 can show. Small blocks in Python and JavaScript are the right place to prove the mechanics and the wrong place to prove value: the hand-written equivalent of the first example is one line. The value is in large blocks such as framework code, which the roadmap reaches later, and that is also where keeping targets equivalent is hardest.
 
@@ -175,6 +177,29 @@ No product code.
 The block list is the main product of this stage. It sets the order in which blocks are built and gives the classifier in Stage 2 a realistic number of blocks to choose among.
 
 Limit: see critique point 12. The result describes generated sample programs.
+
+#### Stage 1 result
+
+Completed on 2026-11-11. The full write-up, method and limits are in `stage1/inventory.md`. Two classifiers judged all 129 units of the 20 programs; the second worked without seeing the first's answers.
+
+| Measure | First classification | Second classification |
+|---|---|---|
+| Programs that could be built entirely from blocks with simple parameters | 9 of 20 | 4 of 20 |
+| The same, if blocks may take formulas as parameters | 16 of 20 | 13 of 20 |
+| Programs containing logic particular to themselves | 4 of 20 | 7 of 20 |
+| Units on which the two agreed about closed or open | 126 of 129 | |
+
+Against the proposed pass mark (30% or more of programs entirely closed), the result is a pass at 65% to 80% with formulas, and borderline to pass at 20% to 45% without.
+
+What the result changes:
+
+- **Formulas are needed.** At least half the programs need an arithmetic, text or true-or-false expression somewhere. The intent language in Stage 2 has comparisons only (D4).
+- **The library has to be large.** Twenty programs needed about 90 distinct blocks, and 55 of those were used by one program only. Only one program, the proposal's own example, could be built from blocks that another program also uses. Each new program brought about three blocks of its own.
+- **Plumbing comes first.** The most reused blocks are printing a message, stopping with an error and reading command-line options. The six pipeline blocks cannot produce a complete program without them (D5).
+- **The classifier has a realistic test set.** The 90 block names are the labels it will be tested against.
+- **The expected hard cases were hard.** The text converter, the loan table and tic-tac-toe each contain logic no library would hold, and so does the file renaming tool, which was not expected.
+
+The limits in critique point 12 apply in full: these are generated programs judged by AI assistants, and "could be built from blocks" was judged by reading, not by building.
 
 ### Stage 2: pipeline slice
 
@@ -337,7 +362,8 @@ For the record, revision 1 of this plan examined it and ran a browser probe on n
 |---|---|---|
 | The classifier accepts a wrong block | A wrong program is produced with no warning | Declining; type check; `explain`; criterion C1. A residual rate remains, which the owner has accepted. |
 | Classifier accuracy falls as the library grows | Six blocks prove little | Test against the whole Stage 1 inventory; repeat at every tier |
-| Too few real programs consist entirely of blocks | Complete programs with no hand-written code means partial coverage is no coverage | Stage 1 gives a one-sided check only; test on real programs before the framework tier |
+| Too few real programs consist entirely of blocks | Complete programs with no hand-written code means partial coverage is no coverage | Stage 1 passed on favourable material only; test on real programs before the framework tier |
+| The library must be very large to be useful | Stage 1 needed about 90 blocks for 20 small programs, most used once | Build blocks in order of reuse; track how many new blocks each new program needs |
 | Developers cannot see or correct a choice | Undermines the goal of control | The `explain` and `choose` commands |
 | A word means different things in different contexts | One code per word loses the distinction, in any human language | Entries for set phrases and word forms; unknown words reported; the parity test (C5) |
 | The builder checks its own work | The assistant writes the briefs, sample programs, blocks, example wordings and tests | Owner approval of briefs; human review before a block is verified; test wordings set aside before training material is written; programs for Stage 1 written without knowledge of their purpose |
@@ -358,6 +384,8 @@ Each has a default that this plan assumes if nobody decides otherwise.
 | D1 | Input format for generated programs, given that C cannot read JSON without added code | Decide before Stage 2. Until then, JSON, with fixed support code written out in full where a target needs it. |
 | D2 | Language the compiler is written in | Python, because the repository is already set up for it. *Assumption: converting generated JavaScript and C back to intent is practical from Python; not tested.* |
 | D3 | Ratify the Stage 1 pass marks and the compiler criteria | The values proposed above |
+| D4 | Should the intent language allow formulas as parameters? Stage 1 found that at least half the sample programs need them. | Not in Stage 2, which keeps comparisons only. Add formulas as the next step after Stage 2, with a written meaning for each operator. |
+| D5 | Should Stage 2 add the plumbing blocks needed to generate a whole program, with the Stage 1 sample J1 as an acceptance test? | Yes: add blocks for command-line options, reading and parsing the input file, checking it, printing a table and a message, and stopping with an error. The generated program must behave like sample J1 on its test input, in Python and JavaScript. |
 
 ## Assumptions
 

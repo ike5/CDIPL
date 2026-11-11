@@ -1,0 +1,130 @@
+program,unit,level,reason
+P01,read_totals,B,read CSV and group totals but amount parsing and validity need expressions
+P01,print_report,A,sort by total then name and print aligned table
+P01,main,A,declare options then call units in order with error reporting
+P02,iter_file_sizes,A,walk folder and yield size of each regular file
+P02,format_size,C,hand-written unit-scaling loop carrying a running value with rounding rule
+P02,positive_int,A,argument check against a fixed minimum
+P02,main,A,declare options take largest N and print aligned
+P03,summarise,A,match pattern per line and count by two fields
+P03,build_report,B,zero-filled hour table needs a lookup-with-default expression
+P03,main,A,declare options read file call units write JSON
+P03,<module>,A,a single text pattern definition
+P04,list_files,A,list folder keep visible regular files and sort
+P04,build_plan,B,new name is a text formula over prefix number and extension
+P04,find_conflicts,B,filter condition is a compound true-or-false expression
+P04,apply_plan,C,program-specific two-phase rename through temporary names on collision
+P04,non_negative_int,A,argument check against a fixed minimum
+P04,parse_args,A,declare options plus ordinary bad-argument checks
+P04,main,B,orchestration but unchanged note and changed count are expressions
+P05,fetch_once,A,send one HTTP request with fixed headers and timeout
+P05,is_retryable,B,true-or-false expression over error type and status list
+P05,fetch_with_retries,A,standard retry N times with growing delay
+P05,parse_json,A,decode and parse JSON with error report
+P05,save_json,A,write JSON file with fixed format
+P05,positive_float,A,argument check against a fixed minimum
+P05,parse_args,A,declare options plus ordinary URL argument check
+P05,main,A,calls units in order with error reporting
+P06,type_name,B,first match in ordered list using predicate expressions
+P06,fail,A,print error message and exit with status
+P06,load_json,A,read JSON file with ordinary error handling
+P06,validate_requirements,A,ordinary input validation against a list of allowed names
+P06,lookup,C,custom nested-path walk carrying state and reporting the broken step
+P06,check_config,B,per-requirement message is a conditional text expression
+P06,parse_args,A,declare command-line options
+P06,main,A,calls units in order and prints results
+P06,<module>,B,table of true-or-false type-check expressions
+P07,open_csv,A,open file with ordinary error handling
+P07,require_key,A,ordinary check that a required column exists
+P07,read_keys,A,read CSV and collect distinct trimmed values of one column
+P07,write_difference,A,read CSV keep rows whose key is absent from a set and write
+P07,parse_args,A,declare command-line options
+P07,main,A,calls units in order with error reporting
+P08,parse_blocks,C,custom line parser with open-block state carried between lines
+P08,render_block,C,branches on the program's own block kinds to build markup
+P08,page_title,A,take first block of a given kind else a default
+P08,convert,A,calls units in order then joins and fills a template
+P08,parse_args,A,declare command-line options
+P08,main,A,read file convert and write to file or screen
+P08,<module>,A,two text pattern definitions
+P09,to_cents,A,round to a fixed number of places
+P09,monthly_payment,B,annuity arithmetic formula with a zero-rate alternative
+P09,schedule,C,loop carries the balance month to month with last-payment adjustment
+P09,print_table,A,print formatted table rows and column totals
+P09,decimal_arg,A,parse a number argument with ordinary error handling
+P09,parse_args,A,declare options plus ordinary range checks on arguments
+P09,main,A,calls two units in order
+P09,<module>,A,a single fixed number
+P10,warn,A,print a warning message
+P10,iter_files,A,walk or list a folder keeping regular non-link files
+P10,_walk_error,A,print a warning message from an error
+P10,file_hash,A,standard hash of a file's contents read in chunks
+P10,group_by_size,A,group files by one field skipping unreadable ones
+P10,find_duplicates,B,group filter and sort but group tuples and sort key are expressions
+P10,print_groups,B,printing is general but wasted-bytes total is an arithmetic formula
+P10,parse_args,A,declare command-line options
+P10,main,A,calls units in order with error reporting
+P10,<module>,A,a single fixed number
+J01,loadUsers,A,read file parse JSON and check it is a list
+J01,isAdult,B,compound true-or-false expression over a record
+J01,selectAdults,A,filter sort by name and take first N
+J01,printUsers,A,print aligned rows or an empty message
+J01,main,A,read argument and call units in order with error reporting
+J02,readText,A,read a text file with ordinary error handling
+J02,countWords,A,lower-case match a pattern and count occurrences
+J02,topWords,A,sort by count then word and take first N
+J02,printTable,A,print aligned rows or an empty message
+J02,parseLimit,A,argument check with default and fixed minimum
+J02,main,A,read arguments and call units in order with error reporting
+J03,getError,B,message is a conditional expression over standard validation rules
+J03,showError,A,show a message beside a form field
+J03,validateField,A,calls two units in order and passes result along
+J03,handleSubmit,A,validate every field block submission and focus first invalid
+J03,handleInput,A,re-validate a field when an attribute equals a fixed value
+J03,<module>,A,find elements set a property and attach handlers
+J04,fetchItems,A,send HTTP request and parse JSON with error check
+J04,createRow,A,build a table row with one cell per value
+J04,renderTable,A,build header and body rows from a column list
+J04,filterRows,A,hide rows not containing text and show message when none
+J04,init,A,calls units in order with status text and error handling
+J04,<module>,A,find elements and attach a handler that calls one unit
+J05,sendJson,A,send a JSON response with status and headers
+J05,readBody,A,read request body with a size limit
+J05,handleTime,A,respond with current time in two formats
+J05,handleEcho,A,read body parse JSON and send it back with error reply
+J05,handleRequest,A,route by path and method with standard error replies
+J05,parsePort,A,argument check with default and fixed range
+J05,main,A,start server attach handlers and report errors
+J05,<module>,A,routing table of paths methods and handlers
+J06,splitDuration,B,arithmetic formulas splitting milliseconds into units
+J06,renderRemaining,A,write each value into its matching element
+J06,showFinished,A,stop timer hide one element and show another
+J06,tick,B,remaining time is an arithmetic expression compared with zero
+J06,start,A,check date start repeating timer and call a unit
+J06,<module>,A,fixed numbers element lookups and a parsed date
+J07,listJsonFiles,A,list folder keep files by extension exclude one path and sort
+J07,readRecords,A,read file parse JSON and check it is a list
+J07,dedupeById,B,remove duplicates by key but missing-id rule needs a key expression
+J07,main,B,orchestration but dropped-duplicates count is an arithmetic expression
+J08,loadTodos,A,read stored JSON list with empty default
+J08,saveTodos,A,write JSON to storage with warning on failure
+J08,createTodoElement,A,build a fixed element structure bound to record fields
+J08,render,A,replace list contents with one element per item
+J08,setTodos,A,assign then call save and render in order
+J08,addTodo,B,new id is an arithmetic formula over existing ids
+J08,toggleTodo,B,update matching item with a negation expression
+J08,deleteTodo,A,keep items whose id differs from a given value
+J08,getTodoId,A,read an attribute of the enclosing element as a number
+J08,<module>,A,find elements and attach handlers made of general operations
+J09,parseCsv,C,hand-written character-by-character parser with quote state
+J09,csvToJson,A,parse rows map to records by header and format as JSON
+J09,formatCsvField,B,quoting rule is a conditional text expression
+J09,jsonToCsv,A,parse JSON collect distinct keys and join rows as CSV
+J09,main,A,choose converter by extension read convert and write or print
+J09,<module>,A,lookup table from extension to converter
+J10,renderBoard,B,chunk and join with a cell formula over mark and position
+J10,findWinner,C,decides the tic-tac-toe winner which serves only this program
+J10,isFull,A,every element compared with a fixed value
+J10,parseMove,B,pattern check plus index arithmetic and occupied-square test
+J10,play,C,game loop carrying board and turn state with game-specific branches
+J10,<module>,A,run main function and report any error

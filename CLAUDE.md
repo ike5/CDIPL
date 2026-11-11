@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project state
 
-This repository is currently an empty scaffold: the only code is PyCharm's default sample `main.py` (a `print_hi` function). There is no application code, test suite, linter config, or dependencies yet. Update this file as real structure is added.
+There is no application code yet: `main.py` is PyCharm's default sample (a `print_hi` function), and there is no test suite, linter config, or dependencies. The programs under `stage1/programs/` are study material, not part of the product. Update this file as real structure is added.
 
-`PLAN.md` is the current plan for the project and records the product owner's decisions; read it before doing any work. `stage1/briefs.md` holds the 20 sample-program briefs for Stage 1 of that plan, which need the owner's approval before any program is generated. The proposal under review is in `outputs/`.
+`PLAN.md` is the current plan for the project and records the product owner's decisions; read it before doing any work. Stage 1 of that plan is complete: `stage1/inventory.md` is the result, and `stage1/` also holds the approved briefs, the 20 sample programs, their test inputs, the classification files and the tools that produce the figures. Stage 2 (the compiler, blocks and classifier) must not start until the owner has reviewed the Stage 1 result. The proposal under review is in `outputs/`.
 
 ## Environment
 

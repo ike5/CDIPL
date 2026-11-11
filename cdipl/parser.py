@@ -2,8 +2,25 @@
 import re
 
 from .languages import HEADERS, PHRASES
-from .model import (COMPARISONS, MAX_INTEGER, Condition, Count, Filter, Group, IfNone, IntentError, Limit,
-                    Program, Read, Show, Sort, Source, TypeMismatch, WriteJson, check_chain)
+from .model import (
+    COMPARISONS,
+    MAX_INTEGER,
+    Condition,
+    Count,
+    Filter,
+    Group,
+    IfNone,
+    IntentError,
+    Limit,
+    Program,
+    Read,
+    Show,
+    Sort,
+    Source,
+    TypeMismatch,
+    WriteJson,
+    check_chain,
+)
 
 IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
 TOKEN = re.compile(r'\s*(?:(?P<text>"(?:[^"\\]|\\["\\])*")|(?P<number>-?\d+)(?![\w.])|(?P<op>>=|<=|!=|=|<|>)|'
@@ -39,15 +56,6 @@ def tokens(text, line):
     return found
 
 
-class Reader:
-    def __init__(self, text):
-        self.lines = text.split("\n")
-        self.number = 0
-
-    def error(self, message, line=None):
-        raise IntentError(line or self.number, message)
-
-
 def parse(text):
     """Turn intent text into a checked Program. Raises IntentError."""
     lines = text.split("\n")
@@ -62,7 +70,6 @@ def parse(text):
     position = 1
     source, position = _parse_source(numbered, position, words)
     steps = []
-    schema_error_line = None
     for number, line in numbered[position:]:
         if line[:1].isspace():
             raise IntentError(number, "a statement must not be indented")

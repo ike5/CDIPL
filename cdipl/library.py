@@ -27,6 +27,6 @@ def version(block):
     for name in sorted(TARGETS):
         for owner, flag, text in TARGETS[name].SUPPORT:
             if owner == block:
-                digest.update(f"{name}\0{flag}\0{text}\0".encode("utf-8"))
+                digest.update(f"{name}\0{flag}\0{text}\0".encode())
         digest.update(TARGETS[name].FORMS.get(block, "").encode("utf-8"))
     return digest.hexdigest()[:12]

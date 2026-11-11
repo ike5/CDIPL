@@ -1,8 +1,23 @@
 """Generate JavaScript (Node) programs, and recognise programs this generator wrote."""
 import re
 
-from .common import (Condition, Count, Filter, Group, IfNone, Limit, NotGenerated, Read, Show, Sort, Source,
-                     WriteJson, assemble, blocks_used, schemas)
+from .common import (
+    Condition,
+    Count,
+    Filter,
+    Group,
+    IfNone,
+    Limit,
+    NotGenerated,
+    Read,
+    Show,
+    Sort,
+    Source,
+    WriteJson,
+    assemble,
+    blocks_used,
+    schemas,
+)
 
 FILE_NAME = "main.js"
 
@@ -134,7 +149,7 @@ function groupRows(rows, name) {
 '''),
     ("count-values", "count", '''\
 function countGroups(groups, name) {
-  return Array.from(groups, ([key, members]) => Object.fromEntries([[name, key], ["count", members.length]]));
+  return Array.from(groups, ([key, members]) => ({ [name]: key, count: members.length }));
 }
 '''),
     ("print-message", "always", '''\
@@ -199,11 +214,11 @@ FORMS = {
 def quote(text):
     out = []
     for ch in text:
-        if ch in '\\"':
-            out.append("\\" + ch)
+        if ch == "\\":
+            out.append("\\\\")
         elif ch == "\n":
             out.append("\\n")
-        elif 32 <= ord(ch) < 127:
+        elif 32 <= ord(ch) < 127 and ch != '"':
             out.append(ch)
         else:
             units = ch.encode("utf-16-be")
@@ -216,16 +231,16 @@ STRING = r'"(?:[^"\\]|\\.)*"'
 
 def unquote(literal):
     inner = literal[1:-1]
-    if re.fullmatch(r'(?:[ -!#-\[\]-~]|\\[\\"n]|\\u[0-9a-f]{4})*', inner) is None:
+    if re.fullmatch(r'(?:[ -!#-\[\]-~]|\\[\\n]|\\u[0-9a-f]{4})*', inner) is None:
         raise NotGenerated("a text value is not written the way the compiler writes it")
     units = bytearray()
-    for match in re.finditer(r'\\([\\"n]|u[0-9a-f]{4})|.', inner):
+    for match in re.finditer(r'\\([\\n]|u[0-9a-f]{4})|.', inner):
         body = match.group(1)
         if body is None:
             code = ord(match.group(0))
         elif body == "n":
             code = 10
-        elif body in '\\"':
+        elif body == "\\":
             code = ord(body)
         else:
             code = int(body[1:], 16)
@@ -348,9 +363,7 @@ def lift(text):
     name = _only(re.fullmatch(rf"const SOURCE = {FIELD_NAME};", line) for line in lines)
     pairs = []
     for line in lines:
-        if match := re.fullmatch(rf'const FIELDS = \[\[{FIELD_NAME}, "(text|integer)"\]\];', line):
-            pairs.append((match[1], match[2]))
-        elif match := re.fullmatch(rf'  \[{FIELD_NAME}, "(text|integer)"\],', line):
+        if (match := re.fullmatch(rf'const FIELDS = \[\[{FIELD_NAME}, "(text|integer)"\]\];', line)) or (match := re.fullmatch(rf'  \[{FIELD_NAME}, "(text|integer)"\],', line)):
             pairs.append((match[1], match[2]))
     if not pairs or len({field for field, _ in pairs}) != len(pairs):
         raise NotGenerated("the declared fields cannot be read")
@@ -377,7 +390,7 @@ def lift(text):
             index += 2
         elif match := re.fullmatch(r"  rows = rows\.filter\(\(row\) => (.*)\);", line):
             steps.append(Filter(conditions=_conditions(match[1])))
-        elif match := re.fullmatch(rf"  rows = \[\.\.\.rows\]\.sort\(\(a, b\) => (.*)\);", line):
+        elif match := re.fullmatch(r"  rows = \[\.\.\.rows\]\.sort\(\(a, b\) => (.*)\);", line):
             steps.append(_sort(match[1]))
         elif match := re.fullmatch(r"  rows = rows\.slice\(0, (\d+)\);", line):
             steps.append(Limit(count=int(match[1])))
@@ -416,15 +429,12 @@ def _only(matches):
 
 def _sort(text):
     for descending, first, second in ((False, "a", "b"), (True, "b", "a")):
-        if match := re.fullmatch(rf"{first}\.{NAME} - {second}\.{NAME}", text):
-            if match[1] == match[2]:
-                return Sort(field=match[1], descending=descending)
-        if match := re.fullmatch(rf"compareText\({first}\.{NAME}, {second}\.{NAME}\)", text):
-            if match[1] == match[2]:
-                return Sort(field=match[1], descending=descending)
-        if match := re.fullmatch(rf"compareText\(foldCase\({first}\.{NAME}\), foldCase\({second}\.{NAME}\)\)", text):
-            if match[1] == match[2]:
-                return Sort(field=match[1], descending=descending, ignore_case=True)
+        if (match := re.fullmatch(rf"{first}\.{NAME} - {second}\.{NAME}", text)) and match[1] == match[2]:
+            return Sort(field=match[1], descending=descending)
+        if (match := re.fullmatch(rf"compareText\({first}\.{NAME}, {second}\.{NAME}\)", text)) and match[1] == match[2]:
+            return Sort(field=match[1], descending=descending)
+        if (match := re.fullmatch(rf"compareText\(foldCase\({first}\.{NAME}\), foldCase\({second}\.{NAME}\)\)", text)) and match[1] == match[2]:
+            return Sort(field=match[1], descending=descending, ignore_case=True)
     raise NotGenerated("a sort cannot be read")
 
 

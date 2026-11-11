@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Reviewed** | `outputs/proposal-classifier-driven-intent-programming-language.md` (v0.2) and this repository at commit `194e44b` |
-| **Revision** | 7, dated 2026-11-11. It incorporates five rounds of decisions from the product owner and the result of Stage 1. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
-| **Status** | Stage 1 is complete and awaits the owner's review (`stage1/inventory.md`). The compiler, blocks and classifier have not been started. |
+| **Revision** | 8, dated 2026-11-11. It incorporates six rounds of decisions from the product owner, the result of Stage 1, and progress on Stage 2. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
+| **Status** | Stage 1 is complete and accepted by the owner. Stage 2 is under way: the compiler core is built and tested (part A); the classifier, word lists and index (part B) and formulas (part C) are not yet built. See [Stage 2 progress](#stage-2-progress). |
 | **Audience** | Engineers deciding whether to build this, and what to build first |
 
 References such as "§8" point to sections of the proposal. Sections of this plan are referred to by name.
@@ -52,8 +52,11 @@ The owner has asked the AI assistant that wrote this plan to build the compiler 
 | Hand-written code inside intent files | Not in the first version | With "complete programs", makes coverage central |
 | Order of targets | Python and JavaScript; then C, then Java; HTML with CSS; then FastAPI and Django; then React with CSS | See [Roadmap](#roadmap-after-the-proof-of-concept) |
 | Sample material for Stage 1 | The assistant drafted 20 program briefs, the owner approved them, and the assistant generates the programs | Changes what Stage 1 can show (critique point 12) |
-| Implementation language | Python is not required | Open (D2) |
-| Pace | Generate a small amount, review, then generate more | Three stages with a review after each |
+| Implementation language | Python is not required | The compiler is written in Python, since the repository was already set up for it |
+| Stage 1 result | Accepted as a pass | Stage 2 started |
+| Formulas | The intent language allows formulas as parameters | Built as part C of Stage 2, after the classifier, so that each operator gets a written meaning first |
+| Plumbing blocks | Stage 2 includes the blocks needed to generate a whole program, with sample J1 as an acceptance test | Done in part A |
+| Pace | Generate a small amount, review, then generate more | Three stages with a review after each; Stage 2 is delivered in three parts |
 
 ## Basis and limits of this review
 
@@ -193,9 +196,9 @@ Against the proposed pass mark (30% or more of programs entirely closed), the re
 
 What the result changes:
 
-- **Formulas are needed.** At least half the programs need an arithmetic, text or true-or-false expression somewhere. The intent language in Stage 2 has comparisons only (D4).
+- **Formulas are needed.** At least half the programs need an arithmetic, text or true-or-false expression somewhere. The owner has since decided that the intent language will allow them; they are part C of Stage 2.
 - **The library has to be large.** Twenty programs needed about 90 distinct blocks, and 55 of those were used by one program only. Only one program, the proposal's own example, could be built from blocks that another program also uses. Each new program brought about three blocks of its own.
-- **Plumbing comes first.** The most reused blocks are printing a message, stopping with an error and reading command-line options. The six pipeline blocks cannot produce a complete program without them (D5).
+- **Plumbing comes first.** The most reused blocks are printing a message, stopping with an error and reading command-line options. The six pipeline blocks cannot produce a complete program without them. The owner agreed to add them to Stage 2.
 - **The classifier has a realistic test set.** The 90 block names are the labels it will be tested against.
 - **The expected hard cases were hard.** The text converter, the loan table and tic-tac-toe each contain logic no library would hold, and so does the file renaming tool, which was not expected.
 
@@ -268,6 +271,32 @@ The second statement might equally be written "order by name ascending". The fir
 
 Also record, for ten test intents, the generated program beside a hand-written equivalent, with line counts. This is not a pass or fail test. It is material for the discussion of value in critique point 2.
 
+#### Stage 2 progress
+
+Stage 2 is being built in three parts.
+
+**Part A, the compiler core: built and tested.** Intent is written in standard phrases, in English or Spanish. There are 15 blocks: the six pipeline blocks, plus the plumbing needed for a whole program. The meanings are in `docs/meaning.md`, the code in `cdipl/`, the tests in `tests/`, and an example in `examples/adult_users.intent`. All blocks are marked draft, because no person has reviewed them yet.
+
+| Criterion | Result | Evidence |
+|---|---|---|
+| G1 Equivalence | Pass | 240 pairs of intent and dataset give byte-identical output, status and error category in Python and JavaScript. Known results on known data are also checked, so that both targets cannot be wrong in the same way unnoticed. |
+| G2 Combination | Pass | All 781 chains of up to four blocks: the 156 whose types fit build in both targets and agree; the 625 whose types do not fit are rejected with a message naming the mismatch. |
+| G3 Round trip | Pass | 120 programs, in English and Spanish, in both targets: lifting the built program gives the intent in standard phrases, and rebuilding the lifted intent reproduces the file. Generated code holds no comments and no copy of the intent. |
+| G4 Edited code | Pass | 58 hand edits and 10 whole-file changes: 25 edits are lifted to an intent that regenerates the edited file exactly, and the rest are refused. |
+| G5 Trace | Pass | Every generated line maps to an intent line or to the block whose support code it is. |
+| G6 Quality | Pass, with the configuration in D2 | No findings from ruff, prettier or eslint on 40 generated programs per target. |
+| G7 Diagnostics | Pass | 33 invalid intent files are each rejected with a message naming the right line. |
+| G8 Flagging and determinism | Pass | Flagging any block stops every build that uses it; ten builds are byte-identical. Listing the affected programs through the index is part B. |
+| G9 Meanings written first | Not met as worded | `docs/meaning.md` was written alongside the two targets, not before the second. Every difference between targets was resolved in the generated code and the meanings, and none by changing a test. |
+| C5 Language parity | Pass for standard phrases | 120 programs written in English and in Spanish build byte-identical programs. Free wording is part B. |
+| Sample J1 | Pass | The program generated from `examples/adult_users.intent` gives the same output as the Stage 1 sample J1 on its test input, in both targets. |
+
+Limits of part A: the tests were written by the same assistant that wrote the compiler; they were run on one machine (Linux, Python 3.14.6, Node 22.23.4); and `docs/meaning.md` lists cases where the targets may still differ, such as very deeply nested JSON.
+
+**Part B, free wording: not yet built.** Word lists for English and Spanish, the classifier, the index, and the `explain` and `choose` commands. The classifier's test wordings (360 per language, four for each of the 90 blocks) were written by separate assistant sessions from the block catalogue alone and committed before any word list or training wording existed (`stage2/wordings/`).
+
+**Part C, formulas: not yet built.**
+
 ### Stage 3: third target
 
 Add C, as the owner decided. Java follows later.
@@ -286,7 +315,7 @@ Editing of existing code, hand-written code inside intent files, markup and fram
 
 ## Evidence that would count as success
 
-Fix these before any result is seen. The owner has ratified the classifier pass marks C1 and C2. The other numbers are proposals (D3). All are judgment calls with no empirical basis.
+Fix these before any result is seen. The owner has ratified the classifier pass marks C1 and C2. The owner has accepted the Stage 1 result as a pass. The compiler criteria remain proposals. All are judgment calls with no empirical basis.
 
 **Stage 1.**
 
@@ -381,11 +410,8 @@ Each has a default that this plan assumes if nobody decides otherwise.
 
 | ID | Decision | Default assumed here |
 |---|---|---|
-| D1 | Input format for generated programs, given that C cannot read JSON without added code | Decide before Stage 2. Until then, JSON, with fixed support code written out in full where a target needs it. |
-| D2 | Language the compiler is written in | Python, because the repository is already set up for it. *Assumption: converting generated JavaScript and C back to intent is practical from Python; not tested.* |
-| D3 | Ratify the Stage 1 pass marks and the compiler criteria | The values proposed above |
-| D4 | Should the intent language allow formulas as parameters? Stage 1 found that at least half the sample programs need them. | Not in Stage 2, which keeps comparisons only. Add formulas as the next step after Stage 2, with a written meaning for each operator. |
-| D5 | Should Stage 2 add the plumbing blocks needed to generate a whole program, with the Stage 1 sample J1 as an acceptance test? | Yes: add blocks for command-line options, reading and parsing the input file, checking it, printing a table and a message, and stopping with an error. The generated program must behave like sample J1 on its test input, in Python and JavaScript. |
+| D1 | Input format for generated programs, given that C cannot read JSON without added code | Decide before Stage 3. Stage 2 uses JSON. |
+| D2 | Formatter and linter configuration for generated code (criterion G6) | Python: ruff format and ruff check with default rules. JavaScript: prettier with defaults and eslint with its recommended rules. Line length 320 in both, so the formatters never re-wrap a generated line. Used in part A; awaiting the owner's confirmation. |
 
 ## Assumptions
 

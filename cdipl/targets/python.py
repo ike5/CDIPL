@@ -1,8 +1,23 @@
 """Generate Python programs, and recognise programs this generator wrote."""
 import re
 
-from .common import (Condition, Count, Filter, Group, IfNone, Limit, NotGenerated, Read, Show, Sort, Source,
-                     WriteJson, assemble, blocks_used, schemas)
+from .common import (
+    Condition,
+    Count,
+    Filter,
+    Group,
+    IfNone,
+    Limit,
+    NotGenerated,
+    Read,
+    Show,
+    Sort,
+    Source,
+    WriteJson,
+    assemble,
+    blocks_used,
+    schemas,
+)
 
 FILE_NAME = "main.py"
 
@@ -157,11 +172,11 @@ def quote(text):
     out = []
     for ch in text:
         code = ord(ch)
-        if ch in '\\"':
-            out.append("\\" + ch)
+        if ch == "\\":
+            out.append("\\\\")
         elif ch == "\n":
             out.append("\\n")
-        elif 32 <= code < 127:
+        elif 32 <= code < 127 and ch != '"':
             out.append(ch)
         elif code < 256:
             out.append(f"\\x{code:02x}")
@@ -178,17 +193,17 @@ STRING = r'"(?:[^"\\]|\\.)*"'
 def unquote(literal):
     def replace(match):
         body = match.group(1)
-        if body[0] in '\\"':
+        if body == "\\":
             return body
         if body == "n":
             return "\n"
         return chr(int(body[1:], 16))
 
     inner = literal[1:-1]
-    if re.fullmatch(r'(?:[ -!#-\[\]-~]|\\[\\"n]|\\x[0-9a-f]{2}|\\u[0-9a-f]{4}|\\U[0-9a-f]{8})*', inner) is None:
+    if re.fullmatch(r'(?:[ -!#-\[\]-~]|\\[\\n]|\\x[0-9a-f]{2}|\\u[0-9a-f]{4}|\\U[0-9a-f]{8})*', inner) is None:
         raise NotGenerated("a text value is not written the way the compiler writes it")
     try:
-        return re.sub(r'\\([\\"n]|x[0-9a-f]{2}|u[0-9a-f]{4}|U[0-9a-f]{8})', replace, inner)
+        return re.sub(r'\\([\\n]|x[0-9a-f]{2}|u[0-9a-f]{4}|U[0-9a-f]{8})', replace, inner)
     except (ValueError, OverflowError):
         raise NotGenerated("a text value cannot be read") from None
 

@@ -1,6 +1,20 @@
 """Pieces shared by the target code generators."""
-from ..model import (Condition, Count, Filter, Group, IfNone, Limit, Program, Read, Show, Sort, Source, TypeMismatch,
-                     WriteJson, check_chain)
+from ..model import (
+    Condition,
+    Count,
+    Filter,
+    Group,
+    IfNone,
+    Limit,
+    Program,
+    Read,
+    Show,
+    Sort,
+    Source,
+    TypeMismatch,
+    WriteJson,
+    check_chain,
+)
 
 
 class NotGenerated(Exception):
@@ -20,10 +34,13 @@ def blocks_used(program):
         if isinstance(step, Read):
             if program.source.argument is not None:
                 add("cli-options")
-            add("read-text-file", "parse-json", "check-list-of-records", "exit-on-error")
-            add("drop-invalid-rows" if step.skip_invalid else "check-required-types")
+            add("read-text-file", "parse-json", "check-list-of-records", "exit-on-error", "check-required-types")
+            if step.skip_invalid:
+                add("drop-invalid-rows")
         elif isinstance(step, Filter):
             add("filter-rows")
+            if any(isinstance(cond.value, str) and cond.op in ("<", "<=", ">", ">=") for cond in step.conditions):
+                add("sort-rows")  # comparing text uses the ordering rule that belongs to sort-rows
         elif isinstance(step, Sort):
             add("sort-rows")
         elif isinstance(step, Limit):
@@ -35,9 +52,9 @@ def blocks_used(program):
         elif isinstance(step, IfNone):
             add("print-message")
         elif isinstance(step, Show):
-            add("print-table")
+            add("print-table", "print-message")
         elif isinstance(step, WriteJson):
-            add("format-json")
+            add("format-json", "print-message")
     return used
 
 

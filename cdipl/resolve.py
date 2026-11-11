@@ -50,6 +50,9 @@ class Resolver:
             tokens, unknown = words.encode(statement, self.words, names)
         except words.WordError as problem:
             raise IntentError(line, str(problem)) from None
+        except FileNotFoundError:
+            raise IntentError(line, f"'{statement}' is not written in standard phrases, and there is no word list "
+                                    f"for this language to read free wording with") from None
         key = key_for(statement)
         entry = self.index["statements"].get(key)
         if entry is None:
@@ -58,7 +61,11 @@ class Resolver:
                 raise IntentError(line, f"not understood: {listed} is not in the word list. Reword the statement, "
                                         f"or record the block you mean with the choose command.")
             self.consulted += 1
-            block, ranked, _ = self.classifier.choose(words.codes(tokens))
+            try:
+                block, ranked, _ = self.classifier.choose(words.codes(tokens))
+            except FileNotFoundError:
+                raise IntentError(line, f"'{statement}' is not written in standard phrases, and no classifier "
+                                        f"is installed to read free wording with") from None
             if block is None:
                 descriptions = library.catalogue()
                 closest = "; ".join(f"{name} ({descriptions[name]})" for name in ranked[:2])

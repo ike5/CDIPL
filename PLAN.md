@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Reviewed** | `outputs/proposal-classifier-driven-intent-programming-language.md` (v0.2) and this repository at commit `194e44b` |
-| **Date** | 2026-11-11 |
+| **Revision** | 2, dated 2026-11-11. Revision 1 led with the engine that edits existing code. This revision follows the product owner's clarifications and leads with generating code from intent files. |
 | **Status** | Recommendation for the development team. Nothing in this plan has been built. |
 | **Audience** | Engineers deciding whether to build this, and what to build first |
 
@@ -11,269 +11,348 @@ References such as "§8" point to sections of the proposal. Sections of this pla
 
 ## Conclusion
 
-The proposal bundles four things under one name: a small language for data pipelines, a language for generating new UI components, an engine that edits existing UI code from short commands ("transformation mode"), and an optional classifier.
+As clarified by the product owner, CDIPL is a language in which a developer writes intent in a file. A deterministic compiler, with no generative model, turns that file into folders of code in several target languages, for frontend, backend and shell scripting. Generated code can be converted back to intent and traced to it. The product is meant to replace the use of LLM coding assistants.
 
-- **Coherent?** Partly. The edit engine is a coherent design. The classifier is not doing any work under the proposal's own rules, the data-pipeline language is an ordinary query language with no stated advantage, and the claim that all of this shares one typed intermediate representation is asserted but not shown.
-- **Worth pursuing?** Only the edit engine, and only as a short experiment with a stop rule. Its value depends on a number nobody has measured: on real UI code, how often can a deterministic tool both find the source construct that controls a property and safely change it? The proposal correctly says the tool must refuse when it cannot be sure. If refusals dominate, the tool is correct and useless.
-- **Smallest proof of concept:** one command (`make <target> N% wider`), with the browser used to find the controlling declaration and to verify the result. It has two stages: first measure on real applications how often the command could act at all, then build the resolve, patch and verify loop for that one command and test that it never emits a wrong patch.
+- **Coherent?** The core is. A deterministic compiler from a declarative language to several targets is established engineering. Three claims need narrowing before they are coherent:
+  - **Reversibility** can hold only for code the tool generated and that is still in the form the tool would generate. Turning arbitrary hand-written code back into intent is a different and much harder problem.
+  - **"Several languages"** requires the same intent to mean the same thing in every target. That is not automatic, even for sorting and comparing (see [Probe 2](#probe-2-the-same-operation-in-two-languages)).
+  - **The classifier** does no work under the proposal's own rules.
+- **Worth pursuing?** Not as a general replacement for LLM assistants. That claim is unsupported by the proposal, and I expect it not to hold: without a generative model, the tool can do only what has been hand-built for each kind of task and each target language, while the appeal of an LLM is that it accepts any request. As a deterministic, traceable generator for a few common kinds of task, it is plausible and cheap to test. Stage 1 of the proof of concept measures which of these two descriptions the evidence supports.
+- **Smallest proof of concept:** three stages, with a review after each.
+  1. **Demand audit**, with no code: sort a sample of real coding requests into kinds, and measure how many a fixed vocabulary could cover.
+  2. **Pipeline slice**: the six operations in the proposal's own examples, compiled to two languages, tested for identical behaviour, conversion back to intent, and tracing.
+  3. **Third target**: add bash, to measure what each additional language costs.
 
-A small browser probe run for this review (see [Probe results](#probe-results)) supports this direction: the browser reported the exact file, line and column of every matching width declaration, and in five of nine simple cases the proposal's rule had nothing to edit (three cases), produced a patch with no visible effect (one), or produced the wrong amount (one).
+The engine that edits existing code, which revision 1 led with, is deferred. Whether it is needed at all depends on an open decision (D2).
+
+## Product intent as clarified by the owner
+
+| Topic | Owner's answer | Effect on this plan |
+|---|---|---|
+| User | Any developer: frontend, backend, shell scripts | The scope is general, not specific to user interfaces |
+| Generative models | None. Hard constraint. | Every capability is hand-built. Hybrid designs are excluded. |
+| Kind of project | Product candidate, used inside developers' own IDEs in place of an LLM | The eventual bar is comparison with LLM assistants |
+| Workflow | Write intent in a file; run it; folders of supporting code are generated | The intent file is the source of truth, so generation leads |
+| Targets | Several languages. React was only an example. | Multi-target output is a core claim and is tested early |
+| Reversibility | Intent to code and code to intent; pieces stack together; code traces to intent | A new core claim, tested in Stage 2 |
+| Implementation language | Python is not required | Open (D6) |
+| Pace | Generate a small amount, review it, then generate more | Three stages with a review after each |
 
 ## Basis and limits of this review
 
 What was examined:
 
-- **The repository.** It contains no implementation. `main.py` is the PyCharm sample script, `pyproject.toml` declares `requires-python >=3.14` with no dependencies, build system or tool configuration, and there are no tests. The only substantive file is the proposal. There is no JavaScript or TypeScript toolchain, although the proposal's proof of concept targets React and TypeScript.
-- **The proposal**, read in full.
-- **A browser probe**, written and run for this review: a static HTML page and one plain CSS file, loaded in headless Chromium 153.0.8010.12 through Playwright 1.63.0 on Node 22. The inputs are in the [Appendix](#appendix-probe-inputs-and-method). The probe script was not committed.
+- **The repository.** It contains no implementation. `main.py` is the PyCharm sample script, `pyproject.toml` declares `requires-python >=3.14` with no dependencies, build system or tool configuration, and there are no tests. The only substantive file is the proposal.
+- **The proposal**, read in full, and the owner's written answers summarised above.
+- **Probe 1**, on editing existing code: a static HTML page and one plain CSS file in headless Chromium 153.0.8010.12, driven by Playwright 1.63.0 on Node 22.
+- **Probe 2**, on generating for several languages: the same sort and filter written the obvious way in Python 3.13.18 and Node 22.23.4, run on five records.
+
+Neither probe script was committed. Inputs and method are in the [Appendix](#appendix-probe-inputs-and-method).
 
 What was not done:
 
 - No part of the proposed system was implemented.
-- The probe did not use React, TypeScript, a bundler, source maps, CSS Modules or any CSS-in-JS library. Whether declaration locations survive a real build pipeline is untested.
-- No search of prior art or competing tools was performed. Statements about existing tools come from general knowledge and are marked as assumptions.
+- Probe 1 did not use React, TypeScript, a bundler, source maps, CSS Modules or CSS-in-JS.
+- Probe 2 did not test bash. Only C locales were available in the environment, so locale-dependent sorting in shell is untested.
+- No search of prior art or competing tools was performed. Statements about existing tools and about the history of similar efforts come from general knowledge and are marked as assumptions.
 - `main.py` was not run. This checkout has no `.venv`, and the container's Python is 3.13.18, below the declared minimum.
 
 ## Critique
 
 ### What holds up
 
-- **Refusing instead of guessing** (§3.2, §4, §11). Classifier confidence never decides acceptance, and ambiguity produces a diagnostic. This is the proposal's real differentiator and should be kept.
-- **Four distinct claims** (§7): "source patch applied", "static checks passed", "tests passed" and "visual effect observed". The probe shows these do come apart. Adopt them as the report format.
-- **The existing project stays authoritative** (§6.2, §6.5), with small source-preserving patches and no whole-file regeneration.
+- **Refusing instead of guessing** (§3.2, §4, §11). Ambiguity produces a diagnostic. This is the proposal's real differentiator.
+- **A compiler, not a predictor.** With the intent file as the source of truth, the same input gives the same output, and every line of output has a known cause.
+- **Four distinct claims about a change** (§7): "source patch applied", "static checks passed", "tests passed" and "visual effect observed". Probe 1 shows these do come apart.
 - **Candour.** The proposal says the worked example is not evidence (§8), that the scope may be too broad (§10.9), and that the classifier may be unnecessary (§9).
 
-### Coherence problems
+### The clarified vision
 
-1. **The classifier is not load-bearing.** The proposal is named after it, yet §4 starts from a rule-based parser, §9 says it "may be unnecessary", §12.1 defers it, and §13 Q1 asks whether it is useful. Under the proposal's rules, the classifier may only choose among alternatives the grammar already defines as equivalent, and may not override validation. Every input it accepts is therefore one a synonym table would accept, deterministically and at no cost. A classifier adds capability only for inputs the grammar rejects, and for those §4 requires a diagnostic. The one consistent role left is ranking "did you mean" suggestions inside a diagnostic.
+1. **A fixed vocabulary against open-ended demand.** An LLM assistant accepts any request. A deterministic compiler accepts the operations its authors implemented. Whether CDIPL can replace LLM use therefore depends on how concentrated real demand is: if most requests fall into a few kinds with well-defined meaning, a fixed vocabulary can cover them; if demand is spread thinly across many kinds, it cannot. Neither the proposal nor the owner's answers estimate this. It is the first thing to measure, and it needs no code.
 
-   A related gap: a pinned classifier is reproducible, but it is not predictable. A user cannot tell in advance which rewording changes the result. §3.3 and §10.8 address reproducibility only.
+2. **General-purpose and high-level pull in opposite directions.** `get users where age >= 18` is short because it belongs to one narrow domain. To express arbitrary program logic, the language needs variables, conditions and loops, and at that point it is a conventional programming language with English keywords. *Assumption, from general knowledge: readable keywords have not historically made programming easier, because the difficulty lies in stating exactly what is wanted.* The realistic shape is a set of narrow families of intent, each high-level within its domain.
 
-2. **Three languages, and no shared representation is shown.** The two examples in §5 have no fields in common: one is a dataflow pipeline, the other a target, property and change record. §6.1 adds a third form, component declarations. §6.2 says generation and transformation "can share the intent IR"; the proposal does not show how. The representation is also called typed, but the examples carry no types and do not say where `users` is bound. §3.1 concedes that "active" needs a schema or environment that is not specified.
+3. **Reversibility has to be scoped.** There are three different things "code to intent" could mean:
 
-3. **The data-pipeline language is a query language.** `get users where age >= 18 / sort by name ascending / limit 10` has the shape of existing query languages. §2 motivates it by saying the Python equivalent "takes several lines", but it is one expression: `sorted((u for u in users if u.age >= 18), key=lambda u: u.name)[:10]`. The proposal names no advantage over a grammar-only language, which §9 itself lists as an alternative. *Assumption: existing query languages already cover this ground; no survey was done.*
+   | Meaning | Feasibility |
+   |---|---|
+   | Trace each generated line to the intent line that produced it | Straightforward. The compiler records it while generating. |
+   | Recover the intent from generated code that nobody has changed | Feasible, because the compiler knows every form it can emit. |
+   | Recover intent from hand-written or hand-edited code | Not feasible in general. Many different programs express one intent, and deciding whether two programs behave the same is not something a tool can do for arbitrary code. |
 
-### Problems with the substance of the edit engine
+   The moment a developer edits a generated file, the second case turns into the third. *Assumption, from general knowledge: earlier model-driven tools that promised round trips between models and code ran into this problem.* The product must say what happens then (D1). The rule proposed here is testable: conversion back to intent either returns an intent that regenerates the file exactly, or refuses.
 
-4. **The tool is confident where the task is easy and silent where it is hard.** To write `make SubmitButton 10% wider`, the developer already knows the target, the property and the amount. What the tool adds is finding the controlling construct, bounding side effects and verifying the result. In easy cases, finding the construct is a text search. In hard cases (competing style sources, parent layout, dynamic class names), §6.2 and §10 require the tool to stop. The tool's value therefore lies in the cases that are hard enough to be worth automating and still resolvable. The proposal does not estimate how many such cases exist or propose to measure it. This is the main reason the question "worth pursuing?" cannot be answered from the document.
+4. **The same intent must mean the same thing in every language.** Probe 2 wrote "sort by name" and "where age >= 18" the obvious way in Python and JavaScript. The two programs disagreed on four of four checks. A specification of the intent language's own semantics, independent of any target, has to exist before the second target is written.
 
-5. **The worked example (§8) is the easy case, and its rule is right only by context.** The rule is "multiply resolved width by 1.10", applied to the declared value. In the probe, that rule gave exactly 10% on a `<button>`, 7.9% on a `<div>` carrying the same class, and no change when a `max-width` applied. Two cases had no width declaration to multiply. "10% wider" has to be defined on a measured quantity at a stated viewport, and the new value has to be solved for and verified, not computed from source text.
+5. **Cost grows with families multiplied by targets.** With no generative model, each operation needs hand-written generation and hand-written conversion back, per target. Ten families in five languages is fifty adapters to build, test and keep equivalent. The proof of concept should measure the cost of adding one target.
 
-6. **The preservation constraints cannot be checked as written.** `preserveBehavior: true` and `preserveUnrelatedStyles: true` (§5) are flags with no test procedure, and §7 itself notes that unchanged source does not prove unchanged behaviour. "Unrelated" also needs a definition: widening an element in normal flow legitimately moves its neighbours. The representation should carry measurable postconditions and a declared set of elements that are allowed to change.
+6. **What happens when the vocabulary runs out.** Developers will need something the language lacks. Either they are stuck, or the language lets them embed raw target-language code. Embedded code is not portable across targets and cannot be converted back to intent. Both answers have a cost (D3).
 
-7. **"Smallest valid source change" (§6.2) has no metric.** A one-line edit to a shared rule is the smallest diff and the widest effect. §6.5 notes the shared-versus-instance distinction but does not say which kind of smallness wins.
+7. **If the intent file is the source of truth, most of the proposal's hardest machinery may be unnecessary.** Transformation mode (§6.2 to §6.5) exists to change code the tool did not write: it needs a project graph, resolution of competing sources, and browser validation. For code CDIPL generated, a change is an edit to the intent file followed by regeneration. The edit engine is needed only if CDIPL must work on existing codebases (D2).
 
-8. **The browser is placed after the patch, where it is least useful.** §6.3 has a static project graph find the controlling construct, and §7 uses the browser to validate afterwards. Yet §10.2 says the static graph will be incomplete, and §10.3 says source inspection "may not reveal the effective style without a browser runtime". The browser already knows which declarations apply to an element and where they came from. Using it to resolve, and not only to validate, removes the most expensive and least reliable component from the first version.
+### The proposal document
 
-9. **No comparison with alternatives is made.** §9 lists them without comparing. *Assumption: the practical baselines today are a manual edit, browser developer tools, and an AI coding assistant whose diff a human reviews.* The proposal's advantages over the last of these (reproducibility, no invented edits, principled refusal, no model at compile time) are real properties, but the proposal does not say who needs them enough to accept a restricted grammar and frequent refusals.
+8. **The classifier is not load-bearing.** The proposal is named after it, yet §4 starts from a rule-based parser, §9 says it "may be unnecessary", §12.1 defers it, and §13 Q1 asks whether it is useful. Under the proposal's rules the classifier may only choose among alternatives the grammar already defines as equivalent, and may not override validation. A synonym table does the same, deterministically. The one consistent role left is ranking "did you mean" suggestions in a diagnostic. A pinned classifier is also reproducible without being predictable: a user cannot tell in advance which rewording changes the result.
 
-### Problems with the proposed proof of concept (§12)
+9. **Three languages, and no shared representation is shown.** The two examples in §5 have no fields in common, and §6.1 adds a third form. §6.2 says the modes "can share the intent IR" without showing how. The representation is called typed, but the examples carry no types and do not say where `users` is bound.
 
-10. **It is too wide and cannot fail informatively.**
-    - The fixture is "one component, one stylesheet, one event handler", but the negative cases in §12.3 (several matching buttons, width controlled by a parent) need more than one component.
-    - With one component the component graph is trivial, so the feasibility of the graph (§13 Q4) is not tested.
-    - The five intents need five different resolvers: style cascade, text (and translation catalogues), design tokens, class-name expressions, and JavaScript scope for event handlers. The fifth intent changes behaviour, which is a different risk class from the other four.
-    - Fixtures written by the tool's authors test whether anticipated cases are handled. They cannot show how often real code falls inside the supported cases.
-    - §12.3 says thresholds must be set before results are seen but proposes none.
-    - Latency, incremental rebuild cost and developer comprehension are premature measures for a first test.
+10. **The data-pipeline language needed a stated advantage, and now has one to test.** Its syntax has the shape of existing query languages, and §2's premise that the Python equivalent "takes several lines" is weak: it is one expression, `sorted((u for u in users if u.age >= 18), key=lambda u: u.name)[:10]`. The owner has since named the intended advantages: several target languages from one source, conversion back to intent, and tracing. Stage 2 tests exactly these.
 
-### Probe results
+### The edit engine and the proposal's own proof of concept
 
-Each case is one element on the test page. "Declarations reported" is what the browser's inspection interface (Chrome DevTools Protocol, `CSS.getMatchedStylesForNode`) returned for `width` from the page's own stylesheet. The edit multiplied one declared value by 1.10 in the CSS file on disk, at the reported line and column; the page was then reloaded and the element re-measured with `getBoundingClientRect().width`. Viewport is 1280 px wide unless stated.
+These points are from revision 1 and still stand. They matter if decision D2 brings the edit engine back.
 
-| # | Case | Declarations reported | Before (px) | After (px) | Ratio |
+11. **The tool is confident where the task is easy and silent where it is hard.** To write `make SubmitButton 10% wider`, the developer already knows the target, property and amount. In easy cases, finding the controlling construct is a text search; in hard cases §6.2 and §10 require the tool to stop.
+12. **The worked example (§8) is the easy case.** Its rule, "multiply resolved width by 1.10", failed in five of nine simple cases in Probe 1.
+13. **The preservation constraints cannot be checked as written.** `preserveBehavior: true` (§5) has no test procedure.
+14. **"Smallest valid source change" (§6.2) has no metric.** A one-line edit to a shared rule is the smallest diff and the widest effect.
+15. **The browser is placed after the patch, where it is least useful.** It already knows which declarations apply to an element and where they came from.
+16. **The proof of concept in §12 is too wide and cannot fail informatively.** Five intents need five different resolvers; the single-component fixture cannot host the negative cases listed in §12.3; and no thresholds are proposed.
+
+### Probe 1: editing an existing stylesheet
+
+Each case is one element. The edit multiplied one declared `width` by 1.10 at the location the browser reported, then the element was re-measured. Viewport is 1280 px unless stated.
+
+| # | Case | Width declarations reported | Before (px) | After (px) | Ratio |
 |---|---|---|---|---|---|
 | 1 | `<button>` with the CSS from §8 | 1, at `style.css:2:3` | 120 | 132 | 1.100 |
 | 2 | `<div role="button">` with the same class | the same one | 152 | 164 | 1.079 |
 | 3 | Button with padding and no width | none | 77.48 | not editable | n/a |
-| 4 | Button with no width inside a 300 px column flex container | none | 300 | not editable | n/a |
+| 4 | Button with no width in a 300 px column flex container | none | 300 | not editable | n/a |
 | 5 | `width: 120px; max-width: 100px` | 1 | 100 | 100 | 1.000 |
 | 6 | `.btn-d` (120 px) and `.form .btn-d` (200 px) both match | 2 | 200 | 200 editing the first, 220 editing the second | 1.000, 1.100 |
-| 7 | Base rule 120 px plus `@media (max-width: 600px)` rule `100%`, at 375 px viewport | 2 (only the base rule at 1280 px) | 359 | 359 editing the base rule, 394.89 editing the media rule | 1.000, 1.100 |
+| 7 | Base rule 120 px plus a `max-width: 600px` media rule of `100%`, at 375 px viewport | 2 | 359 | 359 editing the base rule, 394.89 editing the media rule | 1.000, 1.100 |
 | 8 | Two buttons sharing one class | 1 | 120 | 132, and the other button also became 132 | 1.100 |
 | 9 | Rule injected by a script at runtime | 1, in a stylesheet with no source URL | 120 | no file to edit | n/a |
 
-What this shows, within the limits stated above:
+Reading: the browser located every declaration accurately enough to patch it directly. The proposal's rule had nothing to edit in cases 3, 4 and 9, changed nothing in case 5, and gave the wrong amount in case 2. Case 1 works only because Chromium sizes buttons by border box by default. Repeated runs gave identical output, on one machine.
 
-- **Resolution through the browser worked.** For every case with a declaration in the CSS file, the reported location was accurate enough to replace the value token directly. No CSS parser was needed.
-- **"Patch applied" and "effect observed" differ.** In cases 5, 6 and 7, a syntactically valid edit to a matching width declaration changed nothing.
-- **The declared-value rule depends on context outside the edited rule.** Case 1 works because Chromium gives buttons `box-sizing: border-box` by default (measured). Case 2, with the same rule on a `<div>`, does not. My own prediction for case 1 before running it was wrong, which is the point: reading the source is not enough.
-- **A satisfied request can still be a bad edit.** In case 7 the ratio is exactly 1.10 and the element is now wider than the viewport. In cases 1 and 8, other elements sharing the class changed too.
-- **Cases 3, 4 and 9 have nothing the proposed patcher can edit.** *My expectation, not a measurement: cases like 3 and 4 will be common for buttons in real applications, because buttons are usually sized by content and padding.* Stage A of the proof of concept tests this.
+### Probe 2: the same operation in two languages
 
-In cases 6 and 7 the declaration that took effect was the last one in the returned list. `!important`, cascade layers and inline styles were not tested, so the proof of concept should not rely on list order. It should find the controlling declaration the way the probe did: change each candidate and see which one moves the measurement.
+Five records, read from one JSON file. Each check is the obvious one-line implementation in each language, the kind a first code generator would emit.
 
-Repeated runs of the probe produced identical output. That is one machine and one browser build, and says little about stability elsewhere.
+| Check | Python | JavaScript (Node) |
+|---|---|---|
+| Sort by name, where names include `～` (U+FF5E) and `😀` (U+1F600) | `～` before `😀` | `😀` before `～` |
+| `age > 9007199254740992` for ages `…993` and `…992` | selects the first record | selects nothing |
+| Output of ages written as `18` and `18.0` | `18`, `18.0` | `18`, `18` |
+| `age >= 18` when one record has no `age` | raises an error | silently drops the record |
+
+Reading: two straightforward translations of one intent are not the same program. None of these differences is exotic, and each has a known remedy, but each remedy is a decision the intent language has to make and every target then has to implement. This is five records and two languages; it shows the problem exists, not how large it is.
 
 ## Recommended direction
 
-1. **Narrow to the edit engine.** Park the data-pipeline language and generation mode. Do not build a classifier.
-2. **State the product claim as:** given a precise command and a running preview of an existing application, the tool either produces a minimal patch with a measured result or refuses with a categorised reason. It never produces a patch whose measured effect differs from the request.
-3. **Change the division of labour.** The browser resolves which declaration controls the property and verifies the result. Static analysis is used later for the one thing the browser cannot do: finding usages on routes and in states that were never rendered.
-4. **Define each command as a measurable postcondition:** which element, which measured quantity, what relation between before and after, at which viewports, with what tolerance, and which other elements may change.
-5. **Make refusal a first-class output** with a fixed list of reasons (see Stage B).
-6. **Measure coverage before building the patcher** (Stage A).
-7. **Build the verifier so that it does not care who wrote the patch.** A check of "did this diff achieve the stated measurable change, and what else moved?" is useful for patches written by a person, a codemod or an AI assistant. If the deterministic resolver turns out to cover too few cases, the verifier is the part most likely to remain useful.
-8. **Defer the value comparison until feasibility is shown,** but do not skip it. Passing the proof of concept shows the tool can work, not that anyone should prefer it.
+1. **Lead with generation from an intent file.** Defer the edit engine. Do not build a classifier.
+2. **Measure demand before building.** Stage 1 decides whether the product is described as a replacement for LLM assistants or as a deterministic generator for selected kinds of task.
+3. **Grow by narrow families, not by generality.** Each family has a closed set of operations with defined meaning. Start with one.
+4. **Write the meaning down first.** A short specification of the first family's semantics, independent of any target language, precedes the second target.
+5. **State reversibility as two testable rules.** Converting generated code back gives the original intent. Converting any file back either gives an intent that regenerates that file exactly, or refuses.
+6. **Every target declares what it supports.** If a target cannot implement an operation to the specification, the compiler refuses that operation for that target (as §6.4 already requires of adapters).
+7. **Review after each stage,** as the owner asked, and decide then whether to continue.
 
 ## Proof of concept
 
-### Questions it answers
+### The hypothesis being tested
 
-- **Coverage (Stage A).** On real React user interfaces, for what share of elements is the width controlled by a declaration that a tool could locate and patch?
-- **Soundness (Stage B).** For one command, can a deterministic tool emit only patches whose measured effect equals the request, and refuse everything else for the right reason?
+For one family of intents, a deterministic compiler can produce programs in at least two languages that behave identically on the same input, convert back to exactly the intent they came from, and trace line by line to it; and a fixed vocabulary of this kind covers a useful share of what developers actually ask for.
 
-### The single command
+### Stage 1: demand audit
+
+No code. It tests point 1 of the critique.
+
+1. Collect at least 100 real coding requests of the kind this product is meant to take over. The best source is the team's own recent requests to LLM assistants, with confidential detail removed. Fix the sampling rule before reading them.
+2. Two people classify each request independently, then record disagreements. For each request:
+   - **Kind:** for example data pipeline, HTTP endpoint, UI component, file or text processing script, data model, test, configuration, change to existing code, explanation or debugging, other.
+   - **Closed or open:** can it be fully stated as a small set of named operations with parameters, or does it need free-form logic?
+   - **New or existing:** does it create new code or change code that already exists?
+3. Report the share of requests per kind, the share that are closed, the share that concern existing code, and how many distinct operations would cover 50% and 80% of the closed requests.
+
+Known weakness: requests made to an LLM are skewed toward what LLMs do well. That is acceptable here, because this is the usage the product aims to replace.
+
+### Stage 2: pipeline slice
+
+**Language.** Exactly the operations in the proposal's examples in §2 and §3.1: read a declared source, filter, sort, limit, group, count.
 
 ```text
-make <target> <N>% wider on <route> [at <W>px] [including shared]
+source users from "users.json":
+    name: text
+    age: integer
+    school: text
+
+get users where age >= 18
+sort by name ascending
+limit 10
 ```
 
-- `<target>` is a CSS selector or `data-testid` that must match exactly one element on `<route>`. Component names are out of scope; see decision D7.
-- "Wider" means the element's border-box width as returned by `getBoundingClientRect().width`.
-- Without `at <W>px`, the result must hold at every configured viewport (proposed: 1280 px and 375 px).
-- The command is parsed by a fixed grammar. There is no classifier.
+- Fields have declared types: `integer` and `text`.
+- Filters compare a field with a literal using `=`, `!=`, `<`, `<=`, `>`, `>=`, joined by `and`.
+- One spelling per operation. No synonyms and no classifier.
+- Named predicates such as "active" (§3.1) are not included; write `where status = "active"`.
 
-### Stage A: provenance audit
+**Specification.** One page that fixes, independently of any target: the ordering of text, the range of integers, what happens when a field is missing or has the wrong type, the order of groups, and the order of records that tie in a sort. Probe 2 shows why each of these needs an answer.
 
-A throwaway measurement script, not product code.
+**Targets.** Python and JavaScript. Input is a JSON file of records; output is JSON.
 
-1. Choose at least two React applications that the team did not write and that use different styling approaches. Choose them before looking at their styles, and record each one's styling approach. If the team has a specific target codebase, include it (decision D5).
-2. Run each application's development build. Visit a fixed list of routes at both viewports. Sample the visible `button`, `a`, `input` and `[role=button]` elements, with a cap per route.
-3. For each sampled element, classify where its width comes from:
+**Commands.**
 
-| Code | Provenance | What a tool could do |
-|---|---|---|
-| P1 | One controlling declaration, in a source file, whose selector matches only this element on the visited routes | Patch |
-| P2 | As P1, but the selector matches other rendered elements | Patch only with `including shared` |
-| P3 | The controlling declaration differs between the configured viewports | Patch only with `at <W>px` |
-| P4 | No width declaration; sized by content or by the parent | Refuse |
-| P5 | Controlling declaration has no patchable source file (runtime-injected styles, inline styles set by script) | Refuse |
-| P6 | A declaration matches, but changing it does not move the measured width as requested | Refuse |
+- `build`: reads an intent file and writes a folder containing the generated program and a trace file that maps each generated line to an intent line.
+- `lift`: reads a generated program and returns the intent, or refuses.
 
-4. Report the frequency of each code, overall and per application, and keep the raw records. The **actionable share** is P1 + P2 + P3.
-5. Record the same classification for `color` and `background-color`. This costs little and shows whether width is unusually hard, which matters if the team needs to pivot.
+**Tests.**
 
-Known weakness: sampling elements is a stand-in for sampling real edit requests. If time allows, also look through each application's commit history for small style changes and classify those.
+| Test | What is checked |
+|---|---|
+| Equivalence | A fixed set of at least 200 pairs of intent and dataset, including the edge cases from Probe 2, empty input, ties, and a limit larger than the data. Every target produces byte-identical output, or every target reports the same category of error. |
+| Round trip | For every test intent, `lift` of the built program equals the intent in normal form, with comments stripped from the program first, so that the intent is recovered from the code and not from an embedded copy. For every generated file, `build` of its `lift` reproduces the file exactly. |
+| Edited code | At least 30 hand edits to generated files: changed literals, changes that stay within the vocabulary, and inserted foreign statements. `lift` either returns an intent that regenerates the edited file exactly, or refuses. It never returns anything else. |
+| Trace | Every non-blank generated line maps to one intent line or is marked as fixed support code. Checked mechanically. |
+| Diagnostics | At least 20 invalid intent files (unknown field, type mismatch, unknown word, missing source). Each is rejected with a message naming the line. None compiles. |
+| Determinism | Ten builds from a clean checkout produce byte-identical folders. |
 
-### Stage B: resolve, patch and verify
+### Stage 3: third target
 
-**Fixture.** A small React and TypeScript application run through its normal development build. This exercises the main thing the probe did not: mapping a declaration back to a source file through a real build. It contains the nine probe cases, plus: a target matching two elements, a target matching none, a CSS Modules class, an `!important` declaration, and an inline `style` attribute. For every fixture, write down the expected outcome before the tool is run: either a specific patch (file, line, old value, new value) or a specific refusal reason.
+Add bash. The owner names shell scripts as a target, and bash is the least similar of the three, so it shows most quickly what a new target costs. *Assumption: generated shell scripts will need an external tool such as `jq` to read JSON.*
 
-**Behaviour.**
+Record the effort relative to the second target, which parts of the specification needed special handling, and which external tools the generated scripts require. The same tests apply. If bash cannot meet the specification for an operation, the target must declare it and the compiler must refuse that operation for bash.
 
-1. Parse the command.
-2. Open the route at each viewport and resolve the target. Refuse with `target-not-found` or `target-ambiguous` unless exactly one element matches.
-3. Measure the starting width.
-4. List the candidate width declarations and find the controlling one by changing each and re-measuring.
-5. Refuse with one of `no-declaration`, `no-patchable-source`, `differs-by-viewport` (when no `at` was given) or `shared-reach` (when `including shared` was not given; list the other elements).
-6. Compute the new value from the measured starting width, so that the measured width and not merely the declared number changes by N%. Write it to the source file by replacing only the value token, reload, and re-measure.
-7. If the measured width is not within tolerance of the request (proposed: 0.5 px), revert the file and refuse with `effect-not-achieved`.
-8. Report, separately: the diff; whether the build still succeeded; the measured before and after at each viewport; and every other element whose box changed.
+### Out of scope
 
-**Out of scope.** The classifier, generation mode, the data-pipeline language, component-name targets, the other four intents in §12.1, a static project graph, frameworks other than React, latency measurement, editor integration, and automatic commits.
+The classifier, the edit engine, UI component generation, embedded raw target code, IDE integration (syntax highlighting, in-editor diagnostics), performance, and any family beyond the first.
 
-**Known limit.** "Other elements that changed" is measured only on the routes, viewports and states the tool renders. A usage on an unvisited route is invisible to it. Closing that gap with a static search is the first follow-on step.
+### Suggested time budget
 
-### Suggested timebox
-
-*My estimate, not validated:* a few days for Stage A and one to two weeks for Stage B, for one engineer who is comfortable with browser automation. Agree a hard stop before starting (decision D8).
+*My estimates, not validated:* two to four days for Stage 1, two to three weeks for Stage 2, and about one week for Stage 3, for one engineer. Agree a hard stop for each stage before starting it (D7).
 
 ## Evidence that would count as success
 
-Fix these thresholds before any result is seen, as §12.3 requires. The numbers below are proposals for the team to ratify; the coverage numbers in particular are judgment calls with no empirical basis.
+Fix these before any result is seen, as §12.3 requires. The numbers are proposals for the team to ratify. The Stage 1 numbers are judgment calls with no empirical basis.
 
-**Stage B, soundness. All must hold.**
+**Stage 1.**
+
+| Share of requests that are closed and fall within five or fewer kinds | Reading |
+|---|---|
+| 40% or more | A fixed vocabulary can cover a large part of demand. Continue, with "replacement within these kinds" as the claim. |
+| Between 20% and 40% | Continue, but describe the product as a deterministic generator used alongside other tools. |
+| Below 20% | The replacement claim is not supported. Stop, or redefine the product. |
+
+Separately: if more than half of the requests concern existing code, the edit engine is not optional, and D2 must be revisited before Stage 2.
+
+**Stages 2 and 3. All must hold.**
 
 | ID | Criterion |
 |---|---|
-| S1 | No wrong patches. Every emitted patch achieves the requested measured change within tolerance at the stated viewports, and changes no element outside the declared scope. A single wrong patch fails the stage. |
-| S2 | Every fixture expected to be refused is refused, with the expected reason. |
-| S3 | Every fixture expected to be patched is patched, at the expected location. |
-| S4 | Each patch changes one value token in one file, and the rest of the file is byte-identical. |
-| S5 | Ten runs from a clean checkout produce byte-identical patches and identical refusal reasons. |
-| S6 | Through the development build, declaration locations map to the correct source file and line for the plain CSS and CSS Modules fixtures. |
+| G1 | Equivalence: no pair on which targets differ. |
+| G2 | Round trip: holds for every test intent and every generated file, in every target. |
+| G3 | Edited code: `lift` never returns an intent that fails to regenerate the file it was given. One such case fails the stage. |
+| G4 | Trace: complete, with no unmapped lines. |
+| G5 | Diagnostics: every invalid file rejected with its line; none compiled. |
+| G6 | Determinism: byte-identical output across ten builds. |
+| G7 | The specification was written before the second target, and every difference found between targets was resolved by changing the specification or a target, not a test. |
+| G8 | Stage 3 only: the effort for the third target is recorded, and any unsupported operation is refused by the compiler, not mistranslated. |
 
-S1 is strict because never being silently wrong is the main advantage this approach claims over asking an AI assistant for a diff.
+**What would disprove the idea.** Stage 1 below its floor disproves the replacement claim. Failure of G1 that can be fixed only by restricting the language until it is no longer useful disproves the multi-target claim for this family. Failure of G3 disproves reversibility as stated.
 
-**Stage A, coverage.**
-
-| Actionable share for width | Reading |
-|---|---|
-| 30% or more | Continue with width as the lead command. |
-| Between 15% and 30% | Team decision. Look at the `color` and `background-color` results. |
-| Below 15% | Stop the width-first approach. |
-
-**What would disprove the idea.** The falsifiable hypothesis is: for a bounded set of edit commands on existing React code, a deterministic tool can act on a useful share of real cases and never emit a patch whose measured effect differs from the request. It is disproved if S1 cannot be met without heuristics that guess, if declaration locations cannot be mapped to source for mainstream styling approaches (S6), or if the actionable share is below the floor for every property measured.
-
-**What success would not show.** That the tool is better than the alternatives; that it generalises beyond React; that component-name targets work; that the other four intents work.
+**What success would not show.** That developers prefer this to an LLM assistant; that families other than data pipelines work; that the cost of many families in many languages is sustainable; that it works inside an IDE.
 
 **What happens next.**
 
 | Outcome | Next step |
 |---|---|
-| Both stages pass | Add component-name targets, a static search for unrendered usages, and a second property. Then compare against the baselines (manual edit and an AI assistant with review) on tasks drawn from the Stage A applications, measuring wrong edits, refusals and time to an accepted diff. |
-| Stage B passes; Stage A fails for width but passes for colour | Re-scope to properties that are usually backed by a declaration, and re-examine against design-token tooling. |
-| Stage B passes; Stage A fails everywhere | Stop the resolver. Consider keeping the verifier as a standalone tool. |
-| Stage B fails | Stop, and write up the failing cases. |
+| All stages pass | Choose the second family from the Stage 1 ranking. Run a small user comparison against an LLM assistant on tasks inside the supported families: time to a correct result, and errors that reach review. |
+| Stage 1 passes; G1 or G2 fails | Reduce to one target language and re-examine the multi-target claim. |
+| Stage 1 lands in the middle band | Proceed to Stage 2, with the product description changed. |
+| Stage 1 fails | Stop before writing the compiler. |
+
+## Deferred track: the edit engine
+
+Kept here in case D2 brings it back. Its design follows from critique points 11 to 16 and Probe 1.
+
+**One command:** `make <target> <N>% wider on <route> [at <W>px] [including shared]`, where the target is a selector matching exactly one element, and "wider" means the measured border-box width.
+
+**Stage E1, provenance audit.** On at least two React applications the team did not write, sample visible buttons, links and inputs, and classify where each one's width comes from:
+
+| Code | Provenance | What a tool could do |
+|---|---|---|
+| P1 | One controlling declaration in a source file, matching only this element | Patch |
+| P2 | As P1, but the selector matches other rendered elements | Patch only with `including shared` |
+| P3 | The controlling declaration differs between viewports | Patch only with `at <W>px` |
+| P4 | No width declaration; sized by content or by the parent | Refuse |
+| P5 | Controlling declaration has no patchable source file | Refuse |
+| P6 | Changing the declaration does not move the measured width as requested | Refuse |
+
+Proposed reading of the actionable share (P1 + P2 + P3): continue at 30% or more, stop below 15%.
+
+**Stage E2, resolve, patch and verify.** On a small React and TypeScript fixture run through its normal development build: resolve the target; find the controlling declaration by changing each candidate and re-measuring; refuse with a named reason where P4 to P6 or an unrequested P2 or P3 applies; otherwise replace only the value token, reload and re-measure; revert and refuse if the measured result is outside tolerance (proposed 0.5 px); report the diff, the measurements and every other element that moved.
+
+**Criteria.** No wrong patches; every fixture expected to be refused is refused for the expected reason; each patch changes one value token; ten runs give identical results; declaration locations map to the correct source file through the development build.
+
+**Main untested risk.** Whether declaration locations survive a real build pipeline.
 
 ## Major risks
 
 | Risk | Why it matters | Mitigation |
 |---|---|---|
-| Source locations do not survive real build pipelines (bundlers, preprocessors, CSS Modules, CSS-in-JS) | The whole approach depends on it, and it is untested | Stage B fixture uses a real development build; criterion S6 |
-| Coverage is low | A correct tool that mostly refuses has no users | Stage A runs first and is cheap |
-| The browser sees only what is rendered | Hover, focus and disabled states, authenticated routes and data-dependent rendering can hide usages | Reports list the routes, viewports and states tested; static search is the first follow-on |
-| Measurements vary between machines | Fonts, sub-pixel rounding, animation and asynchronous rendering; the probe was stable on one machine only | Pinned browser build, explicit tolerance, explicit wait conditions; criterion S5 |
-| The Stage A applications are unrepresentative | Two applications can flatter or condemn the idea | Choose before looking, record the styling approach, publish raw records |
-| Stage A runs third-party code | Installing and running unknown applications (see §10.7 and §11) | Isolated container, no credentials |
-| Scope returns to "a language" | The proposal's breadth is its main delivery risk (§10.9) | The out-of-scope list and the stop rule |
-| Alternatives are simply better | Not evaluated in this review | The comparison step after the gate; decision D1 |
-| Dependence on Chromium's inspection interface | Ties the tool to one browser family; its stability guarantees were not checked | Keep it behind one small module; accept for the proof of concept |
+| Real demand is too varied for a fixed vocabulary | The replacement claim fails | Stage 1 runs first and needs no code |
+| Cost grows with families multiplied by targets | Every pair is hand-built and must stay equivalent | Stage 3 measures the cost of one added target; add families one at a time |
+| Targets drift apart in meaning | Probe 2 found four differences in two operations | Written specification; equivalence tests on every change (G1, G7) |
+| Developers edit generated code | Conversion back to intent stops working for that file | Decision D1; criterion G3 ensures it fails visibly |
+| Developers hit the edge of the vocabulary | They leave, or ask for embedded raw code that breaks portability and reversal | Decision D3, informed by Stage 1 |
+| An English-like syntax is not easier in practice | A new language to learn, with less reach than the one it generates | The user comparison after Stage 3 |
+| Existing tools already do this well | Not evaluated in this review | A prior-art survey before Stage 2 is recommended |
+| The Stage 1 sample is unrepresentative | It can flatter or condemn the idea | Fix the sampling rule first; two independent classifiers; keep raw records |
+| Scope returns to "everything at once" | The proposal's breadth is its main delivery risk (§10.9) | The out-of-scope list and a review after each stage |
 
-## Unresolved decisions
+## Decisions
+
+### Still open
 
 Each has a default that this plan assumes if nobody decides otherwise.
 
 | ID | Decision | Default assumed here |
 |---|---|---|
-| D1 | Who is the user, and what do they use today? | Professional front-end developers in an existing React codebase, who would otherwise edit by hand or use an AI assistant |
-| D2 | Is this a product, a research result or a learning project? | A product candidate, so "stop" is an acceptable outcome |
-| D3 | Is "no generative model at compile time" a hard constraint or a preference? | Hard constraint. If it is a preference, a hybrid in which a model proposes and the deterministic verifier checks may be stronger, and should be evaluated. |
-| D4 | Implementation language. The repository declares Python 3.14 or later; the target ecosystem is TypeScript. | TypeScript for the proof of concept. As designed, it needs only browser automation and file edits, so Python is workable, though Playwright for Python is not installed in this environment and was not tested. *Assumption: later static analysis of TSX is easier with TypeScript's own tooling.* |
-| D5 | Which applications for Stage A? Is there a specific target codebase? | Two open-source React applications with different styling approaches |
-| D6 | Ratify thresholds and tolerance | The values in the success section |
-| D7 | Are the data-pipeline language and generation mode dropped or parked? Does the name stay? Do component-name targets come back in? | Parked; name unchanged for now; component names after the gate |
-| D8 | Timebox and staffing | About three weeks, one engineer |
+| D1 | What happens when a developer hand-edits generated code? The options are: not allowed, and regeneration overwrites; allowed only when the edit can be converted back to intent; or allowed freely, with tracing lost for that file. | The second: convert back or refuse |
+| D2 | Must CDIPL work on existing code it did not generate? | No, for the first product. The edit engine stays deferred unless Stage 1 shows most requests concern existing code. |
+| D3 | May an intent file embed raw target-language code when the vocabulary runs out? | Not in the proof of concept. Decide after Stage 1. |
+| D4 | First family and first targets | Data pipelines; Python and JavaScript; bash third |
+| D5 | Is "replacement for LLM assistants" a required claim, or is "deterministic generator for common kinds of task" an acceptable product? | Let Stage 1 decide |
+| D6 | Language the compiler is written in | Python, because the repository is already set up for it and the lead track no longer needs browser tooling. *Assumption: converting generated JavaScript back to intent is practical from Python; not tested.* |
+| D7 | Ratify the pass and fail numbers and the time budget per stage | The values proposed above |
+| D8 | What "stacked together" means | That operations chain into a pipeline, and that one intent file can read another's output |
+| D9 | Whether the name stays, given that no classifier is built | Unchanged for now |
+
+### Resolved by the owner
+
+No generative model, as a hard constraint. Product candidate. Python not required. No specific target codebase. Several target languages. Staged delivery with reviews.
 
 ## Assumptions
 
 - No implementation exists beyond what is in the repository at commit `194e44b`. Verified for this checkout only.
-- The proposal is the only design document.
-- The target is web UI in React, because §12 says so.
-- The team can run a Chromium-based browser in development and continuous integration.
-- Statements about existing tools and query languages are general knowledge, not the result of a survey.
+- The proposal and the owner's answers are the only statements of intent.
+- The team can collect at least 100 of its own past coding requests for Stage 1.
+- Statements about existing tools and about the history of similar efforts are general knowledge, not the result of a survey.
 - Effort estimates are unvalidated.
 
 ## Positions on the proposal's evaluation questions (§13)
 
 | Q | Position |
 |---|---|
-| 1 | A classifier is not useful in the acceptance path. Its only consistent role is ranking suggestions in diagnostics. Do not build it now. |
-| 2 | Target (route, selector, state), measured quantity, requested relation, viewports, tolerance, and the set of elements allowed to change. Postconditions, not boolean flags. |
+| 1 | A classifier is not useful in the acceptance path. Do not build it now. |
+| 2 | For generation: a pipeline of typed operations over a declared source. For edits: target, measured quantity, requested relation, viewports, tolerance, and the elements allowed to change. The proposal does not show that these are one representation. |
 | 3 | As refusal reasons with evidence attached, not as scores. |
-| 4 | Unknown, and not needed for the proof of concept. The probe shows what is unavailable statically: sizes produced by layout (cases 3, 4 and 7) and styles injected at runtime (case 9). |
-| 5 | For changing a CSS value, replacing the token at the browser-reported location was sufficient in the probe. Techniques for editing JSX were not evaluated. |
+| 4 | Unknown, and not needed for this proof of concept. Probe 1 shows what is unavailable statically: sizes produced by layout and styles injected at runtime. |
+| 5 | For changing a CSS value, replacing the token at the browser-reported location was sufficient in Probe 1. Other techniques were not evaluated. |
 | 6 | Never infer it. Require explicit scope and report which elements are affected. |
-| 7 | The measured target property; the boxes of other elements; no new horizontal overflow; a successful build. Event-binding and accessibility checks are outside the proof of concept. |
-| 8 | Measured boxes at declared viewports, with a pinned browser, an explicit tolerance and repeated runs. |
-| 9 | Through a fixed list of refusal reasons, with fixtures of unsupported patterns that must be refused. Adapters are outside the proof of concept. |
-| 10 | Not done in this review. Required after the gate. |
-| 11 | Stage A runs third-party code, so it needs an isolated container without credentials. |
+| 7 | For generation: identical output across targets and the round-trip rules. For edits: the measured target property and the boxes of other elements. |
+| 8 | Deferred with the edit engine: measured boxes at declared viewports, with a pinned browser and an explicit tolerance. |
+| 9 | Each target declares unsupported operations, and the compiler refuses them for that target. |
+| 10 | Not done in this review. A user comparison follows Stage 3; a prior-art survey is recommended before Stage 2. |
+| 11 | Generated programs are executed during testing, so tests run in an isolated environment. The deferred audit of third-party applications needs the same. |
 | 12 | See "Evidence that would count as success". |
 | 13 | See "What would disprove the idea". |
 
 ## Appendix: probe inputs and method
+
+### Probe 1
 
 Stylesheet (`style.css`), loaded by a static page through a `<link>` element:
 
@@ -297,7 +376,7 @@ Stylesheet (`style.css`), loaded by a static page through a `<link>` element:
 .shared { width: 120px; }
 ```
 
-Elements, by case number in the results table. Each sits in its own `<div>` unless noted.
+Elements, by case number. Each sits in its own `<div>` unless noted.
 
 | # | Element |
 |---|---|
@@ -311,11 +390,28 @@ Elements, by case number in the results table. Each sits in its own `<div>` unle
 | 8 | Two `<button class="shared">` in one `<div>` |
 | 9 | `<button class="injected">`, with `.injected{width:120px}` added by a script through a new `<style>` element |
 
-A tenth element, a button with class `submit-button-bb`, behaved exactly as case 1 and is omitted from the table.
+A tenth element, a button with class `submit-button-bb`, behaved exactly as case 1 and is omitted from the results.
 
 Method, for each case:
 
 1. Restore the stylesheet, open the page at the stated viewport, and attach a Chrome DevTools Protocol session.
-2. Call `CSS.getMatchedStylesForNode` for the element. Keep `width` declarations from rules whose origin is the page's own stylesheets, with their file, line and column.
+2. Call `CSS.getMatchedStylesForNode` for the element. Keep `width` declarations from the page's own stylesheets, with their file, line and column.
 3. Measure `getBoundingClientRect().width`.
 4. For each declaration found in the file on disk: restore the stylesheet, multiply the declared number by 1.10 at the reported position, reload, measure the target again, and measure every other button on the page.
+
+### Probe 2
+
+Input (`data.json`):
+
+```json
+[{"name":"～","age":9007199254740993},{"name":"😀","age":9007199254740992},{"name":"b","age":18},{"name":"B","age":18.0},{"name":"a"}]
+```
+
+| Check | Python | JavaScript |
+|---|---|---|
+| Sort | `sorted(d, key=lambda u: u['name'])` | `sort` with a comparator using `<` and `>` on `name` |
+| Large integers | first two records, `u['age'] > 9007199254740992` | first two records, `u.age > 9007199254740992` |
+| Number output | `json.dumps` of the ages of records 3 and 4 | `JSON.stringify` of the same |
+| Missing field | `[u for u in d if u['age'] >= 18]` | `d.filter(u => u.age >= 18)` |
+
+Full sort results: Python gave `B, a, b, ～, 😀`; JavaScript gave `B, a, b, 😀, ～`.

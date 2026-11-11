@@ -1,0 +1,1081 @@
+block	wording
+cli-options	declara los argumentos y opciones de línea de comandos que acepta el programa y lee sus valores
+cli-options	define las opciones de la línea de comandos
+cli-options	parsea los argumentos de la línea de comandos
+cli-options	quiero que el script acepte un argumento "path" y una opción "--verbose"
+cli-options	leer los argumentos con los que se llamó al programa
+cli-options	configura los flags que admite el programa, por ejemplo "--limit" y "--region"
+cli-options	declarar parámetros de la cli y obtener sus valores
+cli-options	el programa debe aceptar un argumento posicional "archivo" y la opción "--salida"
+cli-options	define qué opciones recibe el script por consola y recoge lo que indique el usuario
+cli-options	añade una opción "--count" con valor por defecto 10 a la línea de comandos
+cli-options	procesa los argumentos recibidos y saca los valores de cada opción
+cli-options	registre los argumentos del comando y muestre la ayuda de uso si faltan
+check-number-range	comprueba que el número que da el usuario esté entre 1 y 100 y usa 10 si no lo indica
+check-number-range	valida que count esté en el rango de 1 a 50, por defecto 20
+check-number-range	verifica que el valor numérico esté dentro del rango permitido
+check-number-range	el número debe estar entre 0 y 10; si falta, usa 5
+check-number-range	asegúrate de que size >= 1 y size <= 500, y si no se indica usa 50
+check-number-range	validar rango numérico con valor por defecto
+check-number-range	revisa que el valor indicado por el usuario esté entre 1024 y 65535 y si no viene usa 8080
+check-number-range	si el usuario no da ningún número toma 30, y si lo da comprueba que quede dentro del rango 1 a 60
+check-number-range	comprobar que amount no está fuera de los límites 0 y 1000
+check-number-range	chequea que el número introducido cae dentro del mínimo 1 y el máximo 99
+check-number-range	rechaza el valor si no está entre 5 y 25, y cuando esté ausente aplica 10
+check-number-range	valide que age sea un número entre 18 y 120 o use 18 por omisión
+exit-on-error	termina el programa con un mensaje de error y código de salida 1
+exit-on-error	aborta con el error "no se encontró el archivo"
+exit-on-error	sal del programa con estado 2 mostrando "configuración inválida"
+exit-on-error	si algo falla, detén la ejecución e informa del error
+exit-on-error	salir con error
+exit-on-error	imprime "error fatal" por stderr y finaliza con un código distinto de cero
+exit-on-error	mata el programa avisando del fallo y devolviendo un estado de error
+exit-on-error	haz que el script muera con el mensaje "falta el argumento path"
+exit-on-error	detener el programa con mensaje de error y código de error 3
+exit-on-error	cierre el programa indicando el error y con estado de salida 1
+exit-on-error	aborta la ejecución, escribe el motivo en la salida de error y sal con 1
+exit-on-error	quiero que el programa termine de inmediato con un error y un código no cero
+print-message	imprime "hola, {name}" con el valor de name insertado
+print-message	muestra por consola el mensaje "procesados {count} registros"
+print-message	escribe una línea de texto en pantalla con los valores de name y age
+print-message	print de "total: {total}"
+print-message	saca por pantalla una línea que incluya el valor de city
+print-message	imprimir un mensaje con total y date
+print-message	di por la terminal "listo, {count} archivos copiados"
+print-message	muestre en la salida estándar una sola línea con el texto "usuario {name} creado"
+print-message	loguea "pedido {id} enviado"
+print-message	imprime una línea que diga cuántos items hay, usando el valor de count
+print-message	escribir en consola "bienvenido" seguido de name
+print-message	haz un print del mensaje "terminado en {amount} segundos"
+print-table	imprime las filas como una tabla con columnas alineadas
+print-table	muestra users en la consola en forma de tabla
+print-table	imprimir tabla alineada con name, age y city
+print-table	saca por pantalla los orders en columnas bien alineadas
+print-table	pinta en la terminal una tabla con las filas de items
+print-table	vuelca los registros por consola en columnas de ancho fijo
+print-table	tabula las filas y muéstralas por consola
+print-table	imprime cada fila con sus columnas alineadas a la izquierda
+print-table	quiero ver records como tabla de texto en la terminal, con las columnas id, title y status
+print-table	mostrar los datos tabulados en la salida estándar
+print-table	imprima las filas encolumnadas, con el mismo ancho en cada columna
+print-table	escribe en pantalla una tabla alineada de users con name y email
+print-groups	imprime las filas por grupos, con un encabezado antes de cada grupo
+print-groups	muestra por consola users agrupados por city con un título encima de cada grupo
+print-groups	imprimir los orders por region poniendo una línea de cabecera antes de cada bloque
+print-groups	lista en pantalla los items en secciones, cada una precedida por su encabezado
+print-groups	saca por consola las filas agrupadas por status, con el nombre del grupo como título
+print-groups	imprime grupos con cabecera
+print-groups	escribe primero el encabezado de cada grupo y debajo sus filas
+print-groups	muestra en pantalla cada grupo de registros bajo una línea de título
+print-groups	vuelca las filas por categorías en la terminal, con un rótulo delante de cada una
+print-groups	imprima los records organizados en grupos según region y encabece cada grupo con su nombre
+print-groups	para cada grupo imprime una línea con el título y luego las filas del grupo
+print-groups	mostrar por terminal los datos en grupos con su encabezado, uno tras otro
+format-number	formatea el número con separador de miles y 2 decimales
+format-number	muestra 1234567.891 con separador de miles, así: "1.234.567,89"
+format-number	dale formato a amount con puntos de miles y 2 decimales fijos
+format-number	formatear número para mostrarlo, con miles separados y 2 cifras decimales
+format-number	pon separadores de miles a total y déjalo con 2 decimales
+format-number	formato numérico con miles y decimales fijos
+format-number	convierte price en un texto presentable con separador de miles y 3 decimales
+format-number	quiero ver el número con comas de miles y exactamente 2 decimales
+format-number	formatee el número agrupando los miles y con un número fijo de decimales
+format-number	presenta amount con formato de miles y 1 decimal
+format-number	escribe el número 9876543.2 con separador de miles y siempre 2 decimales
+format-number	da formato al valor para mostrarlo: millares separados y 4 decimales
+format-size	convierte un número de bytes en un tamaño legible como "1.5 MB"
+format-size	muestra size en KB, MB o GB
+format-size	formatea los bytes a un tamaño legible para humanos
+format-size	pasa 1536 bytes a "1.5 KB"
+format-size	formatear tamaño de archivo en unidades legibles
+format-size	expresa el tamaño en bytes con la unidad adecuada, por ejemplo "2.3 GB"
+format-size	transforma la cantidad de bytes en algo fácil de leer, como "512 KB"
+format-size	dame el tamaño en formato humano en vez de en bytes
+format-size	convierta 1048576 bytes a megabytes legibles
+format-size	humaniza el tamaño de size
+format-size	quiero que los bytes se muestren como KB, MB o GB con 1 decimal
+format-size	traduce bytes a una cadena amigable como "4.2 MB"
+format-text	construye un texto a partir de un patrón insertando valores, como un prefijo seguido de un número con ceros a la izquierda
+format-text	genera el texto "FAC-" seguido de id rellenado con ceros a 6 dígitos
+format-text	formatea una cadena con el patrón "{prefijo}-{numero}"
+format-text	arma un texto con prefijo "ORD" y el número con ceros delante
+format-text	formatear texto según un patrón con valores
+format-text	crea la cadena "item-0042" a partir del prefijo "item-" y el número 42 con 4 dígitos
+format-text	compón un string con formato: prefijo más id con relleno de ceros
+format-text	monta un texto siguiendo un patrón de formato, por ejemplo "user_{id}" con id de 5 cifras
+format-text	genere un identificador de texto con el prefijo "INV" y count con ceros iniciales
+format-text	interpola name y un número de 3 dígitos rellenado con ceros en el patrón "{name}-{n}"
+format-text	construir una cadena formateada con un prefijo y un número de ancho fijo
+format-text	quiero un texto como "REF-000123" hecho con un patrón y el valor de id
+format-grid	distribuye los valores en una cuadrícula de 4 columnas
+format-grid	coloca los items en una rejilla con un número fijo de columnas
+format-grid	muestra los valores en una cuadrícula de 3 columnas
+format-grid	maqueta la lista en forma de grid de 5 columnas
+format-grid	organizar valores en una grilla de 2 columnas
+format-grid	reparte los valores de name en 6 columnas por fila
+format-grid	dispón los elementos en una matriz con 3 columnas fijas
+format-grid	formatea la lista como cuadrícula, 4 valores por fila
+format-grid	acomoda los valores en una rejilla de ancho fijo de 8 columnas
+format-grid	quiero los valores colocados en cuadrícula con siempre 3 columnas
+format-grid	ponga los datos en una grilla de columnas fijas
+format-grid	formato en cuadrícula de 10 columnas
+fill-template	rellena la plantilla del documento con los valores
+fill-template	inserta name y date en la plantilla "carta.html"
+fill-template	sustituye los marcadores de la plantilla por sus valores
+fill-template	completa la plantilla de la página con title y text
+fill-template	rellenar plantilla con datos
+fill-template	reemplaza los placeholders del template por los datos de users
+fill-template	mete los valores en los marcadores de la plantilla fija de la página
+fill-template	genera el documento a partir de la plantilla "informe.txt" poniendo total y region
+fill-template	aplica los datos a la plantilla del documento
+fill-template	llene la plantilla con los valores de name, city y amount
+fill-template	toma la plantilla "factura.html" y coloca cada valor en su marcador
+fill-template	quiero rellenar una plantilla de documento fija con los valores de un registro
+escape-html	escapa el texto para que sea seguro dentro de una página html
+escape-html	escapar html
+escape-html	convierte los caracteres especiales de text en entidades html
+escape-html	sanitiza el texto antes de insertarlo en el html
+escape-html	haz que el texto "<b>hola</b>" se pueda poner en la página sin que el navegador lo tome como html
+escape-html	escapa "<", ">" y "&" del texto
+escape-html	neutraliza las etiquetas html que haya en title
+escape-html	deja el texto seguro para incrustarlo en una página web
+escape-html	evita inyección de html escapando el contenido de text
+escape-html	escape los caracteres peligrosos del texto para mostrarlo en html
+escape-html	codifica como entidades html lo que escribió el usuario
+escape-html	quiero insertar text en la página sin riesgo de xss
+lowercase-text	convierte el texto a minúsculas
+lowercase-text	pasa name a minúsculas
+lowercase-text	poner en minúsculas
+lowercase-text	transforma "HOLA Mundo" en minúsculas
+lowercase-text	deja el email todo en minúsculas
+lowercase-text	minúsculas para title
+lowercase-text	cambia las mayúsculas del texto por minúsculas
+lowercase-text	convierta la cadena a letras minúsculas
+lowercase-text	haz lowercase del texto
+lowercase-text	pon city en minúscula
+lowercase-text	quiero el texto sin mayúsculas, todo en minúsculas
+lowercase-text	normaliza el texto a minúsculas
+match-pattern	busca en cada línea las partes que encajan con un patrón y extrae los grupos con nombre
+match-pattern	aplica la expresión regular "(?P<date>\d+-\d+-\d+)" a cada línea y saca los grupos nombrados
+match-pattern	extrae de cada línea de lines los trozos que coincidan con el patrón
+match-pattern	encuentra coincidencias de la regex en las líneas y extrae date y status
+match-pattern	extraer grupos con nombre de cada línea usando una regex
+match-pattern	recorre las líneas y saca las partes que cumplen el patrón "(\w+)=(\d+)"
+match-pattern	saca las piezas con nombre de cada línea de texto que cumpla el patrón
+match-pattern	para cada línea, busca el patrón y devuelve los fragmentos extraídos por nombre
+match-pattern	usa una expresión regular para extraer id y amount de cada línea
+match-pattern	localice en las líneas lo que encaje con el patrón y obtenga sus grupos de captura
+match-pattern	aplica un regex línea a línea y quédate con los grupos nombrados
+match-pattern	obtén las coincidencias del patrón en cada línea con sus partes nombradas
+check-pattern	comprueba que el texto encaja con un patrón, como la forma de un email
+check-pattern	valida que email tenga formato de correo electrónico
+check-pattern	verifica que el texto cumple la expresión regular "^\d{5}$"
+check-pattern	validar email con regex
+check-pattern	comprueba si la cadena coincide con el patrón "^[A-Z]{3}-\d+$"
+check-pattern	asegúrate de que el texto tiene forma de dirección de correo
+check-pattern	revisa que el valor se ajusta al patrón esperado
+check-pattern	¿el texto cumple el formato de un email?
+check-pattern	valide que id tiene la forma "\d{5}"
+check-pattern	chequea con una regex que el texto es válido
+check-pattern	comprobar que text respeta el patrón de un email
+check-pattern	mira si la cadena tiene pinta de correo electrónico válido
+check-text-rule	comprueba que el texto cumple una regla sencilla, como no estar vacío
+check-text-rule	valida que name no esté vacío
+check-text-rule	verifica que el texto no contiene el carácter "@"
+check-text-rule	asegúrate de que title no tenga espacios
+check-text-rule	validar que la cadena no está en blanco
+check-text-rule	comprueba que text no incluya ninguna coma
+check-text-rule	revisa que el texto empiece por una letra mayúscula
+check-text-rule	chequea que la cadena no lleve el carácter ";"
+check-text-rule	el texto debe obedecer la regla de no terminar en punto
+check-text-rule	valide que city solo tiene letras
+check-text-rule	regla simple: text no puede estar vacío ni contener "/"
+check-text-rule	comprueba si la cadena respeta la norma de no tener dígitos
+check-url	comprueba que el texto es una dirección web
+check-url	valida que "https://ejemplo.com" sea una url correcta
+check-url	verifica si la cadena es una url válida
+check-url	validar url
+check-url	asegúrate de que text sea una dirección web bien formada
+check-url	¿este texto es un enlace http o https válido?
+check-url	revisa que el valor tenga forma de url, con protocolo y dominio
+check-url	chequea que lo que escribió el usuario sea una dirección de internet
+check-url	comprobar que el texto es un link válido
+check-url	valide que la url empieza por "http://" o "https://" y tiene host
+check-url	mira si text es una dirección web de verdad
+check-url	confirma que la cadena dada es una uri válida
+check-valid-date	comprueba que el texto es una fecha real
+check-valid-date	valida que "2024-02-30" sea una fecha que existe
+check-valid-date	verifica si date contiene una fecha válida
+check-valid-date	validar fecha
+check-valid-date	asegúrate de que la cadena es una fecha del calendario y no algo como "31/02/2024"
+check-valid-date	¿"31/04/2023" es una fecha correcta?
+check-valid-date	revisa que el texto sea un día que existe en el calendario
+check-valid-date	chequea que la fecha escrita por el usuario sea real
+check-valid-date	comprobar si el texto "2023-13-01" es una fecha de verdad
+check-valid-date	valide que date tenga un día, mes y año válidos
+check-valid-date	mira si la cadena se puede leer como una fecha existente
+check-valid-date	confirma que el valor es una fecha válida del calendario
+check-required	comprueba que el campo obligatorio del formulario se ha rellenado
+check-required	valida que el campo "#nombre" no se haya dejado vacío
+check-required	verifica que el usuario completó el campo requerido "#email"
+check-required	campo obligatorio: comprueba que tiene valor
+check-required	asegúrate de que el campo requerido del formulario esté relleno
+check-required	validar campo requerido
+check-required	revisa que no falte el campo obligatorio "#telefono" en el formulario
+check-required	chequea que el input obligatorio "#ciudad" no esté en blanco
+check-required	comprobar que se llenó el campo requerido del form
+check-required	valide que el campo marcado como obligatorio tenga algo escrito
+check-required	el campo "#apellidos" es obligatorio, mira si lo han completado
+check-required	confirma que el campo de formulario requerido no quedó sin rellenar
+check-min-length	comprueba que el campo del formulario tiene al menos 8 caracteres
+check-min-length	valida que "#clave" tenga como mínimo 6 caracteres
+check-min-length	verifica la longitud mínima del campo "#usuario": 3 caracteres
+check-min-length	longitud mínima de 10 caracteres para el campo "#comentario"
+check-min-length	asegúrate de que lo escrito en el campo no sea más corto que 5 caracteres
+check-min-length	validar longitud mínima del campo
+check-min-length	revisa que el input "#nombre" tenga por lo menos 2 letras
+check-min-length	chequea que el campo no tenga menos de 12 caracteres
+check-min-length	el campo "#password" debe tener 8 caracteres o más
+check-min-length	valide que el texto del campo llegue como mínimo a 4 caracteres
+check-min-length	comprobar que el campo de formulario alcanza el mínimo de 20 caracteres
+check-min-length	rechaza el campo si su longitud es inferior a 6
+check-allowed-values	comprueba que cada valor está en la lista de valores permitidos
+check-allowed-values	valida que status sea uno de "open", "closed" o "pending"
+check-allowed-values	verifica que todos los valores pertenecen a la lista permitida
+check-allowed-values	valores permitidos: comprueba que region es "norte", "sur", "este" u "oeste"
+check-allowed-values	asegúrate de que ningún valor quede fuera del conjunto admitido
+check-allowed-values	validar contra lista de valores permitidos
+check-allowed-values	revisa que todos los status estén entre los aceptados
+check-allowed-values	chequea que cada valor de city figure en la lista blanca
+check-allowed-values	comprobar que los valores son solo de los permitidos
+check-allowed-values	valide que el campo solo toma valores de la enumeración "A", "B", "C"
+check-allowed-values	mira si algún valor no está en la lista de opciones válidas
+check-allowed-values	confirma que todos los valores están dentro de la lista autorizada
+check-required-types	comprueba que el registro tiene las claves indicadas y que sus valores son del tipo esperado
+check-required-types	valida que name sea texto y age sea número en el registro
+check-required-types	verifica que las claves id, title y done existen y tienen el tipo correcto
+check-required-types	validar claves obligatorias y sus tipos
+check-required-types	asegúrate de que el objeto contiene email de tipo cadena y count de tipo número
+check-required-types	revisa presencia y tipo de las claves requeridas del registro
+check-required-types	chequea que cada clave requerida esté presente y con el tipo de dato esperado
+check-required-types	comprobar tipos de los campos obligatorios del registro
+check-required-types	valide que el registro tiene price numérico y status de tipo texto
+check-required-types	el objeto debe tener id de tipo número y name de tipo string, compruébalo
+check-required-types	mira si faltan claves en el registro o si alguna tiene un tipo que no es el esperado
+check-required-types	confirma que las claves dadas están en el diccionario con valores del tipo previsto
+check-list-of-records	comprueba que los datos cargados son una lista de registros
+check-list-of-records	valida que lo leído sea un array de objetos
+check-list-of-records	verifica que los datos tienen forma de lista de registros
+check-list-of-records	validar que los datos son una lista de registros
+check-list-of-records	asegúrate de que el json cargado es una lista y que cada elemento es un objeto
+check-list-of-records	revisa que los datos cargados no sean otra cosa que una lista de diccionarios
+check-list-of-records	chequea que users sea una lista de registros
+check-list-of-records	comprobar la estructura: debe ser una lista de registros
+check-list-of-records	valide que los datos que se han cargado son un arreglo de registros
+check-list-of-records	los datos cargados tienen que ser una lista de objetos, compruébalo
+check-list-of-records	mira si lo que se cargó es realmente una lista de registros
+check-list-of-records	confirma que orders es una colección de registros y no un solo registro
+check-path-exists	comprueba que el archivo o la carpeta existe
+check-path-exists	verifica si existe "datos/entrada.csv"
+check-path-exists	¿existe la carpeta "salida"?
+check-path-exists	valida que la ruta path exista
+check-path-exists	comprobar existencia de archivo o directorio
+check-path-exists	asegúrate de que el fichero "config.json" está ahí
+check-path-exists	revisa si la ruta "logs/" existe en disco
+check-path-exists	chequea que exista el directorio
+check-path-exists	mira si hay un archivo en path
+check-path-exists	confirme que el archivo "notas.txt" existe
+check-path-exists	existe o no la carpeta "backup"
+check-path-exists	quiero saber si el archivo o directorio indicado existe
+read-text-file	lee todo el contenido de un archivo de texto
+read-text-file	lee el archivo "notas.txt" completo
+read-text-file	carga el texto de "datos.txt"
+read-text-file	leer archivo de texto entero
+read-text-file	abre "informe.txt" y devuelve todo su contenido
+read-text-file	obtén el contenido completo del fichero de texto path
+read-text-file	léeme el archivo "readme.md" de principio a fin
+read-text-file	lea el contenido íntegro del archivo de texto
+read-text-file	carga en memoria todo el texto del archivo "log.txt"
+read-text-file	quiero el contenido entero de un fichero de texto
+read-text-file	leer "entrada.txt" como texto
+read-text-file	dame todo lo que hay en el archivo de texto "poema.txt"
+write-text-file	escribe el texto en un archivo
+write-text-file	guarda text en "salida.txt"
+write-text-file	escribir texto a archivo
+write-text-file	vuelca el texto al fichero "resultado.txt"
+write-text-file	graba la cadena en el archivo path
+write-text-file	crea el archivo "notas.txt" con el texto "hola"
+write-text-file	escriba el contenido de texto en disco, en "informe.txt"
+write-text-file	guarda el texto en un fichero
+write-text-file	pon el texto dentro del archivo "log.txt", sobrescribiendo lo que haya
+write-text-file	quiero escribir una cadena de texto a un archivo
+write-text-file	salva el texto generado en "out.txt"
+write-text-file	escribir "listo" en el archivo "estado.txt"
+parse-json	convierte el texto json en datos
+parse-json	parsea el json
+parse-json	parsear json
+parse-json	interpreta la cadena json y devuelve los datos
+parse-json	pasa de json a datos
+parse-json	deserializa el texto json en un objeto
+parse-json	decodifica el json de text
+parse-json	lee el texto como json y dame la estructura de datos
+parse-json	analiza la cadena json "[1, 2, 3]"
+parse-json	transforma una cadena json en datos
+parse-json	carga los datos desde un texto json
+parse-json	quiero obtener los datos a partir del json en texto
+format-json	convierte los datos a texto json
+format-json	serializa los datos a json
+format-json	pasa el objeto a json
+format-json	genera una cadena json con los datos
+format-json	stringify de los datos
+format-json	convierte users en json
+format-json	formatea los datos como texto json con sangría de 2 espacios
+format-json	serializar a json
+format-json	vuelca el registro en formato json
+format-json	transforma la lista de records en una cadena json
+format-json	escribe los datos en json bien indentado
+format-json	exporta los datos a json
+parse-csv	convierte el texto csv en filas
+parse-csv	parsea el csv
+parse-csv	parsear csv a filas
+parse-csv	lee el texto csv y sepáralo en filas de valores
+parse-csv	pasa de csv a filas
+parse-csv	interpreta la cadena csv como una lista de filas
+parse-csv	divide el contenido csv en filas y columnas
+parse-csv	transforma text, que es csv, en filas
+parse-csv	analiza el csv con separador ";" y devuelve las filas
+parse-csv	decodifica el texto separado por comas en filas
+parse-csv	obtén las filas a partir del csv
+parse-csv	quiero las filas de un texto csv
+format-csv	convierte las filas a texto csv
+format-csv	pasa las filas a csv
+format-csv	serializa las filas en formato csv
+format-csv	genera texto csv con las filas
+format-csv	filas a csv
+format-csv	escribe las filas como texto separado por comas
+format-csv	formatea las filas como csv con separador ","
+format-csv	exporta las filas a csv
+format-csv	convierta la lista de filas en una cadena csv
+format-csv	arma el csv con las filas
+format-csv	une cada fila con comas y junta todo en un texto csv
+format-csv	vuelca las filas en csv
+require-columns	comprueba que la tabla tiene las columnas indicadas
+require-columns	verifica que existen las columnas name, email y age en la tabla
+require-columns	valida que no falte ninguna columna requerida
+require-columns	exigir columnas id y date
+require-columns	asegúrate de que la tabla tiene las columnas price y amount
+require-columns	revisa que el csv tenga las columnas obligatorias
+require-columns	chequea que estén las columnas "nombre" y "ciudad"
+require-columns	columnas requeridas: status, region, total
+require-columns	comprobar que el encabezado incluye todas las columnas necesarias
+require-columns	valide la presencia de las columnas esperadas en la tabla
+require-columns	falla si a la tabla le falta la columna title o la columna done
+require-columns	confirma que la tabla contiene las columnas con esos nombres
+rows-to-records	convierte las filas y la fila de encabezado en registros con nombre
+rows-to-records	pasa de filas a registros usando la cabecera como claves
+rows-to-records	transforma las filas en objetos usando la primera fila como nombres de campo
+rows-to-records	filas a registros
+rows-to-records	combina el encabezado con cada fila para formar registros
+rows-to-records	crea un diccionario por fila con las claves de la cabecera
+rows-to-records	convierte cada fila de valores en un registro con los nombres de columna
+rows-to-records	empareja los valores de cada fila con los títulos de la cabecera para obtener registros
+rows-to-records	arma registros a partir de las filas y su encabezado
+rows-to-records	convierta las filas en diccionarios con la fila de títulos como claves
+rows-to-records	usa el encabezado para dar nombre a los valores de cada fila
+rows-to-records	quiero registros en vez de filas: nombra cada valor según la cabecera
+records-to-rows	convierte los registros en una fila de encabezado y filas de valores
+records-to-rows	pasa de registros a filas con cabecera
+records-to-rows	transforma los objetos en filas, con una primera fila de nombres de campo
+records-to-rows	registros a filas
+records-to-rows	saca el encabezado de las claves y una fila de valores por cada registro
+records-to-rows	convierte la lista de diccionarios en encabezado y filas
+records-to-rows	separa los registros en una cabecera y filas de valores
+records-to-rows	descompón users en fila de títulos más filas de valores
+records-to-rows	genera filas a partir de los registros, con el encabezado primero
+records-to-rows	convierta cada registro en una fila de valores y añada la fila de encabezado
+records-to-rows	deja los registros como filas y pon las claves como cabecera
+records-to-rows	quiero filas en vez de registros, con la fila de cabecera delante
+list-folder	lista los archivos que hay directamente dentro de una carpeta
+list-folder	lista los archivos de la carpeta "docs"
+list-folder	listar archivos de un directorio
+list-folder	dame los ficheros de "src" sin entrar en subcarpetas
+list-folder	muestra el contenido inmediato del directorio path
+list-folder	qué archivos hay en la carpeta "fotos"
+list-folder	enumera los archivos del primer nivel de la carpeta
+list-folder	ls de la carpeta "descargas"
+list-folder	obtén la lista de archivos de un directorio, solo ese nivel
+list-folder	liste los ficheros directos de la carpeta, sin recursión
+list-folder	archivos de la carpeta "tmp", no de las subcarpetas
+list-folder	quiero ver qué ficheros contiene directamente el directorio "datos"
+walk-folder	lista todos los archivos de una carpeta y de todas sus subcarpetas
+walk-folder	recorre la carpeta "proyecto" de forma recursiva y lista cada archivo
+walk-folder	listar archivos recursivamente
+walk-folder	dame todos los ficheros de "src" incluyendo los de las subcarpetas
+walk-folder	recorre el árbol de directorios desde path y devuelve todos los archivos
+walk-folder	busca archivos en la carpeta y en todos sus niveles
+walk-folder	enumera cada archivo de la carpeta y de las carpetas que hay debajo
+walk-folder	recorrido completo de la carpeta "datos"
+walk-folder	obtén el listado completo de archivos recorriendo todas las subcarpetas
+walk-folder	liste los ficheros de un directorio y de todos los directorios anidados
+walk-folder	archivos de la carpeta "fotos" y de todo lo que hay dentro, a cualquier profundidad
+walk-folder	quiero todos los archivos del directorio, subdirectorios incluidos
+file-size	obtén el tamaño de un archivo en bytes
+file-size	cuánto pesa el archivo "video.mp4"
+file-size	tamaño en bytes de "datos.csv"
+file-size	dame el tamaño del fichero path
+file-size	cuántos bytes ocupa el archivo
+file-size	averigua el tamaño del archivo "foto.png" en bytes
+file-size	obtener tamaño de archivo
+file-size	mide el archivo "backup.zip" en bytes
+file-size	devuelve el número de bytes del fichero
+file-size	consulte cuánto ocupa en disco el archivo "log.txt"
+file-size	quiero saber el peso en bytes de un fichero
+file-size	calcula el tamaño de "informe.pdf"
+hash-file	calcula la suma de verificación del contenido de un archivo
+hash-file	calcula el hash sha256 de "paquete.zip"
+hash-file	checksum del archivo path
+hash-file	obtén el md5 del fichero "imagen.iso"
+hash-file	calcular hash de un archivo
+hash-file	genera la huella digital del contenido del archivo
+hash-file	saca el sha1 de "datos.bin"
+hash-file	dame el checksum del fichero
+hash-file	hashea el archivo "backup.tar"
+hash-file	compute el resumen criptográfico del archivo
+hash-file	suma de comprobación de "setup.exe"
+hash-file	quiero el hash del contenido de un fichero
+split-extension	separa el nombre de archivo en nombre y extensión
+split-extension	divide "informe.pdf" en nombre base y extensión
+split-extension	obtén la extensión y el nombre sin extensión de path
+split-extension	separar extensión del nombre de fichero
+split-extension	parte "foto.final.jpg" en nombre y extensión
+split-extension	dame por separado el nombre y la extensión del archivo
+split-extension	saca la extensión de "datos.csv" y el resto del nombre
+split-extension	descompón el nombre del archivo en su raíz y su extensión
+split-extension	trocea el nombre de fichero por el último punto: nombre y extensión
+split-extension	extraiga la extensión del nombre de archivo y deje el nombre aparte
+split-extension	split del nombre de archivo en nombre y ext
+split-extension	quiero el nombre del fichero y su extensión como 2 valores separados
+filter-rows	conserva solo las filas que cumplen una condición
+filter-rows	filtra users donde age >= 18
+filter-rows	quédate con los orders con total > 100
+filter-rows	filtrar filas por condición
+filter-rows	deja solo las filas en las que status = "activo"
+filter-rows	filtra los records cuya region = "norte"
+filter-rows	selecciona las filas que cumplan price < 50
+filter-rows	dame solo los items con count > 0
+filter-rows	mantén únicamente las filas donde city = "Madrid"
+filter-rows	filtre las filas y conserve las que tengan amount >= 1000
+filter-rows	solo quiero los users que cumplan age > 65
+filter-rows	saca las filas que satisfacen la condición date >= "2024-01-01"
+sort-rows	ordena las filas por un campo, ascendente o descendente
+sort-rows	ordena users por age de mayor a menor
+sort-rows	ordenar orders por date descendente
+sort-rows	pon las filas en orden según price, de menor a mayor
+sort-rows	ordena los items por name alfabéticamente
+sort-rows	sort por total desc
+sort-rows	reordena records por amount en orden ascendente
+sort-rows	ordene las filas por city de la a a la z
+sort-rows	dame los users ordenados por age, los menores primero
+sort-rows	ordena las filas por date, primero las más recientes
+sort-rows	reordena la tabla por size en orden decreciente
+sort-rows	quiero los records ordenados por title
+take-first	conserva solo las primeras 10 filas
+take-first	quédate con los 5 primeros users
+take-first	toma las primeras 20 filas
+take-first	limita el resultado a 100 filas
+take-first	dame solo los 3 primeros orders
+take-first	solo las primeras 50 filas
+take-first	recorta la lista a los primeros 15 items
+take-first	top 10 de records
+take-first	devuelve como máximo las 25 primeras filas
+take-first	tome los primeros 8 elementos y descarte el resto
+take-first	head de 30 filas
+take-first	quiero únicamente las 2 primeras filas de users
+group-by-key	agrupa las filas que comparten el mismo valor de un campo
+group-by-key	agrupa users por city
+group-by-key	agrupar orders por region
+group-by-key	junta en grupos los items con el mismo status
+group-by-key	group by date
+group-by-key	reúne las filas en grupos según el valor de name
+group-by-key	organiza los records en grupos por region
+group-by-key	separa las filas en grupos, uno por cada valor de status
+group-by-key	agrupe las filas por el campo city
+group-by-key	haz grupos de users que tengan la misma age
+group-by-key	particiona las filas por el valor de region
+group-by-key	quiero las filas agrupadas por title, cada grupo con las filas que comparten ese valor
+group-total	suma un campo para cada grupo de filas que comparten un valor
+group-total	suma amount por region
+group-total	totales de price por city
+group-total	calcula la suma de total para cada status
+group-total	subtotales de amount por region
+group-total	agrupa orders por city y suma total en cada grupo
+group-total	sumar count agrupando por name
+group-total	dame la suma de price por cada region
+group-total	totaliza amount por grupo de status
+group-total	obtenga los totales de size por cada valor de region
+group-total	cuánto suma amount en cada city
+group-total	quiero la suma de price de cada grupo de filas con la misma region
+count-values	cuenta cuántas veces aparece cada valor distinto
+count-values	cuenta las veces que se repite cada status
+count-values	frecuencia de cada valor de city
+count-values	contar ocurrencias de cada region
+count-values	cuántas veces figura cada valor de name
+count-values	haz un histograma de los valores de status
+count-values	dame el número de apariciones de cada valor distinto de region
+count-values	cuenta cuántos users hay por cada city
+count-values	calcula la frecuencia con que aparece cada title
+count-values	cuente las repeticiones de cada valor del campo status
+count-values	tabla de frecuencias de age
+count-values	quiero saber cuántas veces aparece cada valor distinto de region
+count-rows	cuenta las filas
+count-rows	cuántas filas hay
+count-rows	número de filas de users
+count-rows	contar los orders
+count-rows	dame la cantidad de registros
+count-rows	cuántos items hay en total
+count-rows	cuenta cuántas filas tiene la tabla
+count-rows	recuento de filas
+count-rows	obtén el número de records
+count-rows	cuente los users
+count-rows	cuántos elementos tiene lines
+count-rows	quiero saber cuántas filas hay
+total	suma un campo en todas las filas
+total	suma amount de todos los orders
+total	suma total de price
+total	calcula la suma de total en todas las filas
+total	sumar count de todos los items
+total	dame la suma de amount
+total	suma global de price en la tabla
+total	cuánto suman todos los total de orders
+total	sumatoria de size sobre todas las filas
+total	obtenga la suma general de amount
+total	añade todos los valores de price y dame el resultado
+total	quiero la suma de count de todos los records
+distinct-values	lista cada valor diferente de un campo una sola vez
+distinct-values	valores únicos de city
+distinct-values	dame los valores distintos de region
+distinct-values	lista los status sin repetir
+distinct-values	obtener valores únicos de name
+distinct-values	qué valores diferentes hay en status
+distinct-values	saca la lista de city sin repetidos
+distinct-values	distinct de region
+distinct-values	enumera cada valor de title solo una vez
+distinct-values	devuelva los valores distintos que toma age
+distinct-values	conjunto de valores únicos del campo email
+distinct-values	quiero ver cada city distinta una única vez
+remove-duplicates	elimina las filas cuya clave ya se ha visto, conservando la primera
+remove-duplicates	quita los duplicados de users por email
+remove-duplicates	elimina filas duplicadas según id, dejando la primera
+remove-duplicates	deduplicar orders por id
+remove-duplicates	borra las filas repetidas quedándote con la primera aparición
+remove-duplicates	quitar duplicados
+remove-duplicates	descarta los records con un email que ya apareció antes
+remove-duplicates	deja solo la primera fila de cada id y elimina las demás
+remove-duplicates	elimine los repetidos de items según name
+remove-duplicates	si una clave ya apareció, sáltate la fila; conserva la primera
+remove-duplicates	limpia la lista de filas duplicadas por la clave id
+remove-duplicates	quiero users sin duplicados, manteniendo el primero de cada email
+exclude-by-key	conserva las filas cuya clave no aparece en un segundo conjunto
+exclude-by-key	quita de users los que tienen id en la lista negra
+exclude-by-key	excluye los orders cuyo id esté en la otra lista
+exclude-by-key	filas cuyo email no está en el segundo conjunto
+exclude-by-key	excluir por clave usando otra tabla
+exclude-by-key	deja solo los items cuyo id no figure en la lista de excluidos
+exclude-by-key	descarta las filas cuya clave aparezca en la segunda lista
+exclude-by-key	anti-join de users contra la lista de bloqueados por email
+exclude-by-key	quédate con los records que no estén en la otra colección, comparando por id
+exclude-by-key	excluya los users presentes en la lista de exclusión según id
+exclude-by-key	quita de orders los que tienen clave en el segundo conjunto
+exclude-by-key	quiero las filas de users cuyo name no aparezca en otra lista
+drop-invalid-rows	omite las filas mal formadas o con valores faltantes en lugar de detenerte
+drop-invalid-rows	descarta las filas inválidas y sigue
+drop-invalid-rows	sáltate las filas con campos vacíos
+drop-invalid-rows	ignora las filas corruptas sin parar el proceso
+drop-invalid-rows	quitar filas inválidas
+drop-invalid-rows	elimina las filas a las que les falta algún valor y continúa con el resto
+drop-invalid-rows	deja fuera las filas incompletas en vez de fallar
+drop-invalid-rows	no te detengas por una fila mal formada, simplemente sáltala
+drop-invalid-rows	filtra las filas erróneas o con datos que faltan y sigue adelante
+drop-invalid-rows	descarte en silencio las filas defectuosas
+drop-invalid-rows	si una fila está rota o incompleta, ignórala y no abortes
+drop-invalid-rows	quiero que se salten las filas con errores en lugar de parar
+clean-number-field	convierte un texto como "1,250.50" en un número
+clean-number-field	limpia price y conviértelo a número
+clean-number-field	pasa "1.250,50" a número
+clean-number-field	normaliza amount, que viene como texto con comas, a valor numérico
+clean-number-field	limpiar campo numérico
+clean-number-field	quita los separadores de miles de "12,500" y devuelve el número
+clean-number-field	convierte la cadena "$ 3,400.00" en un número
+clean-number-field	parsea total como número aunque tenga comas y símbolos
+clean-number-field	transforme el texto de price en un número real
+clean-number-field	sanea el campo amount para que sea numérico
+clean-number-field	deja "1 250,50" como número
+clean-number-field	quiero convertir el texto de count a número, quitando comas y espacios
+number-items	asigna a cada elemento un número consecutivo, empezando por un valor dado
+number-items	numera los items empezando en 1
+number-items	numerar las filas desde 100
+number-items	añade un índice a cada elemento de la lista, a partir de 1
+number-items	enumera los users empezando por 0
+number-items	pon a cada fila su número de orden comenzando en 1
+number-items	dale a cada item un número correlativo desde 10
+number-items	agrega un contador a cada registro, empezando en 1
+number-items	numere las líneas a partir de 1
+number-items	asigna números secuenciales a orders, el primero es 1000
+number-items	cada elemento con su número de posición, arrancando en 1
+number-items	quiero numerar los records de 1 en adelante
+fill-series	rellena las entradas que faltan de una serie, como cada hora del día, con un valor por defecto
+fill-series	completa los huecos de la serie con 0
+fill-series	rellena las horas que faltan del día con count = 0
+fill-series	rellenar huecos de una serie temporal
+fill-series	añade las fechas ausentes de la serie con un valor predeterminado
+fill-series	completa la serie diaria poniendo 0 en los días sin datos
+fill-series	para cada hora de 0 a 23 que no tenga entrada, pon el valor 0
+fill-series	rellena la serie de meses con un total por defecto donde falte
+fill-series	complete los valores que faltan de la serie con "n/a"
+fill-series	que no queden huecos en la serie: usa 0 para lo que falte
+fill-series	inserta las entradas faltantes de la secuencia de días con amount = 0
+fill-series	quiero una serie completa de horas, rellenando con 0 las que no existen
+build-record	arma un registro a partir de valores con nombre
+build-record	crea un registro con name = "Ana", age = 30 y city = "Lima"
+build-record	construye un objeto con los campos id, title y done
+build-record	crear registro con valores dados
+build-record	monta un diccionario con email y status
+build-record	junta name, price y count en un registro
+build-record	forma un registro nuevo con los valores de id y date
+build-record	genera un objeto con las claves region y total
+build-record	ensamble un registro a partir de pares clave valor
+build-record	haz un registro con title = "tarea" y done = false
+build-record	crea un objeto de datos con estos campos: name, email, age
+build-record	quiero construir un registro con varios valores nombrados
+first-match	encuentra el primer elemento que cumple una condición, o usa un valor alternativo
+first-match	busca el primer registro de users con age > 30, y si no hay devuelve null
+first-match	primer registro de orders con status = "pendiente" o nada
+first-match	encuentra el primer item cuyo price < 10, por defecto "ninguno"
+first-match	buscar la primera coincidencia o usar un valor por defecto
+first-match	dame el primer registro que tenga city = "Quito"; si no existe, usa el de respaldo
+first-match	halla la primera fila donde done = false, o devuelve un valor de reserva
+first-match	localiza el primer elemento que cumpla total >= 500 y si ninguno cumple devuelve 0
+first-match	obtenga el primero de users con email = "ana@ejemplo.com" o un registro vacío
+first-match	búsqueda del primer item con count = 0, con fallback
+first-match	primer elemento de la lista que satisfaga la condición, si no el valor por defecto
+first-match	quiero el primero de records con region = "sur" y, si no lo hay, un valor alternativo
+all-match	comprueba si todos los elementos cumplen una condición
+all-match	¿todos los users tienen age >= 18?
+all-match	verifica que cada item tenga price > 0
+all-match	todos cumplen la condición
+all-match	comprobar si todas las filas tienen status = "ok"
+all-match	dime si todos los orders cumplen total > 0
+all-match	¿se cumple done = true en todos los records?
+all-match	mira si cada elemento de la lista satisface la condición
+all-match	valide que todos los items tengan count >= 1
+all-match	true si todos los elementos pasan la prueba, false si alguno no
+all-match	asegúrate de que no hay ninguno de users que no cumpla age < 100
+all-match	quiero saber si todas las filas cumplen region = "norte"
+flatten-lists	une varias listas en una sola lista
+flatten-lists	aplana la lista de listas
+flatten-lists	junta todas las sublistas en una única lista
+flatten-lists	concatena las listas en una
+flatten-lists	aplanar listas anidadas
+flatten-lists	combina users y records en una sola lista
+flatten-lists	fusiona varias listas en una lista plana
+flatten-lists	convierte una lista de listas en una lista simple
+flatten-lists	flatten de las listas
+flatten-lists	junte las 3 listas, una detrás de otra, en una sola
+flatten-lists	mete todos los elementos de las sublistas en una lista sola
+flatten-lists	quiero una única lista con los elementos de todas las listas
+get-by-path	sigue una ruta con puntos como "server.port" dentro de datos anidados
+get-by-path	obtén el valor de "user.address.city" en el objeto
+get-by-path	lee "config.db.host" de los datos anidados
+get-by-path	accede al valor anidado por su ruta de claves separadas por puntos
+get-by-path	obtener valor por ruta con puntos
+get-by-path	dame lo que hay en "a.b.c" dentro del diccionario
+get-by-path	busca en los datos anidados siguiendo la ruta "servidor.puerto"
+get-by-path	extrae el valor profundo indicado por "pedido.cliente.nombre"
+get-by-path	recupere el campo anidado "settings.theme.color" del registro
+get-by-path	navega por el objeto con la ruta punteada "x.y.z" y devuelve el valor
+get-by-path	valor en la ruta "meta.autor.email"
+get-by-path	quiero el valor que está en "app.server.port" de la configuración
+json-type-of	di qué tipo json tiene un valor
+json-type-of	dime si el valor es objeto, lista, texto, número, booleano o null
+json-type-of	tipo json del valor
+json-type-of	indica el tipo de dato json de "hola"
+json-type-of	determinar el tipo json de un valor
+json-type-of	¿de qué tipo json es 42?
+json-type-of	devuelve el nombre del tipo json del valor
+json-type-of	clasifica el valor según su tipo json
+json-type-of	averigüe si el dato es string, number, boolean, array, object o null
+json-type-of	saca el tipo json que tiene name
+json-type-of	qué tipo de json es el valor de price
+json-type-of	quiero saber el tipo json de cada valor
+calculate	calcula un valor a partir de una fórmula
+calculate	calcula "price * count"
+calculate	evalúa la fórmula "total * 0.21"
+calculate	calcular con una fórmula
+calculate	aplica la fórmula "(amount - 10) / 2" y dame el resultado
+calculate	resuelve la expresión "price * 1.16 + 5"
+calculate	obtén el valor de la operación amount multiplicado por 2
+calculate	haz el cálculo de total dividido entre count
+calculate	compute el resultado de la fórmula con price y count
+calculate	cuánto es el 15 por ciento de amount
+calculate	calcula el valor de la expresión matemática "size / 1024"
+calculate	quiero calcular un valor con una fórmula aritmética
+round-number	redondea un número a una cantidad dada de decimales
+round-number	redondea price a 2 decimales
+round-number	redondear a 1 decimal
+round-number	redondea 3.14159 a 3 cifras decimales
+round-number	deja amount con 2 decimales redondeando
+round-number	redondeo de total a 0 decimales
+round-number	aproxima el valor a 4 decimales
+round-number	redondee el número al entero más cercano
+round-number	round de price con 2 decimales
+round-number	redondea size a 3 posiciones decimales
+round-number	quiero amount redondeado a 2 decimales
+round-number	redondear el resultado a 2 lugares decimales
+split-duration	divide una duración en días, horas, minutos y segundos
+split-duration	descompón 93784 segundos en días, horas, minutos y segundos
+split-duration	pasa una cantidad de segundos a días, horas, minutos y segundos
+split-duration	separar duración en días, horas, minutos y segundos
+split-duration	convierte 3725 segundos en horas, minutos y segundos
+split-duration	desglosa el tiempo transcurrido en días, horas y minutos
+split-duration	cuántos días, horas, minutos y segundos son 500000 segundos
+split-duration	parte la duración en sus componentes: días, horas, minutos, segundos
+split-duration	exprese la duración en días, horas, minutos y segundos
+split-duration	trocea un lapso de tiempo en días, horas, minutos y segundos
+split-duration	duración a días horas minutos segundos
+split-duration	quiero ver 7265 segundos como horas, minutos y segundos
+current-time	obtén la fecha y hora actuales
+current-time	qué hora es
+current-time	dame la fecha de hoy
+current-time	fecha y hora actual
+current-time	obtener el momento actual
+current-time	ahora mismo, qué fecha y hora es
+current-time	devuelve el timestamp de ahora
+current-time	consulta el reloj del sistema
+current-time	deme la hora actual
+current-time	fecha y hora de este instante
+current-time	dame la hora y la fecha del sistema
+current-time	quiero saber la fecha y la hora en este momento
+choose-by-value	elige una de varias acciones según un valor, como la extensión de un archivo
+choose-by-value	según la extensión del archivo, ejecuta una acción u otra
+choose-by-value	si la extensión es "csv" haz una cosa, si es "json" otra
+choose-by-value	elegir acción según el valor de status
+choose-by-value	decide qué hacer dependiendo del valor de region
+choose-by-value	switch sobre la extensión: "txt", "md" o "pdf"
+choose-by-value	escoge el manejador adecuado según el tipo de archivo
+choose-by-value	despacha a una acción distinta para cada valor posible de status
+choose-by-value	seleccione la operación correspondiente al valor de path
+choose-by-value	en función de la extensión, llama a una función diferente
+choose-by-value	un caso para cada valor: "a", "b" y por defecto otro
+choose-by-value	quiero ejecutar una acción distinta según el valor que tenga status
+http-get	descarga el contenido de una dirección web
+http-get	haz un get a "https://ejemplo.com/datos"
+http-get	obtén el contenido de la url "https://api.ejemplo.com/users"
+http-get	descargar una url
+http-get	trae lo que hay en "https://ejemplo.com"
+http-get	haz una petición http get a la dirección dada y devuelve el cuerpo
+http-get	baja la página "https://ejemplo.com/index.html"
+http-get	fetch de "https://ejemplo.com/api"
+http-get	consulte la url y devuelva lo que responde
+http-get	lee el contenido de la web en "http://localhost:8000/estado"
+http-get	pide por http el recurso "https://ejemplo.com/info.json"
+http-get	quiero descargar el contenido de un enlace
+retry-with-backoff	reintenta una acción tras un fallo, esperando más cada vez, hasta un límite
+retry-with-backoff	reintenta la petición hasta 5 veces con espera exponencial
+retry-with-backoff	si falla, vuelve a intentarlo esperando cada vez más, máximo 3 intentos
+retry-with-backoff	reintentar con backoff
+retry-with-backoff	intenta de nuevo la operación con pausas cada vez más largas y ríndete tras 4 intentos
+retry-with-backoff	repite la llamada cuando falle, aumentando la espera en cada intento, como mucho 6 veces
+retry-with-backoff	reintentos con retroceso exponencial y un tope de 10
+retry-with-backoff	vuelve a ejecutar la acción si da error, con esperas de 1, 2, 4 y 8 segundos
+retry-with-backoff	reintente la descarga con esperas progresivas hasta un máximo de 5 intentos
+retry-with-backoff	si la acción falla espera un poco más y prueba otra vez, sin pasar de 5 intentos
+retry-with-backoff	retry con espera incremental y límite de intentos
+retry-with-backoff	quiero reintentar la operación fallida esperando más tiempo en cada intento, hasta 3 veces
+http-server	inicia un servidor web en un puerto
+http-server	levanta un servidor http en el puerto 8080
+http-server	arranca el servidor en el puerto 3000
+http-server	iniciar servidor web
+http-server	pon a escuchar un servidor http en el 5000
+http-server	crea un servidor web que escuche en el puerto 8000
+http-server	lanza el servidor en localhost, puerto 9090
+http-server	abre el puerto 4000 y sirve peticiones http
+http-server	monte un servidor web en el puerto 80
+http-server	servidor http escuchando en 8888
+http-server	enciende el servidor web en el puerto indicado
+http-server	quiero un servidor web corriendo en el puerto 7000
+route-request	envía cada petición web entrante al manejador que corresponde a su dirección y método
+route-request	enruta las peticiones según la ruta y el método http
+route-request	despacha cada request a su handler por ruta y método
+route-request	enrutar peticiones a manejadores
+route-request	define que get "/users" vaya a un manejador y post "/users" a otro
+route-request	dirige cada solicitud entrante a la función que atiende esa url y ese verbo
+route-request	router: manda cada petición al controlador de su ruta
+route-request	asocia rutas y métodos con sus manejadores y encamina las peticiones que llegan
+route-request	encamine cada petición http al handler registrado para su ruta y método
+route-request	según la dirección y el método de la petición, elige el manejador adecuado
+route-request	tabla de rutas: cada petición entrante va al manejador de su endpoint
+route-request	quiero que cada petición web llegue al manejador correcto según su ruta y su método
+read-request-body	lee el cuerpo de una petición web entrante, hasta un límite de tamaño
+read-request-body	lee el body de la petición con un máximo de 1048576 bytes
+read-request-body	obtén el cuerpo del request sin pasar de 1 MB
+read-request-body	leer cuerpo de la petición con límite
+read-request-body	recibe el cuerpo de la solicitud http y recházalo si supera 2 MB
+read-request-body	lee los datos enviados en la petición, como mucho 4096 bytes
+read-request-body	carga el payload de la petición entrante limitando su tamaño
+read-request-body	lea el contenido del cuerpo de la solicitud hasta 512 KB
+read-request-body	extrae el body del post, con tope de tamaño
+read-request-body	cuerpo de la petición, máximo 10 MB
+read-request-body	lee lo que manda el cliente en el cuerpo de la petición, pero no más de 100000 bytes
+read-request-body	quiero leer el cuerpo de una petición entrante con un límite de bytes
+send-json-response	responde a una petición web con json y un código de estado
+send-json-response	responde con json y estado 200
+send-json-response	envía una respuesta json con código 404
+send-json-response	devuelve al cliente un json con status 201
+send-json-response	responder en json
+send-json-response	contesta la petición con el objeto en json y código 400
+send-json-response	manda como respuesta los datos en formato json y el estado 500
+send-json-response	respuesta json con código de estado 200 y el registro como cuerpo
+send-json-response	responda al request con un json y el código http indicado
+send-json-response	envía de vuelta un json con el resultado y estado 200
+send-json-response	escribe la respuesta http en json con su código de estado
+send-json-response	quiero contestar a la petición con un json y un código de estado
+on-signal-shutdown	cierra el programa limpiamente cuando se le pide que pare
+on-signal-shutdown	al recibir sigint o sigterm, apaga el servidor de forma ordenada
+on-signal-shutdown	maneja ctrl-c para terminar el programa con un cierre ordenado
+on-signal-shutdown	apagado limpio al recibir una señal
+on-signal-shutdown	cuando llegue la señal de parada, cierra todo y sal sin errores
+on-signal-shutdown	captura sigterm y finaliza el proceso de manera controlada
+on-signal-shutdown	si piden detener el programa, termina lo que queda y apágalo bien
+on-signal-shutdown	escucha la señal de interrupción y haz un shutdown ordenado
+on-signal-shutdown	cierre el programa con elegancia cuando el sistema le mande parar
+on-signal-shutdown	al pulsar ctrl c el programa debe apagarse limpiamente
+on-signal-shutdown	gestiona las señales de terminación para salir de forma limpia
+on-signal-shutdown	quiero que el servidor se apague ordenadamente cuando le digan que se detenga
+select-elements	busca elementos en una página web
+select-elements	selecciona los elementos con el selector ".item"
+select-elements	encuentra todos los "li" dentro de "#menu"
+select-elements	seleccionar elementos de la página
+select-elements	obtén el elemento "#titulo"
+select-elements	dame todos los botones de la página que tengan la clase "primario"
+select-elements	localiza los nodos del dom que coinciden con "div.card"
+select-elements	todos los elementos "a.externo" del documento
+select-elements	busque en el documento los elementos "input"
+select-elements	coge los elementos de la página por su selector css
+select-elements	elementos de la página con el selector "table tr"
+select-elements	quiero encontrar en la página todos los elementos "p"
+on-event	ejecuta una acción cuando pasa algo en la página, como un clic o el envío de un formulario
+on-event	al hacer clic en "#guardar" ejecuta la función
+on-event	cuando se envíe el formulario "#registro", llama al manejador
+on-event	escuchar evento click en un botón
+on-event	añade un listener de clic al elemento "#menu"
+on-event	reacciona al evento submit del formulario
+on-event	cuando el usuario pulse "#enviar", haz la acción
+on-event	engancha una función al evento "change" de "#pais"
+on-event	registre un manejador para cuando se haga clic en ".borrar"
+on-event	on click de "#aceptar" ejecutar callback
+on-event	dispara una acción cada vez que ocurra el evento "keyup" en "#buscar"
+on-event	quiero que al enviar el formulario se ejecute una función
+set-text	cambia el texto que muestra un elemento de la página
+set-text	pon el texto "guardado" en "#estado"
+set-text	actualiza el texto del elemento "#contador" con count
+set-text	cambiar texto de un elemento
+set-text	escribe "hola" dentro de "#saludo"
+set-text	establece el contenido de texto de "#titulo" a title
+set-text	reemplaza el texto de ".precio" por price
+set-text	que "#mensaje" diga "sin resultados"
+set-text	modifique el texto visible del elemento "h1"
+set-text	asigna total como texto de "#total"
+set-text	muestra el valor de name como texto del elemento "#usuario"
+set-text	quiero cambiar lo que pone en el elemento "#aviso"
+show-hide	muestra u oculta un elemento de la página
+show-hide	oculta "#panel"
+show-hide	muestra el elemento "#ayuda"
+show-hide	alterna la visibilidad de "#menu"
+show-hide	mostrar u ocultar un elemento
+show-hide	esconde el banner ".aviso"
+show-hide	haz visible "#detalles"
+show-hide	toggle de "#filtros"
+show-hide	oculte el spinner "#cargando" y muestre "#contenido"
+show-hide	haz que "#modal" quede oculto
+show-hide	despliega o repliega el panel "#opciones"
+show-hide	quiero mostrar un elemento oculto de la página, o esconderlo
+show-field-message	muestra un mensaje junto a un campo de formulario
+show-field-message	pon el aviso "campo obligatorio" al lado de "#email"
+show-field-message	muestra el error "demasiado corto" junto al campo "#clave"
+show-field-message	mostrar mensaje junto al campo
+show-field-message	escribe un mensaje de error debajo del input "#nombre"
+show-field-message	enseña la advertencia "formato incorrecto" al lado del campo "#fecha"
+show-field-message	coloca un texto de aviso junto al campo "#telefono"
+show-field-message	que aparezca "revisa este dato" pegado al campo "#edad"
+show-field-message	muestre al lado del campo del formulario el mensaje de validación
+show-field-message	mensaje "no puede estar vacío" junto a "#ciudad"
+show-field-message	indica el error del campo con un mensaje a su lado
+show-field-message	quiero ver un mensaje cerca del campo cuando haya un problema
+block-submit-if-invalid	impide que se envíe un formulario mientras algún campo sea inválido
+block-submit-if-invalid	bloquea el envío del formulario "#registro" si hay campos inválidos
+block-submit-if-invalid	no dejes que se envíe el formulario con errores
+block-submit-if-invalid	bloquear submit si el formulario no es válido
+block-submit-if-invalid	evita el envío mientras algún campo no pase la validación
+block-submit-if-invalid	cancela el submit de "#pedido" cuando haya campos incorrectos
+block-submit-if-invalid	si algún campo está mal, no permitas enviar el formulario
+block-submit-if-invalid	detén el envío del formulario hasta que todos los campos sean válidos
+block-submit-if-invalid	impida enviar "#contacto" si queda algún campo inválido
+block-submit-if-invalid	frena el submit cuando la validación falle
+block-submit-if-invalid	el formulario no debe poder enviarse mientras tenga campos con error
+block-submit-if-invalid	quiero bloquear el envío del formulario si algún campo es inválido
+focus-element	mueve el cursor a un elemento de la página
+focus-element	pon el foco en "#buscar"
+focus-element	enfoca el campo "#email"
+focus-element	dar foco a un elemento
+focus-element	lleva el cursor al input "#nombre"
+focus-element	coloca el cursor en el primer campo del formulario
+focus-element	haz focus en "#usuario"
+focus-element	sitúa el foco en el botón "#aceptar"
+focus-element	enfoque el elemento "#comentario"
+focus-element	que el cursor vaya a "#clave"
+focus-element	foco al campo "#ciudad"
+focus-element	quiero mover el foco al elemento "#telefono"
+reset-form	limpia un formulario y déjalo en su estado inicial
+reset-form	resetea el formulario "#registro"
+reset-form	reinicia el formulario
+reset-form	vaciar formulario
+reset-form	restablece los campos de "#contacto" a sus valores iniciales
+reset-form	borra todo lo escrito en el formulario
+reset-form	devuelve el formulario a su estado original
+reset-form	limpia todos los campos del form "#pedido"
+reset-form	reset del formulario "#buscar"
+reset-form	restaure el formulario como estaba al principio
+reset-form	deja el formulario "#alta" en blanco
+reset-form	quiero que el formulario vuelva a como estaba al cargarse
+read-element-data	lee un valor guardado en un elemento de la página
+read-element-data	lee el atributo "data-id" de "#fila"
+read-element-data	obtén el dato "data-precio" del elemento ".producto"
+read-element-data	leer data attribute de un elemento
+read-element-data	saca el valor almacenado en los datos del elemento "#usuario"
+read-element-data	dame el atributo de datos "data-estado" del botón
+read-element-data	recupera el valor que guarda el elemento "#item" en "data-codigo"
+read-element-data	consulta el atributo "data-region" de la tarjeta
+read-element-data	lea el dato guardado en el elemento "li.activo"
+read-element-data	atributo "data-total" de "#resumen"
+read-element-data	valor del atributo data de un nodo del dom
+read-element-data	quiero leer el valor que tiene guardado un elemento de la página
+render-table	muestra registros como una tabla en la página
+render-table	pinta users en una tabla html dentro de "#lista"
+render-table	renderiza los orders como tabla en "#resultados"
+render-table	mostrar registros en tabla html
+render-table	genera una tabla en la página con una fila por registro
+render-table	dibuja en "#tabla" los items con columnas name, price y count
+render-table	rellena la tabla "#datos" con los records
+render-table	crea en el dom una tabla con los registros
+render-table	presenta los registros en forma de tabla dentro de la página web
+render-table	render de tabla con users en "#contenedor"
+render-table	tabla html con los campos id, title y status de cada registro
+render-table	quiero ver los registros como tabla en la página
+render-list	muestra registros como una lista en la página, un elemento por registro
+render-list	pinta users como lista en "#usuarios"
+render-list	renderiza los items en un "ul", un "li" por cada uno
+render-list	mostrar registros en lista html
+render-list	genera una lista en la página con una entrada por registro
+render-list	crea en "#tareas" un elemento de lista por cada registro
+render-list	dibuja los orders como lista con viñetas en "#pedidos"
+render-list	añade a la página un "li" por cada registro con su title
+render-list	presenta los registros como lista en la página web
+render-list	render de lista con los name de users en "#nombres"
+render-list	lista html de registros, uno por línea
+render-list	quiero ver los registros como una lista en la página
+filter-elements-by-text	oculta los elementos de la página que no contienen el texto que escribió el usuario
+filter-elements-by-text	filtra la lista "#productos" según lo que se escribe en "#buscar"
+filter-elements-by-text	esconde los "li" que no incluyan el texto tecleado
+filter-elements-by-text	filtrar elementos por texto de búsqueda
+filter-elements-by-text	deja visibles solo las tarjetas que contengan lo que el usuario teclea
+filter-elements-by-text	búsqueda en vivo: oculta las filas que no coinciden con el texto de "#filtro"
+filter-elements-by-text	mientras el usuario escribe, muestra solo los elementos que contienen ese texto
+filter-elements-by-text	filtra en tiempo real los elementos ".item" por el texto introducido
+filter-elements-by-text	oculte de la página lo que no contenga la palabra buscada
+filter-elements-by-text	buscador que esconde los elementos sin el texto escrito en el campo
+filter-elements-by-text	filtro de texto sobre los elementos de "#lista": los que no lo contienen se ocultan
+filter-elements-by-text	quiero que al escribir en "#buscar" solo se vean los elementos que contienen ese texto
+timer-every	ejecuta una acción repetidamente a un intervalo fijo
+timer-every	ejecuta la función cada 5 segundos
+timer-every	cada 1000 ms llama a la función
+timer-every	repetir acción cada cierto tiempo
+timer-every	agenda una tarea que se repita cada 10 minutos
+timer-every	crea un temporizador que dispare la acción cada 30 segundos
+timer-every	intervalo de 2000 ms que repite la acción
+timer-every	lanza la tarea periódicamente, cada hora
+timer-every	ejecute el callback a intervalos regulares de 15 segundos
+timer-every	timer que corre la función cada 500 ms
+timer-every	que la acción se repita una y otra vez cada 3 segundos
+timer-every	quiero ejecutar algo de forma periódica cada minuto
+stop-timer	detén un temporizador que se repite
+stop-timer	para el temporizador
+stop-timer	cancela el intervalo
+stop-timer	detener timer
+stop-timer	borra el intervalo que se repite
+stop-timer	apaga el temporizador periódico
+stop-timer	deja de repetir la acción
+stop-timer	cancela la tarea que se repite cada 5 segundos
+stop-timer	detenga el timer que estaba en marcha
+stop-timer	anula la repetición programada
+stop-timer	stop del temporizador periódico
+stop-timer	quiero que el temporizador deje de dispararse
+load-from-storage	carga datos guardados del almacenamiento del navegador
+load-from-storage	lee "tareas" de localstorage
+load-from-storage	recupera lo guardado en el almacenamiento local con la clave "carrito"
+load-from-storage	cargar desde localstorage
+load-from-storage	obtén los datos almacenados en el navegador
+load-from-storage	trae de sessionstorage el valor de "usuario"
+load-from-storage	carga la lista guardada en el storage del navegador
+load-from-storage	lee del almacenamiento web los datos de "preferencias"
+load-from-storage	recupere del navegador los datos persistidos con la clave "config"
+load-from-storage	saca del local storage lo que se guardó con la clave "notas"
+load-from-storage	datos guardados en el navegador: cárgalos
+load-from-storage	quiero cargar del almacenamiento del navegador los datos que guardé antes
+save-to-storage	guarda datos en el almacenamiento del navegador
+save-to-storage	guarda "tareas" en localstorage
+save-to-storage	almacena la lista en el almacenamiento local con la clave "carrito"
+save-to-storage	guardar en localstorage
+save-to-storage	persiste los datos en el navegador
+save-to-storage	escribe en sessionstorage el valor de "usuario"
+save-to-storage	salva la lista en el storage del navegador
+save-to-storage	graba en el almacenamiento web los datos de "preferencias"
+save-to-storage	almacene los records en el navegador con la clave "config"
+save-to-storage	mete en el local storage los datos de users
+save-to-storage	datos al almacenamiento del navegador: guárdalos
+save-to-storage	quiero guardar los datos en el almacenamiento del navegador para después
+append-record	añade un registro nuevo a una lista, dándole el siguiente id libre
+append-record	agrega un registro nuevo a users con el próximo id disponible
+append-record	añade un registro a orders y dale el siguiente id
+append-record	agregar registro con id nuevo
+append-record	inserta un nuevo item en la lista con un id autoincremental
+append-record	crea un registro en records con el id que sigue al mayor
+append-record	añade a users un registro con name = "Luis" y el primer id sin usar
+append-record	mete un registro al final de la lista y ponle el id siguiente
+append-record	agregue una nueva fila con id automático a la lista de orders
+append-record	nuevo registro en items, id igual al último más 1
+append-record	incorpora un registro a la lista dándole un id que no esté usado
+append-record	quiero añadir un registro a la lista y que reciba el siguiente id libre
+update-where	cambia un campo en los registros que cumplen una condición
+update-where	pon status = "enviado" en los orders con id = 7
+update-where	actualiza price a 20 donde name = "café"
+update-where	actualizar registros que cumplan una condición
+update-where	marca done = true en los items con title = "comprar pan"
+update-where	modifica city a "Bogotá" en los users cuyo id = 3
+update-where	cambia region por "sur" en todos los records donde region = "sud"
+update-where	establece amount = 0 en las filas con status = "cancelado"
+update-where	actualice el campo email del registro con id = 12
+update-where	update de status a "cerrado" para los orders con total = 0
+update-where	cambia a "menor" el status de los users con age < 18
+update-where	quiero cambiar el valor de count en los registros que cumplan price > 100
+remove-where	elimina los registros que cumplen una condición
+remove-where	borra los orders con status = "cancelado"
+remove-where	elimina de users los que tengan age < 18
+remove-where	eliminar registros que cumplan una condición
+remove-where	quita los items donde count = 0
+remove-where	borra el registro con id = 5
+remove-where	suprime de records todas las filas con done = true
+remove-where	descarta los users cuyo email = "spam@ejemplo.com"
+remove-where	elimine los orders con total < 1
+remove-where	delete de los registros donde region = "test"
+remove-where	quita de la lista los items con price > 1000
+remove-where	quiero borrar los registros que cumplan date < "2020-01-01"

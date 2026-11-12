@@ -61,6 +61,13 @@ def make_server(intent_path, port=8765):
                 if name in latest:
                     return self.reply(200, latest[name], kinds.get(Path(name).suffix, "text/plain"), shared=True)
                 return self.reply(404, "{}")
+            if self.path.startswith("/api/") and f"{self.path[5:]}.json" in latest | {"": ""}:
+                # The preview of an application with an API: list the records written in the intent file.
+                seed = json.loads(latest.get(f"{self.path[5:]}.json", "[]"))
+                listed = [{"id": number, **record} for number, record in enumerate(seed, start=1)]
+                return self.reply(200, json.dumps(listed), shared=True)
+            if self.path.startswith("/api/"):
+                return self.reply(200, "[]", shared=True)
             if self.path == "/file":
                 text = intent.read_text(encoding="utf-8") if intent.exists() else STARTER
                 return self.reply(200, json.dumps({"name": intent.name, "text": text}))

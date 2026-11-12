@@ -1,0 +1,38 @@
+language: en
+
+use sqlite
+use FastAPI
+
+app Inventory:
+    data Product:
+        name: text
+        price: decimal
+        stock: integer
+
+    data Supplier:
+        name: text
+        city: text
+
+    records Product:
+        "Widget", 9.99, 12
+        "Gadget", 24.50, 3
+        "bolt", 0.35, 400
+
+    records Supplier:
+        "Acme", "Lima"
+        "Bolts & Co", "Quito"
+
+    expose Product as api
+
+    page Products:
+        heading "Products"
+        table Product
+        searchable by name
+        sortable by price
+        button "Add product" width 160px adds Product
+        button "Suppliers" opens Suppliers
+
+    page Suppliers:
+        heading "Suppliers"
+        table Supplier
+        button "Products" opens Products

@@ -1,4 +1,6 @@
 {
+  "add-record-form": "draft",
+  "button-opens-page": "draft",
   "calculate": "draft",
   "check-list-of-records": "draft",
   "check-required-types": "draft",
@@ -8,6 +10,7 @@
   "data-table": "draft",
   "drop-invalid-rows": "draft",
   "exit-on-error": "draft",
+  "fastapi-app": "draft",
   "filter-elements-by-text": "draft",
   "filter-rows": "draft",
   "format-json": "draft",
@@ -22,7 +25,9 @@
   "print-table": "draft",
   "read-text-file": "draft",
   "render-table": "draft",
+  "rest-api": "draft",
   "sort-rows": "draft",
+  "sqlite-table": "draft",
   "table-sort": "draft",
   "take-first": "draft"
 }

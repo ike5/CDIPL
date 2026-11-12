@@ -3,8 +3,7 @@ import json
 import re
 
 from ..model import IntentError
-from ..pages import (App, Button, Data, Decimal, Heading, Page, Paragraph, Quoted, Records, Table, check,
-                     first_use_order)
+from ..pages import App, Button, Data, Decimal, Heading, Page, Paragraph, Quoted, Records, Table, check, first_use_order
 from .common import NotGenerated
 
 STYLES = "styles.css"
@@ -71,7 +70,7 @@ td.decimal {
   text-align: right;
 }
 '''),
-    ("filter-elements-by-text", "search", '''\
+    ("filter-elements-by-text", "label", '''\
 label {
   display: block;
   margin: 0 0 0.75rem;
@@ -97,6 +96,43 @@ th button {
   background: none;
   cursor: pointer;
   text-decoration: underline;
+}
+'''),
+    ("add-record-form", "form", '''\
+dialog {
+  padding: 1.5rem;
+  border: 1px solid #9aa5b1;
+  border-radius: 0.25rem;
+}
+'''),
+    ("add-record-form", "form", '''\
+dialog input {
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #9aa5b1;
+  border-radius: 0.25rem;
+  font: inherit;
+}
+'''),
+    ("add-record-form", "form", '''\
+dialog button {
+  margin: 0.5rem 0.5rem 0 0;
+  padding: 0.5rem 1rem;
+  font: inherit;
+}
+'''),
+    ("button-opens-page", "link", '''\
+a.button {
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0 0.5rem 1rem 0;
+  padding: 0.5rem 1rem;
+  border: 1px solid #1f2933;
+  border-radius: 0.25rem;
+  color: #ffffff;
+  background: #1f2933;
+  text-align: center;
+  text-decoration: none;
 }
 '''),
     ("page-button", "button", '''\
@@ -157,6 +193,25 @@ function searchTable(box) {
   }
 }
 '''),
+    ("add-record-form", "form", '''\
+async function addRecord(form) {
+  const dialog = form.closest("dialog");
+  const name = dialog.dataset.form;
+  const record = {};
+  for (const input of form.querySelectorAll("input")) {
+    record[input.name] = input.type === "number" ? Number(input.value) : input.value;
+  }
+  const reply = await fetch(`/api/${name.toLowerCase()}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(record) });
+  if (!reply.ok) {
+    throw new Error(`${name}: ${reply.status}`);
+  }
+  form.reset();
+  dialog.close();
+  for (const table of document.querySelectorAll(`table[data-name="${name}"]`)) {
+    await fillTable(table);
+  }
+}
+'''),
     ("table-sort", "sort", '''\
 function compareText(left, right) {
   const a = Array.from(left, (letter) => letter.codePointAt(0));
@@ -192,6 +247,20 @@ function sortTable(button) {
 '''),
 ]
 
+# Fixed server code. Each piece belongs to one block and is included only when a data type has an API.
+SERVER = [
+    ('sqlite-table', 'def connect():\n    connection = sqlite3.connect(DATABASE)\n    connection.row_factory = sqlite3.Row\n    return connection\n'),
+    ('sqlite-table', 'def fits(value, kind):\n    if kind == "integer":\n        return isinstance(value, int) and not isinstance(value, bool) and abs(value) <= MAX_INTEGER\n    if not isinstance(value, str):\n        return False\n    if kind == "decimal":\n        return DECIMAL.fullmatch(value) is not None and sum(ch.isdigit() for ch in value) <= 15\n    try:\n        value.encode("utf-8")\n    except UnicodeEncodeError:\n        return False\n    return True\n'),
+    ('sqlite-table', 'def checked(record, fields):\n    if set(record) != set(fields):\n        raise HTTPException(status_code=422, detail=f"a record needs exactly these fields: {\', \'.join(fields)}")\n    for name, kind in fields.items():\n        if not fits(record[name], kind):\n            raise HTTPException(status_code=422, detail=f"\'{name}\' must be {kind}")\n    return [record[name] for name in fields]\n'),
+    ('sqlite-table', 'def columns(fields):\n    return ", ".join(f\'"{name}"\' for name in fields)\n'),
+    ('sqlite-table', 'def create_table(table, fields, seed):\n    kinds = ", ".join(f\'"{name}" {"INTEGER" if kind == "integer" else "TEXT"} NOT NULL\' for name, kind in fields.items())\n    with closing(connect()) as connection, connection:\n        if connection.execute("SELECT 1 FROM sqlite_master WHERE type = \'table\' AND name = ?", (table,)).fetchone():\n            return\n        connection.execute(f\'CREATE TABLE "{table}" (id INTEGER PRIMARY KEY, {kinds})\')\n        if seed.exists():\n            marks = ", ".join("?" for _ in fields)\n            rows = [checked(record, fields) for record in json.loads(seed.read_text(encoding="utf-8"))]\n            connection.executemany(f\'INSERT INTO "{table}" ({columns(fields)}) VALUES ({marks})\', rows)\n'),
+    ('rest-api', 'def list_records(table, fields):\n    with closing(connect()) as connection:\n        rows = connection.execute(f\'SELECT id, {columns(fields)} FROM "{table}" ORDER BY id\').fetchall()\n    return [dict(row) for row in rows]\n'),
+    ('rest-api', 'def add_record(table, fields, record):\n    values = checked(record, fields)\n    marks = ", ".join("?" for _ in fields)\n    with closing(connect()) as connection, connection:\n        cursor = connection.execute(f\'INSERT INTO "{table}" ({columns(fields)}) VALUES ({marks})\', values)\n    return {"id": cursor.lastrowid, **dict(zip(fields, values))}\n'),
+    ('rest-api', 'def change_record(table, fields, record_id, record):\n    values = checked(record, fields)\n    changes = ", ".join(f\'"{name}" = ?\' for name in fields)\n    with closing(connect()) as connection, connection:\n        cursor = connection.execute(f\'UPDATE "{table}" SET {changes} WHERE id = ?\', [*values, record_id])\n    if cursor.rowcount == 0:\n        raise HTTPException(status_code=404, detail="there is no record with that id")\n    return {"id": record_id, **dict(zip(fields, values))}\n'),
+    ('rest-api', 'def delete_record(table, record_id):\n    with closing(connect()) as connection, connection:\n        cursor = connection.execute(f\'DELETE FROM "{table}" WHERE id = ?\', [record_id])\n    if cursor.rowcount == 0:\n        raise HTTPException(status_code=404, detail="there is no record with that id")\n'),
+]
+REQUIREMENTS = ["fastapi==0.162.5", "uvicorn==0.54.0"]  # the versions the generated server was tested with
+
 # The shape of the markup each block adds. Part of the block's version.
 FORMS = {
     "html-page": "<!doctype html><html><head><title>PAGE - APP</title></head><body><nav></nav><main></main></body></html>",
@@ -203,6 +272,11 @@ FORMS = {
     "render-table": '<table data-name="DATA" data-source="DATA.json">; document.querySelectorAll("table[data-source]")',
     "filter-elements-by-text": '<label>FIELD <input type="search" data-search="DATA" data-field="FIELD" /></label>',
     "table-sort": '<th scope="col"><button type="button" data-sort="FIELD">FIELD</button></th>',
+    "fastapi-app": "server.py: app = FastAPI(title=APP); GET / redirects to the first page; pages served from static/",
+    "sqlite-table": 'create_table(TABLE, FIELDS, HERE / "TABLE.json"); id INTEGER PRIMARY KEY; decimals stored as TEXT',
+    "rest-api": "GET and POST /api/TABLE; PUT and DELETE /api/TABLE/{record_id}",
+    "add-record-form": '<button data-add="DATA">; <dialog data-form="DATA"><form method="dialog"> one input per field',
+    "button-opens-page": '<a class="button" href="PAGE.html">TEXT</a>',
 }
 
 
@@ -230,8 +304,12 @@ def tables(app):
 
 def features(app):
     """Which behaviours the application uses: fill, search, sort."""
-    filled = {item.name for item in app.records}
+    filled = {item.name for item in app.records} | set(app.exposed)
     found = set()
+    for page in app.pages:
+        for element in page.elements:
+            if isinstance(element, Button) and element.action is not None and element.action[0] == "adds":
+                found.add("form")
     for table in tables(app):
         if table.data in filled:
             found.add("fill")
@@ -250,10 +328,16 @@ def blocks_used(app):
             if name not in used:
                 used.append(name)
 
-    filled = {item.name for item in app.records}
+    filled = {item.name for item in app.records} | set(app.exposed)
+    if "fastapi" in app.uses:
+        add("fastapi-app")
+    if app.exposed:
+        add("sqlite-table", "rest-api")
     for page in app.pages:
         for element in page.elements:
             add({Heading: "page-heading", Paragraph: "page-text", Table: "data-table", Button: "page-button"}[type(element)])
+            if isinstance(element, Button) and element.action is not None:
+                add("add-record-form" if element.action[0] == "adds" else "button-opens-page")
             if isinstance(element, Table):
                 if element.data in filled or element.search is not None or element.sort:
                     add("render-table")
@@ -270,6 +354,7 @@ def page_lines(app, page):
     """One page as (text, origin) pairs. origin is an intent line number or the name of a block."""
     data = {item.name: item for item in app.data}
     filled = {item.name for item in app.records}
+    files = {other.name: file_name(other) for other in app.pages}
     out = [("<!doctype html>", "html-page"), ("<html>", "html-page"), ("  <head>", "html-page"),
            ('    <meta charset="utf-8" />', "html-page"),
            ('    <meta name="viewport" content="width=device-width, initial-scale=1" />', "html-page"),
@@ -296,6 +381,8 @@ def page_lines(app, page):
                 out.append((f'      <label>{element.search} <input type="search" data-search="{element.data}" '
                             f'data-field="{element.search}" /></label>', element.search_line or element.line))
             source = f' data-source="{records_file(element.data)}"' if element.data in filled else ""
+            if element.data in app.exposed:
+                source = f' data-source="/api/{element.data.lower()}"'
             out += [(f'      <table data-name="{element.data}"{source}>', element.line), ("        <thead>", element.line),
                     ("          <tr>", element.line)]
             sort_lines = dict(zip(element.sort, element.sort_lines or (element.line,) * len(element.sort)))
@@ -308,19 +395,39 @@ def page_lines(app, page):
                     out.append((f'            <th scope="col"{kind_class}>{name}</th>', element.line))
             out += [("          </tr>", element.line), ("        </thead>", element.line),
                     ("        <tbody></tbody>", element.line), ("      </table>", element.line)]
+        elif element.action is not None and element.action[0] == "opens":
+            width_class = "" if element.width is None else f" width-{element.width}"
+            out.append((f'      <a class="button{width_class}" href="{files[element.action[1]]}">{escape(element.text)}</a>',
+                        element.line))
         else:
             width_class = "" if element.width is None else f' class="width-{element.width}"'
-            out.append((f'      <button type="button"{width_class}>{escape(element.text)}</button>', element.line))
+            adds = "" if element.action is None else f' data-add="{element.action[1]}"'
+            out.append((f'      <button type="button"{width_class}{adds}>{escape(element.text)}</button>', element.line))
+            if element.action is not None:
+                out += [(f'      <dialog data-form="{element.action[1]}">', element.line),
+                        ('        <form method="dialog">', element.line)]
+                for name, kind in data[element.action[1]].fields:
+                    extra = {"text": "", "integer": ' type="number" step="1" required',
+                             "decimal": ' inputmode="decimal" pattern="-?\\d+(\\.\\d+)?" required'}[kind]
+                    out.append((f'          <label>{name} <input name="{name}"{extra} /></label>', element.line))
+                out += [(f'          <button type="submit">{escape(element.text)}</button>', element.line),
+                        ('          <button type="button" value="close">×</button>', element.line),
+                        ("        </form>", element.line), ("      </dialog>", element.line)]
     out += [("    </main>", "html-page"), ("  </body>", "html-page"), ("</html>", "html-page")]
     return out
 
 
 def style_lines(app):
     flags = {"always"} | features(app)
+    if flags & {"search", "form"}:
+        flags.add("label")
     widths = {}
     for page in app.pages:
         for element in page.elements:
-            flags.add({Heading: "heading", Paragraph: "text", Table: "table", Button: "button"}[type(element)])
+            if isinstance(element, Button) and element.action is not None and element.action[0] == "opens":
+                flags.add("link")
+            else:
+                flags.add({Heading: "heading", Paragraph: "text", Table: "table", Button: "button"}[type(element)])
             if isinstance(element, Button) and element.width is not None:
                 widths.setdefault(element.width, element.line)
     if len(app.pages) > 1:
@@ -354,6 +461,16 @@ def script_lines(app):
     if "sort" in flags:
         out += [('  for (const button of document.querySelectorAll("button[data-sort]")) {', "table-sort"),
                 ('    button.addEventListener("click", () => sortTable(button));', "table-sort"), ("  }", "table-sort")]
+    if "form" in flags:
+        block = "add-record-form"
+        out += [('  for (const button of document.querySelectorAll("button[data-add]")) {', block),
+                ("    const dialog = button.nextElementSibling;", block),
+                ('    button.addEventListener("click", () => dialog.showModal());', block),
+                ("    dialog.querySelector('button[value=\"close\"]').addEventListener(\"click\", () => dialog.close());", block),
+                ('    dialog.querySelector("form").addEventListener("submit", (event) => {', block),
+                ("      event.preventDefault();", block),
+                ("      addRecord(event.target).catch((problem) => console.error(problem));", block),
+                ("    });", block), ("  }", block)]
     out.append(("});", "render-table"))
     return out
 
@@ -374,14 +491,75 @@ def record_lines(app, records):
     return out
 
 
+def server_lines(app):
+    """The FastAPI server: serves the pages and, for each exposed data type, an API over a SQLite table."""
+    data = {item.name: item for item in app.data}
+    exposed = [data[name] for name in app.exposed]
+    lines = dict(zip(app.exposed, app.expose_lines or (app.line,) * len(app.exposed)))
+    use = dict(zip(app.uses, app.use_lines or (app.line,) * len(app.uses)))
+    web, base = use.get("fastapi", app.line), use.get("sqlite", app.line)
+    out = []
+    if exposed:
+        out += [("import json", base), ("import re", base), ("import sqlite3", base),
+                ("from contextlib import closing", base)]
+    out.append(("from pathlib import Path", web))
+    if exposed:
+        out.append(("from typing import Annotated", web))
+    names = "Body, FastAPI, HTTPException" if exposed else "FastAPI"
+    out += [("", "support"), (f"from fastapi import {names}", web),
+            ("from fastapi.responses import RedirectResponse", web), ("from fastapi.staticfiles import StaticFiles", web),
+            ("", "support"), ("HERE = Path(__file__).parent", web)]
+    if exposed:
+        out += [(f'DATABASE = HERE / "{app.name.lower()}.db"', base), ("MAX_INTEGER = 9007199254740991", "sqlite-table"),
+                ('DECIMAL = re.compile(r"-?\\d+(\\.\\d+)?")', "sqlite-table")]
+        for item in exposed:
+            fields = ", ".join(f'"{name}": "{kind}"' for name, kind in item.fields)
+            out.append((f"{item.name.upper()}_FIELDS = {{{fields}}}", item.line))
+    out += [("", "support"), (f'app = FastAPI(title="{app.name}")', app.line)]
+    if exposed:
+        for block, text in SERVER:
+            out += [("", "support"), ("", "support")] + [(line, block) for line in text.rstrip("\n").split("\n")]
+    for item in exposed:
+        table, fields, line = item.name.lower(), f"{item.name.upper()}_FIELDS", lines[item.name]
+        out += [("", "support"), ("", "support"),
+                (f'@app.get("/api/{table}")', line), (f"def {table}_list():", line),
+                (f'    return list_records("{table}", {fields})', line),
+                ("", "support"), ("", "support"),
+                (f'@app.post("/api/{table}", status_code=201)', line),
+                (f"def {table}_add(record: Annotated[dict, Body()]):", line),
+                (f'    return add_record("{table}", {fields}, record)', line),
+                ("", "support"), ("", "support"),
+                (f'@app.put("/api/{table}/{{record_id}}")', line),
+                (f"def {table}_change(record_id: int, record: Annotated[dict, Body()]):", line),
+                (f'    return change_record("{table}", {fields}, record_id, record)', line),
+                ("", "support"), ("", "support"),
+                (f'@app.delete("/api/{table}/{{record_id}}", status_code=204)', line),
+                (f"def {table}_delete(record_id: int):", line),
+                (f'    delete_record("{table}", record_id)', line)]
+    first = app.pages[0]
+    out += [("", "support"), ("", "support"), ('@app.get("/")', first.line), ("def first_page():", first.line),
+            (f'    return RedirectResponse(url="/{file_name(first)}")', first.line), ("", "support"), ("", "support")]
+    for item in exposed:
+        table = item.name.lower()
+        out.append((f'create_table("{table}", {item.name.upper()}_FIELDS, HERE / "{table}.json")', lines[item.name]))
+    out.append(('app.mount("/", StaticFiles(directory=HERE / "static"), name="pages")', web))
+    return out
+
+
 def generate(app):
     """Every file of the application: file name -> list of (line, origin)."""
-    files = {file_name(page): page_lines(app, page) for page in app.pages}
-    files[STYLES] = style_lines(app)
+    served = "fastapi" in app.uses
+    folder = "static/" if served else ""
+    files = {folder + file_name(page): page_lines(app, page) for page in app.pages}
+    files[folder + STYLES] = style_lines(app)
     if features(app):
-        files[SCRIPTS] = script_lines(app)
+        files[folder + SCRIPTS] = script_lines(app)
     for records in app.records:
-        files[records_file(records.name)] = record_lines(app, records)
+        files[("" if records.name in app.exposed else folder) + records_file(records.name)] = record_lines(app, records)
+    if served:
+        files["server.py"] = server_lines(app)
+        line = dict(zip(app.uses, app.use_lines or (app.line,) * len(app.uses)))["fastapi"]
+        files["requirements.txt"] = [(requirement, line) for requirement in REQUIREMENTS]
     return files
 
 
@@ -391,7 +569,9 @@ HEADING_CELL = re.compile(rf'            <th scope="col"(?: class="(integer|deci
 
 def lift(files):
     """Recover the App from generated files (file name -> text). Raises NotGenerated."""
-    pages, order, fields, app_names = {}, None, {}, set()
+    served = "server.py" in files
+    files = {name.removeprefix("static/") if served else name: text for name, text in files.items()}
+    pages, order, fields, app_names, exposed, opens = {}, None, {}, set(), [], {}
     for name, text in files.items():
         if not name.endswith(".html"):
             continue
@@ -424,7 +604,9 @@ def lift(files):
                     raise NotGenerated(f"{name}: a search box is not as generated")
                 search = (match[2], match[1])
                 continue
-            elif match := re.fullmatch(rf'      <table data-name="{NAME}"(?: data-source="[a-z0-9_]+\.json")?>', line):
+            elif match := re.fullmatch(rf'      <table data-name="{NAME}"(?: data-source="(/api/)?[a-z0-9_]+(?:\.json)?")?>', line):
+                if match[2] and match[1] not in exposed:
+                    exposed.append(match[1])
                 found, sortable = [], []
                 while index < len(body) and body[index] != "      </table>":
                     if cell := HEADING_CELL.fullmatch(body[index]):
@@ -442,8 +624,18 @@ def lift(files):
                     raise NotGenerated(f"{name}: a search box does not belong to the table after it")
                 elements.append(Table(data=match[1], search=search[1] if search else None, sort=tuple(sortable)))
                 search = None
-            elif match := re.fullmatch(r'      <button type="button"(?: class="width-(\d+)")?>(.*)</button>', line):
-                elements.append(Button(text=unescape(match[2]), width=int(match[1]) if match[1] else None))
+            elif match := re.fullmatch(rf'      <button type="button"(?: class="width-(\d+)")?(?: data-add="{NAME}")?>(.*)</button>', line):
+                action = ("adds", match[2]) if match[2] else None
+                if action is not None:
+                    try:
+                        index = body.index("      </dialog>", index) + 1
+                    except ValueError:
+                        raise NotGenerated(f"{name}: a form is not as generated") from None
+                elements.append(Button(text=unescape(match[3]), width=int(match[1]) if match[1] else None, action=action))
+            elif match := re.fullmatch(r'      <a class="button(?: width-(\d+))?" href="([a-z0-9_]+\.html)">(.*)</a>', line):
+                opens[(page_name, len(elements))] = match[2]
+                elements.append(Button(text=unescape(match[3]), width=int(match[1]) if match[1] else None,
+                                       action=("opens", match[2])))
             else:
                 raise NotGenerated(f"{name}: this line is not one the compiler generates: {line.strip()}")
             if search is not None:
@@ -457,6 +649,14 @@ def lift(files):
         order = list(pages)
     if sorted(order) != sorted(pages) or (len(pages) > 1 and len(order) != len(pages)):
         raise NotGenerated("the pages listed do not match the files")
+    by_file = {file_name(page): page.name for page in pages.values()}
+    for (page_name, position), target in opens.items():
+        if target not in by_file:
+            raise NotGenerated("a button opens a page that is not among the files")
+        page = pages[page_name]
+        button = page.elements[position]
+        changed = Button(text=button.text, width=button.width, action=("opens", by_file[target]))
+        pages[page_name] = Page(page.name, (*page.elements[:position], changed, *page.elements[position + 1:]))
     ordered = tuple(pages[name] for name in order)
     data = first_use_order([Data(name, found) for name, found in fields.items()], ordered)
     records = []
@@ -464,7 +664,10 @@ def lift(files):
         text = files.get(records_file(item.name))
         if text is not None:
             records.append(Records(item.name, _rows(text, item)))
-    app = App(app_names.pop(), data, ordered, tuple(records))
+    position = {item.name: index for index, item in enumerate(data)}
+    exposed.sort(key=lambda name: position.get(name, len(position)))
+    uses = (("sqlite",) if exposed else ()) + (("fastapi",) if served else ())
+    app = App(app_names.pop(), data, ordered, tuple(records), uses, tuple(exposed))
     try:
         check(app)
     except IntentError as problem:

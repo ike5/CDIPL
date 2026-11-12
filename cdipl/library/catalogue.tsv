@@ -97,3 +97,8 @@ page-button	A button on a web page
 table-sort	Let the reader sort a table on a web page by clicking a column heading
 page-button-resize	Make a button on a web page wider or narrower by a number of pixels
 data-records	Records of a data type, written out as a JSON file
+fastapi-app	A FastAPI server that serves the pages of an application
+sqlite-table	A SQLite table for a data type, created when the server first starts and holding the records written in the intent file to begin with
+rest-api	An API for a data type: list, add, change and delete records
+add-record-form	A button that opens a form with one input for each field, adds the record through the API and refreshes the table
+button-opens-page	A button that opens another page of the application

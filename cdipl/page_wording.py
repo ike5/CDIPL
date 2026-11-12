@@ -42,11 +42,25 @@ def make_resolver(language, notes=None, accept_unsure=False, classifier=None, wo
             descriptions = library.catalogue()
             closest = "; ".join(f"{name} ({descriptions[name]})" for name in ranked[:2])
             raise IntentError(number, f"cannot tell which part of a page this means. The closest are: {closest}")
-        block = ranked[0]
-        note["block"] = block
-        if block not in PAGE_BLOCKS:
-            raise IntentError(number, f"this was read as '{block}', which a page cannot hold")
-        return fill(block, tokens, number, items, data, state["words"])
+        # Try the best candidate first. In the live view, if the values written do not fit it, try the next
+        # closest candidates: the values are evidence too. Such a choice is always marked unsure.
+        first_problem = None
+        for position, block in enumerate(ranked[:3] if accept_unsure else ranked[:1]):
+            if block not in PAGE_BLOCKS:
+                problem = IntentError(number, f"this was read as '{block}', which a page cannot hold")
+            else:
+                try:
+                    changed = fill(block, tokens, number, items, data, state["words"])
+                except IntentError as error:
+                    problem = error
+                else:
+                    note["block"] = block
+                    if position:
+                        note["how"] = "unsure"
+                        note["alternatives"] = [block, *[other for other in ranked[:3] if other != block]]
+                    return changed
+            first_problem = first_problem or problem
+        raise first_problem
 
     return resolve
 

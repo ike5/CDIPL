@@ -8,16 +8,19 @@ IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
 STRING = r'"(?:[^"\\]|\\.)*"'
 FIELD_TYPES = ("text", "integer", "decimal")
 MAX_WIDTH = 2000
+PARTS = {"sqlite": "sqlite", "fastapi": "FastAPI"}  # the parts of an application that can be built, as written
 
 PHRASES = {
     "en": {"header": "language: en", "app": "app", "data": "data", "records": "records", "page": "page",
            "heading": "heading", "text": "text", "table": "table", "button": "button", "width": "width",
-           "searchable": "searchable by", "sortable": "sortable by",
+           "searchable": "searchable by", "sortable": "sortable by", "use": "use", "expose": r"expose (\S+) as api",
+           "expose_text": "expose {} as api", "adds": "adds", "opens": "opens",
            "increase": r"increase button(?: (STRING))? size by (\d+)px", "decrease": r"decrease button(?: (STRING))? size by (\d+)px",
            "types": {"text": "text", "integer": "integer", "decimal": "decimal"}},
     "es": {"header": "idioma: es", "app": "aplicación", "data": "datos", "records": "registros", "page": "página",
            "heading": "encabezado", "text": "texto", "table": "tabla", "button": "botón", "width": "ancho",
-           "searchable": "buscable por", "sortable": "ordenable por",
+           "searchable": "buscable por", "sortable": "ordenable por", "use": "usar", "expose": r"exponer (\S+) como api",
+           "expose_text": "exponer {} como api", "adds": "añade", "opens": "abre",
            "increase": r"aumentar tamaño del botón(?: (STRING))? en (\d+)px",
            "decrease": r"reducir tamaño del botón(?: (STRING))? en (\d+)px",
            "types": {"text": "texto", "integer": "entero", "decimal": "decimal"}},
@@ -30,7 +33,6 @@ NOT_BUILT = {
         (r"use\s+\S+", "choosing the parts of an application, such as SQLite, Postgres or FastAPI"),
         (r"create\s+\S+\s*:", "creating a service, such as a Postgres database"),
         (r"using\s+\S+", "choosing how a service is run, such as Docker"),
-        (r"expose\s+\S+\s+as\s+api", "an API for a data type"),
         (r"editable", "editing a table, which needs somewhere to store the data"),
         (r"when\s+.+:", "rules that react to data"),
         (r"notify\s+\S+", "notifying someone"),
@@ -39,7 +41,6 @@ NOT_BUILT = {
         (r"usar\s+\S+", "choosing the parts of an application, such as SQLite, Postgres or FastAPI"),
         (r"crear\s+\S+\s*:", "creating a service, such as a Postgres database"),
         (r"usando\s+\S+", "choosing how a service is run, such as Docker"),
-        (r"exponer\s+\S+\s+como\s+api", "an API for a data type"),
         (r"editable", "editing a table, which needs somewhere to store the data"),
         (r"cuando\s+.+:", "rules that react to data"),
         (r"notificar\s+\S+", "notifying someone"),
@@ -75,6 +76,7 @@ class Table(Element):
 class Button(Element):
     text: str = ""
     width: int | None = None
+    action: tuple[str, str] | None = None  # ("adds", a data name) or ("opens", a page name)
 
 
 @dataclass(frozen=True)
@@ -106,9 +108,13 @@ class App:
     data: tuple[Data, ...]
     pages: tuple[Page, ...]
     records: tuple[Records, ...] = ()
+    uses: tuple[str, ...] = ()  # the parts chosen with 'use': sqlite, fastapi
+    exposed: tuple[str, ...] = ()  # the data types that have an API
     language: str = field(default="en", compare=False)
     line: int = field(default=0, compare=False)
     changes: tuple[tuple[int, int], ...] = field(default=(), compare=False)  # (line of a change, line it changes)
+    use_lines: tuple[int, ...] = field(default=(), compare=False)
+    expose_lines: tuple[int, ...] = field(default=(), compare=False)
 
 
 class NotBuilt(IntentError):
@@ -179,6 +185,29 @@ def check(app):
                     raise IntentError(line, f"the value for '{name}' must be {VALUE_HELP[kind]}")
     if not app.pages:
         raise IntentError(app.line, "the application has no page")
+    lines = dict(zip(app.exposed, app.expose_lines)) if app.expose_lines else {}
+    for name in app.exposed:
+        line = lines.get(name, app.line)
+        if name not in names:
+            raise IntentError(line, f"there is no data named '{name}'")
+        if set(app.uses) != set(PARTS):
+            raise IntentError(line, "an API needs a database and a web framework: add 'use sqlite' and 'use FastAPI'")
+        if any(field_name == "id" for field_name, _ in names[name].fields):
+            raise IntentError(line, f"'{name}' has a field named 'id', which the database keeps for itself")
+    if len({name.lower() for name in app.exposed}) != len(app.exposed):
+        raise IntentError(app.line, "two data types with an API would share one table name")
+    if "sqlite" in app.uses and not app.exposed:
+        raise IntentError((app.use_lines or (app.line,))[0], "nothing uses the database: expose a data type as an API, "
+                                                             "or remove 'use sqlite'")
+    page_names = {page.name for page in app.pages}
+    for page in app.pages:
+        for element in page.elements:
+            if isinstance(element, Button) and element.action is not None:
+                verb, target = element.action
+                if verb == "adds" and target not in app.exposed:
+                    raise IntentError(element.line, f"a button can add a '{target}' only if '{target}' is exposed as an API")
+                if verb == "opens" and target not in page_names:
+                    raise IntentError(element.line, f"there is no page named '{target}'")
     shown = {element.data for page in app.pages for element in page.elements if isinstance(element, Table)}
     for item in app.data:
         if item.name not in shown:
@@ -239,6 +268,7 @@ def read_lines(text, on_problem=None, resolver=None):
     words = PHRASES[language]
     types = {word: kind for kind, word in words["types"].items()}
     app_name, app_line, data, records, pages, changes = None, numbered[0][0], [], [], [], []
+    uses, use_lines, exposed, expose_lines = [], [], [], []
     current = None  # [kind, name, line, indent, items, lines of the items]
 
     def close():
@@ -258,6 +288,29 @@ def read_lines(text, on_problem=None, resolver=None):
     for number, raw in numbered[1:]:
         indent = len(raw) - len(raw.lstrip())
         line = raw.strip()
+        if (match := re.fullmatch(rf"{words['use']}\s+(\S+)", line)) and match[1].lower() in PARTS:
+            part = match[1].lower()
+            if app_name is not None or indent:
+                problem(IntentError(number, "the parts of an application are chosen before the application, at the "
+                                            "start of a line"))
+            elif part in uses:
+                problem(IntentError(number, f"'{PARTS[part]}' is chosen twice"))
+            else:
+                uses.append(part)
+                use_lines.append(number)
+            continue
+        if match := re.fullmatch(words["expose"].replace(" ", r"\s+"), line):
+            close()
+            if app_name is None or not indent:
+                problem(IntentError(number, "this belongs inside the application, so it must be indented"))
+            elif not IDENTIFIER.match(match[1]):
+                problem(IntentError(number, f"'{match[1]}' is not a valid name"))
+            elif match[1] in exposed:
+                problem(IntentError(number, f"'{match[1]}' is exposed twice"))
+            else:
+                exposed.append(match[1])
+                expose_lines.append(number)
+            continue
         unbuilt = next((needs for pattern, needs in NOT_BUILT[language] if re.fullmatch(pattern, line)), None)
         if unbuilt is not None:
             problem(NotBuilt(number, f"this is understood, but it is not built yet: it needs {unbuilt}"))
@@ -310,7 +363,11 @@ def read_lines(text, on_problem=None, resolver=None):
     ordered = first_use_order(data, pages)
     position = {item.name: index for index, item in enumerate(ordered)}
     records.sort(key=lambda item: position.get(item.name, len(position)))
-    return App(app_name, ordered, tuple(pages), tuple(records), language, app_line, tuple(changes))
+    pairs = sorted(zip(exposed, expose_lines), key=lambda pair: position.get(pair[0], len(position)))
+    parts = sorted(zip(uses, use_lines), key=lambda pair: list(PARTS).index(pair[0]))
+    return App(app_name, ordered, tuple(pages), tuple(records), tuple(part for part, _ in parts),
+               tuple(name for name, _ in pairs), language, app_line, tuple(changes),
+               tuple(line for _, line in parts), tuple(line for _, line in pairs))
 
 
 def _record(line, number, declared):
@@ -371,11 +428,17 @@ def _element(line, number, words):
         if not IDENTIFIER.match(match[1]):
             raise IntentError(number, f"'{match[1]}' is not a valid name")
         return Table(data=match[1], line=number)
-    if match := re.fullmatch(rf"{words['button']}\s+({STRING})(?:\s+{words['width']}\s+(\d+)px)?", line):
+    if match := re.fullmatch(rf"{words['button']}\s+({STRING})(?:\s+{words['width']}\s+(\d+)px)?"
+                             rf"(?:\s+({words['adds']}|{words['opens']})\s+(\S+))?", line):
         width = int(match[2]) if match[2] else None
         if width is not None and not 1 <= width <= MAX_WIDTH:
             raise IntentError(number, f"the width must be between 1px and {MAX_WIDTH}px")
-        return Button(text=_text(match[1], number), width=width, line=number)
+        action = None
+        if match[3]:
+            if not IDENTIFIER.match(match[4]):
+                raise IntentError(number, f"'{match[4]}' is not a valid name")
+            action = ("adds" if match[3] == words["adds"] else "opens", match[4])
+        return Button(text=_text(match[1], number), width=width, action=action, line=number)
     return None
 
 
@@ -434,7 +497,7 @@ def resize(items, number, amount, label):
     width = button.width + amount
     if not 1 <= width <= MAX_WIDTH:
         raise IntentError(number, f"the width would be {width}px; it must be between 1px and {MAX_WIDTH}px")
-    items[index] = Button(text=button.text, width=width, line=button.line)
+    items[index] = Button(text=button.text, width=width, action=button.action, line=button.line)
     return button.line
 
 
@@ -461,6 +524,8 @@ def element_text(element, language):
             lines.append(f"{words['searchable']} {element.search}")
         return lines + [f"{words['sortable']} {name}" for name in element.sort]
     suffix = f" {words['width']} {element.width}px" if element.width is not None else ""
+    if element.action is not None:
+        suffix += f" {words[element.action[0]]} {element.action[1]}"
     return [f"{words['button']} {quote(element.text)}{suffix}"]
 
 
@@ -472,7 +537,10 @@ def render(app, language=None):
     """Write an App as intent text in standard phrases."""
     language = language or app.language
     words = PHRASES[language]
-    out = [words["header"], "", f"{words['app']} {app.name}:"]
+    out = [words["header"], ""]
+    if app.uses:
+        out += [f"{words['use']} {PARTS[part]}" for part in app.uses] + [""]
+    out.append(f"{words['app']} {app.name}:")
     for item in app.data:
         out.append(f"    {words['data']} {item.name}:")
         out += [f"        {name}: {words['types'][kind]}" for name, kind in item.fields]
@@ -481,6 +549,8 @@ def render(app, language=None):
         out.append(f"    {words['records']} {item.name}:")
         out += ["        " + ", ".join(value_text(value) for value in row) for row in item.rows]
         out.append("")
+    if app.exposed:
+        out += [f"    {words['expose_text'].format(name)}" for name in app.exposed] + [""]
     for index, page in enumerate(app.pages):
         out.append(f"    {words['page']} {page.name}:")
         out += [f"        {line}" for element in page.elements for line in element_text(element, language)]

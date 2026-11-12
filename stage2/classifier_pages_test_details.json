@@ -1,0 +1,495 @@
+[
+ {
+  "language": "en",
+  "block": "page-heading",
+  "wording": "heading \"Products\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "page-heading",
+  "best_guess_correct": true,
+  "margin": 2409,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-heading",
+  "wording": "Put a title at the top of the page that says \"Customer list\"",
+  "outcome": "correct",
+  "best_guess": "page-heading",
+  "best_guess_correct": true,
+  "margin": 6011,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-heading",
+  "wording": "add a big header reading \"Orders this month\"",
+  "outcome": "correct",
+  "best_guess": "page-heading",
+  "best_guess_correct": true,
+  "margin": 5406,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-heading",
+  "wording": "I'd like the page to open with a headline, something like \"Welcome to the shop\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "page-heading",
+  "best_guess_correct": true,
+  "margin": 2780,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-text",
+  "wording": "paragraph \"All prices include tax\"",
+  "outcome": "correct",
+  "best_guess": "page-text",
+  "best_guess_correct": true,
+  "margin": 5169,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-text",
+  "wording": "Add some text underneath saying \"Orders placed before noon ship the same day\"",
+  "outcome": "correct",
+  "best_guess": "page-text",
+  "best_guess_correct": true,
+  "margin": 4590,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-text",
+  "wording": "write a short blurb: \"We have been selling bicycles since 1998\"",
+  "outcome": "correct",
+  "best_guess": "page-text",
+  "best_guess_correct": true,
+  "margin": 7899,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-text",
+  "wording": "then I want a line or two of plain copy that explains things, \"Pick a customer to see their details\"",
+  "outcome": "declined: unknown word",
+  "best_guess": "print-message",
+  "best_guess_correct": false,
+  "margin": 661,
+  "unknown": [
+   "explains"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "data-table",
+  "wording": "table of Product",
+  "outcome": "declined: too close to call",
+  "best_guess": "data-table",
+  "best_guess_correct": true,
+  "margin": 254,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "data-table",
+  "wording": "Show all the Customer records in a grid, with name, email and city as columns",
+  "outcome": "declined: too close to call",
+  "best_guess": "print-table",
+  "best_guess_correct": false,
+  "margin": 43,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "data-table",
+  "wording": "list every Order in rows with a column per field",
+  "outcome": "declined: too close to call",
+  "best_guess": "rows-to-records",
+  "best_guess_correct": false,
+  "margin": 1284,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "data-table",
+  "wording": "I need the Product data laid out as a table so people can see name, price and stock side by side",
+  "outcome": "declined: too close to call",
+  "best_guess": "print-table",
+  "best_guess_correct": false,
+  "margin": 2768,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-button",
+  "wording": "button \"Save\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "page-button",
+  "best_guess_correct": true,
+  "margin": 774,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-button",
+  "wording": "Add a button labelled \"Add product\"",
+  "outcome": "correct",
+  "best_guess": "page-button",
+  "best_guess_correct": true,
+  "margin": 8212,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-button",
+  "wording": "put a clickable \"Checkout\" button at the bottom of the page",
+  "outcome": "declined: unknown word",
+  "best_guess": "page-button",
+  "best_guess_correct": true,
+  "margin": 6884,
+  "unknown": [
+   "bottom"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "page-button",
+  "wording": "give the user something to press once they are done, a button with \"Send order\" on it",
+  "outcome": "declined: unknown word",
+  "best_guess": "page-button",
+  "best_guess_correct": true,
+  "margin": 3739,
+  "unknown": [
+   "done"
+  ]
+ },
+ {
+  "language": "en",
+  "block": "table-sort",
+  "wording": "sortable columns",
+  "outcome": "correct",
+  "best_guess": "table-sort",
+  "best_guess_correct": true,
+  "margin": 4899,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "table-sort",
+  "wording": "Clicking a column header should sort the table by that column",
+  "outcome": "correct",
+  "best_guess": "table-sort",
+  "best_guess_correct": true,
+  "margin": 14795,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "table-sort",
+  "wording": "make the Order table sortable by date or total when you click the headings",
+  "outcome": "correct",
+  "best_guess": "table-sort",
+  "best_guess_correct": true,
+  "margin": 12569,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "table-sort",
+  "wording": "let people reorder the rows by clicking on price or any other column title",
+  "outcome": "correct",
+  "best_guess": "table-sort",
+  "best_guess_correct": true,
+  "margin": 12216,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-button-resize",
+  "wording": "widen the \"Save\" button by 40px",
+  "outcome": "correct",
+  "best_guess": "page-button-resize",
+  "best_guess_correct": true,
+  "margin": 12275,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-button-resize",
+  "wording": "Make the \"Add product\" button 20px narrower",
+  "outcome": "correct",
+  "best_guess": "page-button-resize",
+  "best_guess_correct": true,
+  "margin": 9033,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-button-resize",
+  "wording": "\"Checkout\" button: 60px wider",
+  "outcome": "correct",
+  "best_guess": "page-button-resize",
+  "best_guess_correct": true,
+  "margin": 9533,
+  "unknown": []
+ },
+ {
+  "language": "en",
+  "block": "page-button-resize",
+  "wording": "the \"Send order\" button looks too cramped, can you stretch it out another 35px",
+  "outcome": "declined: unknown word",
+  "best_guess": "page-button-resize",
+  "best_guess_correct": true,
+  "margin": 8528,
+  "unknown": [
+   "cramped"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "page-heading",
+  "wording": "título \"Clientes\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "page-heading",
+  "best_guess_correct": true,
+  "margin": 2409,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-heading",
+  "wording": "Pon un encabezado arriba del todo que diga \"Pedidos recientes\"",
+  "outcome": "correct",
+  "best_guess": "page-heading",
+  "best_guess_correct": true,
+  "margin": 5624,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-heading",
+  "wording": "quiero que la página empiece con un titular grande: \"Nuestro catálogo\"",
+  "outcome": "correct",
+  "best_guess": "page-heading",
+  "best_guess_correct": true,
+  "margin": 5809,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-heading",
+  "wording": "añade una cabecera con el texto \"Bienvenido a la tienda\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "page-heading",
+  "best_guess_correct": true,
+  "margin": 911,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-text",
+  "wording": "párrafo \"Envío gratis a partir de 50 euros\"",
+  "outcome": "correct",
+  "best_guess": "page-text",
+  "best_guess_correct": true,
+  "margin": 5169,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-text",
+  "wording": "Escribe debajo un texto que explique \"Los precios no incluyen IVA\"",
+  "outcome": "declined: unknown word",
+  "best_guess": "page-text",
+  "best_guess_correct": true,
+  "margin": 2416,
+  "unknown": [
+   "explique"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "page-text",
+  "wording": "añade unas líneas de texto normal diciendo \"Aquí puedes consultar el estado de tus pedidos\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "page-text",
+  "best_guess_correct": true,
+  "margin": 1546,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-text",
+  "wording": "me gustaría poner un parrafito de introducción, algo como \"Llevamos veinte años vendiendo muebles hechos a mano\"",
+  "outcome": "declined: unknown word",
+  "best_guess": "page-button",
+  "best_guess_correct": false,
+  "margin": 75,
+  "unknown": [
+   "parrafito",
+   "introducción"
+  ]
+ },
+ {
+  "language": "es",
+  "block": "data-table",
+  "wording": "tabla de Customer",
+  "outcome": "declined: too close to call",
+  "best_guess": "data-table",
+  "best_guess_correct": true,
+  "margin": 254,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "data-table",
+  "wording": "Muestra los Order en una tabla con columnas para date y total",
+  "outcome": "declined: too close to call",
+  "best_guess": "print-table",
+  "best_guess_correct": false,
+  "margin": 656,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "data-table",
+  "wording": "necesito un listado de todos los Product en filas, con una columna por cada campo",
+  "outcome": "declined: too close to call",
+  "best_guess": "data-table",
+  "best_guess_correct": true,
+  "margin": 790,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "data-table",
+  "wording": "saca los datos de Customer en una cuadrícula para que se vean name, email y city uno al lado del otro",
+  "outcome": "declined: too close to call",
+  "best_guess": "format-grid",
+  "best_guess_correct": false,
+  "margin": 816,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-button",
+  "wording": "botón \"Guardar\"",
+  "outcome": "declined: too close to call",
+  "best_guess": "page-button",
+  "best_guess_correct": true,
+  "margin": 774,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-button",
+  "wording": "Añade un botón que ponga \"Nuevo cliente\"",
+  "outcome": "correct",
+  "best_guess": "page-button",
+  "best_guess_correct": true,
+  "margin": 5455,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-button",
+  "wording": "coloca al final de la página un botón para pulsar con la etiqueta \"Enviar pedido\"",
+  "outcome": "correct",
+  "best_guess": "page-button",
+  "best_guess_correct": true,
+  "margin": 6391,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-button",
+  "wording": "hace falta también un botón de \"Cancelar\" al lado",
+  "outcome": "declined: too close to call",
+  "best_guess": "page-button",
+  "best_guess_correct": true,
+  "margin": 722,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "table-sort",
+  "wording": "ordenar por columna al hacer clic",
+  "outcome": "correct",
+  "best_guess": "table-sort",
+  "best_guess_correct": true,
+  "margin": 8939,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "table-sort",
+  "wording": "Que se pueda ordenar la tabla pinchando en el encabezado de cada columna",
+  "outcome": "correct",
+  "best_guess": "table-sort",
+  "best_guess_correct": true,
+  "margin": 11305,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "table-sort",
+  "wording": "haz que la tabla de Product se ordene por price o stock cuando el usuario pulse el título de la columna",
+  "outcome": "correct",
+  "best_guess": "table-sort",
+  "best_guess_correct": true,
+  "margin": 13693,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "table-sort",
+  "wording": "quiero que el lector pueda reordenar las filas con un clic en la cabecera, por ejemplo por city",
+  "outcome": "correct",
+  "best_guess": "table-sort",
+  "best_guess_correct": true,
+  "margin": 8873,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-button-resize",
+  "wording": "ensancha el botón \"Guardar\" 30px",
+  "outcome": "correct",
+  "best_guess": "page-button-resize",
+  "best_guess_correct": true,
+  "margin": 8626,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-button-resize",
+  "wording": "Haz el botón \"Nuevo cliente\" 15px más estrecho",
+  "outcome": "correct",
+  "best_guess": "page-button-resize",
+  "best_guess_correct": true,
+  "margin": 9131,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-button-resize",
+  "wording": "el botón de \"Enviar pedido\" se queda corto, dale 50px más de ancho",
+  "outcome": "correct",
+  "best_guess": "page-button-resize",
+  "best_guess_correct": true,
+  "margin": 8223,
+  "unknown": []
+ },
+ {
+  "language": "es",
+  "block": "page-button-resize",
+  "wording": "botón \"Cancelar\": reducir el ancho en 25px",
+  "outcome": "correct",
+  "best_guess": "page-button-resize",
+  "best_guess_correct": true,
+  "margin": 14051,
+  "unknown": []
+ }
+]

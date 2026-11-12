@@ -137,6 +137,7 @@ function mark(scroll) {
     if (statement.alternatives.length) parts.push(element("div", "soft", "Closest: " + statement.alternatives.map((block) => `${block.block} - ${block.description}`).join("; ")));
   }
   for (const problem of latest.problems) parts.push(element("div", "error", `Line ${problem.line}: ${problem.message}`));
+  if (tab === "Preview" && latest.preview_note) parts.push(element("div", "soft", latest.preview_note));
   if (!parts.length) parts.push(element("div", "soft", "Put the cursor on a statement to see how it was read. Its code is highlighted on the right."));
   reading.replaceChildren(...parts);
 }

@@ -29,8 +29,10 @@ def version(block):
             if owner == block:
                 digest.update(f"{name}\0{flag}\0{text}\0".encode())
         digest.update(TARGETS[name].FORMS.get(block, "").encode("utf-8"))
-    for owner, flag, text in [*html.SUPPORT, *html.SCRIPT]:
+    for owner, flag, text in [*html.SUPPORT, *html.SCRIPT, *((owner, "server", text) for owner, text in html.SERVER)]:
         if owner == block:
             digest.update(f"html\0{flag}\0{text}\0".encode())
+    if block == "fastapi-app":
+        digest.update("\n".join(html.REQUIREMENTS).encode())
     digest.update(html.FORMS.get(block, "").encode("utf-8"))
     return digest.hexdigest()[:12]

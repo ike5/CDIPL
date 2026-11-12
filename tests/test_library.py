@@ -20,13 +20,13 @@ EXAMPLE = REPO / "examples" / "adult_users.intent"
 class LibraryTest(unittest.TestCase):
     def test_every_implemented_block_is_in_the_catalogue_with_a_status(self):
         catalogue, statuses = library.catalogue(), library.statuses()
-        self.assertEqual(len(catalogue), 98)  # the 90 blocks of the Stage 1 inventory and eight page blocks
+        self.assertEqual(len(catalogue), 103)  # the 90 blocks of the Stage 1 inventory and thirteen for applications
         for block, status in statuses.items():
             self.assertIn(block, catalogue)
             self.assertIn(status, library.STATUSES)
             self.assertRegex(library.version(block), r"^[0-9a-f]{12}$")
         owners = {owner for generator in [*TARGETS.values(), html] for owner, _, _ in generator.SUPPORT}
-        owners |= {owner for owner, _, _ in html.SCRIPT}
+        owners |= {owner for owner, _, _ in html.SCRIPT} | {owner for owner, _ in html.SERVER}
         self.assertLessEqual(owners, set(statuses))
 
     def test_a_flagged_block_stops_every_build_that_uses_it(self):

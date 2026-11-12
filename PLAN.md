@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Reviewed** | `outputs/proposal-classifier-driven-intent-programming-language.md` (v0.2) and this repository at commit `194e44b` |
-| **Revision** | 11, dated 2026-11-12. It incorporates nine rounds of decisions from the product owner and the results of Stage 1 and Stage 2. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
-| **Status** | Stage 1 is complete and accepted. Stage 2 is built and measured. A first live view and the first web-page blocks (HTML and CSS) are built and tested: see [Next step: a live view](#next-step-a-live-view). The owner's sample pseudocode describes a whole application, most of which cannot be built yet. Stage 3 (a C target) has not started. |
+| **Revision** | 12, dated 2026-11-12. It incorporates eleven rounds of decisions from the product owner and the results of Stage 1 and Stage 2. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
+| **Status** | Stage 1 is complete and accepted. Stage 2 is built and measured. The live view and a first slice of whole applications are built and tested: pages, records, tables that fill, search and sort, buttons with actions, and a FastAPI server with an API over SQLite. See [Next step: a live view](#next-step-a-live-view). Authentication, Postgres, editing and rules are not built. No developer other than the assistant has used any of it. Stage 3 (a C target) has not started. |
 | **Audience** | Engineers deciding whether to build this, and what to build first |
 
 References such as "§8" point to sections of the proposal. Sections of this plan are referred to by name.
@@ -64,7 +64,14 @@ The owner has asked the AI assistant that wrote this plan to build the compiler 
 | What may be written | Any description should be accepted as input, with the tool steering the developer toward the wording it recognises best | Cannot be met in full without a generative model; see the limits in the next step |
 | What happens to an accepted choice | It becomes canonical for the developer's project. Accepting is saving the file. | On saving, the live view rewrites the file in standard phrases, so the file itself is the record (see the next step) |
 | Where the live view runs | A local browser page first; integration with editors later | Built |
-| User-interface blocks | Start now, in HTML and CSS | Five page blocks built |
+| User-interface blocks | Start now, in HTML and CSS | Built |
+| Data in pseudocode | Records are written in the intent file and built into JSON: everything is created from the file | Built: `records` |
+| Table behaviour | Fill from the records first, then search and sort | Built |
+| Sentences about something already declared | "Increase button size by 40px" changes the button declared above | Built |
+| Free wording for pages | Teach the classifier the page blocks | Built; no wrong choice in 24 unseen wordings per language, nearly half declined |
+| Choosing a stack | By keyword: `use sqlite`, `use FastAPI`, `use postgres`, `create postgres:` with `using docker` | `use sqlite` and `use FastAPI` are built; the others are recognised and reported as not built |
+| What a stack generates first | A table for each data declaration that is exposed, and an API to list, add, change and delete its records | Built |
+| Buttons | Buttons have actions | Two built: add a record, open a page |
 | Pace | Generate a small amount, review, then generate more | Three stages with a review after each; Stage 2 is delivered in three parts |
 
 ## Basis and limits of this review
@@ -343,44 +350,64 @@ Asked for by the owner in the eighth and ninth rounds of decisions. A first vers
 
 **The first web-page blocks.** Five blocks build static pages in HTML and CSS: the page itself, headings, paragraphs, a table with a column for each field of a declared data type, and buttons with an optional width in pixels. They follow the shape of the owner's pseudocode (`app`, `data`, `page`, `table`). Their meaning is in `docs/meaning.md`, and an example is in `examples/inventory.intent`. Pages convert back to intent, build identically from English and Spanish, and pass the formatter. They have structure and style and no behaviour: a table has headings and no rows, and a button does nothing.
 
-**The owner's pseudocode, and what it shows.** The sample describes a whole application: a database, authentication, an API, a page with a table that can be searched, sorted and edited, and a rule that notifies someone when stock runs low.
+**What has been added since the first version.**
+
+- **Records in the intent file.** `records Product:` with one record per line is built into a JSON file.
+- **Tables that fill, search and sort.** `table Product` fills itself from the records, `searchable by name` adds a search box, and `sortable by price` makes a column heading sort the table.
+- **A sentence that changes something already declared.** `increase button size by 40px` changes the width of a button declared above it. The preview follows at once, and on saving the button's own line carries the new width and the sentence is gone.
+- **Free wording for pages.** The classifier now knows six page blocks. In the live view, `add a big title that says "Products"` is read as a heading, and `make the button 40px wider` as a change to the button, in English and in Spanish.
+- **A server, a database and an API.** With `use sqlite` and `use FastAPI`, `expose Product as api` generates a FastAPI server with a SQLite table for Product, seeded from the records, and an API to list, add, change and delete. A table of Product on a page then fills from the API.
+- **Buttons with actions.** `button "Add product" adds Product` opens a form with an input for each field and adds the record through the API. `button "Suppliers" opens Suppliers` opens another page.
+
+The meaning of every statement, and what the generated server does not do, is in `docs/meaning.md`. Examples are `examples/inventory.intent` (pages only) and `examples/inventory_server.intent` (with a server).
+
+**The owner's pseudocode, line by line.**
 
 | Line | What happens today |
 |---|---|
 | `app Inventory:`, `data Product:` and its fields | Built |
-| `page Products:`, `table Product` | Built, as a static page |
-| `use web`, `use database`, `use authentication` | Understood, not built |
-| `expose Product as api` | Understood, not built |
-| `searchable by name`, `sortable by price`, `editable` | Understood, not built |
+| `page Products:`, `table Product` | Built; the table fills from records or from the API |
+| `searchable by name`, `sortable by price` | Built |
+| `use sqlite`, `use FastAPI` | Built |
+| `expose Product as api` | Built |
+| `use web`, `use database` | Understood, not built: they do not name a technology. The owner has since said these lines should name one. |
+| `use authentication` | Understood, not built |
+| `create postgres:`, `using docker` | Understood, not built |
+| `editable` | Understood, not built. The API can change and delete records; the page cannot yet. |
 | `when Product.stock < 5:`, `notify inventory_manager` | Understood, not built |
 
-This is a different and much larger kind of block than anything built so far. Three things follow.
+**What the generated server fixes in advance.** Each of these is a decision the pseudocode does not state, made once by the generator. They are listed in `docs/meaning.md` so that a developer can see them.
 
-- **Each line hides many decisions.** "Use authentication" does not say how people sign in, who may see what, or how passwords are kept. A deterministic generator has to fix one answer to each such question in advance, the way an opinionated framework does, and the developer has to be able to see and change those answers.
-- **These are the tiers the roadmap put last,** because one intent meaning the same thing in several target languages is hardest there. A database, an API and a page are three different technologies, and "the language of their choice" becomes a choice of whole stack.
-- **Some of it must not be used unreviewed.** Generated authentication that is subtly wrong is worse than none. Blocks of that kind need review by a person with the right experience before anyone relies on them.
+- **There is no authentication. Anyone who can reach the server can read and change every record.** It is safe only where that is acceptable, such as on the developer's own machine. This is the most important limit of what has been built.
+- Decimals are stored as text, so that no digit is lost.
+- A record must have exactly the declared fields, of exactly the declared types, or it is refused.
+- The first records are put into a table when it is created and never again.
+- Changing a data declaration does not change a table that already exists.
+- The versions of FastAPI and uvicorn are pinned to the ones the server was tested with.
 
 **Limits that the live view does not remove.**
 
 - **"Any description should work" cannot be promised.** The tool accepts any text and answers at once, but it can only build what is in the library, and one statement maps to one block.
-- **Free wording works only for the 90 blocks the classifier was trained on.** The page blocks are read from standard phrases only. Teaching the classifier new blocks needs new training wordings and a new test.
-- **Descriptions that refer to something, such as "increase button size by 40px",** are not read yet. Today the developer changes the width in the button's own line, and the preview follows at once.
+- **Free wording covers statements, not structure.** The lines that open a section (`app`, `data`, `records`, `page`), the fields and the records must be written in their fixed form, and so must `use`, `expose`, and buttons that add a record or open a page.
+- **The preview of an application with an API imitates the API.** It lists the records written in the file and does not save anything added. The real server has to be run to try adding.
 - **A wrong choice is caught only if the developer looks.** The view shows the reading beside what was typed, and marks unsure choices, but nothing forces a look.
-- **The values still have to be exact.** Field names, numbers, comparisons and formulas are read by fixed rules, however freely the rest is worded.
+- **The values still have to be exact.** Names, numbers, sizes, comparisons and formulas are read by fixed rules, however freely the rest is worded.
 
 **Evidence so far.**
 
 | ID | Criterion | Result |
 |---|---|---|
-| L1 | After each change to the text, the view shows the new code within 100 ms | Met on the one machine tried: an analysis takes 1 to 3 ms once the word lists are loaded, and in a browser the new blocks appeared 69 ms after the text changed, which includes a deliberate 40 ms pause after the last keystroke. The first analysis of a session takes about 20 ms. |
-| L2 | A statement and its code are highlighted together, in both directions | Met: the cursor's statement highlights exactly the lines the trace gives for it, and selecting a line of code selects its statement. |
+| L1 | After each change to the text, the view shows the new code within 100 ms | Met on the one machine tried: an analysis takes 1 to 3 ms once the word lists are loaded, and in a browser the new code appeared 69 ms after the text changed, which includes a deliberate 40 ms pause after the last keystroke. The first analysis of a session takes about 20 ms. |
+| L2 | A statement and its code are highlighted together, in both directions | Met: the cursor's statement highlights exactly the lines the trace gives for it, in whichever file is shown, and selecting a line of code selects its statement. |
 | L3 | Every statement shows what it was read as, and whether the choice was sure | Met |
 | L4 | A statement that cannot be read shows why and lists the closest blocks, without hiding the rest | Met |
 | L5 | An accepted wording is fixed for the project | Met by rewriting the file in standard phrases on saving |
-| L6 | What the view shows is byte-identical to what `build` writes | Met for complete files, for all three targets |
+| L6 | What the view shows is byte-identical to what `build` writes | Met for complete files, for programs, pages and applications with a server |
 | L7 | Five developers who have not seen the tool each write a small program | Not done. This remains the test that says whether the idea works. |
 
-The view was driven in a real browser (Chromium) by a script: typing, changing the target language, selecting in both directions, saving, and changing a button's width while watching the preview. The text shown in the right-hand panel was compared with the output of `build` and was identical. Screenshots are in `docs/live-view-program.png`, `docs/live-view-pages.png` and `docs/live-view-preview.png`.
+For applications, the same criteria as Stage 2 were applied and are in the tests: every generated file passes its formatter and linter; applications convert back to intent and build identically from English and Spanish; edited files are lifted exactly or refused; invalid descriptions are rejected with their line. In addition, the generated server is imported and exercised by the tests, and it was run with uvicorn and used from a real browser: the table filled from the API, a record was added through the form and was still there after the server was restarted, and the server did not serve its own code, its database or its seed file.
+
+Screenshots: `docs/live-view-program.png`, `docs/live-view-pages.png` and `docs/live-view-preview.png` show the live view; `docs/generated-app.png` and `docs/generated-app-form.png` show the generated application running.
 
 ### Stage 3: third target
 
@@ -496,11 +523,11 @@ Each has a default that this plan assumes if nobody decides otherwise.
 | ID | Decision | Default assumed here |
 |---|---|---|
 | D1 | Input format for generated programs, given that C cannot read JSON without added code | Decide before Stage 3. Stage 2 uses JSON. |
-| D2 | Which behaviour should the pages get first: filling a table from data, searching, sorting, or editing? Each needs script blocks, and filling and editing also need somewhere for the data to live. | Filling a table from a JSON file, then searching and sorting, in JavaScript, since those blocks were already identified in Stage 1 |
-| D3 | For the owner's application pseudocode, which one stack is built first? "Use database", "use authentication" and "expose as api" each need fixed choices. | None yet. Decide after the pages have behaviour. |
-| D4 | Should the classifier be taught the page blocks, so that pages can also be worded freely? It needs new training wordings and a new held-out test. | Not yet; pages use standard phrases |
-| D5 | Should descriptions that refer to something already declared, such as "increase button size by 40px", be read as a change to that declaration? | Yes, as the next small addition to the live view |
-| D6 | Who are the five developers for criterion L7, and when? | The owner arranges it once the pages have some behaviour |
+| D2 | What should be built next for applications? The candidates are: changing and deleting records from the page (`editable`); authentication; Postgres in place of SQLite; rules such as `when Product.stock < 5: notify`. | Changing and deleting from the page, because the API for it already exists and it completes the table. Authentication after that, with review by someone experienced in it before anyone relies on it. |
+| D3 | Which other button actions are wanted? Two are built: add a record, and open a page. | Decide from real use |
+| D4 | Should the generated server refuse to start, or warn, when it is asked to listen beyond the local machine while it has no authentication? | Yes, warn in the documentation now; enforce once authentication exists |
+| D5 | What should `use web` and `use database` mean, if anything, now that parts are chosen by naming a technology? | Nothing: report them as not built and suggest `use FastAPI` and `use sqlite` |
+| D6 | Who are the five developers for criterion L7, and when? | The owner arranges it |
 
 ## Assumptions
 

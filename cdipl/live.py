@@ -157,13 +157,15 @@ def _analyse_app(text):
     by_line = {problem.line: problem for problem in found}
     language = app.language
     words = pages_module.PHRASES[language]
-    filled = {item.name for item in app.records}
+    filled = {item.name for item in app.records} | set(app.exposed)
     readings = {}  # line -> (reading, blocks, line whose code to show)
     for page in app.pages:
         readings[page.line] = (None, ["html-page"], None)
         for element in page.elements:
             lines = pages_module.element_text(element, language)
             blocks = [ELEMENT_BLOCKS[type(element)]]
+            if isinstance(element, pages_module.Button) and element.action is not None:
+                blocks.append("add-record-form" if element.action[0] == "adds" else "button-opens-page")
             if isinstance(element, pages_module.Table):
                 if element.data in filled:
                     blocks.append("render-table")
@@ -172,6 +174,10 @@ def _analyse_app(text):
                 for name, line in zip(element.sort, element.sort_lines):
                     readings[line] = (f"{words['sortable']} {name}", ["table-sort"], None)
             readings[element.line] = (lines[0], blocks, None)
+    for part, line in zip(app.uses, app.use_lines):
+        readings[line] = (f"{words['use']} {pages_module.PARTS[part]}", ["sqlite-table" if part == "sqlite" else "fastapi-app"], None)
+    for name, line in zip(app.exposed, app.expose_lines):
+        readings[line] = (words["expose_text"].format(name), ["rest-api", "sqlite-table"], None)
     for item in app.records:
         readings[item.line] = (None, ["data-records"], None)
         for row, line in zip(item.rows, item.row_lines):
@@ -219,21 +225,36 @@ def _analyse_app(text):
         generated = html.generate(usable)
         files = [{"name": name, "lines": [{"text": line, "origin": origin} for line, origin in generated[name]]}
                  for name in generated]
-        preview = html.file_name(usable.pages[0])
+        served = "fastapi" in usable.uses
+        preview = ("static/" if served else "") + html.file_name(usable.pages[0])
     canonical = pages_module.render(app) if complete else None
+    note = ("The preview imitates the API: it lists the records written in the file, and nothing added is saved."
+            if usable.exposed else "")
     return {"kind": "app", "targets": ["html"], "target": "html", "statements": statements, "files": files,
             "problems": problems, "complete": complete, "canonical": canonical, "preview": preview,
-            "index": empty_index()}
+            "preview_note": note, "index": empty_index()}
 
 
 def _usable(app):
     """The part of an application that can be generated: what is left after dropping whatever does not fit."""
     fields = {item.name: [name for name, _ in item.fields] for item in app.data if item.fields}
     kinds = {item.name: [kind for _, kind in item.fields] for item in app.data if item.fields}
+    exposed, tables = [], set()
+    if set(app.uses) == set(pages_module.PARTS):
+        for name in app.exposed:
+            if name in fields and "id" not in fields[name] and name.lower() not in tables:
+                tables.add(name.lower())
+                exposed.append(name)
+    uses = tuple(part for part in app.uses if part != "sqlite" or exposed)
+    page_names = {page.name for page in app.pages if page.elements}
     usable_pages, seen = [], set()
     for page in app.pages:
         kept = []
         for element in page.elements:
+            if isinstance(element, pages_module.Button) and element.action is not None:
+                verb, target = element.action
+                if (verb == "adds" and target not in exposed) or (verb == "opens" and target not in page_names):
+                    element = pages_module.Button(text=element.text, width=element.width, line=element.line)
             if isinstance(element, pages_module.Table):
                 if element.data not in fields:
                     continue
@@ -256,4 +277,7 @@ def _usable(app):
         if good:
             names.add(item.name.lower())
             records.append(item)
-    return pages_module.App(app.name, app.data, tuple(usable_pages), tuple(records), app.language, app.line)
+    lines = dict(zip(app.exposed, app.expose_lines))
+    use = dict(zip(app.uses, app.use_lines))
+    return pages_module.App(app.name, app.data, tuple(usable_pages), tuple(records), uses, tuple(exposed), app.language,
+                            app.line, (), tuple(use[part] for part in uses), tuple(lines[name] for name in exposed))

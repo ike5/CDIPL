@@ -46,6 +46,7 @@ def command_build(args):
     folder = Path(args.out) if args.out else intent.parent / "build" / args.target
     folder.mkdir(parents=True, exist_ok=True)
     for name, text in files.items():
+        (folder / name).parent.mkdir(parents=True, exist_ok=True)
         (folder / name).write_text(text, encoding="utf-8")
         print(f"wrote {folder / name}")
     trace = json.loads(files["trace.json"])
@@ -58,8 +59,9 @@ def command_lift(args):
     path = Path(args.program)
     try:
         if path.is_dir():
-            files = {item.name: item.read_text(encoding="utf-8") for item in sorted(path.iterdir())
-                     if item.suffix in (".html", ".css", ".js", ".json") and item.name != "trace.json"}
+            files = {item.relative_to(path).as_posix(): item.read_text(encoding="utf-8") for item in sorted(path.rglob("*"))
+                     if item.is_file() and item.suffix in (".html", ".css", ".js", ".json", ".py", ".txt")
+                     and item.name != "trace.json" and "__pycache__" not in item.parts}
             sys.stdout.write(pages.render(lift_app(files), args.language))
         else:
             sys.stdout.write(lift_text(path.read_text(encoding="utf-8"), target_for(path.name), args.language))

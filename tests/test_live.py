@@ -90,9 +90,9 @@ class LiveTest(unittest.TestCase):
         result = analyse(OWNERS)
         status = {statement["text"]: statement["status"] for statement in result["statements"]}
         self.assertEqual(status["table Product"], "standard")
-        for line in ("use web", "expose Product as api", "editable", "when Product.stock < 5:",
-                     "notify inventory_manager"):
+        for line in ("use web", "editable", "when Product.stock < 5:", "notify inventory_manager"):
             self.assertEqual(status[line], "unbuilt", line)
+        self.assertEqual(status["expose Product as api"], "error")  # it needs 'use sqlite' and 'use FastAPI'
         self.assertEqual(status["searchable by name"], "standard")
         self.assertEqual(result["kind"], "app")
         self.assertIn('<table data-name="Product">', text_of(result, "products.html"))
@@ -103,9 +103,27 @@ class LiveTest(unittest.TestCase):
         text = "language: en\n\nuse sqlite\nuse FastAPI\ncreate postgres:\n    using docker\n\napp A:\n    page P:\n        heading \"Hi\"\n"
         result = analyse(text)
         status = {statement["text"]: statement["status"] for statement in result["statements"]}
-        for line in ("use sqlite", "use FastAPI", "create postgres:", "using docker"):
+        for line in ("create postgres:", "using docker"):
             self.assertEqual(status[line], "unbuilt", line)
-        self.assertIn("<h1>Hi</h1>", text_of(result, "p.html"))
+        self.assertEqual(status["use FastAPI"], "standard")
+        self.assertEqual(status["use sqlite"], "error")  # nothing is exposed, so nothing uses the database
+        self.assertIn("<h1>Hi</h1>", text_of(result, "static/p.html"))
+        self.assertIn("FastAPI(", text_of(result, "server.py"))
+
+    def test_an_application_with_an_api(self):
+        text = (REPO / "examples" / "inventory_server.intent").read_text(encoding="utf-8")
+        result = analyse(text)
+        self.assertTrue(result["complete"])
+        self.assertEqual(result["canonical"], text)
+        self.assertEqual(result["preview"], "static/products.html")
+        self.assertIn("imitates", result["preview_note"])
+        built = build(text, "html")
+        for file in result["files"]:
+            self.assertEqual(text_of(result, file["name"]), built[file["name"]])
+        expose = next(s for s in result["statements"] if s["text"] == "expose Product as api")
+        mine = [line["text"] for file in result["files"] if file["name"] == "server.py" for line in file["lines"]
+                if line["origin"] == expose["line"]]
+        self.assertIn('@app.get("/api/product")', mine)
 
     def test_resizing_a_button_shows_the_change_at_once(self):
         text = (REPO / "examples" / "inventory.intent").read_text(encoding="utf-8") + "        increase button size by 40px\n"
@@ -117,6 +135,31 @@ class LiveTest(unittest.TestCase):
         command = result["statements"][-1]
         button = next(s for s in result["statements"] if s["text"].startswith("button"))
         self.assertEqual(command["shows"], button["line"])
+
+    def test_free_wording_on_a_page(self):
+        head = "language: en\n\napp Shop:\n    data Product:\n        name: text\n        price: decimal\n\n    page Products:\n"
+        free = head + ('        add a big title that says "Products"\n        show a table of Product\n'
+                       "        let people sort the table by clicking the price column\n"
+                       '        put a button labelled "Add product" 160px wide\n        make the button 40px wider\n')
+        result = analyse(free)
+        self.assertTrue(result["complete"])
+        standard = head + ('        heading "Products"\n        table Product\n        sortable by price\n'
+                           '        button "Add product" width 200px\n')
+        self.assertEqual(result["canonical"], standard)
+        self.assertEqual(analyse(standard)["files"], [dict(file, lines=[dict(line, origin=line["origin"]) for line in file["lines"]])
+                                                      for file in analyse(standard)["files"]])
+        statuses = {statement["text"]: statement["status"] for statement in result["statements"]}
+        self.assertIn(statuses['add a big title that says "Products"'], ("sure", "unsure"))
+        spanish = ("idioma: es\n\naplicación Shop:\n    datos Product:\n        name: texto\n        price: decimal\n\n"
+                   "    página Products:\n" '        pon un título grande que diga "Products"\n        muestra una tabla de Product\n'
+                   '        añade un botón con el texto "Add product" de 160px de ancho\n        ensancha el botón 40px\n')
+        result = analyse(spanish)
+        self.assertTrue(result["complete"])
+        self.assertIn('botón "Add product" ancho 200px', result["canonical"])
+        unknown = analyse(head + "        add a carousel of Product\n        table Product\n")
+        problem = next(s for s in unknown["statements"] if "carousel" in s["text"])
+        self.assertEqual(problem["status"], "error")
+        self.assertIn("carousel", problem["note"])
 
     def test_problems_before_anything_can_be_read(self):
         for text in ("", "get users\n", "language: en\n\nsource users\n"):

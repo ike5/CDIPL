@@ -79,6 +79,29 @@ A separate check uses 32 pairs of statements for the built blocks, written by th
 
 More than half were declined. The catalogue describes each block in general terms, while the built versions are specific: the built message block only speaks when there are no rows, and the built calculation block needs a name, an equals sign and a formula. Statements that fit the built version do not always resemble the training wordings for the general block.
 
+## The page blocks
+
+Added on 2026-11-12, after the owner asked for pages to be worded freely.
+
+Six blocks for parts of a web page were added to the classifier: a heading, a paragraph, a table of a data type, a button, sorting a table by a column heading, and making a button wider or narrower. A further session wrote 12 training wordings for each in each language and the word-list entries they needed. A separate session, given only the six descriptions, wrote 4 test wordings for each in each language; these were committed before the training material existed. The classifier was retrained on all blocks and frozen (commit `b9a7f71`), and the page test was run once.
+
+| | English | Spanish |
+|---|---|---|
+| Unseen page wordings tested | 24 | 24 |
+| Chosen correctly | 13 | 13 |
+| Chosen wrongly | 0 | 0 |
+| Declined: too close to call | 7 | 9 |
+| Declined: an unknown word | 4 | 2 |
+| Best guess correct, if it never declined | 20 (83%) | 21 (88%) |
+
+- **No wrong choice was accepted**, in a sample of 24 per language. That is too small a sample to say the rate is below 1 in 300.
+- **Nearly half were declined.** In the live view a declined statement is still shown with the best guess, marked unsure, so the figure that matters there is the best guess: right for 83% and 88%.
+- **The original 720 test wordings were run again as a check** and gave almost the same result as before: 243 correct and 3 wrong in English, 268 correct and 4 wrong in Spanish. This second run is a check that adding blocks did no harm, not a fresh measurement.
+
+**Two corrections made after the test.** Trying the live view by hand showed that the English word "wider" was coded as "width", so "make the button 40px wider" could not be read; and Spanish had no entries for "más ancho" and "más estrecho". These were corrected and the classifier retrained. The figures above are from before the corrections. They were prompted by the assistant's own example sentences and not by the test results, which have not been examined line by line; even so, the page test has now been used and cannot serve as a clean measurement of the corrected classifier.
+
+**One rule added for the live view.** If the values written in a statement do not fit the block the classifier chose, the live view tries the next closest blocks and takes the first whose values fit, marking the choice unsure. For example, `put a button labelled "Add product" 160px wide` is first read as resizing a button, which needs a direction; a button with a width fits, and is used. A build outside the live view does not do this: it accepts only a first choice the classifier is sure of.
+
 ## Limits
 
 - **One test set, now used.** Having looked at the individual results, any change to the word lists, the training wordings or the model must be tested on new wordings written afresh. Re-running this test after such a change would prove nothing.

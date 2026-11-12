@@ -102,3 +102,5 @@ sqlite-table	A SQLite table for a data type, created when the server first start
 rest-api	An API for a data type: list, add, change and delete records
 add-record-form	A button that opens a form with one input for each field, adds the record through the API and refreshes the table
 button-opens-page	A button that opens another page of the application
+edit-table-rows	Controls on each row of a table that open a form to change the record through the API, or delete it, and then refill the table
+notify-when	A rule that stores a notification when a record added or changed through the API meets a condition, and an API that lists the notifications

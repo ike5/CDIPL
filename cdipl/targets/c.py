@@ -36,6 +36,7 @@ from .common import (
     formulas,
     schemas,
 )
+from ..model import uses_field
 
 FILE_NAME = "main.c"
 SUPPORTED = None  # the blocks this target can build; None means every block
@@ -1018,7 +1019,10 @@ def step_lines(program):
             value = formula(step.formula, schema)
             if formula_type(schema, step.formula) == "integer":
                 value = f"integer({value})"
-            functions += [(f"static Value {name}(const Value *row) {{", step.line), (f"  return {value};", step.line), ("}", step.line), ("", "support")]
+            functions.append((f"static Value {name}(const Value *row) {{", step.line))
+            if not uses_field(step.formula):
+                functions.append(("  (void)row;", step.line))
+            functions += [(f"  return {value};", step.line), ("}", step.line), ("", "support")]
             body.append((f"  rows = add_field(rows, F_{step.name}, {name});", step.line))
         elif isinstance(step, Sort):
             order = "compare_numbers" if schema[step.field] == "integer" else "compare_folded" if step.ignore_case else "compare_text"
@@ -1098,6 +1102,8 @@ def lift(text):
     functions = {}
     for index, line in enumerate(lines):
         if match := FUNCTION.fullmatch(line):
+            if lines[index + 1:index + 2] == ["  (void)row;"]:
+                index += 1
             body = re.fullmatch(r"  return (.*);", lines[index + 1] if index + 1 < len(lines) else "")
             if body is None or lines[index + 2:index + 3] != ["}"]:
                 raise NotGenerated("a function written for a step is not as generated")

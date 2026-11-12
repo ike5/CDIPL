@@ -13,8 +13,10 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from .live import analyse
+from .targets.html import SIGN_IN_SCRIPT
 
 PAGE = Path(__file__).parent / "live_page.html"
+PREVIEW_USER = "preview"  # the user the preview of an application with authentication is given
 STARTER = 'language: en\n\nsource users from argument 1:\n    name: text\n    age: integer\n\nget users\n'
 
 
@@ -27,6 +29,8 @@ class PreviewServer:
 
     The generated files are written to a temporary folder and served by uvicorn on this machine only.
     The server is started again, with an empty database, whenever its code or its first records change.
+    When the application uses authentication, each new database is given one user, PREVIEW_USER, with a
+    password made up for this preview, so that the developer can sign in.
     """
 
     def __init__(self):
@@ -34,6 +38,8 @@ class PreviewServer:
         self.process = None
         self.port = None
         self.signature = None
+        self.password = secrets.token_urlsafe(12)
+        self.user = None  # the user that can sign in to the running preview, if it uses authentication
 
     @staticmethod
     def available():
@@ -59,14 +65,19 @@ class PreviewServer:
         core = sorted((name, text) for name, text in files.items() if "/" not in name)
         signature = hashlib.sha256(json.dumps(core).encode("utf-8")).hexdigest()
         if signature != self.signature or self.process is None or self.process.poll() is not None:
-            self._start(root)
+            self._start(root, f"static/{SIGN_IN_SCRIPT}" in files)
             self.signature = signature
         return f"http://127.0.0.1:{self.port}" if self.process is not None else None
 
-    def _start(self, root):
+    def _start(self, root, authenticated):
         self._end_process()
         for database in root.glob("*.db"):
             database.unlink()
+        self.user = None
+        if authenticated:  # before the server starts, so that the two never create the tables at the same moment
+            done = subprocess.run([sys.executable, "server.py", "add-user", PREVIEW_USER], input=self.password + "\n",
+                                  cwd=root, capture_output=True, text=True, timeout=60, check=False)
+            self.user = PREVIEW_USER if done.returncode == 0 else None
         with socket.socket() as probe:
             probe.bind(("127.0.0.1", 0))
             self.port = probe.getsockname()[1]
@@ -119,6 +130,9 @@ def make_server(intent_path, port=8765):
                 result["preview_url"] = f"{address}/{result['preview'].removeprefix('static/')}"
                 result["preview_note"] = ("The preview is the generated server, running on this machine. Its database "
                                           "starts again from the records in the file whenever the data or the API change.")
+                if preview.user is not None:
+                    result["preview_note"] += (f" To sign in, use the name '{preview.user}' and the password "
+                                               f"'{preview.password}', which were made up for this preview only.")
         return result
 
     def load_index():

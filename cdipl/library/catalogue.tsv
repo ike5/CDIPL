@@ -104,3 +104,6 @@ add-record-form	A button that opens a form with one input for each field, adds t
 button-opens-page	A button that opens another page of the application
 edit-table-rows	Controls on each row of a table that open a form to change the record through the API, or delete it, and then refill the table
 notify-when	A rule that stores a notification when a record added or changed through the API meets a condition, and an API that lists the notifications
+authentication	Signing in to an application: users and sessions kept in SQLite, every page, file and API refused without a session, and commands that manage the users
+sign-in-form	A form on a web page for signing in with a name and a password, with its own small script
+sign-out-button	A button on a web page that ends the session and returns to the sign-in page

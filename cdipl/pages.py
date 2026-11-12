@@ -8,9 +8,11 @@ IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
 STRING = r'"(?:[^"\\]|\\.)*"'
 FIELD_TYPES = ("text", "integer", "decimal")
 MAX_WIDTH = 2000
-PARTS = {"sqlite": "sqlite", "fastapi": "FastAPI"}  # the parts of an application that can be built, as written
+PARTS = {"sqlite": "sqlite", "fastapi": "FastAPI", "authentication": "authentication"}  # the parts that can be built
+SERVER_PARTS = {"sqlite", "fastapi"}  # what an API, and authentication, need
 OPERATORS = ("=", "!=", "<", "<=", ">", ">=")
 NOTIFICATIONS_TABLE = "notification"  # the table, and the address under /api/, that keeps the notifications
+AUTH_TABLES = ("auth_user", "auth_session")  # the tables that keep the users and their sessions
 
 PHRASES = {
     "en": {"header": "language: en", "app": "app", "data": "data", "records": "records", "page": "page",
@@ -19,6 +21,7 @@ PHRASES = {
            "expose_text": "expose {} as api", "adds": "adds", "opens": "opens",
            "increase": r"increase button(?: (STRING))? size by (\d+)px", "decrease": r"decrease button(?: (STRING))? size by (\d+)px",
            "editable": "editable", "when": "when", "notify": "notify", "and": "and", "notifications": "notifications",
+           "authentication": "authentication", "sign_in": "sign in", "signs_out": "signs out",
            "types": {"text": "text", "integer": "integer", "decimal": "decimal"}},
     "es": {"header": "idioma: es", "app": "aplicación", "data": "datos", "records": "registros", "page": "página",
            "heading": "encabezado", "text": "texto", "table": "tabla", "button": "botón", "width": "ancho",
@@ -27,6 +30,7 @@ PHRASES = {
            "increase": r"aumentar tamaño del botón(?: (STRING))? en (\d+)px",
            "decrease": r"reducir tamaño del botón(?: (STRING))? en (\d+)px",
            "editable": "editable", "when": "cuando", "notify": "notificar", "and": "y", "notifications": "notificaciones",
+           "authentication": "autenticación", "sign_in": "iniciar sesión", "signs_out": "cierra sesión",
            "types": {"text": "texto", "integer": "entero", "decimal": "decimal"}},
 }
 HEADERS = {phrases["header"]: code for code, phrases in PHRASES.items()}
@@ -76,7 +80,19 @@ class Table(Element):
 class Button(Element):
     text: str = ""
     width: int | None = None
-    action: tuple[str, str] | None = None  # ("adds", a data name) or ("opens", a page name)
+    action: tuple[str, str] | None = None  # ("adds", a data name), ("opens", a page name) or SIGNS_OUT
+
+
+SIGNS_OUT = ("signs out", "")  # the action of a button that ends the session
+
+
+@dataclass(frozen=True)
+class SignIn(Element):
+    """The form for signing in: the labels of the name and password boxes, the button, and the message on failure."""
+    name_label: str = ""
+    password_label: str = ""
+    button: str = ""
+    failure: str = ""
 
 
 @dataclass(frozen=True)
@@ -126,7 +142,7 @@ class App:
     data: tuple[Data, ...]
     pages: tuple[Page, ...]
     records: tuple[Records, ...] = ()
-    uses: tuple[str, ...] = ()  # the parts chosen with 'use': sqlite, fastapi
+    uses: tuple[str, ...] = ()  # the parts chosen with 'use': sqlite, fastapi, authentication
     exposed: tuple[str, ...] = ()  # the data types that have an API
     language: str = field(default="en", compare=False)
     line: int = field(default=0, compare=False)
@@ -138,6 +154,24 @@ class App:
 
 class NotBuilt(IntentError):
     """A statement the reader recognises but the library cannot build yet."""
+
+
+def part_of(written, words):
+    """The part of an application that a word after 'use' names, or None."""
+    written = written.lower()
+    if written == words["authentication"]:
+        return "authentication"
+    return written if written in SERVER_PARTS else None
+
+
+def part_text(part, language):
+    """A part of an application as written after 'use' in standard phrases."""
+    return PHRASES[language]["authentication"] if part == "authentication" else PARTS[part]
+
+
+def sign_in_page(app):
+    """The page that holds the sign-in form, or None if there is none."""
+    return next((page for page in app.pages if any(isinstance(element, SignIn) for element in page.elements)), None)
 
 
 def unquote(literal):
@@ -209,15 +243,16 @@ def check(app):
         line = lines.get(name, app.line)
         if name not in names:
             raise IntentError(line, f"there is no data named '{name}'")
-        if set(app.uses) != set(PARTS):
+        if not SERVER_PARTS <= set(app.uses):
             raise IntentError(line, "an API needs a database and a web framework: add 'use sqlite' and 'use FastAPI'")
         if any(field_name == "id" for field_name, _ in names[name].fields):
             raise IntentError(line, f"'{name}' has a field named 'id', which the database keeps for itself")
     if len({name.lower() for name in app.exposed}) != len(app.exposed):
         raise IntentError(app.line, "two data types with an API would share one table name")
-    if "sqlite" in app.uses and not app.exposed:
+    if "sqlite" in app.uses and not app.exposed and "authentication" not in app.uses:
         raise IntentError((app.use_lines or (app.line,))[0], "nothing uses the database: expose a data type as an API, "
                                                              "or remove 'use sqlite'")
+    check_authentication(app)
     page_names = {page.name for page in app.pages}
     for page in app.pages:
         for element in page.elements:
@@ -237,6 +272,37 @@ def check(app):
     for item in app.data:
         if item.name not in shown:
             raise IntentError(item.line, f"'{item.name}' is declared but no page shows it")
+
+
+def check_authentication(app):
+    """Check signing in and out. Raises IntentError at the line of the problem."""
+    use_line = dict(zip(app.uses, app.use_lines)).get("authentication", app.line)
+    forms = sorted([(page, element) for page in app.pages for element in page.elements if isinstance(element, SignIn)],
+                   key=lambda pair: pair[1].line)
+    leaving = [element for page in app.pages for element in page.elements
+               if isinstance(element, Button) and element.action == SIGNS_OUT]
+    if "authentication" not in app.uses:
+        if forms or leaving:
+            first = min([element for _, element in forms] + leaving, key=lambda element: element.line)
+            raise IntentError(first.line, "signing in and out needs 'use authentication' before the application")
+        return
+    if not SERVER_PARTS <= set(app.uses):
+        raise IntentError(use_line, "authentication needs a database and a web framework: add 'use sqlite' and 'use FastAPI'")
+    for item in app.data:
+        if item.name.lower() in AUTH_TABLES:
+            raise IntentError(item.line, f"'{item.name}' cannot be declared with authentication: its table would be named "
+                                         f"'{item.name.lower()}', where the users and their sessions are kept")
+    if not forms:
+        raise IntentError(use_line, "authentication needs one page with a sign-in form, such as "
+                                    "'sign in \"Name\" \"Password\" \"Sign in\" \"Wrong name or password\"'")
+    if len(forms) > 1:
+        raise IntentError(forms[1][1].line, "there is already a sign-in form; an application has exactly one")
+    page = forms[0][0]
+    for element in page.elements:
+        if not isinstance(element, (Heading, Paragraph, SignIn)):
+            raise IntentError(element.line, "the sign-in page may hold only headings, text and the sign-in form")
+    if len(app.pages) < 2:
+        raise IntentError(page.line, "there must be at least one page besides the sign-in page")
 
 
 def check_rules(app, names, expose_lines):
@@ -347,8 +413,8 @@ def read_lines(text, on_problem=None, resolver=None):
     for number, raw in numbered[1:]:
         indent = len(raw) - len(raw.lstrip())
         line = raw.strip()
-        if (match := re.fullmatch(rf"{words['use']}\s+(\S+)", line)) and match[1].lower() in PARTS:
-            part = match[1].lower()
+        if (match := re.fullmatch(rf"{words['use']}\s+(\S+)", line)) and part_of(match[1], words) is not None:
+            part = part_of(match[1], words)
             if app_name is not None or indent:
                 problem(IntentError(number, "the parts of an application are chosen before the application, at the "
                                             "start of a line"))
@@ -450,6 +516,7 @@ def read_lines(text, on_problem=None, resolver=None):
     pairs = sorted(zip(exposed, expose_lines), key=lambda pair: position.get(pair[0], len(position)))
     parts = sorted(zip(uses, use_lines), key=lambda pair: list(PARTS).index(pair[0]))
     rules.sort(key=lambda rule: position.get(rule.data, len(position)))
+    pages.sort(key=lambda page: not any(isinstance(element, SignIn) for element in page.elements))  # the sign-in page first
     known = {item.name: dict(item.fields) for item in data}
     rules = [replace(rule, conditions=tuple((name, operator, as_kind(value, known.get(rule.data, {}).get(name)))
                                             for name, operator, value in rule.conditions)) for rule in rules]
@@ -566,12 +633,20 @@ def _element(line, number, words):
         return Table(data=match[1], line=number)
     if re.fullmatch(words["notifications"], line):
         return Notifications(line=number)
+    sign_in = words["sign_in"].replace(" ", r"\s+")
+    if match := re.fullmatch(rf"{sign_in}\s+({STRING})\s+({STRING})\s+({STRING})\s+({STRING})", line):
+        texts = [_text(match[index], number) for index in range(1, 5)]
+        return SignIn(name_label=texts[0], password_label=texts[1], button=texts[2], failure=texts[3], line=number)
+    if re.match(rf"{sign_in}(\s|\Z)", line):
+        raise IntentError(number, f"expected '{words['sign_in']}' and four texts in double quotes: the labels of the name "
+                                  f"and the password, the text of the button, and the message when signing in fails")
+    signs_out = words["signs_out"].replace(" ", r"\s+")
     if match := re.fullmatch(rf"{words['button']}\s+({STRING})(?:\s+{words['width']}\s+(\d+)px)?"
-                             rf"(?:\s+({words['adds']}|{words['opens']})\s+(\S+))?", line):
+                             rf"(?:\s+({words['adds']}|{words['opens']})\s+(\S+)|\s+({signs_out}))?", line):
         width = int(match[2]) if match[2] else None
         if width is not None and not 1 <= width <= MAX_WIDTH:
             raise IntentError(number, f"the width must be between 1px and {MAX_WIDTH}px")
-        action = None
+        action = SIGNS_OUT if match[5] else None
         if match[3]:
             if not IDENTIFIER.match(match[4]):
                 raise IntentError(number, f"'{match[4]}' is not a valid name")
@@ -668,8 +743,13 @@ def element_text(element, language):
         return lines + ([words["editable"]] if element.editable else [])
     if isinstance(element, Notifications):
         return [words["notifications"]]
+    if isinstance(element, SignIn):
+        texts = (element.name_label, element.password_label, element.button, element.failure)
+        return [f"{words['sign_in']} " + " ".join(quote(text) for text in texts)]
     suffix = f" {words['width']} {element.width}px" if element.width is not None else ""
-    if element.action is not None:
+    if element.action == SIGNS_OUT:
+        suffix += f" {words['signs_out']}"
+    elif element.action is not None:
         suffix += f" {words[element.action[0]]} {element.action[1]}"
     return [f"{words['button']} {quote(element.text)}{suffix}"]
 
@@ -684,7 +764,7 @@ def render(app, language=None):
     words = PHRASES[language]
     out = [words["header"], ""]
     if app.uses:
-        out += [f"{words['use']} {PARTS[part]}" for part in app.uses] + [""]
+        out += [f"{words['use']} {part_text(part, language)}" for part in app.uses] + [""]
     out.append(f"{words['app']} {app.name}:")
     for item in app.data:
         out.append(f"    {words['data']} {item.name}:")

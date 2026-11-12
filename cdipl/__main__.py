@@ -119,6 +119,9 @@ def command_run(args):
             command = [sys.executable, "-m", "http.server", str(port), "--bind", "127.0.0.1", "--directory", str(folder)]
             shown, serve_folder = first, Path.cwd()
         print(f"open http://127.0.0.1:{port}/{shown}  (stop with Ctrl+C)", flush=True)
+        if "static/sign-in.js" in files:  # the database starts empty, so nobody can sign in until a user is added
+            print(f"to add a user who can sign in, run in another terminal: cd {folder} && {sys.executable} server.py add-user NAME",
+                  flush=True)
         signal.signal(signal.SIGTERM, signal.default_int_handler)  # stop the server too when asked to end
         try:
             sys.exit(subprocess.run(command, cwd=serve_folder).returncode)

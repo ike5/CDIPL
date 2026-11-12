@@ -301,7 +301,7 @@ class ServerTest(unittest.TestCase):
                                     ("put", "/api/notification"), ("delete", "/api/notification"), ("patch", "/api/notification/1")):
                 with self.subTest(method=method, address=address):
                     reply = getattr(client, method)(address, **({} if method == "delete" else {"json": {"recipient": "x"}}))
-                    self.assertIn(reply.status_code, (404, 405))
+                    self.assertEqual(reply.status_code, 405)
             self.assertEqual(notes(), found)
             # starting again keeps the notifications, and goes on numbering them
             again = TestClient(load_server(folder, "generated_server_rules_b").app)

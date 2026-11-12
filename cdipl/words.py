@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 HERE = Path(__file__).parent / "library"
-TOKEN = re.compile(r'(?P<text>"(?:[^"\\]|\\.)*")|(?P<number>-?\d+)(?![\w.]|,\d)|(?P<decimal>-?\d+(?:[.,]\d+)+)(?!\w)|'
+TOKEN = re.compile(r'(?P<text>"(?:[^"\\]|\\.)*")|(?P<pixels>\d+px)(?!\w)|(?P<number>-?\d+)(?![\w.]|,\d)|(?P<decimal>-?\d+(?:[.,]\d+)+)(?!\w)|'
                    r'(?P<mixed>\d\w*)|(?P<op>>=|<=|!=|=|<|>)|(?P<comma>,)|'
                    r"(?P<word>[^\W\d][\w'’-]*)|(?P<sym>[-+*&()])|(?P<stray>\S)")
 SUFFIXES = {
@@ -100,6 +100,8 @@ def split(statement):
             value = re.sub(r'\\(["\\])', r"\1", value[1:-1])  # only \" and \\ are escapes; other backslashes stay
         elif kind == "number":
             value = int(value)
+        elif kind == "pixels":
+            value = int(value[:-2])
         elif kind == "word":
             value = value.strip("-'’") or value
         elif kind == "mixed":
@@ -159,5 +161,5 @@ def codes(tokens):
                 out.append(token.code)
         elif token.kind != "comma":
             out.append({"text": "<text>", "number": "<number>", "decimal": "<number>", "op": "<comparison>",
-                        "name": "<name>", "newname": "<newname>", "sym": "<arithmetic>"}[token.kind])
+                        "name": "<name>", "newname": "<newname>", "sym": "<arithmetic>", "pixels": "<pixels>"}[token.kind])
     return out

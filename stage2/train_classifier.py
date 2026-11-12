@@ -18,25 +18,34 @@ sys.path.insert(0, str(REPO))
 from cdipl import classifier, library, words
 
 NAMES = set(["users", "orders", "items", "files", "records", "lines", "name", "age", "price", "city", "id", "date", "status", "email", "total", "amount", "region", "size", "count", "path", "title", "done", "text"])
+# The page wordings use their own names for kinds of data and fields.
+PAGE_NAMES = {"Product", "Customer", "Order", "name", "price", "stock", "email", "city", "total", "date"}
 FOLDS = 12
 WRONG_ONE_IN = 300
 
 
-def examples(language):
-    """(block, features, wording, unknown words) for each training wording in one language."""
-    path = REPO / "stage2" / "wordings" / f"train_{language}.tsv"
-    if not path.exists():
-        return []
-    word_list = words.load(language)
+def read_wordings(path, word_list, names):
+    """(block, features, wording, unknown words) for each wording in a file."""
     out = []
     with open(path, newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle, delimiter="\t", quoting=csv.QUOTE_NONE):
             try:
-                tokens, unknown = words.encode(row["wording"], word_list, NAMES)
+                tokens, unknown = words.encode(row["wording"], word_list, names)
             except words.WordError as problem:
                 out.append((row["block"], [], row["wording"], [str(problem)]))
                 continue
             out.append((row["block"], words.codes(tokens), row["wording"], unknown))
+    return out
+
+
+def examples(language):
+    """Every training wording in one language: the 90 original blocks, then the page blocks."""
+    folder = REPO / "stage2" / "wordings"
+    word_list = words.load(language)
+    out = []
+    for name, names in ((f"train_{language}.tsv", NAMES), (f"train_pages_{language}.tsv", PAGE_NAMES)):
+        if (folder / name).exists():
+            out += read_wordings(folder / name, word_list, names)
     return out
 
 

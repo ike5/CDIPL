@@ -438,9 +438,12 @@ def resize(items, number, amount, label):
     return button.line
 
 
-def parse(text):
-    """Turn an application description into a checked App. Raises IntentError."""
-    app = read_lines(text)
+def parse(text, resolver=None):
+    """Turn an application description into a checked App. Raises IntentError.
+
+    resolver, if given, is asked about lines of a page that are not standard phrases.
+    """
+    app = read_lines(text, resolver=resolver)
     check(app)
     return app
 

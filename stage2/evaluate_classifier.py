@@ -1,6 +1,7 @@
 """Run the classifier once on the held-out test wordings and report the result.
 
-Usage: .venv/bin/python stage2/evaluate_classifier.py [--details FILE]
+Usage: .venv/bin/python stage2/evaluate_classifier.py [--pages] [--details FILE]
+With --pages it runs the separate held-out wordings for the page blocks.
 The test wordings were written by sessions that never saw the word lists or training wordings,
 and were committed before those existed. Do not use the output to adjust the word lists,
 the training wordings or the threshold: that would make the test meaningless.
@@ -15,16 +16,17 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
 from cdipl import classifier, words
-from stage2.train_classifier import NAMES
+from stage2.train_classifier import NAMES, PAGE_NAMES
 
 
-def evaluate(language, model):
+def evaluate(language, model, file_name=None, names=NAMES):
     word_list = words.load(language)
     outcomes, details = Counter(), []
-    with open(REPO / "stage2" / "wordings" / f"test_{language}.tsv", newline="", encoding="utf-8") as handle:
+    file_name = file_name or f"test_{language}.tsv"
+    with open(REPO / "stage2" / "wordings" / file_name, newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle, delimiter="\t", quoting=csv.QUOTE_NONE):
             try:
-                tokens, unknown = words.encode(row["wording"], word_list, NAMES)
+                tokens, unknown = words.encode(row["wording"], word_list, names)
             except words.WordError as problem:
                 outcome, chosen, margin, unknown = "declined: cannot be read", "", 0, [str(problem)]
             else:
@@ -47,8 +49,12 @@ def main():
     model = classifier.load()
     print(f"classifier version {model.version}, threshold {model.threshold}")
     everything = []
+    pages = "--pages" in sys.argv
     for language in ("en", "es"):
-        outcomes, details = evaluate(language, model)
+        if pages:
+            outcomes, details = evaluate(language, model, f"test_pages_{language}.tsv", PAGE_NAMES)
+        else:
+            outcomes, details = evaluate(language, model)
         everything += details
         total = sum(outcomes.values())
         declined = sum(count for name, count in outcomes.items() if name.startswith("declined"))

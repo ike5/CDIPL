@@ -5,7 +5,7 @@ and generates code for as much of the file as can be read.
 """
 import time
 
-from . import library, parser, words
+from . import library, page_wording, parser, words
 from . import pages as pages_module
 from .languages import HEADERS, PHRASES
 from .model import (
@@ -150,8 +150,10 @@ def _analyse_program(text, target, index):
 
 
 def _analyse_app(text):
-    found = []
-    app = pages_module.read_lines(text, on_problem=found.append)
+    found, notes = [], {}
+    language = pages_module.HEADERS.get(" ".join(text.lstrip("\n").split("\n", 1)[0].split()), "en")
+    resolver = page_wording.make_resolver(language, notes, accept_unsure=True)
+    app = pages_module.read_lines(text, on_problem=found.append, resolver=resolver)
     by_line = {problem.line: problem for problem in found}
     language = app.language
     words = pages_module.PHRASES[language]
@@ -187,10 +189,15 @@ def _analyse_app(text):
             problem = by_line[number]
             record["status"] = "unbuilt" if isinstance(problem, pages_module.NotBuilt) else "error"
             record["note"] = problem.message
+            record["alternatives"] = describe(notes.get(number, {}).get("alternatives", []))
         elif number in readings:
             reading, blocks, shows = readings[number]
             record["reading"] = reading or raw.strip()
             record["blocks"] = describe(blocks)
+            if number in notes:
+                record["status"] = notes[number]["how"]
+                if notes[number]["how"] == "unsure":
+                    record["alternatives"] = describe(notes[number]["alternatives"][1:])
             if shows is not None:
                 record["shows"] = shows
                 record["note"] = "this changes the button declared above; saving writes the new width into that line"

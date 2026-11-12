@@ -1,7 +1,7 @@
 """Build programs from intent, and lift generated programs back to intent."""
 import json
 
-from . import library
+from . import library, page_wording
 from . import pages as pages_module
 from .languages import HEADERS
 from .model import IntentError
@@ -76,7 +76,9 @@ def build_with_index(intent_text, target, index, statuses=None, classifier=None,
     if pages_module.is_app(intent_text):
         if target != "html":
             raise BuildError("an application's pages are built with the target 'html'")
-        return build_app(pages_module.parse(intent_text), statuses), index or {"classifier": "", "statements": {}}
+        language = pages_module.HEADERS.get(" ".join(intent_text.lstrip("\n").split("\n", 1)[0].split()), "en")
+        resolver = page_wording.make_resolver(language, classifier=classifier, word_list=word_list)
+        return build_app(pages_module.parse(intent_text, resolver), statuses), index or {"classifier": "", "statements": {}}
     if target == "html":
         raise BuildError("the target 'html' builds an application's pages; this file is a program over a source")
     program, resolver = read_intent(intent_text, index, classifier, word_list)

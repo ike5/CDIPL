@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 `PLAN.md` is the current plan for the project and records the product owner's decisions; read it before doing any work. The proposal under review is in `outputs/`.
 
 - **Stage 1 (complete, accepted):** `stage1/inventory.md` is the result. `stage1/` also holds the approved briefs, the 20 sample programs, their test inputs, the classification files and the tools that produce the figures. The programs under `stage1/programs/` are study material, not part of the product.
-- **Stage 2 (built and measured):** `cdipl/` is the compiler. The compiler criteria pass. The classifier missed the owner's marks on the held-out test; `stage2/classifier_result.md` has the result and the options, and the owner has to decide what to do (decision D2 in `PLAN.md`). Stage 3 (a C target) has not started.
+- **Stage 2 (built and measured):** `cdipl/` is the compiler. The compiler criteria pass. The classifier missed the marks set for choosing unseen (`stage2/classifier_result.md`). The owner has since asked for a live view, in which choices are applied automatically and shown as they are made; it is proposed in `PLAN.md` under "Next step: a live view" and is not built. Stage 3 (a C target) has not started.
 
 Layout:
 

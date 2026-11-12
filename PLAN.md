@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Reviewed** | `outputs/proposal-classifier-driven-intent-programming-language.md` (v0.2) and this repository at commit `194e44b` |
-| **Revision** | 9, dated 2026-11-11. It incorporates seven rounds of decisions from the product owner and the results of Stage 1 and Stage 2. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
-| **Status** | Stage 1 is complete and accepted. Stage 2 is built and measured: the compiler criteria pass, and the classifier misses the owner's marks. A decision on the classifier is needed before Stage 3. See [Stage 2 progress](#stage-2-progress) and decision D2. |
+| **Revision** | 10, dated 2026-11-12. It incorporates eight rounds of decisions from the product owner and the results of Stage 1 and Stage 2. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
+| **Status** | Stage 1 is complete and accepted. Stage 2 is built and measured: the compiler criteria pass, and the classifier misses the marks set for choosing unseen. The owner has since redirected the product toward pseudocode written in a live view, where every choice is shown as it is made. That step is proposed, not built: see [Next step: a live view](#next-step-a-live-view). |
 | **Audience** | Engineers deciding whether to build this, and what to build first |
 
 References such as "§8" point to sections of the proposal. Sections of this plan are referred to by name.
@@ -59,6 +59,10 @@ The owner has asked the AI assistant that wrote this plan to build the compiler 
 | Formulas | The intent language allows formulas as parameters | Built as part C of Stage 2, with a written meaning for each operator |
 | Plumbing blocks | Stage 2 includes the blocks needed to generate a whole program, with sample J1 as an acceptance test | Done in part A |
 | Formatter and linter for generated code | ruff for Python; prettier and eslint for JavaScript; default rules; line length 320, so the formatters never re-wrap a generated line | Used for criterion G6 |
+| Main way of writing | Pseudocode, written quickly as intents. Short descriptions are also wanted, such as "increase button size by 40px". | The next step is built around pseudocode (D3, D5) |
+| How choices are accepted | Automatically, in a live view: the generated code appears beside the text as it is typed, each statement is shown against the code it produced, and a change to the text changes the code at once | Replaces confirming each choice; see [Next step: a live view](#next-step-a-live-view) |
+| What may be written | Any description should be accepted as input, with the tool steering the developer toward the wording it recognises best | Cannot be met in full without a generative model; see the limits in the next step |
+| What happens to an accepted choice | It becomes canonical for the developer's project | A project-wide record of accepted wordings (D4) |
 | Pace | Generate a small amount, review, then generate more | Three stages with a review after each; Stage 2 is delivered in three parts |
 
 ## Basis and limits of this review
@@ -315,6 +319,49 @@ Each of the six wrong choices was a close neighbour of the block meant, such as 
 
 **Part C, formulas: built and tested.** A formula may be a field, a whole number, text, `+`, `-` or `*` on whole numbers, `&` to join text, or any of these in brackets. Conditions compare two formulas, and `add N = formula` gives every row a calculated field. Every step of a calculation is checked against the integer range in both targets, and a result outside it stops the program with the same error in both. There is no division, no conversion between numbers and text, and no choosing between values by a condition; these are listed in `docs/meaning.md`. The criteria in the table above were re-run with formulas included.
 
+### Next step: a live view
+
+Proposed after the owner's eighth round of decisions. Not built.
+
+**What the owner asked for.** Developers write pseudocode, or short descriptions, in one pane. The generated code, in the language they chose, appears in another pane as they type. Each statement is shown against the code it produced. The classifier's choice is applied automatically, with no confirmation step. If the result is not what was meant, the developer rewords the statement and the code changes at once. Once the developer has accepted a choice, it is fixed for their project.
+
+**Why this changes the classifier question.** The Stage 2 marks were set for a classifier that chooses unseen. In a live view nothing is unseen: a wrong choice appears on screen the moment it is made, next to the statement that caused it. On that footing the useful figure is how often the first guess is right, which was 93% in English and 95% in Spanish on wording the classifier had not seen. The product's promise changes with this, and should be stated that way: it no longer "never guesses"; it guesses in the open, and what the developer accepts is then fixed and repeatable.
+
+**What is already in place.**
+
+- A build takes well under a millisecond once the word lists are loaded (measured: about 0.2 ms for standard phrases and 0.5 ms for free wording, on the example program). Rebuilding on every keystroke is feasible.
+- The trace already maps every generated line to the statement it came from.
+- The index already records choices; `explain` already says in plain words what each statement was read as.
+
+**What has to be built.**
+
+1. A long-running process that rebuilds on each change and reports, for every statement: the block chosen, the same statement in standard phrases, the lines of code it produced, and whether the choice was sure, unsure, or impossible.
+2. A two-pane view: text on one side, code on the other, with each statement and its code highlighted together, in both directions.
+3. For a statement that cannot be read: the reason, and the closest blocks, shown in place.
+4. A project-wide record of accepted wordings, kept in the repository, so that an accepted wording means the same block in every file and for every member of the team.
+
+**Limits that the live view does not remove.**
+
+- **"Any description should work" cannot be promised.** The tool can accept any text as input and answer at once, but it can only build what is in the library. Three boundaries remain:
+  - *One statement, one block.* A description that needs several steps, such as "find the duplicate files in a folder", has to be written as several statements, or the library has to hold a ready-made chain of blocks for it.
+  - *Only what the library holds.* Sixteen blocks are built. Anything else is recognised, at best, as a block that does not exist yet.
+  - *Descriptions that refer to something.* "Increase button size by 40px" refers to a particular button and its present size. That can be read only if the button was declared earlier in the same intent file, in which case the statement is a change to that declaration. There are no user-interface blocks yet, and changing code that CDIPL did not generate remains out of scope by the owner's earlier decision.
+- **Pseudocode with loops and branches is not in the language.** The family built so far is a chain of steps over rows. "For each user, if age > 18, print the name" would have to be recognised as a filter followed by a display. That is recognising a pattern across several lines, which the classifier does not do.
+- **A wrong choice is caught only if the developer looks.** The view must make the reading obvious, by showing the statement in standard phrases beside what was typed, and must mark unsure choices clearly.
+- **The values still have to be exact.** Field names, numbers, comparisons and formulas are read by fixed rules, however freely the rest is worded.
+
+**Evidence that would count as success.**
+
+| ID | Criterion |
+|---|---|
+| L1 | After each change to the text, the view shows the new code within 100 ms on an ordinary laptop. |
+| L2 | Selecting a statement highlights exactly the lines the trace gives for it, and selecting a line of code highlights its statement. |
+| L3 | Every statement shows what it was read as, in standard phrases, and whether the choice was sure or unsure. |
+| L4 | A statement that cannot be read shows why and lists the closest blocks, without stopping the rest of the file from being shown. |
+| L5 | An accepted wording is recorded for the project, is reused in other files without consulting the classifier, and survives the classifier being replaced. |
+| L6 | The code shown in the view is byte-identical to what the `build` command writes for the same text and project record. |
+| L7 | Five developers who have not seen the tool each write a small program from a written task. Record how many statements were read correctly first time, how many needed rewording, and whether any wrong reading went unnoticed. This is the first test with real developers, and the one that says whether the idea works. |
+
 ### Stage 3: third target
 
 Add C, as the owner decided. Java follows later.
@@ -429,7 +476,12 @@ Each has a default that this plan assumes if nobody decides otherwise.
 | ID | Decision | Default assumed here |
 |---|---|---|
 | D1 | Input format for generated programs, given that C cannot read JSON without added code | Decide before Stage 3. Stage 2 uses JSON. |
-| D2 | What to do about the classifier, now that it has missed the marks for wrong choices and, in English, for declining. The options are set out in `stage2/classifier_result.md`: confirm each choice once and remember it in the index; keep silent choosing with a stricter threshold; improve the classifier and test it on new wordings; or accept the measured rates. | Recommended: confirm once and remember, and improve the classifier over time. Until the owner decides, the classifier keeps choosing silently at the tested threshold. |
+| D2 | What counts as the developer accepting a choice, so that it becomes canonical for the project? | Saving the file. Until then a choice is provisional and may change as the text changes. |
+| D3 | What does the owner's pseudocode look like? A few real lines would settle whether the present chain-of-steps language is enough, or whether loops and branches have to be recognised. | Chain of steps, one per line, as in the examples so far |
+| D4 | Where is the project's record of accepted wordings kept, and is it shared by a team? | One file at the root of the project, committed with the code |
+| D5 | Which should come first: more blocks, so that more can be written, or the live view, so that what exists can be used as intended? | The live view, on the sixteen blocks that exist |
+| D6 | Where does the live view run first: a page in the browser served from the developer's machine, or an extension for a particular editor? | A local browser page, because it needs no editor-specific work and tests the idea soonest |
+| D7 | Should short descriptions that refer to existing things, such as "increase button size by 40px", be read as changes to an earlier declaration in the same intent file? | Yes, once there are user-interface blocks. Not before. |
 
 ## Assumptions
 

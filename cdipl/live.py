@@ -31,8 +31,7 @@ STEP_BLOCKS = {Read: ["read-text-file", "parse-json", "check-list-of-records", "
                Filter: ["filter-rows"], Add: ["calculate"], Sort: ["sort-rows"], Limit: ["take-first"],
                Group: ["group-by-key"], Count: ["count-values"], IfNone: ["print-message"], Show: ["print-table"],
                WriteJson: ["format-json"]}
-ELEMENT_BLOCKS = {pages_module.Heading: "page-heading", pages_module.Paragraph: "page-text",
-                  pages_module.Table: "data-table", pages_module.Button: "page-button"}
+ELEMENT_BLOCKS = html.ELEMENT_BLOCKS
 
 
 class LiveResolver(Resolver):
@@ -173,7 +172,12 @@ def _analyse_app(text):
                     readings[element.search_line] = (f"{words['searchable']} {element.search}", ["filter-elements-by-text"], None)
                 for name, line in zip(element.sort, element.sort_lines):
                     readings[line] = (f"{words['sortable']} {name}", ["table-sort"], None)
+                if element.editable:
+                    readings[element.editable_line] = (words["editable"], ["edit-table-rows", "add-record-form"], None)
             readings[element.line] = (lines[0], blocks, None)
+    for rule in app.rules:
+        readings[rule.line] = (f"{words['when']} {pages_module.condition_text(rule, language)}:", ["notify-when"], None)
+        readings[rule.notify_line] = (f"{words['notify']} {rule.recipient}", ["notify-when"], None)
     for part, line in zip(app.uses, app.use_lines):
         readings[line] = (f"{words['use']} {pages_module.PARTS[part]}", ["sqlite-table" if part == "sqlite" else "fastapi-app"], None)
     for name, line in zip(app.exposed, app.expose_lines):
@@ -219,7 +223,11 @@ def _analyse_app(text):
             for record in statements:
                 if record["line"] == problem.line:
                     record["status"], record["note"] = "error", problem.message
-    usable = _usable(app)
+    usable, dropped = _usable(app)
+    for record in statements:  # a statement that is left out of what is generated is reported, with the reason
+        if record["line"] in dropped and record["status"] not in ("error", "unbuilt"):
+            record["status"], record["note"] = "error", dropped[record["line"]]
+            complete = False
     files, preview = [], None
     if usable.pages:
         generated = html.generate(usable)
@@ -236,15 +244,32 @@ def _analyse_app(text):
 
 
 def _usable(app):
-    """The part of an application that can be generated: what is left after dropping whatever does not fit."""
+    """The part of an application that can be generated: what is left after dropping whatever does not fit.
+
+    Returns that application and, for the new statements of an application that are left out, line -> reason.
+    """
     fields = {item.name: [name for name, _ in item.fields] for item in app.data if item.fields}
     kinds = {item.name: [kind for _, kind in item.fields] for item in app.data if item.fields}
-    exposed, tables = [], set()
+    exposed, tables, dropped = [], set(), {}
     if set(app.uses) == set(pages_module.PARTS):
         for name in app.exposed:
+            if app.rules and name.lower() == pages_module.NOTIFICATIONS_TABLE:
+                line = dict(zip(app.exposed, app.expose_lines)).get(name, app.line)
+                dropped[line] = f"'{name}' cannot have an API: its table would be named 'notification', where the notifications are kept"
+                continue
             if name in fields and "id" not in fields[name] and name.lower() not in tables:
                 tables.add(name.lower())
                 exposed.append(name)
+    rules, seen = [], set()
+    for rule in app.rules:
+        known = dict(zip(fields.get(rule.data, []), kinds.get(rule.data, [])))
+        if rule.data not in exposed:
+            dropped[rule.line] = dropped[rule.notify_line] = f"a rule about '{rule.data}' needs '{rule.data}' to be exposed as an API"
+        elif not all(name in known and pages_module.fits(value, known[name]) for name, _, value in rule.conditions):
+            dropped[rule.line] = dropped[rule.notify_line] = f"the condition does not fit the fields of '{rule.data}'"
+        elif rule not in seen:
+            seen.add(rule)
+            rules.append(rule)
     uses = tuple(part for part in app.uses if part != "sqlite" or exposed)
     page_names = {page.name for page in app.pages if page.elements}
     usable_pages, seen = [], set()
@@ -255,15 +280,22 @@ def _usable(app):
                 verb, target = element.action
                 if (verb == "adds" and target not in exposed) or (verb == "opens" and target not in page_names):
                     element = pages_module.Button(text=element.text, width=element.width, line=element.line)
+            if isinstance(element, pages_module.Notifications) and not rules:
+                dropped[element.line] = "there are no notifications to show: no rule that can be built notifies anyone"
+                continue
             if isinstance(element, pages_module.Table):
                 if element.data not in fields:
                     continue
                 known = fields[element.data]
                 pairs = [(name, line) for name, line in zip(element.sort, element.sort_lines) if name in known]
+                editable = element.editable and element.data in exposed
+                if element.editable and not editable:
+                    dropped[element.editable_line] = f"a table can be editable only if '{element.data}' is exposed as an API"
                 element = pages_module.Table(
                     data=element.data, search=element.search if element.search in known else None,
-                    sort=tuple(name for name, _ in pairs), line=element.line, search_line=element.search_line,
-                    sort_lines=tuple(line for _, line in pairs))
+                    sort=tuple(name for name, _ in pairs), editable=editable, line=element.line,
+                    search_line=element.search_line, sort_lines=tuple(line for _, line in pairs),
+                    editable_line=element.editable_line)
             kept.append(element)
         if kept and page.name.lower() not in seen:
             seen.add(page.name.lower())
@@ -279,5 +311,7 @@ def _usable(app):
             records.append(item)
     lines = dict(zip(app.exposed, app.expose_lines))
     use = dict(zip(app.uses, app.use_lines))
-    return pages_module.App(app.name, app.data, tuple(usable_pages), tuple(records), uses, tuple(exposed), app.language,
-                            app.line, (), tuple(use[part] for part in uses), tuple(lines[name] for name in exposed))
+    usable = pages_module.App(app.name, app.data, tuple(usable_pages), tuple(records), uses, tuple(exposed), app.language,
+                              app.line, (), tuple(use[part] for part in uses), tuple(lines[name] for name in exposed),
+                              tuple(rules))
+    return usable, dropped

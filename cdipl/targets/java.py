@@ -168,8 +168,10 @@ IMPORTS = [
     ("always", "import java.nio.file.Files;"),
     ("always", "import java.nio.file.InvalidPathException;"),
     ("always", "import java.nio.file.Path;"),
+    ("always", "import java.util.ArrayDeque;"),
     ("always", "import java.util.ArrayList;"),
     ("compare", "import java.util.Arrays;"),
+    ("always", "import java.util.Deque;"),
     ("always", "import java.util.HexFormat;"),
     ("always", "import java.util.LinkedHashMap;"),
     ("always", "import java.util.List;"),
@@ -227,13 +229,76 @@ SUPPORT = [
             this.text = text;
         }
 
-        Object read() {
-            Object value = readValue();
-            skipSpace();
-            if (position < text.length()) {
-                throw invalid();
+        private static final class Container {
+            private final List<Object> array;
+            private final Map<String, Object> object;
+            private String key;
+
+            Container(List<Object> array, Map<String, Object> object) {
+                this.array = array;
+                this.object = object;
             }
-            return value;
+
+            void add(Object value) {
+                if (array != null) {
+                    array.add(value);
+                } else {
+                    object.put(key, value);
+                }
+            }
+
+            Object value() {
+                return array != null ? array : object;
+            }
+        }
+
+        Object read() {
+            Deque<Container> open = new ArrayDeque<>();
+            while (true) {
+                Object value;
+                skipSpace();
+                if (take('[')) {
+                    skipSpace();
+                    if (!take(']')) {
+                        open.push(new Container(new ArrayList<>(), null));
+                        continue;
+                    }
+                    value = new ArrayList<>();
+                } else if (take('{')) {
+                    skipSpace();
+                    if (!take('}')) {
+                        Container object = new Container(null, new LinkedHashMap<>());
+                        object.key = readKey();
+                        open.push(object);
+                        continue;
+                    }
+                    value = new LinkedHashMap<>();
+                } else {
+                    value = readScalar();
+                }
+                while (true) {
+                    Container parent = open.peek();
+                    if (parent == null) {
+                        skipSpace();
+                        if (position < text.length()) {
+                            throw invalid();
+                        }
+                        return value;
+                    }
+                    parent.add(value);
+                    skipSpace();
+                    if (take(',')) {
+                        if (parent.object != null) {
+                            parent.key = readKey();
+                        }
+                        break;
+                    }
+                    if (!take(parent.array != null ? ']' : '}')) {
+                        throw invalid();
+                    }
+                    value = open.pop().value();
+                }
+            }
         }
 
         private static Failure invalid() {
@@ -261,14 +326,24 @@ SUPPORT = [
             return text.charAt(position++);
         }
 
-        private Object readValue() {
+        private String readKey() {
             skipSpace();
+            if (position >= text.length() || text.charAt(position) != '"') {
+                throw invalid();
+            }
+            String key = readString();
+            skipSpace();
+            if (!take(':')) {
+                throw invalid();
+            }
+            return key;
+        }
+
+        private Object readScalar() {
             if (position >= text.length()) {
                 throw invalid();
             }
             return switch (text.charAt(position)) {
-                case '{' -> readObject();
-                case '[' -> readArray();
                 case '"' -> readString();
                 case 't' -> readWord("true", Boolean.TRUE);
                 case 'f' -> readWord("false", Boolean.FALSE);
@@ -283,49 +358,6 @@ SUPPORT = [
             }
             position += word.length();
             return value;
-        }
-
-        private Map<String, Object> readObject() {
-            position++;
-            Map<String, Object> object = new LinkedHashMap<>();
-            skipSpace();
-            if (take('}')) {
-                return object;
-            }
-            do {
-                skipSpace();
-                if (position >= text.length() || text.charAt(position) != '"') {
-                    throw invalid();
-                }
-                String key = readString();
-                skipSpace();
-                if (!take(':')) {
-                    throw invalid();
-                }
-                object.put(key, readValue());
-                skipSpace();
-            } while (take(','));
-            if (!take('}')) {
-                throw invalid();
-            }
-            return object;
-        }
-
-        private List<Object> readArray() {
-            position++;
-            List<Object> array = new ArrayList<>();
-            skipSpace();
-            if (take(']')) {
-                return array;
-            }
-            do {
-                array.add(readValue());
-                skipSpace();
-            } while (take(','));
-            if (!take(']')) {
-                throw invalid();
-            }
-            return array;
         }
 
         private String readString() {
@@ -401,11 +433,7 @@ SUPPORT = [
 '''),
     ("parse-json", "always", r'''
     private static Object parseJson(String json) {
-        try {
-            return new JsonReader(json).read();
-        } catch (StackOverflowError error) {
-            throw new Failure(4, "bad-json", "the input is nested too deeply");
-        }
+        return new JsonReader(json).read();
     }
 '''),
     ("check-list-of-records", "always", r'''

@@ -40,6 +40,7 @@ from ..model import uses_field
 
 FILE_NAME = "main.c"
 SUPPORTED = None  # the blocks this target can build; None means every block
+COMMENTS = ("//", "/*", "*")  # what a comment line starts with; generated code holds none
 
 # How a generated program is compiled before it is run. -O0 keeps the tests fast; the output does not depend on it.
 COMPILE_FLAGS = ("-std=c11", "-O0")
@@ -70,16 +71,14 @@ def run_command(program_path):
     return [str(binary)]
 
 
-# The includes are written with the digraph %: (ISO C 6.4.6), which is the same as #, because the shared
-# tests take any line that starts with # as a comment. See docs/target-c.md.
 PRELUDE = '''\
-%:include <errno.h>
-%:include <stdarg.h>
-%:include <stdbool.h>
-%:include <stddef.h>
-%:include <stdio.h>
-%:include <stdlib.h>
-%:include <string.h>
+#include <errno.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct {
   const char *text;

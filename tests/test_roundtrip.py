@@ -35,7 +35,7 @@ class RoundTripTest(unittest.TestCase):
                 text = build_program(program, target)[generator.FILE_NAME]
                 with self.subTest(program=index, target=target):
                     for line in text.split("\n"):
-                        self.assertFalse(line.strip().startswith(("#", "//", "/*", "*")), line)
+                        self.assertFalse(line.strip().startswith(generator.COMMENTS), line)
                     for phrase in ("keep where", "sort by", "group by", "count each group", "write as json",
                                    "conservar donde", "ordenar por"):
                         self.assertNotIn(phrase, text)

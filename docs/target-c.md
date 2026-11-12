@@ -32,7 +32,7 @@ Any C11 compiler will do; `clang -std=c11` gives the same program. `run_command`
 
 The column limit is 400 rather than the 320 of the other targets because C is wordier: an integer field is written `row[F_age].number` and a calculation `calculate(a, '*', b)`. The longest line in 3,000 random programs is 341 characters in C, against 246 in Python and 233 in JavaScript; 4 of the 3,000 C programs have a line longer than 320. A formula long enough to pass 400 characters would be re-wrapped, as a line past 320 would be in the other targets. Each test is skipped, with a message, when its tool is not installed. Tested with gcc 13.3, clang 18.1 and clang-format 18.1.3.
 
-**Includes are written `%:include`.** `%:` is the C digraph for `#` (ISO C 6.4.6) and means exactly the same. It is used because `tests/test_roundtrip.py` checks that no generated line starts with `#`, `//`, `/*` or `*`, treating `#` as a comment as it is in Python. In C, `#` starts a preprocessor directive, and an include cannot be written without one, so the test as written cannot pass with ordinary `#include` lines. The test was left unchanged; if it learns each target's comment markers, the generator can write `#include` instead by changing seven lines of `PRELUDE` in `c.py`. For the same reason no generated line starts with `*`: pointers are written through `->` and indexes instead of `*p = ...`.
+**No generated line starts with `*`.** The shared round-trip test checks that generated code holds no comments, and for C it takes a line starting with `//`, `/*` or `*` as one. Pointers are therefore written through `->` and indexes instead of `*p = ...`.
 
 The generated code holds no comments.
 
@@ -44,7 +44,7 @@ The generated code holds no comments.
 4. One function per `keep where` (`keep_1`, `keep_2`, ...) and per `add` (`add_1`, ...), because C has no anonymous functions. They are numbered in order of appearance, never by intent line, so that the English and Spanish intents build the same file.
 5. `main`, with one line (or, for `if none say`, four) per statement, in the shapes listed in `FORMS`.
 
-`lift` reads the header, the step functions and the lines of `main`, rebuilds the program and regenerates it; `cdipl.compiler.lift` refuses the file unless the result is identical. `tests/test_edited_c.py` checks 47 hand edits: 17 are lifted exactly (changed literals, operators, comparisons, fields shown, sort direction and field, file and source name, a repeated or moved step) and 30 are refused (a removed range check, division, foreign statements, both kinds of comment, changed support code, `#include` in place of `%:include`, edits that leave the text and the declared types inconsistent). Unlike Python and JavaScript, deleting a `limit` step by hand is refused, because its support function `first_rows` is left behind unused; the same holds for deleting any step whose support code no other step uses.
+`lift` reads the header, the step functions and the lines of `main`, rebuilds the program and regenerates it; `cdipl.compiler.lift` refuses the file unless the result is identical. `tests/test_edited_c.py` checks 47 hand edits: 17 are lifted exactly (changed literals, operators, comparisons, fields shown, sort direction and field, file and source name, a repeated or moved step) and 30 are refused (a removed range check, division, foreign statements, both kinds of comment, changed support code, an include written with the digraph `%:`, edits that leave the text and the declared types inconsistent). Unlike Python and JavaScript, deleting a `limit` step by hand is refused, because its support function `first_rows` is left behind unused; the same holds for deleting any step whose support code no other step uses.
 
 ## Size of the fixed support code
 
@@ -91,7 +91,7 @@ Besides the shared tests, two checks were run during development and are not par
 - **Surrogates.** JSON escapes are UTF-16 code units. Matching Python meant pairing a high escape only with an immediately following low escape and treating any other surrogate as making the text invalid, while still storing it.
 - **No anonymous functions.** Filters and added fields became separate numbered functions, and `lift` had to match each line of `main` with its function.
 - **Unused code is an error.** With `-Wall -Werror` an unused `static` function fails the build, so support code had to be split into pieces with exact conditions for inclusion, and an added field that uses no field had to mark its parameter as used with `(void)row;`.
-- **The shared tests' idea of a comment** (lines starting with `#` or `*`) forced the `%:include` digraph and some reshaping of ordinary C.
+- **The shared tests' idea of a comment.** The test was written for Python and took `#` as a comment, which no C file with an include can satisfy. Each target now declares what a comment line starts with (`COMMENTS`).
 
 ## Cost in the test suite
 

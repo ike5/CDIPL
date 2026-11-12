@@ -15,6 +15,7 @@ from cdipl import __main__ as cli
 from cdipl import pages, starters
 from cdipl.compiler import build
 from cdipl.parser import parse
+from cdipl.targets import TARGETS
 
 from .support import REPO
 
@@ -95,6 +96,15 @@ class RunTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout.split(), ["Bo", "20", "Zoe", "30"])
         self.assertFalse(list(self.dir.glob("*.py")), "nothing is written beside the intent file")
+
+    def test_program_runs_in_every_target_language(self):
+        data = self.dir / "people.json"
+        data.write_text(json.dumps([{"name": "Zoe", "age": 30}, {"name": "Al", "age": 9}, {"name": "Bo", "age": 20}]), encoding="utf-8")
+        for target in sorted(TARGETS):
+            with self.subTest(target=target):
+                result = cdipl("run", "--target", target, self.intent("program"), str(data), cwd=self.dir)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(result.stdout.split(), ["Bo", "20", "Zoe", "30"])
 
     def test_program_exits_with_the_programs_status(self):
         missing = cdipl("run", self.intent("program"), str(self.dir / "absent.json"), cwd=self.dir)

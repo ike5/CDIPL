@@ -82,7 +82,7 @@ def command_run(args):
     try:
         text = intent.read_text(encoding="utf-8")
         is_app = pages.is_app(text)
-        files, _ = build_with_index(text, "html" if is_app else "python", load_index(intent))
+        files, _ = build_with_index(text, "html" if is_app else args.target, load_index(intent))
     except OSError as problem:
         sys.exit(f"{intent}: {problem.strerror}")
     except (IntentError, BuildError) as problem:
@@ -97,7 +97,12 @@ def command_run(args):
             (folder / file).parent.mkdir(parents=True, exist_ok=True)
             (folder / file).write_text(content, encoding="utf-8")
         if not is_app:
-            sys.exit(subprocess.run([sys.executable, str(folder / "main.py"), *args.arguments], cwd=Path.cwd()).returncode)
+            generator = TARGETS[args.target]
+            try:
+                command = generator.run_command(folder / generator.FILE_NAME)
+            except (OSError, RuntimeError) as problem:  # for example, no compiler for a target that needs one
+                sys.exit(f"cannot run the {args.target} program: {problem}")
+            sys.exit(subprocess.run([*command, *args.arguments], cwd=Path.cwd()).returncode)
         rest = list(args.arguments)
         port = args.port
         if rest[:1] == ["--port"] and len(rest) == 2 and rest[1].isdigit():  # --port given after the file name
@@ -236,6 +241,8 @@ def main():
     run_parser.add_argument("intent")
     run_parser.add_argument("arguments", nargs=argparse.REMAINDER, help="arguments for a program")
     run_parser.add_argument("--port", type=int, help="port for an application (default 8000)")
+    run_parser.add_argument("--target", choices=sorted(TARGETS), default="python",
+                            help="language to build a program in before running it (default python); put it before the file name")
     run_parser.set_defaults(run=command_run)
     build_parser = commands.add_parser("build", help="generate a program from an intent file")
     build_parser.add_argument("intent")

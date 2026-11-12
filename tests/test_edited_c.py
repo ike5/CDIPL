@@ -41,7 +41,7 @@ C_EDITS = [
     ("add a block comment", "  return row[F_age]", "  /* adults */ return row[F_age]", REFUSED),
     ("change support code", "  exit(status);", "  exit(1);", REFUSED),
     ("change a constant", "MAX_INTEGER = 9007199254740991;", "MAX_INTEGER = 100;", REFUSED),
-    ("write the includes with #", "%:include <stdio.h>", "#include <stdio.h>", REFUSED),
+    ("write an include with a digraph", "#include <stdio.h>", "%:include <stdio.h>", REFUSED),
     ("arithmetic in a condition", "row[F_age].number >= 18", "row[F_age].number + 1 >= 18", REFUSED),
     ("join conditions with or", " && !same_text", " || !same_text", REFUSED),
     ("compare text by order instead of sameness", '!same_text(row[F_city], literal("Lima"))',

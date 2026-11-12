@@ -31,6 +31,7 @@ from .common import (
 
 FILE_NAME = "main.js"
 SUPPORTED = None  # the blocks this target can build; None means every block
+COMMENTS = ("//", "/*", "*")  # what a comment line starts with; generated code holds none
 
 
 def run_command(program_path):

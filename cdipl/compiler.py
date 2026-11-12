@@ -130,6 +130,6 @@ def lift_text(program_text, target, language="en"):
 
 def target_for(file_name):
     for name, generator in TARGETS.items():
-        if file_name.endswith(generator.FILE_NAME.rsplit(".", 1)[1]):
+        if file_name.endswith("." + generator.FILE_NAME.rsplit(".", 1)[1]):
             return name
     raise NotGenerated(f"cannot tell which target language {file_name} is written in")

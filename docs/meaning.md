@@ -20,7 +20,7 @@ The source is a file whose path is written in the intent file or given as a comm
 3. The top-level value must be a list.
 4. Each item of the list is a record. A record is **valid** when it is a JSON object and every declared field is present with a value of the declared type:
    - a text field holds a JSON string that is valid text;
-   - an integer field holds a JSON number whose value is a whole number in range. `18`, `18.0` and `1e3` are all accepted and mean 18, 18 and 1000. `18.5`, `"18"`, `true` and `null` are not accepted. Negative zero means 0.
+   - an integer field holds a JSON number whose value is a whole number in range. `18`, `18.0` and `1e3` are all accepted and mean 18, 18 and 1000. `18.5`, `"18"`, `true` and `null` are not accepted. Negative zero means 0. The test is made on the number as every target reads it, which is the nearest double-precision value: a number written with a fraction too small to survive that, such as `9007199254740990.5`, is read as the whole number beside it and accepted.
 5. From each valid record a **row** is made, holding only the declared fields, in the order they were declared. Fields that were not declared are ignored. If a field name appears twice in a record, the last value counts.
 6. An invalid record stops the program with an error, unless the intent says `skip invalid records`, in which case invalid records are left out and the rest are kept in their original order.
 
@@ -84,7 +84,7 @@ A program that fails writes one line to the error stream, beginning `error: <cat
 
 These are cases where the targets may behave differently, or where the rules above leave something out. They are not covered by tests.
 
-- **Very deeply nested JSON.** Python refuses JSON nested more than about a thousand levels deep, which is reported as `bad-json`. Node accepts far deeper nesting. A file nested that deeply inside a field that was not declared would be accepted by one target and refused by the other.
+- **Very deeply nested JSON.** The targets stop at different depths, and a file refused for its depth is reported as `bad-json`. As measured with the versions used here: Python 3.14 accepts 10,000 levels and refuses 50,000; C refuses more than 10,000; Node and Java accept whatever fits in memory. A file nested that deeply inside a field that was not declared would be accepted by some targets and refused by others.
 - **Very large files.** Each program reads the whole file into memory. Limits on size differ between targets and were not measured.
 - **Platforms.** The tests were run on Linux only, with Python 3.14.6 and Node 22.23.4.
 - **Formulas.** There is no division, no conversion between integers and text, and no way to choose between values by a condition.

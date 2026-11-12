@@ -655,7 +655,7 @@ FORMS = {
                       '"/sign-in.js"), ("POST", "/api/sign-in")}; every other request needs a session: 401 under /api/, else 303 to '
                       '/SIGNIN.html; POST /api/sign-in, POST /api/sign-out; python server.py add-user | set-password | remove-user | '
                       'list-users; in scripts.js every "await fetch(" becomes "await fetchSignedIn("',
-    "sign-in-form": '<form data-sign-in> <label>NAME <input name="name" autocomplete="username" required /></label> '
+    "sign-in-form": '<form data-sign-in method="post"> <label>NAME <input name="name" autocomplete="username" required /></label> '
                     '<label>PASSWORD <input name="password" type="password" autocomplete="current-password" required /></label> '
                     '<button type="submit">BUTTON</button> <p data-failed role="alert" hidden>FAILURE</p></form>; '
                     '<script src="sign-in.js" defer></script>; the sign-in page has no links to the other pages',
@@ -828,7 +828,7 @@ def page_lines(app, page):
         elif isinstance(element, Notifications):
             out.append(("      <ul data-notifications></ul>", element.line))
         elif isinstance(element, SignIn):
-            out += [("      <form data-sign-in>", element.line),
+            out += [('      <form data-sign-in method="post">', element.line),
                     (f'        <label>{escape(element.name_label)} <input name="name" autocomplete="username" required /></label>',
                      element.line),
                     (f'        <label>{escape(element.password_label)} <input name="password" type="password" '
@@ -1181,7 +1181,7 @@ def lift(files):
                 continue
             elif line == "      <ul data-notifications></ul>":
                 elements.append(Notifications())
-            elif line == "      <form data-sign-in>":
+            elif line == '      <form data-sign-in method="post">':
                 elements.append(_sign_in_form(name, body[index:index + 5]))
                 index += 5
             elif match := re.fullmatch(r'      <button type="button"(?: class="width-(\d+)")? data-sign-out>(.*)</button>', line):

@@ -243,7 +243,8 @@ class PagesTest(unittest.TestCase):
         files = without_trace(build(EXAMPLE, "html"))
         edits = [("static/welcome.html", ["Wrong name or password</p>"], ["Try again</p>"], True),
                  ("static/welcome.html", ['autocomplete="current-password"'], ['autocomplete="off"'], False),
-                 ("static/welcome.html", ['      <form data-sign-in>\n'], [""], False),
+                 ("static/welcome.html", ['      <form data-sign-in method="post">\n'], [""], False),
+                 ("static/welcome.html", ['<form data-sign-in method="post">'], ['<form data-sign-in method="get">'], False),
                  ("static/welcome.html", [' role="alert"'], [""], False),
                  ("static/products.html", ["data-sign-out>Sign out</button>"], ["data-sign-out>Leave</button>"], True),
                  ("static/products.html", ['<button type="button" data-sign-out>'], ['<button type="button" class="width-90" data-sign-out>'], False),

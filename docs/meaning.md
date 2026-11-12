@@ -244,6 +244,10 @@ When the command is run at a terminal, the password is asked for twice without b
 - Each attempt to sign in takes about 16 MB of memory and tens of milliseconds of work, so a flood of attempts can slow the server or exhaust its memory.
 - The time taken for a known name and an unknown one differs a little, by the time to store the counted attempt; the hash, which takes far longer, is worked out for both.
 - Nothing is logged by the application, so failed attempts leave no trace other than the count.
+- Signing in again does not end an earlier session of the same user; each lasts until it is signed out of, it expires, or the user's password is set or the user removed.
+- Browsers do not keep cookies apart by port, so the session cookie is also sent to any other server on the same host name, such as another application on the developer's machine.
+- The database file, which holds the password hashes, gets the permissions the operating system gives any new file. Other accounts on the same machine may be able to read it; restrict the folder if that matters.
+- The sign-in form is sent by its script. The form is marked to post, so if the script has not loaded the password is never put in the address, but nobody is signed in either.
 - **The code is a draft that has not been reviewed by a person experienced in authentication.**
 
 **What the generated server does not do.** These are fixed choices of the generator, and anyone who runs the server should know them.

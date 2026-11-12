@@ -1,0 +1,73 @@
+block	wording
+page-heading	pon de título "Mi cuenta"
+page-heading	añade un encabezado que diga "Bienvenidos a la tienda"
+page-heading	título de la página: "Nuestros productos"
+page-heading	quiero que la página lleve arriba del todo el título "Catálogo de otoño"
+page-heading	poner un encabezado en la web con el texto "Pedidos recientes"
+page-heading	encabezado "Contacto"
+page-heading	agregar un titular grande a la página, "Rebajas de invierno"
+page-heading	muestra "Lista de clientes" como encabezado principal
+page-heading	¿puedes colocar un título que ponga "Novedades de la semana"?
+page-heading	la página necesita una cabecera, que sea "Resumen de ventas"
+page-heading	escribir "Quiénes somos" a modo de título en la página web
+page-heading	hazme un título para esta página, tiene que decir "Inventario"
+page-text	escribe "Abrimos de lunes a sábado" en un párrafo
+page-text	párrafo "Gracias por su visita"
+page-text	añadir un párrafo de texto a la página: "Los precios incluyen IVA"
+page-text	que la página muestre el texto "Todavía no hay pedidos"
+page-text	pon un párrafo que diga "Enviamos a todo el país en 48 horas"
+page-text	debajo del título quiero un párrafo corto que ponga "Elige un producto para ver los detalles"
+page-text	texto para la página: "La carga puede tardar unos segundos"
+page-text	inserta un bloque de texto con "Devoluciones gratis durante 30 días"
+page-text	agrega otro párrafo, el texto es "Inicia sesión para continuar"
+page-text	necesito un texto en la web que diga "Los precios se muestran en euros"
+page-text	¿me pones un párrafo con el texto "Atención al cliente las 24 horas"?
+page-text	redactar un párrafo para la página web, "Somos una empresa familiar"
+data-table	tabla de Customer
+data-table	añade una tabla de Product con una columna por cada campo
+data-table	crear en la página una tabla con una columna para cada campo de Order
+data-table	necesito una tabla cuyas columnas sean los campos de Customer
+data-table	pon una tabla para Product en la web, una columna por campo
+data-table	tabla de Order con las columnas total y date
+data-table	haz una tabla con columnas name, price y stock para Product
+data-table	quiero en la página una tabla vacía con las columnas de Customer: name, email, city
+data-table	montar una tabla para el tipo Order, cada campo en su propia columna
+data-table	que la página tenga una tabla de Product, tantas columnas como campos
+data-table	¿se puede poner una tabla de Customer con un encabezado de columna para cada campo?
+data-table	genera la tabla del tipo de datos Order con todos sus campos como columnas
+page-button	botón "Comprar ahora"
+page-button	añade un botón con el texto "Guardar"
+page-button	pon un botón "Enviar" en la página
+page-button	crear un botón que diga "Añadir al carrito"
+page-button	me hace falta un botón en la página rotulado "Cancelar"
+page-button	muestra un botón para pulsar que ponga "Registrarse"
+page-button	un botón de "Pagar"
+page-button	insertar un botón en el que el usuario pueda hacer clic, etiquetado como "Siguiente"
+page-button	la página debe tener un botón llamado "Descargar"
+page-button	coloca un botón para los visitantes y etiquétalo "Actualizar"
+page-button	¿puedes agregar un botón nuevo a la web? que ponga "Cerrar sesión"
+page-button	haz un botón que lleve escrito "Buscar"
+table-sort	tabla ordenable
+table-sort	que la tabla se ordene al pinchar en el encabezado de una columna
+table-sort	permite que el lector ordene la tabla haciendo clic en los títulos de las columnas
+table-sort	quiero poder ordenar la tabla de Order pulsando sobre date o total
+table-sort	al hacer clic en una cabecera, ordenar la tabla por esa columna
+table-sort	encabezados clicables para ordenar la tabla de la página
+table-sort	si el usuario pulsa el título de una columna, la tabla se reordena según esa columna
+table-sort	hacer que las columnas de la tabla de Product se puedan ordenar con un clic
+table-sort	deja que los visitantes ordenen la tabla tocando la cabecera de cada columna
+table-sort	ordenación de la tabla por columnas al dar clic
+table-sort	¿se puede hacer que la gente ordene las filas de la tabla pinchando en la cabecera de la columna?
+table-sort	cada encabezado de columna debe servir para ordenar la tabla de la web cuando lo pulsen
+page-button-resize	ensancha el botón 20px
+page-button-resize	haz el botón "Guardar" 40px más ancho
+page-button-resize	estrechar el botón en 15px
+page-button-resize	reduce 10px el ancho del botón "Cancelar"
+page-button-resize	aumenta el ancho del botón "Comprar" en 24px
+page-button-resize	el botón tiene que ser 8px más estrecho
+page-button-resize	botón 30px más ancho
+page-button-resize	quiero el botón "Enviar" 12px más angosto
+page-button-resize	agranda un poco el botón de la página, unos 16px a lo ancho
+page-button-resize	¿puedes achicar 6px el ancho del botón "Siguiente"?
+page-button-resize	disminuir en 5px la anchura en píxeles del botón "Buscar"
+page-button-resize	al botón "Salir" hay que ensancharlo 50px

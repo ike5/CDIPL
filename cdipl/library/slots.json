@@ -22,6 +22,10 @@
     "empty",
     "nothing"
   ],
-  "wider": [],
-  "narrower": []
+  "wider": [
+    "wider"
+  ],
+  "narrower": [
+    "narrower"
+  ]
 }

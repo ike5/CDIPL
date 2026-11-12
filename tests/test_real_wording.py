@@ -94,7 +94,7 @@ class RealWordingTest(unittest.TestCase):
     def test_classifier_file_is_intact(self):
         path = Path(classifier.HERE / "classifier.json")
         model = json.loads(path.read_text(encoding="utf-8"))
-        self.assertEqual(model["blocks"], list(library.catalogue())[:90])  # the page blocks came after training
+        self.assertEqual(model["blocks"], list(library.catalogue()))
         rebuilt = classifier.make_model(model["weights"], model["blocks"], model["threshold"])
         self.assertEqual(rebuilt["version"], model["version"])
         self.assertTrue(all(isinstance(weight, int) for row in model["weights"].values() for weight in row))

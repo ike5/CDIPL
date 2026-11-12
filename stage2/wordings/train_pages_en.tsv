@@ -1,0 +1,73 @@
+block	wording
+page-heading	add a heading that says "Welcome to the shop"
+page-heading	heading "Our products"
+page-heading	put a title at the top of the page, "Order history"
+page-heading	show "Customer list" as the page heading
+page-heading	I need a big headline on the page: "Summer sale"
+page-heading	page title "Contact us"
+page-heading	can you add a heading to the page with the text "About this site"
+page-heading	the first thing on the page should be a heading, "Latest orders"
+page-heading	insert a title "Checkout" above everything else
+page-heading	the web page should have a main heading called "Your account"
+page-heading	write "Stock overview" as the headline of the page
+page-heading	we want a title on this page and it should say "Dashboard"
+page-text	add a paragraph that says "We ship worldwide within three days"
+page-text	paragraph "Thanks for visiting"
+page-text	put a paragraph of text on the page: "All prices include tax"
+page-text	show the text "No orders yet" on the page
+page-text	write "Our store opened in 2010" as a paragraph
+page-text	I'd like a short paragraph under the heading saying "Pick a product to see its details"
+page-text	text for the page: "Loading may take a moment"
+page-text	insert a block of text with "Free returns for 30 days"
+page-text	the page needs some body text, "Welcome back, here are your orders"
+page-text	add a couple of sentences to the web page: "Questions? Send us a message"
+page-text	can you write a new paragraph on the page, the text is "Sign in to continue"
+page-text	plain text paragraph "Prices are shown in euros"
+data-table	add a table for Product with one column per field
+data-table	table of Customer
+data-table	show a table on the page with a column for each field of Order
+data-table	put a Product table on the web page, one column for every field
+data-table	I need a table whose columns are the fields of Customer
+data-table	make a table with columns name, price and stock for Product
+data-table	Order table with a column for each of its fields
+data-table	create an empty table on the page with the columns of Customer: name, email, city
+data-table	a table for the Order type where each field has its own column
+data-table	page table with one column for each Product field
+data-table	can we have a table on the page with a column heading for every field of Customer
+data-table	build a table for the Order data type, columns total and date
+page-button	add a button labelled "Save"
+page-button	button "Buy now"
+page-button	put a "Send" button on the page
+page-button	create a button that says "Add to cart"
+page-button	I need a button on the page with the label "Cancel"
+page-button	show a clickable button with the text "Sign up"
+page-button	a "Checkout" button
+page-button	insert a button the user can click, labeled "Next"
+page-button	the page should have a button for "Download"
+page-button	place a button for visitors to press and label it "Refresh"
+page-button	can you add a new button to the web page, its label is "Log out"
+page-button	make a button with "Search" on it
+table-sort	let the reader sort the table by clicking a column heading
+table-sort	sortable table
+table-sort	make the table sortable by clicking its headers
+table-sort	clicking a column header should sort the table by that column
+table-sort	when someone clicks a heading in the table, reorder the rows by that column
+table-sort	allow visitors to sort the Product table by clicking on a column title
+table-sort	click a column to sort the table
+table-sort	I want users to be able to reorder the table on the page by clicking the column headings
+table-sort	sort the table on the web page whenever a column heading is clicked
+table-sort	make the column headers clickable so the table can be sorted
+table-sort	let people click the name or city heading to sort the Customer table
+table-sort	table columns should sort on click
+page-button-resize	make the "Save" button 40px wider
+page-button-resize	widen the button by 20px
+page-button-resize	make the button 15px narrower
+page-button-resize	shrink the "Cancel" button by 10px
+page-button-resize	increase the width of the "Buy now" button by 24px
+page-button-resize	reduce the button's pixel width by 8px
+page-button-resize	button wider by 30px
+page-button-resize	decrease the width of the "Send" button by 12px
+page-button-resize	I'd like the button on the page to be a bit bigger, 16px more width
+page-button-resize	can you make the "Next" button smaller, 6px less in width
+page-button-resize	narrow the "Search" button by 5px
+page-button-resize	stretch the "Download" button so it is 50px wider

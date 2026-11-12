@@ -3398,9 +3398,9 @@ node	element
 nodes	element
 el	element
 els	element
-button	element
-buttons	element
-btn	element
+button	button
+buttons	button
+btn	button
 checkbox	element
 checkboxes	element
 dropdown	element
@@ -3409,8 +3409,8 @@ div	element
 divs	element
 span	element
 spans	element
-paragraph	element
-paragraphs	element
+paragraph	paragraph
+paragraphs	paragraph
 image	element
 images	element
 img	element
@@ -4390,3 +4390,98 @@ function's	action
 task's	action
 option's	option
 argument's	argument
+title	header
+titles	header
+title's	header
+headline	header
+headlines	header
+heading's	header
+subtitle	header
+subtitles	header
+h1	header
+h2	header
+h3	header
+h4	header
+h5	header
+h6	header
+paragraph of text	paragraph
+paragraphs of text	paragraph
+text paragraph	paragraph
+text paragraphs	paragraph
+block of text	paragraph
+blocks of text	paragraph
+text block	paragraph
+text blocks	paragraph
+body text	paragraph
+body copy	paragraph
+blurb	paragraph
+blurbs	paragraph
+sentence	text
+sentences	text
+cta	element
+clickable	click
+tappable	click
+pressable	press
+sortable	sort
+rearrange	arrange
+rearranges	arrange
+rearranged	arrange
+rearranging	arrange
+visitor	user
+visitors	user
+viewer	user
+viewers	user
+people	user
+pixel	pixel
+pixels	pixel
+px	pixel
+widen	wider
+widens	wider
+widened	wider
+widening	wider
+broaden	wider
+broadens	wider
+broadened	wider
+broadening	wider
+broader	wider
+enlarge	wider
+enlarges	wider
+enlarged	wider
+enlarging	wider
+increase	wider
+increases	wider
+increased	wider
+stretch	wider
+stretches	wider
+stretched	wider
+stretching	wider
+narrower	narrower
+shrink	narrower
+shrinks	narrower
+shrinking	narrower
+shrank	narrower
+shrunk	narrower
+reduce	narrower
+reduces	narrower
+reduced	narrower
+reducing	narrower
+decrease	narrower
+decreases	narrower
+decreased	narrower
+less wide	narrower
+more narrow	narrower
+resize	size
+resizes	size
+resized	size
+resizing	size
+main	-
+less	-
+a bit	-
+a little	-
+a little bit	-
+slightly	-
+somewhat	-
+additional	-
+we'd	-
+letting	-
+mouse	-

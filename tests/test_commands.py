@@ -1,5 +1,6 @@
 """The commands `new` and `run`, and the starter files `new` writes."""
 import json
+import os
 import socket
 import subprocess
 import sys
@@ -22,7 +23,7 @@ from .support import REPO
 
 def cdipl(*args, cwd=None):
     return subprocess.run([sys.executable, "-m", "cdipl", *args], capture_output=True, text=True, cwd=cwd,
-                          env={"PYTHONPATH": str(REPO), "PATH": "/usr/bin:/bin"})
+                          env={"PYTHONPATH": str(REPO), "PATH": os.environ.get("PATH", "/usr/bin:/bin"), "TMPDIR": tempfile.gettempdir()})
 
 
 def free_port():
@@ -109,7 +110,7 @@ class RunTest(unittest.TestCase):
     def test_program_exits_with_the_programs_status(self):
         missing = cdipl("run", self.intent("program"), str(self.dir / "absent.json"), cwd=self.dir)
         direct = subprocess.run([sys.executable, "-m", "cdipl", "build", self.intent("program"), "--target", "python", "--out", str(self.dir / "o")],
-                                capture_output=True, text=True, env={"PYTHONPATH": str(REPO), "PATH": "/usr/bin:/bin"})
+                                capture_output=True, text=True, env={"PYTHONPATH": str(REPO), "PATH": os.environ.get("PATH", "/usr/bin:/bin"), "TMPDIR": tempfile.gettempdir()})
         expected = subprocess.run([sys.executable, str(self.dir / "o" / "main.py"), str(self.dir / "absent.json")], capture_output=True).returncode
         self.assertEqual(direct.returncode, 0, direct.stderr)
         self.assertNotEqual(expected, 0)
@@ -158,7 +159,7 @@ class RunTest(unittest.TestCase):
         port = free_port()
         process = subprocess.Popen([sys.executable, "-m", "cdipl", "run", self.intent("pages"), "--port", str(port)],
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
-                                   env={"PYTHONPATH": str(REPO), "PATH": "/usr/bin:/bin"})
+                                   env={"PYTHONPATH": str(REPO), "PATH": os.environ.get("PATH", "/usr/bin:/bin"), "TMPDIR": tempfile.gettempdir()})
         try:
             body = None
             for _ in range(50):

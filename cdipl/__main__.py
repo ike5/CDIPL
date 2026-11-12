@@ -100,9 +100,10 @@ def command_run(args):
             generator = TARGETS[args.target]
             try:
                 command = generator.run_command(folder / generator.FILE_NAME)
-            except (OSError, RuntimeError) as problem:  # for example, no compiler for a target that needs one
+                status = subprocess.run([*command, *args.arguments], cwd=Path.cwd()).returncode
+            except (OSError, RuntimeError) as problem:  # for example, no compiler or interpreter for the target
                 sys.exit(f"cannot run the {args.target} program: {problem}")
-            sys.exit(subprocess.run([*command, *args.arguments], cwd=Path.cwd()).returncode)
+            sys.exit(status)
         rest = list(args.arguments)
         port = args.port
         if rest[:1] == ["--port"] and len(rest) == 2 and rest[1].isdigit():  # --port given after the file name

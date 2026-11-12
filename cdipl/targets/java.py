@@ -5,8 +5,10 @@ import os
 import re
 import subprocess
 import tempfile
+import threading
 from pathlib import Path
 
+from ..model import TypeMismatch
 from .common import (
     Add,
     Arith,
@@ -33,7 +35,6 @@ from .common import (
     formulas,
     schemas,
 )
-from ..model import TypeMismatch
 
 FILE_NAME = "Main.java"
 SUPPORTED = None  # the blocks this target can build; None means every block
@@ -75,6 +76,7 @@ public final class CompileServer {
 }
 """
 _server = None
+_server_lock = threading.Lock()
 
 
 def _javac(source, classes):
@@ -116,16 +118,17 @@ def _stop_server():
 def _compile(source, classes):
     """Compile through the running compile server, starting it if needed. Returns whether it succeeded."""
     global _server
-    try:
-        server = _server if _server is not None and _server.poll() is None else _start_server()
-        if server is None:
+    with _server_lock:
+        try:
+            server = _server if _server is not None and _server.poll() is None else _start_server()
+            if server is None:
+                return False
+            server.stdin.write(f"{source}\t{classes}\n")
+            server.stdin.flush()
+            return server.stdout.readline().strip() == "0"
+        except OSError:
+            _server = None
             return False
-        server.stdin.write(f"{source}\t{classes}\n")
-        server.stdin.flush()
-        return server.stdout.readline().strip() == "0"
-    except OSError:
-        _server = None
-        return False
 
 
 def compile_program(program_path):

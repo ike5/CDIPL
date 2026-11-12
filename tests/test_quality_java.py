@@ -20,8 +20,7 @@ from .support import REPO, programs
 SAMPLE = programs(40, seed=5)
 HEADER = "language: en\n\nsource people from argument 1:\n    name: text\n    age: integer\n    city: text\n\nget people\n"
 FIXED = [
-    'keep where name < "m" and age * 2 - 1 > age + 3\nadd label = name & ", " & city\nsort by label descending ignoring case\n'
-    'write as json\n',
+    'keep where name < "m" and age * 2 - 1 > age + 3\nadd label = name & ", " & city\nsort by label descending ignoring case\nwrite as json\n',
     "skip invalid records\ngroup by city\ncount each group\nsort by count ascending\nlimit 3\nif none say \"None.\"\nshow city, count\n",
 ]
 

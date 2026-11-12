@@ -3,6 +3,7 @@ import hashlib
 import importlib.util
 import json
 import secrets
+import signal
 import socket
 import subprocess
 import sys
@@ -197,6 +198,11 @@ def make_server(intent_path, port=8765):
 def serve(intent_path, port=8765):
     server = make_server(intent_path, port)
     print(f"Live view for {intent_path}: http://127.0.0.1:{server.server_address[1]}/  (Ctrl+C to stop)")
+
+    def stop(*_):
+        raise KeyboardInterrupt
+
+    signal.signal(signal.SIGTERM, stop)  # so that being asked to end also ends the preview server
     try:
         server.serve_forever()
     except KeyboardInterrupt:

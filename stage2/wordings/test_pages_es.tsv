@@ -1,0 +1,25 @@
+block	wording
+page-heading	título "Clientes"
+page-heading	Pon un encabezado arriba del todo que diga "Pedidos recientes"
+page-heading	quiero que la página empiece con un titular grande: "Nuestro catálogo"
+page-heading	añade una cabecera con el texto "Bienvenido a la tienda"
+page-text	párrafo "Envío gratis a partir de 50 euros"
+page-text	Escribe debajo un texto que explique "Los precios no incluyen IVA"
+page-text	añade unas líneas de texto normal diciendo "Aquí puedes consultar el estado de tus pedidos"
+page-text	me gustaría poner un parrafito de introducción, algo como "Llevamos veinte años vendiendo muebles hechos a mano"
+data-table	tabla de Customer
+data-table	Muestra los Order en una tabla con columnas para date y total
+data-table	necesito un listado de todos los Product en filas, con una columna por cada campo
+data-table	saca los datos de Customer en una cuadrícula para que se vean name, email y city uno al lado del otro
+page-button	botón "Guardar"
+page-button	Añade un botón que ponga "Nuevo cliente"
+page-button	coloca al final de la página un botón para pulsar con la etiqueta "Enviar pedido"
+page-button	hace falta también un botón de "Cancelar" al lado
+table-sort	ordenar por columna al hacer clic
+table-sort	Que se pueda ordenar la tabla pinchando en el encabezado de cada columna
+table-sort	haz que la tabla de Product se ordene por price o stock cuando el usuario pulse el título de la columna
+table-sort	quiero que el lector pueda reordenar las filas con un clic en la cabecera, por ejemplo por city
+page-button-resize	ensancha el botón "Guardar" 30px
+page-button-resize	Haz el botón "Nuevo cliente" 15px más estrecho
+page-button-resize	el botón de "Enviar pedido" se queda corto, dale 50px más de ancho
+page-button-resize	botón "Cancelar": reducir el ancho en 25px

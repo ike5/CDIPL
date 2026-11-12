@@ -1,0 +1,25 @@
+block	wording
+page-heading	heading "Products"
+page-heading	Put a title at the top of the page that says "Customer list"
+page-heading	add a big header reading "Orders this month"
+page-heading	I'd like the page to open with a headline, something like "Welcome to the shop"
+page-text	paragraph "All prices include tax"
+page-text	Add some text underneath saying "Orders placed before noon ship the same day"
+page-text	write a short blurb: "We have been selling bicycles since 1998"
+page-text	then I want a line or two of plain copy that explains things, "Pick a customer to see their details"
+data-table	table of Product
+data-table	Show all the Customer records in a grid, with name, email and city as columns
+data-table	list every Order in rows with a column per field
+data-table	I need the Product data laid out as a table so people can see name, price and stock side by side
+page-button	button "Save"
+page-button	Add a button labelled "Add product"
+page-button	put a clickable "Checkout" button at the bottom of the page
+page-button	give the user something to press once they are done, a button with "Send order" on it
+table-sort	sortable columns
+table-sort	Clicking a column header should sort the table by that column
+table-sort	make the Order table sortable by date or total when you click the headings
+table-sort	let people reorder the rows by clicking on price or any other column title
+page-button-resize	widen the "Save" button by 40px
+page-button-resize	Make the "Add product" button 20px narrower
+page-button-resize	"Checkout" button: 60px wider
+page-button-resize	the "Send order" button looks too cramped, can you stretch it out another 35px

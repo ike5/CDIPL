@@ -91,7 +91,7 @@ These are cases where the targets may behave differently, or where the rules abo
 
 ## Web pages
 
-A second kind of intent file describes the pages of an application and is built into HTML and CSS. It is separate from the blocks above: it has no source and no chain of steps.
+A second kind of intent file describes the pages of an application and is built into HTML, CSS, JavaScript and JSON. It is separate from the blocks above: it has no source and no chain of steps.
 
 ```text
 language: en
@@ -102,28 +102,42 @@ app Inventory:
         price: decimal
         stock: integer
 
+    records Product:
+        "Widget", 9.99, 12
+        "Gadget", 24.50, 3
+
     page Products:
         heading "Products"
         table Product
+        searchable by name
+        sortable by price
         button "Add product" width 160px
 ```
 
-**Status:** a first step, written by the AI assistant and not yet reviewed by a person. The pages are static: they have structure and style and no behaviour.
+**Status:** written by the AI assistant and not yet reviewed by a person. All blocks are marked draft.
 
 | Statement | Meaning |
 |---|---|
 | `app N:` | The application. Its name appears in the title of every page. |
-| `data N:` with fields beneath | A kind of record, with fields of type `text`, `integer` or `decimal`. Here the types affect only how a column is aligned. Every data declaration must be shown by at least one table. |
+| `data N:` with fields beneath | A kind of record, with fields of type `text`, `integer` or `decimal`. Every data declaration must be shown by at least one table. |
+| `records N:` with one record per line beneath | Records of the data N. Each line gives one value for each field, in order, separated by commas: text in double quotes, whole numbers, or decimals such as `9.99`. They are written to a JSON file named after the data in lower case, ending `.json`, as a list of objects. |
 | `page N:` with elements beneath | One page, written to a file named after the page in lower case, ending `.html`. The page title is the page name, a hyphen and the application name. When there is more than one page, every page starts with links to all the pages, in the order they are declared. |
 | `heading "T"` | A heading. The first on a page is the main heading; later ones are second-level headings. |
 | `text "T"` | A paragraph. |
-| `table D` | A table with one column for each field of the data D, in the order declared, headed by the field's name. Columns of numbers are aligned to the right. The table has no rows: nothing yet supplies them. |
+| `table D` | A table with one column for each field of the data D, in the order declared, headed by the field's name. Columns of numbers are aligned to the right. If D has records, the table fills itself from their JSON file when the page opens, one row per record in the order written. Otherwise it has no rows. |
+| `searchable by F` | Directly after a table: a search box, labelled with the field's name. As the reader types, rows whose value of F does not contain the typed text are hidden. The letters A to Z are treated as a to z; nothing else is changed. An empty box shows every row. |
+| `sortable by F` | Directly after a table, and may be repeated for other fields: the heading of column F becomes a control. The first press sorts the rows by F in ascending order; pressing the same heading again reverses the order. Numbers are compared by value and text in the order of text defined above. Rows that are equal keep their order. |
 | `button "T"` and optionally `width Npx` | A button. It does nothing when pressed. With a width, the button is exactly that many pixels wide. |
+| `increase button size by Npx`, `decrease button size by Npx` | Makes a button declared above it on the same page wider or narrower by N pixels. If the page has more than one button, the label must be given: `increase button "T" size by Npx`. The button must already have a width. This statement changes the declaration: in standard phrases the button's line carries the new width and the statement is gone. |
 
-All pages share one stylesheet, `styles.css`, which holds fixed rules for the elements that are used and one rule for each button width that is used. The colours, spacing and fonts are fixed choices of the generator.
+**Decimals** are kept exactly as written, digits and all, so `24.50` stays `24.50`. In the JSON file they are written as text, so that no digit is lost; they are compared by value when sorting. A decimal may have at most 15 digits.
+
+**Files.** All pages share one stylesheet, `styles.css`, which holds fixed rules for the elements that are used and one rule for each button width that is used. If any table fills, searches or sorts, the pages also share `scripts.js`, which holds fixed code for the behaviours that are used. The colours, spacing and fonts are fixed choices of the generator.
+
+**Opening the pages.** A table that fills itself reads its JSON file over the web, so the folder has to be served by a web server; opened directly from disk, browsers refuse the request and the table stays empty.
 
 Text in double quotes is shown exactly as written; the characters `&`, `<` and `>` are escaped. No words are added that the developer did not write.
 
-Some statements are recognised but cannot be built yet, and say so: choosing parts of an application (`use web`), an API for a data type (`expose Product as api`), searching, sorting and editing a table, and rules that react to data (`when ...:` and `notify`).
+Some statements are recognised but cannot be built yet, and say so: choosing parts of an application (`use sqlite`, `use FastAPI`), creating a service (`create postgres:` and `using docker`), an API for a data type (`expose Product as api`), editing a table (`editable`), and rules that react to data (`when ...:` and `notify`).
 
-Known limits: there is no behaviour of any kind; the language of the page is not declared in the HTML; and a line of text longer than about 300 characters would be re-wrapped by the formatter used for criterion G6.
+Known limits: buttons do nothing; records cannot be changed from the page; the language of the page is not declared in the HTML; sorting text puts all capital letters before all small letters, as the order of text above says; and a line of text longer than about 300 characters would be re-wrapped by the formatter used for criterion G6.

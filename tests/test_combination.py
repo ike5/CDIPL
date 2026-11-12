@@ -4,6 +4,7 @@ import unittest
 
 from cdipl.model import IntentError
 from cdipl.parser import parse
+from cdipl.targets import TARGETS
 
 from .support import Workspace, run
 from .test_equivalence import DATASETS
@@ -78,8 +79,9 @@ class CombinationTest(unittest.TestCase):
                         continue
                     program = parse(text)
                     results = [run(target, self.work.write_program(program, target), self.data)
-                               for target in ("python", "javascript")]
-                    self.assertEqual(results[0], results[1])
+                               for target in TARGETS]
+                    for other in results[1:]:
+                        self.assertEqual(results[0], other)
                     self.assertEqual(results[0][0], 0, results[0])
                     fitting += 1
         self.assertEqual(fitting + rejected, sum(len(KINDS) ** length for length in range(5)))

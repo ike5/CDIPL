@@ -1,7 +1,6 @@
 """Shared helpers for the tests: build programs, run them, and make test material."""
 import random
 import subprocess
-import sys
 import tempfile
 from pathlib import Path
 
@@ -30,7 +29,6 @@ from cdipl.model import (
 from cdipl.targets import TARGETS
 
 REPO = Path(__file__).resolve().parent.parent
-RUNNERS = {"python": [sys.executable], "javascript": ["node"]}
 FIELDS = (("name", "text"), ("age", "integer"), ("city", "text"))
 TEXTS = ["Lima", "m", "", "～", "😀", "Zoe", 'a"b', "back\\slash", "Ñandú", "zoe"]
 NUMBERS = [18, 0, -5, 30, 9007199254740991, -9007199254740991, 2]
@@ -63,7 +61,7 @@ class Workspace:
 
 def run(target, program_path, *arguments):
     """Run a generated program. Returns (exit status, output bytes, error category)."""
-    done = subprocess.run(RUNNERS[target] + [str(program_path), *map(str, arguments)], capture_output=True, timeout=60, check=False)
+    done = subprocess.run([*TARGETS[target].run_command(program_path), *map(str, arguments)], capture_output=True, timeout=60, check=False)
     category = ""
     if done.stderr:
         first = done.stderr.decode("utf-8", "replace").split("\n")[0]

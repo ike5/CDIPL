@@ -30,6 +30,13 @@ from .common import (
 )
 
 FILE_NAME = "main.js"
+SUPPORTED = None  # the blocks this target can build; None means every block
+
+
+def run_command(program_path):
+    """The command that runs a generated program."""
+    return ["node", str(program_path)]
+
 
 SUPPORT = [
     ("exit-on-error", "always", '''\

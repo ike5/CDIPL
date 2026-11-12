@@ -41,6 +41,18 @@ class LibraryTest(unittest.TestCase):
         statuses = dict(library.statuses(), **{"format-json": "flagged"})
         build(text, "python", statuses)  # a flagged block the program does not use is no obstacle
 
+    def test_a_target_refuses_blocks_it_does_not_support(self):
+        text = EXAMPLE.read_text(encoding="utf-8")
+        generator = TARGETS["python"]
+        try:
+            generator.SUPPORTED = set(blocks_used(parse(text))) - {"sort-rows"}
+            with self.assertRaises(BuildError) as caught:
+                build(text, "python")
+            self.assertIn("sort-rows", str(caught.exception))
+        finally:
+            generator.SUPPORTED = None
+        build(text, "python")
+
     def test_ten_builds_are_byte_identical(self):
         with tempfile.TemporaryDirectory() as folder:
             for target in TARGETS:

@@ -9,6 +9,7 @@ from pathlib import Path
 
 from cdipl.compiler import build
 from cdipl.live import analyse
+from cdipl.targets import TARGETS
 from cdipl.live_server import make_server
 
 from .support import REPO
@@ -69,7 +70,7 @@ class LiveTest(unittest.TestCase):
         self.assertEqual([line for line in lines if line["origin"] == by_text["frobnicate everything"]], [])
 
     def test_a_complete_file_shows_exactly_what_build_writes(self):
-        for example, targets in (("adult_users.intent", ("python", "javascript")), ("inventory.intent", ("html",))):
+        for example, targets in (("adult_users.intent", tuple(TARGETS)), ("inventory.intent", ("html",))):
             text = (REPO / "examples" / example).read_text(encoding="utf-8")
             for target in targets:
                 with self.subTest(example=example, target=target):

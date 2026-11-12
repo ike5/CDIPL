@@ -2,11 +2,12 @@
 import json
 import unittest
 
+from cdipl import targets
 from cdipl.parser import parse
 
 from .support import REPO, Workspace, programs, run
 
-TARGETS = ("python", "javascript")
+TARGETS = tuple(targets.TARGETS)  # every target is compared with the first, Python
 
 
 def people(rows):
@@ -75,7 +76,8 @@ class EquivalenceTest(unittest.TestCase):
                 results = {target: run(target, built[target], path) for target in TARGETS}
                 pairs += 1
                 with self.subTest(program=index, dataset=name):
-                    self.assertEqual(results["python"], results["javascript"])
+                    for target in TARGETS[1:]:
+                        self.assertEqual(results[TARGETS[0]], results[target], target)
                     self.assertFalse(results["python"][2].startswith("unexpected"), results["python"])
         self.assertGreaterEqual(pairs, 200)
 

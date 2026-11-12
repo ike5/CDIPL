@@ -90,6 +90,10 @@ def build_program(program, target, statuses=None):
     statuses = library.statuses() if statuses is None else statuses
     used = blocks_used(program)
     check_blocks(used, statuses)
+    if generator.SUPPORTED is not None:
+        missing = [block for block in used if block not in generator.SUPPORTED]
+        if missing:
+            raise BuildError(f"the target '{target}' cannot build these blocks yet: {', '.join(missing)}")
     lines = generator.generate(program)
     text = "\n".join(line for line, _ in lines) + "\n"
     trace = {

@@ -1,5 +1,6 @@
 """Generate Python programs, and recognise programs this generator wrote."""
 import re
+import sys
 
 from .common import (
     Add,
@@ -29,6 +30,13 @@ from .common import (
 )
 
 FILE_NAME = "main.py"
+SUPPORTED = None  # the blocks this target can build; None means every block
+
+
+def run_command(program_path):
+    """The command that runs a generated program."""
+    return [sys.executable, str(program_path)]
+
 
 # Fixed support code. Each piece belongs to one block and is included only when needed.
 SUPPORT = [

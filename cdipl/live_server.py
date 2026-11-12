@@ -1,6 +1,13 @@
-"""A local web server for the live view: text on one side, generated blocks on the other."""
+"""A local web server for the live view: text on one side, generated files on the other."""
+import hashlib
+import importlib.util
 import json
 import secrets
+import socket
+import subprocess
+import sys
+import tempfile
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -14,6 +21,85 @@ def index_path(intent):
     return intent.with_suffix(".index.json")
 
 
+class PreviewServer:
+    """Runs the generated server of an application, so that the preview is the real thing.
+
+    The generated files are written to a temporary folder and served by uvicorn on this machine only.
+    The server is started again, with an empty database, whenever its code or its first records change.
+    """
+
+    def __init__(self):
+        self.folder = None
+        self.process = None
+        self.port = None
+        self.signature = None
+
+    @staticmethod
+    def available():
+        return all(importlib.util.find_spec(name) is not None for name in ("fastapi", "uvicorn"))
+
+    def update(self, files):
+        """Bring the running server in line with the files. Returns its address, or None if there is none."""
+        if "server.py" not in files or not self.available():
+            self.stop()
+            return None
+        if self.folder is None:
+            self.folder = tempfile.TemporaryDirectory(prefix="cdipl-preview-")
+        root = Path(self.folder.name)
+        for name, text in files.items():
+            path = root / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            if not path.exists() or path.read_text(encoding="utf-8") != text:
+                path.write_text(text, encoding="utf-8")
+        for path in root.rglob("*"):
+            relative = path.relative_to(root).as_posix()
+            if path.is_file() and relative not in files and path.suffix != ".db" and "__pycache__" not in path.parts:
+                path.unlink()
+        core = sorted((name, text) for name, text in files.items() if "/" not in name)
+        signature = hashlib.sha256(json.dumps(core).encode("utf-8")).hexdigest()
+        if signature != self.signature or self.process is None or self.process.poll() is not None:
+            self._start(root)
+            self.signature = signature
+        return f"http://127.0.0.1:{self.port}" if self.process is not None else None
+
+    def _start(self, root):
+        self._end_process()
+        for database in root.glob("*.db"):
+            database.unlink()
+        with socket.socket() as probe:
+            probe.bind(("127.0.0.1", 0))
+            self.port = probe.getsockname()[1]
+        self.process = subprocess.Popen(
+            [sys.executable, "-m", "uvicorn", "server:app", "--host", "127.0.0.1", "--port", str(self.port),
+             "--log-level", "warning"], cwd=root, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        deadline = time.monotonic() + 8
+        while time.monotonic() < deadline:
+            if self.process.poll() is not None:
+                break
+            try:
+                with socket.create_connection(("127.0.0.1", self.port), timeout=0.2):
+                    return
+            except OSError:
+                time.sleep(0.05)
+        self._end_process()
+
+    def _end_process(self):
+        if self.process is not None:
+            self.process.terminate()
+            try:
+                self.process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                self.process.kill()
+            self.process = None
+
+    def stop(self):
+        self._end_process()
+        self.signature = None
+        if self.folder is not None:
+            self.folder.cleanup()
+            self.folder = None
+
+
 def make_server(intent_path, port=8765):
     """Create the server. intent_path is the one file the view may read and write."""
     intent = Path(intent_path)
@@ -21,9 +107,17 @@ def make_server(intent_path, port=8765):
     latest = {}  # the files of the most recent analysis, served to the preview
     kinds = {".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".json": "application/json"}
 
+    preview = PreviewServer()
+
     def remember(result):
         latest.clear()
         latest.update({file["name"]: "\n".join(line["text"] for line in file["lines"]) + "\n" for file in result["files"]})
+        if result.get("kind") == "app":
+            address = preview.update(latest)
+            if address is not None and result.get("preview"):
+                result["preview_url"] = f"{address}/{result['preview'].removeprefix('static/')}"
+                result["preview_note"] = ("The preview is the generated server, running on this machine. Its database "
+                                          "starts again from the records in the file whenever the data or the API change.")
         return result
 
     def load_index():
@@ -95,7 +189,9 @@ def make_server(intent_path, port=8765):
                 return self.reply(200, json.dumps({"text": saved, "accepted": accepted}))
             return self.reply(404, "{}")
 
-    return ThreadingHTTPServer(("127.0.0.1", port), Handler)
+    server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
+    server.preview = preview
+    return server
 
 
 def serve(intent_path, port=8765):
@@ -106,4 +202,5 @@ def serve(intent_path, port=8765):
     except KeyboardInterrupt:
         pass
     finally:
+        server.preview.stop()
         server.server_close()

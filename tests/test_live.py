@@ -10,7 +10,7 @@ from pathlib import Path
 from cdipl.compiler import build
 from cdipl.live import analyse
 from cdipl.targets import TARGETS
-from cdipl.live_server import make_server
+from cdipl.live_server import PreviewServer, make_server
 
 from .support import REPO
 
@@ -205,6 +205,46 @@ class LiveTest(unittest.TestCase):
                 self.assertFalse(unfinished["accepted"])
                 self.assertEqual(intent.read_text(encoding="utf-8"), HEAD + "get users\n")
             finally:
+                server.shutdown()
+                server.server_close()
+
+
+class LivePreviewTest(unittest.TestCase):
+    @unittest.skipUnless(PreviewServer.available(), "fastapi and uvicorn are not installed")
+    def test_the_preview_of_an_application_is_its_real_server(self):
+        text = (REPO / "examples" / "inventory_server.intent").read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as folder:
+            intent = Path(folder) / "inventory.intent"
+            intent.write_text(text, encoding="utf-8")
+            server = make_server(intent, port=0)
+            threading.Thread(target=server.serve_forever, daemon=True).start()
+            base = f"http://127.0.0.1:{server.server_address[1]}"
+            opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+            try:
+                token = opener.open(base + "/").read().decode("utf-8").split('const token = "')[1].split('"')[0]
+
+                def analyse_text(body):
+                    request = urllib.request.Request(base + "/analyse", json.dumps({"text": body}).encode(),
+                                                     {"Content-Type": "application/json", "X-CDIPL-Token": token})
+                    return json.loads(opener.open(request).read())
+
+                result = analyse_text(text)
+                address = result["preview_url"]
+                self.assertTrue(address.endswith("/products.html"))
+                self.assertIn("generated server", result["preview_note"])
+                root = address.rsplit("/", 1)[0]
+                self.assertIn("<h1>Products</h1>", opener.open(address).read().decode("utf-8"))
+                first = json.loads(opener.open(root + "/api/product").read())
+                self.assertEqual(first[0]["name"], "Widget")
+                # a change to a page does not restart the server; a change to the records starts it afresh
+                same = analyse_text(text.replace('heading "Products"', 'heading "Stock"'))
+                self.assertEqual(same["preview_url"].rsplit("/", 1)[0], root)
+                self.assertIn("<h1>Stock</h1>", opener.open(same["preview_url"]).read().decode("utf-8"))
+                again = analyse_text(text.replace('"Widget", 9.99, 12', '"Sprocket", 1.50, 7'))
+                listed = json.loads(opener.open(again["preview_url"].rsplit("/", 1)[0] + "/api/product").read())
+                self.assertEqual(listed[0]["name"], "Sprocket")
+            finally:
+                server.preview.stop()
                 server.shutdown()
                 server.server_close()
 

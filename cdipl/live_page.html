@@ -57,7 +57,7 @@ main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1
   <div id="right">
     <div id="tabs" role="tablist"></div>
     <pre id="code" aria-label="Generated code"></pre>
-    <iframe id="preview" title="Preview of the generated page" sandbox="allow-scripts"></iframe>
+    <iframe id="preview" title="Preview of the generated page" sandbox="allow-scripts allow-same-origin allow-forms allow-modals"></iframe>
   </div>
 </main>
 <script>
@@ -67,7 +67,7 @@ const tabs = document.querySelector("#tabs"), code = document.querySelector("#co
 const targetBox = document.querySelector("#target"), state = document.querySelector("#state"), saveButton = document.querySelector("#save");
 const LABELS = { standard: "Standard phrase", sure: "Chosen", project: "Accepted earlier", unsure: "Chosen, unsure", error: "Not understood", unbuilt: "Not built yet" };
 const MARKS = { standard: "●", sure: "●", project: "●", unsure: "◐", error: "✕", unbuilt: "○" };
-let latest = null, counter = 0, timer = null, tab = null, lastLine = 0, notice = "";
+let latest = null, counter = 0, timer = null, tab = null, lastLine = 0, notice = "", previewKey = null;
 
 function post(path, body) {
   return fetch(path, { method: "POST", headers: { "Content-Type": "application/json", "X-CDIPL-Token": token }, body: JSON.stringify(body) }).then((reply) => reply.json());
@@ -101,7 +101,16 @@ function showCode() {
   const file = latest.files.find((each) => each.name === tab);
   preview.style.display = tab === "Preview" ? "block" : "none";
   code.style.display = tab === "Preview" ? "none" : "block";
-  if (tab === "Preview") { preview.src = `/preview/${token}/${latest.preview}?v=${counter}`; return; }
+  if (tab === "Preview") {
+    // Load the page again only when what it shows has changed, so that a form in the preview is not lost while typing.
+    const key = JSON.stringify(latest.files.map((each) => [each.name, each.lines.map((line) => line.text)]));
+    if (key !== previewKey) {
+      previewKey = key;
+      preview.src = latest.preview_url ? latest.preview_url : `/preview/${token}/${latest.preview}?v=${counter}`;
+    }
+    return;
+  }
+  previewKey = null;
   if (!file) { code.replaceChildren(element("div", "", "")); code.firstChild.id = "empty"; code.firstChild.textContent = "Nothing can be generated yet."; return; }
   code.replaceChildren(...file.lines.map((line) => {
     const row = element("div", typeof line.origin === "number" ? "pick" : "", line.text);

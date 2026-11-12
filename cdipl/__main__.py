@@ -1,11 +1,15 @@
-"""Command line: python -m cdipl build|lift|explain|choose|affected ..."""
+"""Command line: cdipl new|build|run|lift|explain|choose|affected|live ..."""
 import argparse
+import importlib.util
 import json
 import re
+import signal
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
-from . import library, pages
+from . import library, pages, starters
 from .compiler import BuildError, build_with_index, lift_app, lift_text, read_intent, target_for
 from .languages import HEADERS
 from .live_server import serve
@@ -53,6 +57,67 @@ def command_build(args):
     drafts = [entry["block"] for entry in trace["blocks"] if entry["status"] == "draft"]
     if drafts:
         print(f"note: {len(drafts)} block(s) used are drafts awaiting human review: {', '.join(drafts)}", file=sys.stderr)
+
+
+def command_new(args):
+    """Write a starter intent file, refusing to overwrite a file."""
+    path = Path(args.file)
+    if path.exists():
+        sys.exit(f"{path} already exists; nothing was written")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(starters.starter(args.kind, args.language), encoding="utf-8")
+    print(f"wrote {path}")
+    print("next:")
+    for line in starters.next_steps(args.kind, path):
+        print(f"    {line}")
+
+
+def server_installed():
+    return all(importlib.util.find_spec(name) is not None for name in ("fastapi", "uvicorn"))
+
+
+def command_run(args):
+    """Build an intent file into a temporary folder and run the result."""
+    intent = Path(args.intent)
+    try:
+        text = intent.read_text(encoding="utf-8")
+        is_app = pages.is_app(text)
+        files, _ = build_with_index(text, "html" if is_app else "python", load_index(intent))
+    except OSError as problem:
+        sys.exit(f"{intent}: {problem.strerror}")
+    except (IntentError, BuildError) as problem:
+        fail(intent, problem)
+    if is_app and "server.py" in files and not server_installed():
+        sys.exit('this application has a server, which needs fastapi and uvicorn; install them with: pip install "cdipl[server]"')
+    if not is_app and args.port is not None:
+        sys.exit("--port applies to applications, not to programs; put it before the file name")
+    with tempfile.TemporaryDirectory(prefix="cdipl-run-") as name:
+        folder = Path(name)
+        for file, content in files.items():
+            (folder / file).parent.mkdir(parents=True, exist_ok=True)
+            (folder / file).write_text(content, encoding="utf-8")
+        if not is_app:
+            sys.exit(subprocess.run([sys.executable, str(folder / "main.py"), *args.arguments], cwd=Path.cwd()).returncode)
+        rest = list(args.arguments)
+        port = args.port
+        if rest[:1] == ["--port"] and len(rest) == 2 and rest[1].isdigit():  # --port given after the file name
+            port, rest = int(rest[1]), []
+        if rest:
+            sys.exit("arguments are passed only to programs, not to applications")
+        port = 8000 if port is None else port
+        if "server.py" in files:
+            command, shown = [sys.executable, "-m", "uvicorn", "server:app", "--host", "127.0.0.1", "--port", str(port)], ""
+            serve_folder = folder
+        else:
+            first = next(file for file in files if file.endswith(".html"))
+            command = [sys.executable, "-m", "http.server", str(port), "--bind", "127.0.0.1", "--directory", str(folder)]
+            shown, serve_folder = first, Path.cwd()
+        print(f"open http://127.0.0.1:{port}/{shown}  (stop with Ctrl+C)", flush=True)
+        signal.signal(signal.SIGTERM, signal.default_int_handler)  # stop the server too when asked to end
+        try:
+            sys.exit(subprocess.run(command, cwd=serve_folder).returncode)
+        except KeyboardInterrupt:
+            sys.exit(0)
 
 
 def command_lift(args):
@@ -162,6 +227,16 @@ def command_affected(args):
 def main():
     parser = argparse.ArgumentParser(prog="cdipl", description="Build programs from intent files.")
     commands = parser.add_subparsers(dest="command", required=True)
+    new_parser = commands.add_parser("new", help="write a small starter intent file")
+    new_parser.add_argument("file")
+    new_parser.add_argument("--kind", choices=sorted(starters.KINDS), default="program")
+    new_parser.add_argument("--language", choices=("en", "es"), default="en")
+    new_parser.set_defaults(run=command_new)
+    run_parser = commands.add_parser("run", help="build an intent file into a temporary folder and run it")
+    run_parser.add_argument("intent")
+    run_parser.add_argument("arguments", nargs=argparse.REMAINDER, help="arguments for a program")
+    run_parser.add_argument("--port", type=int, help="port for an application (default 8000)")
+    run_parser.set_defaults(run=command_run)
     build_parser = commands.add_parser("build", help="generate a program from an intent file")
     build_parser.add_argument("intent")
     build_parser.add_argument("--target", choices=[*sorted(TARGETS), "html"], required=True)

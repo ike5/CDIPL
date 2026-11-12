@@ -28,9 +28,9 @@ main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1
 .badge { font-weight: 600; margin-right: 8px; }
 .standard { color: var(--ok); } .sure, .project { color: var(--sure); } .unsure { color: var(--unsure); } .error { color: var(--bad); } .unbuilt { color: var(--none); }
 .soft { color: var(--soft); }
-#right { display: flex; flex-direction: column; min-height: 0; background: var(--paper); }
-#tabs { display: flex; gap: 4px; padding: 6px 10px 0; border-bottom: 1px solid var(--line); background: var(--wash); }
-#tabs button { border-bottom: 0; border-radius: 4px 4px 0 0; background: transparent; color: var(--soft); }
+#right { display: flex; flex-direction: column; min-height: 0; min-width: 0; background: var(--paper); }
+#tabs { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 10px 0; border-bottom: 1px solid var(--line); background: var(--wash); }
+#tabs button { white-space: nowrap; border-bottom: 0; border-radius: 4px 4px 0 0; background: transparent; color: var(--soft); }
 #tabs button.on { background: var(--paper); color: var(--ink); font-weight: 600; }
 #code { flex: 1; min-height: 0; overflow: auto; margin: 0; padding: 12px 0; font: 13px/20px ui-monospace, monospace; counter-reset: line; tab-size: 4; }
 #code div { white-space: pre; padding: 0 16px 0 0; min-height: 20px; }

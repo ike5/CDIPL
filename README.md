@@ -1,6 +1,6 @@
 # CDIPL
 
-CDIPL is a compiler. You write what a program or a small web application should do, called intent, in a plain text file in English or Spanish. CDIPL builds the program from blocks of code that were written beforehand: a Python or JavaScript program, or an application made of HTML, CSS and JavaScript pages, optionally with a FastAPI server over a SQLite database. No AI model writes code when you build: the same intent gives the same files every time. The generated code can be converted back to intent, and a live view shows your intent beside the exact files it produces.
+CDIPL is a compiler. You write what a program or a small web application should do, called intent, in a plain text file in English or Spanish. CDIPL builds the program from blocks of code that were written beforehand: a program in Python, JavaScript, C or Java, or an application made of HTML, CSS and JavaScript pages, optionally with a FastAPI server over a SQLite database and with signing in. No AI model writes code when you build: the same intent gives the same files every time. The generated code can be converted back to intent, and a live view shows your intent beside the exact files it produces.
 
 CDIPL is early. Only a part of the block catalogue is built (see [What is not built yet](#what-is-not-built-yet)), and no developer other than its authors has used it.
 
@@ -56,7 +56,7 @@ wrote out/trace.json
 note: 10 block(s) used are drafts awaiting human review: cli-options, read-text-file, parse-json, check-list-of-records, exit-on-error, check-required-types, filter-rows, sort-rows, print-table, print-message
 ```
 
-`out/main.py` is a complete Python program that depends on nothing from CDIPL (the JavaScript target works the same way: `--target javascript`). `out/trace.json` records which block each line came from. Without `--out`, files go to `build/<target>` beside the intent file.
+`out/main.py` is a complete Python program that depends on nothing from CDIPL. The same file builds as JavaScript, C or Java with `--target javascript`, `--target c` or `--target java`, and the four programs behave identically: the same output and the same exit status for the same input. `cdipl run --target c people.intent people.json` builds and runs in one step (C needs `gcc`, Java needs `javac` and `java`). `out/trace.json` records which block each line came from. Without `--out`, files go to `build/<target>` beside the intent file.
 
 Run it. This program reads a JSON file given as its first argument:
 
@@ -184,6 +184,48 @@ This is the pages example plus three things: `use sqlite` and `use FastAPI` at t
 
 If FastAPI or uvicorn is missing, `cdipl run` says so and tells you to run `pip install "cdipl[server]"`.
 
+### Editing, rules and signing in
+
+`examples/inventory_server.intent` adds two things to an application. `editable` under a table gives each row a control to change it and one to delete it. A rule stores a notification whenever a record that is added or changed meets its condition, and `notifications` lists them on a page:
+
+```
+    page Products:
+        table Product
+        editable
+        notifications
+
+    when Product.stock < 5:
+        notify inventory_manager
+```
+
+`examples/inventory_auth.intent` adds `use authentication`. Nothing can then be reached without signing in, except the page that holds the sign-in form, which you write yourself, with your own words for the two boxes, the button and the message for a wrong password:
+
+```
+use sqlite
+use FastAPI
+use authentication
+
+app Inventory:
+    page Welcome:
+        heading "Inventory"
+        sign in "Name" "Password" "Sign in" "Wrong name or password"
+
+    page Products:
+        table Product
+        button "Sign out" signs out
+```
+
+There is no default account. Build to a folder and add a user there; the password is asked for and never written anywhere:
+
+```console
+$ cdipl build examples/inventory_auth.intent --target html --out shop
+$ cd shop
+$ python server.py add-user ana
+$ python -m uvicorn server:app
+```
+
+`set-password NAME`, `remove-user NAME` and `list-users` are the other commands. In the live view the preview is the real server, and a user is made up for it; the name and password are shown under the text.
+
 ## Writing in Spanish
 
 Start a file in Spanish with `--language es`, or give `idioma: es` as the first line. Every command that reads or writes intent works in both languages, and the same program in the two languages builds identical code.
@@ -241,10 +283,13 @@ The classifier is not reliable enough to trust unseen wording unattended: on 360
 
 ## What is not built yet
 
-- Only part of the block catalogue is implemented, and every implemented block is a draft until a person reviews it. A build prints a note listing the drafts it used.
-- The targets are Python and JavaScript for programs, and HTML, CSS and JavaScript (with FastAPI and SQLite) for applications. A C target has not started.
-- Understood but not built: `use authentication`, `use postgres`, `create postgres:` with `using docker`, editable tables, and rules such as `when Product.stock < 5:` with `notify`.
-- **The generated server has no authentication.** Anyone who can reach it can read and change every record. Run it only on your own machine. `cdipl run` listens on 127.0.0.1 for this reason; if you start a generated server yourself, do not make it listen on other addresses.
+- Only part of the block catalogue is implemented (37 of 108 blocks), and every implemented block is a draft until a person reviews it. A build prints a note listing the drafts it used.
+- The targets are Python, JavaScript, C and Java for programs, and HTML, CSS and JavaScript (with FastAPI and SQLite) for applications.
+- Understood but not built: `use postgres`, `create postgres:` with `using docker`, and any other `use`. Django and React are not started.
+- A rule stores a notification that a page can list. Nothing is delivered to a person.
+- Free wording covers the statements of a program and the common lines of a page. `use`, `expose`, buttons with an action, `editable`, `notifications`, rules and the sign-in element are read in their fixed form only.
+- **Without `use authentication`, the generated server lets anyone who can reach it read and change every record.** Run it only on your own machine. `cdipl run` listens on 127.0.0.1 for this reason.
+- **With `use authentication`, the protecting code is a draft that no person experienced in authentication has reviewed.** Its limits are listed in [docs/meaning.md](docs/meaning.md). Put it behind HTTPS and have it reviewed before using it for anything beyond your own machine.
 
 The details and the open decisions are in `PLAN.md`.
 
@@ -262,4 +307,4 @@ pip install -e ".[dev]"
 python -m unittest discover -s tests -t .
 ```
 
-The tests need `node` on the path for the generated JavaScript. The formatter and linter tests are skipped, and reported as skipped, unless `ruff` and some JavaScript tools are installed; `tests/README.md` lists what each test file checks and which tools it uses.
+The tests need `node`, `gcc`, `javac` and `java` on the path, to run the generated JavaScript, C and Java. The formatter and linter tests are skipped, and reported as skipped, unless `ruff` and some JavaScript tools are installed; `tests/README.md` lists what each test file checks and which tools it uses.

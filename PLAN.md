@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Reviewed** | `outputs/proposal-classifier-driven-intent-programming-language.md` (v0.2) and this repository at commit `194e44b` |
-| **Revision** | 12, dated 2026-11-12. It incorporates eleven rounds of decisions from the product owner and the results of Stage 1 and Stage 2. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
-| **Status** | Stage 1 is complete and accepted. Stage 2 is built and measured. The live view and a first slice of whole applications are built and tested: pages, records, tables that fill, search and sort, buttons with actions, and a FastAPI server with an API over SQLite. See [Next step: a live view](#next-step-a-live-view). Authentication, Postgres, editing and rules are not built. No developer other than the assistant has used any of it. Stage 3 (a C target) has not started. |
+| **Revision** | 13, dated 2026-11-12. It incorporates twelve rounds of decisions from the product owner and the results of Stages 1, 2 and 3. In the twelfth round the owner asked the assistant to stop asking questions and build a CDIPL that works from the ideas given so far; the choices the assistant made to do that are listed under [Decisions made by the assistant](#decisions-made-by-the-assistant). Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
+| **Status** | Stage 1 is complete and accepted. Stage 2 is built and measured. Stage 3 is built: programs now build in Python, JavaScript, C and Java, with identical behaviour on every test. The live view and whole applications are built and tested: pages, records, tables that fill, search, sort and can be edited, buttons with actions, rules that notify, a FastAPI server with an API over SQLite, and authentication. CDIPL installs as a package with a `cdipl` command. See [Next step: a live view](#next-step-a-live-view) and [Stage 3 result](#stage-3-result). Not built: Postgres and Docker, Django, React. Every block is still a draft: no person has reviewed any of them, and the authentication code in particular has not been reviewed by anyone experienced in it. No developer other than the assistant has used any of it. |
 | **Audience** | Engineers deciding whether to build this, and what to build first |
 
 References such as "§8" point to sections of the proposal. Sections of this plan are referred to by name.
@@ -24,6 +24,8 @@ As decided by the product owner, CDIPL works like this. A developer writes inten
   1. **Block inventory**, with no product code: work out, from sample programs, which blocks a library would need and how many sample programs it could produce in full.
   2. **Pipeline slice**: six blocks from the proposal's own examples, with a classifier, an index and two targets (Python and JavaScript), tested for correct choices in English and Spanish, identical behaviour, every valid combination, conversion back to intent, and tracing.
   3. **Third target**: add C, to measure what each additional language costs.
+
+**Stage 3 is built.** C and Java were added as targets. Every program in the equivalence and combination tests behaves identically in all four languages. The cost of a target is now measured: a C program carries about 500 lines of fixed support code and a Java program about 360, against 77 for Python, and each generator is two to three times the size of the Python one. See [Stage 3 result](#stage-3-result).
 
 **Stage 2 is built and measured.** The compiler does what the plan asked: 16 blocks, programs that behave identically in Python and JavaScript, conversion back to intent, formulas, and English and Spanish. The classifier does not meet the marks the owner set: on wording it had not seen, 1 accepted choice in 120 was wrong against a mark of 1 in 300, and it declined 32% of English statements against a mark of 25%. Its first guess is right 93% to 95% of the time, so the difficulty is knowing when a guess can be trusted without anyone looking. See [Stage 2 progress](#stage-2-progress).
 
@@ -69,9 +71,10 @@ The owner has asked the AI assistant that wrote this plan to build the compiler 
 | Table behaviour | Fill from the records first, then search and sort | Built |
 | Sentences about something already declared | "Increase button size by 40px" changes the button declared above | Built |
 | Free wording for pages | Teach the classifier the page blocks | Built; no wrong choice in 24 unseen wordings per language, nearly half declined |
-| Choosing a stack | By keyword: `use sqlite`, `use FastAPI`, `use postgres`, `create postgres:` with `using docker` | `use sqlite` and `use FastAPI` are built; the others are recognised and reported as not built |
+| Choosing a stack | By keyword: `use sqlite`, `use FastAPI`, `use postgres`, `create postgres:` with `using docker` | `use sqlite`, `use FastAPI` and `use authentication` are built; Postgres and Docker are recognised and reported as not built |
 | What a stack generates first | A table for each data declaration that is exposed, and an API to list, add, change and delete its records | Built |
-| Buttons | Buttons have actions | Two built: add a record, open a page |
+| Buttons | Buttons have actions | Three built: add a record, open a page, sign out |
+| How to proceed | The assistant does all the work without stopping to ask questions, delegating to other AI agents, and uses the owner's ideas so far to build a CDIPL that works | Done in revision 13. Choices that were the owner's to make are listed under [Decisions made by the assistant](#decisions-made-by-the-assistant) so that they can be reversed. |
 | Pace | Generate a small amount, review, then generate more | Three stages with a review after each; Stage 2 is delivered in three parts |
 
 ## Basis and limits of this review
@@ -358,8 +361,13 @@ Asked for by the owner in the eighth and ninth rounds of decisions. A first vers
 - **Free wording for pages.** The classifier now knows six page blocks. In the live view, `add a big title that says "Products"` is read as a heading, and `make the button 40px wider` as a change to the button, in English and in Spanish.
 - **A server, a database and an API.** With `use sqlite` and `use FastAPI`, `expose Product as api` generates a FastAPI server with a SQLite table for Product, seeded from the records, and an API to list, add, change and delete. A table of Product on a page then fills from the API.
 - **Buttons with actions.** `button "Add product" adds Product` opens a form with an input for each field and adds the record through the API. `button "Suppliers" opens Suppliers` opens another page.
+- **Editable tables.** `editable` under a table gives every row a control to change it and one to delete it, through the API.
+- **Rules that notify.** `when Product.stock < 5:` with `notify inventory_manager` beneath stores a notification whenever a record that is added or changed meets the condition, in the same transaction as the record. `notifications` on a page lists them. Nothing is sent to anyone: the name after `notify` is a label, and delivery (email, chat) is not built.
+- **Authentication.** `use authentication` makes the server refuse everything to a visitor who has not signed in, except the sign-in page and what it needs. The developer writes the sign-in page (`sign in "Name" "Password" "Sign in" "Wrong name or password"`) and a `signs out` button. Users are added from the command line (`python server.py add-user NAME`); there is no default account and no password in the intent file. Passwords are stored as scrypt hashes, sessions as hashes of random tokens, and a name is locked for five minutes after five wrong passwords.
+- **The preview is the real server.** For an application with a server, the live view runs the generated server itself in a temporary folder, so adding, changing, deleting, notifications and signing in work in the preview as they will when built. With authentication it creates a user for the preview and shows the name and password under the text.
+- **A package and two more commands.** `pip install -e .` gives a `cdipl` command. `cdipl new FILE --kind program|pages|app` writes a starter file in English or Spanish, and `cdipl run FILE` builds into a temporary folder and runs the result (`--target` chooses the language of a program).
 
-The meaning of every statement, and what the generated server does not do, is in `docs/meaning.md`. Examples are `examples/inventory.intent` (pages only) and `examples/inventory_server.intent` (with a server).
+The meaning of every statement, and what the generated server does not do, is in `docs/meaning.md`. Examples are `examples/inventory.intent` (pages only), `examples/inventory_server.intent` (with a server, an editable table and a rule) and `examples/inventory_auth.intent` (with authentication).
 
 **The owner's pseudocode, line by line.**
 
@@ -371,14 +379,15 @@ The meaning of every statement, and what the generated server does not do, is in
 | `use sqlite`, `use FastAPI` | Built |
 | `expose Product as api` | Built |
 | `use web`, `use database` | Understood, not built: they do not name a technology. The owner has since said these lines should name one. |
-| `use authentication` | Understood, not built |
-| `create postgres:`, `using docker` | Understood, not built |
-| `editable` | Understood, not built. The API can change and delete records; the page cannot yet. |
-| `when Product.stock < 5:`, `notify inventory_manager` | Understood, not built |
+| `use authentication` | Built. It needs a page with a `sign in` element, which the owner's pseudocode did not have, because a page carries no words the developer did not write. |
+| `create postgres:`, `using docker` | Understood, not built. Neither Postgres nor Docker can be run where this was built, so nothing generated for them could have been tested. |
+| `editable` | Built |
+| `when Product.stock < 5:`, `notify inventory_manager` | Built: a notification is stored and can be listed on a page. Nothing is delivered to a person. |
 
 **What the generated server fixes in advance.** Each of these is a decision the pseudocode does not state, made once by the generator. They are listed in `docs/meaning.md` so that a developer can see them.
 
-- **There is no authentication. Anyone who can reach the server can read and change every record.** It is safe only where that is acceptable, such as on the developer's own machine. This is the most important limit of what has been built.
+- **Without `use authentication`, anyone who can reach the server can read and change every record.** It is safe only where that is acceptable, such as on the developer's own machine.
+- **With `use authentication`, the code that protects the server is a draft.** It was written by an AI agent to a design by the assistant and reviewed by the assistant, which also probed a running server: every file and every route refused a visitor without a session, including addresses written to slip past the check. No person experienced in authentication has read it. Its limits are listed in `docs/meaning.md`; the main ones are one kind of user with full access, no way to register or reset a password except the commands, no limit on attempts per address, and that it must be put behind HTTPS for anything beyond the developer's own machine. Have it reviewed before anyone relies on it.
 - Decimals are stored as text, so that no digit is lost.
 - A record must have exactly the declared fields, of exactly the declared types, or it is refused.
 - The first records are put into a table when it is created and never again.
@@ -388,8 +397,8 @@ The meaning of every statement, and what the generated server does not do, is in
 **Limits that the live view does not remove.**
 
 - **"Any description should work" cannot be promised.** The tool accepts any text and answers at once, but it can only build what is in the library, and one statement maps to one block.
-- **Free wording covers statements, not structure.** The lines that open a section (`app`, `data`, `records`, `page`), the fields and the records must be written in their fixed form, and so must `use`, `expose`, and buttons that add a record or open a page.
-- **The preview of an application with an API imitates the API.** It lists the records written in the file and does not save anything added. The real server has to be run to try adding.
+- **Free wording covers statements, not structure.** The lines that open a section (`app`, `data`, `records`, `page`), the fields and the records must be written in their fixed form, and so must `use`, `expose`, buttons with an action, `editable`, `notifications`, rules and the sign-in element. The last five were added after the classifier was trained and it has not been taught them, because both sets of test wordings are used up and teaching it would need newly written ones.
+- **The preview needs FastAPI and uvicorn installed** to run the real server. Without them it imitates the API: it lists the records written in the file and saves nothing.
 - **A wrong choice is caught only if the developer looks.** The view shows the reading beside what was typed, and marks unsure choices, but nothing forces a look.
 - **The values still have to be exact.** Names, numbers, sizes, comparisons and formulas are read by fixed rules, however freely the rest is worded.
 
@@ -407,9 +416,13 @@ The meaning of every statement, and what the generated server does not do, is in
 
 For applications, the same criteria as Stage 2 were applied and are in the tests: every generated file passes its formatter and linter; applications convert back to intent and build identically from English and Spanish; edited files are lifted exactly or refused; invalid descriptions are rejected with their line. In addition, the generated server is imported and exercised by the tests, and it was run with uvicorn and used from a real browser: the table filled from the API, a record was added through the form and was still there after the server was restarted, and the server did not serve its own code, its database or its seed file.
 
-Screenshots: `docs/live-view-program.png`, `docs/live-view-pages.png` and `docs/live-view-preview.png` show the live view; `docs/generated-app.png` and `docs/generated-app-form.png` show the generated application running.
+The later additions were checked the same way. Editable tables and rules: in a real browser a record was changed and deleted, a change that met the rule put a notification in the list, and one that did not put none. Authentication: 29 tests on the generated server and its commands, and by hand over a real connection, as described above. In the live view's preview, in a real browser, a wrong password showed the developer's message, the right one opened the first page, a record was changed, a notification appeared, and signing out returned to the sign-in page.
+
+Screenshots: `docs/live-view-program.png`, `docs/live-view-pages.png` and `docs/live-view-preview.png` show the live view; `docs/live-view-c.png` shows it generating C; `docs/live-view-app.png` shows the preview of the application with authentication after signing in; `docs/generated-app.png` and `docs/generated-app-form.png` show the generated application running.
 
 ### Stage 3: third target
+
+*The plan as written before the work; the result follows it.*
 
 Add C, as the owner decided. Java follows later.
 
@@ -417,9 +430,35 @@ C will show the cost of a target more sharply than any other choice. *From gener
 
 Record the effort relative to the second target, which written meanings needed special handling, how much of each generated C program is fixed support code, and any dependency required. The same tests apply. If C cannot meet the written meaning for a block, the target must declare it and the compiler must refuse that block for C.
 
+#### Stage 3 result
+
+Built in revision 13: C, and Java as well, since the owner had named it as the next target. Each was written by an AI agent working from `docs/meaning.md` and the existing targets, and then merged and checked by the assistant. The details are in `docs/target-c.md` and `docs/target-java.md`.
+
+**The same tests pass.** Registering a target puts it through every existing test with no change to the tests' substance: all 240 equivalence pairs and all 399 fitting chains of the combination test give the same output and exit status in Python, JavaScript, C and Java. No block had to be declared unsupported in either language, so the compiler's refusal of unsupported blocks (which exists) was not needed. Round trip, exact lifting of edited files (47 hand edits in C, 48 in Java, each lifted exactly or refused) and the trace hold for both.
+
+**Quality.** Generated C compiles with gcc and clang under `-std=c11 -Wall -Wextra -Werror -pedantic` with no warnings, is unchanged by clang-format, and uses only the C standard library. Generated Java compiles with `javac -Xlint:all -Werror` with no output and uses only `java.base`; no Java formatter was available, so none was applied.
+
+**D1, the input format, is settled by the result:** JSON stays. Each C and Java program carries its own JSON reader, written once as a block.
+
+**The cost of a target (criterion G10).**
+
+| | Python | JavaScript | C | Java |
+|---|---|---|---|---|
+| Fixed support code in a typical generated program (non-blank lines) | 77 | 107 | 495 | 364 |
+| of which the JSON reader | 9 | 7 | 226 | 195 |
+| Generator source (lines) | 460 | 545 | 1,253 | 1,073 |
+
+- A generated C program is about 520 lines for the ten-line example, and a Java one about 400, against 86 for Python. The code is fixed and written once, but it is what a reviewer has to read before the blocks can be called verified.
+- Where the meanings needed special care: the integer rule (defined by double-precision reading, reproduced in C with `strtod` and range checks, and in Java with `Double.parseDouble`), surrogate escapes in JSON, a sort that keeps equal rows in order (C has none), integer overflow (Java adds small literals as `int` unless forced to `long`), and nesting depth, where the targets differ and the specification now says so.
+- The Java work found two inexact statements in `docs/meaning.md` (Python's nesting limit, and that "a whole number" is tested on the nearest double). Both are corrected, and the second was confirmed to behave identically in all four languages.
+- The test suite went from 45 seconds to about two and a half minutes, mostly compiling. It now needs `gcc` and `javac`.
+- Effort was not measured in person-hours, because agents did the work: each target took one agent session of 35 to 45 minutes, against a specification and two existing targets to copy from. That says little about what a person would need.
+
+**What this does not show.** Both targets cover the 16 blocks of the pipeline family only. Nothing was learned about C or Java for other kinds of intent.
+
 ### Not included
 
-Editing of existing code, hand-written code inside intent files, markup and framework blocks, IDE integration, performance measurement, and any family beyond the first.
+Editing of existing code, hand-written code inside intent files, IDE integration and performance measurement. Markup and framework blocks, first listed here, were later asked for by the owner and are described under [Next step: a live view](#next-step-a-live-view).
 
 ### Suggested time budget
 
@@ -462,7 +501,7 @@ C1 is strict because an accepted wrong choice produces a wrong program with no w
 | G7 | Diagnostics: every invalid file rejected with its statement; none built. |
 | G8 | Flagging and determinism: both tests pass. |
 | G9 | The written meanings existed before the second target, and every difference found between targets was resolved by changing a meaning or a target, not a test. |
-| G10 | Stage 3 only: the effort for C is recorded, and any unsupported block is refused by the compiler, not mistranslated. |
+| G10 | Stage 3 only: the effort for C is recorded, and any unsupported block is refused by the compiler, not mistranslated. *Result: the cost is recorded under [Stage 3 result](#stage-3-result); no block was unsupported.* |
 
 **What would disprove the idea.** Stage 1 below its floor disproves usefulness for the first version as scoped. Failure of C1 that cannot be fixed without declining most statements disproves "the classifier chooses" as a safe design. Failure of G1 or G2 that can be fixed only by restricting the blocks until they are no longer useful disproves the multi-target or the Lego claim for this family. Failure of G4 disproves reversibility as stated.
 
@@ -484,9 +523,9 @@ This follows the owner's order. Each step adds either a target for existing bloc
 | Tier | Owner's item | What it adds | What is new and untested |
 |---|---|---|---|
 | 1 | Python, JavaScript | First two targets | Covered by Stages 1 and 2 |
-| 2 | C, then Java | More targets for the same blocks | Manual memory and no built-in data formats in C; static types in both. Stage 3 covers C. |
-| 2 | HTML with CSS | A new kind of intent: pages and layout | A new set of blocks. "Identical behaviour" needs a new definition, because the output is rendered, not computed. |
-| 3 | FastAPI, Django | New kinds of intent: endpoints and data models | Large blocks; dependence on framework versions; whether one intent can target two frameworks at all |
+| 2 | C, then Java | More targets for the same blocks | Built for the pipeline family; see [Stage 3 result](#stage-3-result). |
+| 2 | HTML with CSS | A new kind of intent: pages and layout | Built, with JavaScript for behaviour. There is one target for pages, so equivalence between targets has not been tested for them. |
+| 3 | FastAPI, Django | New kinds of intent: endpoints and data models | FastAPI with SQLite is built, including authentication. Django is not, so whether one intent can target two frameworks is still untested. |
 | 4 | React with CSS | A new kind of intent: stateful components | State and events; equivalence across UI frameworks |
 
 At each tier, repeat the classifier test against the enlarged library.
@@ -511,10 +550,30 @@ For the record, revision 1 of this plan examined it and ran a browser probe on n
 | Cost grows with kinds of intent multiplied by targets | Every block is written per target and must stay equivalent; every human language needs a word list and standard phrases | Stage 3 measures one added target; one roadmap step at a time |
 | Targets drift apart in meaning | The probe found four differences in two operations | Written meanings; equivalence tests on every change (G1, G9) |
 | Blocks interact badly when combined | Tests of single blocks do not cover joins | Typed interfaces; the combination test (G2) |
-| C makes complete, dependency-free programs expensive | Large fixed support code in every program | Decide the input format before Stage 2 (D1) |
+| C makes complete, dependency-free programs expensive | Large fixed support code in every program | Measured in Stage 3: about 500 lines per program, written once. It is the reviewer's burden, not the developer's. |
 | Developers cannot adjust generated code | Edits that do not convert back are refused, by the owner's rule | Accepted for the first version; watch for it in early use |
 | Existing tools already do this well | Not evaluated in this review | A prior-art survey before Stage 2 is recommended |
 | Scope returns to "everything at once" | The proposal's breadth is its main delivery risk (§10.9) | The roadmap's one-step rule and a review after each stage |
+
+## Decisions made by the assistant
+
+In the twelfth round the owner asked for the work to be done without further questions. These are the choices that would otherwise have been put to the owner. Each can be reversed; none changes a decision in the table at the top.
+
+| Topic | What the assistant chose | Why |
+|---|---|---|
+| What to build | Everything in the owner's pseudocode that could be tested here: editable tables, rules that notify, authentication; C and Java targets; a package with `new` and `run` commands | The owner's roadmap and pseudocode, in order |
+| Postgres and Docker | Not built; the lines are still recognised and reported | Neither can be run where this was built, and generated code that has never run would break the rule that blocks are tested |
+| Django, React | Not built | Each is a second target for a kind of intent, which is the roadmap's hardest untested question, and deserves its own stage |
+| `use web`, `use database` | Still reported as not built, with a suggestion to name a technology | The owner said parts are chosen by naming a technology |
+| What `notify` does | Stores a notification that a page can list. Nothing is delivered. | Delivery needs a mail or chat service and credentials, which the pseudocode does not name |
+| How users are created | From the command line of the generated server. No default account, no password in the intent file, no self-registration. | A default account or a password in a file under version control is the commonest way such systems are broken |
+| The sign-in page | Written by the developer with a `sign in` element carrying four texts | A page carries no words the developer did not write, which also keeps English and Spanish builds identical |
+| Free wording for the new statements | None. `editable`, `notifications`, rules, the sign-in element and `signs out` are read in their fixed form only. | Both sets of test wordings have been used. Teaching the classifier new blocks honestly needs new wordings written by someone who has not seen the training material. |
+| Input format for C and Java (D1) | JSON, with a reader carried in each program | Keeps every target's programs interchangeable; the cost is measured in [Stage 3 result](#stage-3-result) |
+| Review status | Every block stays a draft | Only the owner or another professional developer can mark a block reviewed |
+| Method | Five AI agents did the building in separate copies of the repository (packaging, C, Java, editable tables and rules, authentication), each to a written brief; the assistant merged, ran the whole test suite after each merge, changed what it found wrong, and probed the results by hand | The owner asked for agents to do the routine work |
+
+What the assistant changed after the agents reported: generated C now uses ordinary `#include` lines (the agent had used the digraph `%:` to get past a test written for Python); the sign-in form is marked to post, so that a password can never be put in an address; `cdipl run` takes `--target`; a file is matched to its language by its whole extension; two statements in `docs/meaning.md` were corrected; and the live view's file tabs wrap.
 
 ## Open decisions
 
@@ -522,12 +581,14 @@ Each has a default that this plan assumes if nobody decides otherwise.
 
 | ID | Decision | Default assumed here |
 |---|---|---|
-| D1 | Input format for generated programs, given that C cannot read JSON without added code | Decide before Stage 3. Stage 2 uses JSON. |
-| D2 | What should be built next for applications? The candidates are: changing and deleting records from the page (`editable`); authentication; Postgres in place of SQLite; rules such as `when Product.stock < 5: notify`. | Changing and deleting from the page, because the API for it already exists and it completes the table. Authentication after that, with review by someone experienced in it before anyone relies on it. |
-| D3 | Which other button actions are wanted? Two are built: add a record, and open a page. | Decide from real use |
-| D4 | Should the generated server refuse to start, or warn, when it is asked to listen beyond the local machine while it has no authentication? | Yes, warn in the documentation now; enforce once authentication exists |
-| D5 | What should `use web` and `use database` mean, if anything, now that parts are chosen by naming a technology? | Nothing: report them as not built and suggest `use FastAPI` and `use sqlite` |
+| D1 | Input format for generated programs | Settled by Stage 3: JSON |
+| D2 | What should be built next? The candidates are: a review of the blocks by a person, starting with authentication; the five-developer test (L7); new wordings so that the classifier can be taught the newer statements; Postgres; Django as a second target for applications; delivery of notifications. | The review and the five-developer test, because everything built so far rests on the assistant's own checking |
+| D3 | Which other button actions are wanted? Three are built: add a record, open a page, sign out. | Decide from real use |
+| D4 | Should a generated server without authentication refuse to listen beyond the local machine? | Not enforced: uvicorn chooses the address, not the generated code. `cdipl run` listens on the local machine only, and the documentation warns. |
+| D5 | What should `use web` and `use database` mean, if anything? | Nothing: report them as not built and suggest `use FastAPI` and `use sqlite` |
 | D6 | Who are the five developers for criterion L7, and when? | The owner arranges it |
+| D7 | Who reviews the authentication blocks, and should `use authentication` print a warning at every build until they have? | Every build already lists the draft blocks it used. A person experienced in authentication should review them before any use beyond the developer's own machine. |
+| D8 | Should roles or per-record permissions be added to authentication? | No, until someone needs them |
 
 ## Assumptions
 

@@ -411,6 +411,33 @@ def _sort(rest, number, words):
     return Sort(field=name, descending=descending, ignore_case=ignore_case, line=number)
 
 
+def step_text(step, words, source):
+    """The statements a step stands for, in standard phrases. Returns a list of lines."""
+    if isinstance(step, Read):
+        return [f"{words['get']} {source.name}"] + ([words["skip"]] if step.skip_invalid else [])
+    if isinstance(step, Filter):
+        joined = f" {words['and']} ".join(
+            f"{formula_text(c.left)} {c.op} {formula_text(c.right)}" for c in step.conditions)
+        return [f"{words['keep']} {joined}"]
+    if isinstance(step, Add):
+        return [f"{words['add']} {step.name} = {formula_text(step.formula)}"]
+    if isinstance(step, Sort):
+        direction = words["descending"] if step.descending else words["ascending"]
+        suffix = f" {words['ignoring_case']}" if step.ignore_case else ""
+        return [f"{words['sort']} {step.field} {direction}{suffix}"]
+    if isinstance(step, Limit):
+        return [f"{words['limit']} {step.count}"]
+    if isinstance(step, Group):
+        return [f"{words['group']} {step.field}"]
+    if isinstance(step, Count):
+        return [words["count"]]
+    if isinstance(step, IfNone):
+        return [f"{words['if_none']} {quote(step.text)}"]
+    if isinstance(step, Show):
+        return [f"{words['show']} {', '.join(step.fields)}"]
+    return [words["write_json"]]
+
+
 def render(program, language=None):
     """Write a Program as intent text in standard phrases."""
     words = PHRASES[language or program.language]
@@ -420,30 +447,5 @@ def render(program, language=None):
     out += [f"    {name}: {words[kind]}" for name, kind in source.fields]
     out.append("")
     for step in program.steps:
-        if isinstance(step, Read):
-            out.append(f"{words['get']} {source.name}")
-            if step.skip_invalid:
-                out.append(words["skip"])
-        elif isinstance(step, Filter):
-            joined = f" {words['and']} ".join(
-                f"{formula_text(c.left)} {c.op} {formula_text(c.right)}" for c in step.conditions)
-            out.append(f"{words['keep']} {joined}")
-        elif isinstance(step, Add):
-            out.append(f"{words['add']} {step.name} = {formula_text(step.formula)}")
-        elif isinstance(step, Sort):
-            direction = words["descending"] if step.descending else words["ascending"]
-            suffix = f" {words['ignoring_case']}" if step.ignore_case else ""
-            out.append(f"{words['sort']} {step.field} {direction}{suffix}")
-        elif isinstance(step, Limit):
-            out.append(f"{words['limit']} {step.count}")
-        elif isinstance(step, Group):
-            out.append(f"{words['group']} {step.field}")
-        elif isinstance(step, Count):
-            out.append(words["count"])
-        elif isinstance(step, IfNone):
-            out.append(f"{words['if_none']} {quote(step.text)}")
-        elif isinstance(step, Show):
-            out.append(f"{words['show']} {', '.join(step.fields)}")
-        elif isinstance(step, WriteJson):
-            out.append(words["write_json"])
+        out += step_text(step, words, source)
     return "\n".join(out) + "\n"

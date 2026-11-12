@@ -23,3 +23,5 @@ Requirements:
 | `test_free_wording.py` | C3, C4 | With a small made-up word list: free wording builds the same program as standard phrases; the index is reused without the classifier; unknown words and close calls are reported |
 | `test_library.py` | G8 | Flagged blocks stop a build; ten builds are byte-identical |
 | `test_real_wording.py` | C5 | The real word lists and classifier file are intact; hand-written English and Spanish pairs build the same program whenever both are accepted, and none is accepted as the wrong block |
+| `test_pages.py` | G3, G4, G5, G6, G7, C5 for web pages | Pages build and convert back in both human languages; edited pages are lifted exactly or refused; invalid descriptions are rejected with their line; the formatter makes no change |
+| `test_live.py` | L2, L3, L4, L6 | The live view reports on every statement, a problem does not hide the rest, a complete file shows exactly what `build` writes, and the server refuses posts that lack its token |

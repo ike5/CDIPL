@@ -5,9 +5,10 @@ import re
 import sys
 from pathlib import Path
 
-from . import library
-from .compiler import BuildError, build_with_index, lift_text, read_intent, target_for
+from . import library, pages
+from .compiler import BuildError, build_with_index, lift_app, lift_text, read_intent, target_for
 from .languages import HEADERS
+from .live_server import serve
 from .model import IntentError
 from .resolve import Resolver, empty_index, key_for
 from .targets import TARGETS
@@ -56,7 +57,12 @@ def command_build(args):
 def command_lift(args):
     path = Path(args.program)
     try:
-        sys.stdout.write(lift_text(path.read_text(encoding="utf-8"), target_for(path.name), args.language))
+        if path.is_dir():
+            files = {item.name: item.read_text(encoding="utf-8") for item in sorted(path.iterdir())
+                     if item.suffix in (".html", ".css")}
+            sys.stdout.write(pages.render(lift_app(files), args.language))
+        else:
+            sys.stdout.write(lift_text(path.read_text(encoding="utf-8"), target_for(path.name), args.language))
     except NotGenerated as problem:
         sys.exit(f"{path}: refused: {problem}")
 
@@ -156,11 +162,11 @@ def main():
     commands = parser.add_subparsers(dest="command", required=True)
     build_parser = commands.add_parser("build", help="generate a program from an intent file")
     build_parser.add_argument("intent")
-    build_parser.add_argument("--target", choices=sorted(TARGETS), required=True)
+    build_parser.add_argument("--target", choices=[*sorted(TARGETS), "html"], required=True)
     build_parser.add_argument("--out", help="folder to write to (default: build/<target> beside the intent file)")
     build_parser.set_defaults(run=command_build)
     lift_parser = commands.add_parser("lift", help="turn a generated program back into intent")
-    lift_parser.add_argument("program")
+    lift_parser.add_argument("program", help="a generated program, or a folder of generated pages")
     lift_parser.add_argument("--language", choices=("en", "es"), default="en")
     lift_parser.set_defaults(run=command_lift)
     explain_parser = commands.add_parser("explain", help="show which block each statement was read as")
@@ -171,6 +177,10 @@ def main():
     choose_parser.add_argument("line", type=int)
     choose_parser.add_argument("--block", help="the block this statement means")
     choose_parser.set_defaults(run=command_choose)
+    live_parser = commands.add_parser("live", help="open the live view for an intent file in a local browser page")
+    live_parser.add_argument("intent")
+    live_parser.add_argument("--port", type=int, default=8765)
+    live_parser.set_defaults(run=lambda args: serve(args.intent, args.port))
     affected_parser = commands.add_parser("affected", help="list the intent files that use a block")
     affected_parser.add_argument("block")
     affected_parser.add_argument("folder")

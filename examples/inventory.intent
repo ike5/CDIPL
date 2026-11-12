@@ -1,0 +1,13 @@
+language: en
+
+app Inventory:
+    data Product:
+        name: text
+        price: decimal
+        stock: integer
+
+    page Products:
+        heading "Products"
+        text "Everything we keep in stock."
+        table Product
+        button "Add product" width 160px

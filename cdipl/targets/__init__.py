@@ -1,4 +1,6 @@
 """Code generators, one per target language."""
-from . import javascript, python
+from . import html, javascript, python
 
 TARGETS = {"python": python, "javascript": javascript}
+
+__all__ = ["TARGETS", "html", "javascript", "python"]

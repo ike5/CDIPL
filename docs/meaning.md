@@ -88,3 +88,42 @@ These are cases where the targets may behave differently, or where the rules abo
 - **Very large files.** Each program reads the whole file into memory. Limits on size differ between targets and were not measured.
 - **Platforms.** The tests were run on Linux only, with Python 3.14.6 and Node 22.23.4.
 - **Formulas.** There is no division, no conversion between integers and text, and no way to choose between values by a condition.
+
+## Web pages
+
+A second kind of intent file describes the pages of an application and is built into HTML and CSS. It is separate from the blocks above: it has no source and no chain of steps.
+
+```text
+language: en
+
+app Inventory:
+    data Product:
+        name: text
+        price: decimal
+        stock: integer
+
+    page Products:
+        heading "Products"
+        table Product
+        button "Add product" width 160px
+```
+
+**Status:** a first step, written by the AI assistant and not yet reviewed by a person. The pages are static: they have structure and style and no behaviour.
+
+| Statement | Meaning |
+|---|---|
+| `app N:` | The application. Its name appears in the title of every page. |
+| `data N:` with fields beneath | A kind of record, with fields of type `text`, `integer` or `decimal`. Here the types affect only how a column is aligned. Every data declaration must be shown by at least one table. |
+| `page N:` with elements beneath | One page, written to a file named after the page in lower case, ending `.html`. The page title is the page name, a hyphen and the application name. When there is more than one page, every page starts with links to all the pages, in the order they are declared. |
+| `heading "T"` | A heading. The first on a page is the main heading; later ones are second-level headings. |
+| `text "T"` | A paragraph. |
+| `table D` | A table with one column for each field of the data D, in the order declared, headed by the field's name. Columns of numbers are aligned to the right. The table has no rows: nothing yet supplies them. |
+| `button "T"` and optionally `width Npx` | A button. It does nothing when pressed. With a width, the button is exactly that many pixels wide. |
+
+All pages share one stylesheet, `styles.css`, which holds fixed rules for the elements that are used and one rule for each button width that is used. The colours, spacing and fonts are fixed choices of the generator.
+
+Text in double quotes is shown exactly as written; the characters `&`, `<` and `>` are escaped. No words are added that the developer did not write.
+
+Some statements are recognised but cannot be built yet, and say so: choosing parts of an application (`use web`), an API for a data type (`expose Product as api`), searching, sorting and editing a table, and rules that react to data (`when ...:` and `notify`).
+
+Known limits: there is no behaviour of any kind; the language of the page is not declared in the HTML; and a line of text longer than about 300 characters would be re-wrapped by the formatter used for criterion G6.

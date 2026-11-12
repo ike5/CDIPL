@@ -4,7 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from .targets import TARGETS
+from .targets import TARGETS, html
 
 HERE = Path(__file__).parent / "library"
 STATUSES = ("draft", "verified", "flagged")
@@ -29,4 +29,8 @@ def version(block):
             if owner == block:
                 digest.update(f"{name}\0{flag}\0{text}\0".encode())
         digest.update(TARGETS[name].FORMS.get(block, "").encode("utf-8"))
+    for owner, flag, text in html.SUPPORT:
+        if owner == block:
+            digest.update(f"html\0{flag}\0{text}\0".encode())
+    digest.update(html.FORMS.get(block, "").encode("utf-8"))
     return digest.hexdigest()[:12]

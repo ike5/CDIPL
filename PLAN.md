@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Reviewed** | `outputs/proposal-classifier-driven-intent-programming-language.md` (v0.2) and this repository at commit `194e44b` |
-| **Revision** | 10, dated 2026-11-12. It incorporates eight rounds of decisions from the product owner and the results of Stage 1 and Stage 2. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
-| **Status** | Stage 1 is complete and accepted. Stage 2 is built and measured: the compiler criteria pass, and the classifier misses the marks set for choosing unseen. The owner has since redirected the product toward pseudocode written in a live view, where every choice is shown as it is made. That step is proposed, not built: see [Next step: a live view](#next-step-a-live-view). |
+| **Revision** | 11, dated 2026-11-12. It incorporates nine rounds of decisions from the product owner and the results of Stage 1 and Stage 2. Revision 1 (commit `d23ae96`) led with an engine for editing existing code, which the owner has since ruled out for the first version. |
+| **Status** | Stage 1 is complete and accepted. Stage 2 is built and measured. A first live view and the first web-page blocks (HTML and CSS) are built and tested: see [Next step: a live view](#next-step-a-live-view). The owner's sample pseudocode describes a whole application, most of which cannot be built yet. Stage 3 (a C target) has not started. |
 | **Audience** | Engineers deciding whether to build this, and what to build first |
 
 References such as "§8" point to sections of the proposal. Sections of this plan are referred to by name.
@@ -59,10 +59,12 @@ The owner has asked the AI assistant that wrote this plan to build the compiler 
 | Formulas | The intent language allows formulas as parameters | Built as part C of Stage 2, with a written meaning for each operator |
 | Plumbing blocks | Stage 2 includes the blocks needed to generate a whole program, with sample J1 as an acceptance test | Done in part A |
 | Formatter and linter for generated code | ruff for Python; prettier and eslint for JavaScript; default rules; line length 320, so the formatters never re-wrap a generated line | Used for criterion G6 |
-| Main way of writing | Pseudocode, written quickly as intents. Short descriptions are also wanted, such as "increase button size by 40px". | The next step is built around pseudocode (D3, D5) |
+| Main way of writing | Pseudocode, written quickly as intents. Short descriptions are also wanted, such as "increase button size by 40px". | The live view and the page blocks follow the shape of the owner's pseudocode |
 | How choices are accepted | Automatically, in a live view: the generated code appears beside the text as it is typed, each statement is shown against the code it produced, and a change to the text changes the code at once | Replaces confirming each choice; see [Next step: a live view](#next-step-a-live-view) |
 | What may be written | Any description should be accepted as input, with the tool steering the developer toward the wording it recognises best | Cannot be met in full without a generative model; see the limits in the next step |
-| What happens to an accepted choice | It becomes canonical for the developer's project | A project-wide record of accepted wordings (D4) |
+| What happens to an accepted choice | It becomes canonical for the developer's project. Accepting is saving the file. | On saving, the live view rewrites the file in standard phrases, so the file itself is the record (see the next step) |
+| Where the live view runs | A local browser page first; integration with editors later | Built |
+| User-interface blocks | Start now, in HTML and CSS | Five page blocks built |
 | Pace | Generate a small amount, review, then generate more | Three stages with a review after each; Stage 2 is delivered in three parts |
 
 ## Basis and limits of this review
@@ -321,46 +323,64 @@ Each of the six wrong choices was a close neighbour of the block meant, such as 
 
 ### Next step: a live view
 
-Proposed after the owner's eighth round of decisions. Not built.
+Asked for by the owner in the eighth and ninth rounds of decisions. A first version is built and tested. It has not been tried by any developer other than the assistant.
 
-**What the owner asked for.** Developers write pseudocode, or short descriptions, in one pane. The generated code, in the language they chose, appears in another pane as they type. Each statement is shown against the code it produced. The classifier's choice is applied automatically, with no confirmation step. If the result is not what was meant, the developer rewords the statement and the code changes at once. Once the developer has accepted a choice, it is fixed for their project.
+**What the owner asked for.** Developers write pseudocode, or short descriptions, in one pane. The generated code, in the language they chose, appears in another pane as they type, as a set of blocks. Each statement is shown against the code it produced. The classifier's choice is applied automatically, with no confirmation step. If the result is not what was meant, the developer rewords the statement and the code changes at once. Saving the file accepts the choices, which are then fixed for the project.
 
 **Why this changes the classifier question.** The Stage 2 marks were set for a classifier that chooses unseen. In a live view nothing is unseen: a wrong choice appears on screen the moment it is made, next to the statement that caused it. On that footing the useful figure is how often the first guess is right, which was 93% in English and 95% in Spanish on wording the classifier had not seen. The product's promise changes with this, and should be stated that way: it no longer "never guesses"; it guesses in the open, and what the developer accepts is then fixed and repeatable.
 
-**What is already in place.**
+**What was built.**
 
-- A build takes well under a millisecond once the word lists are loaded (measured: about 0.2 ms for standard phrases and 0.5 ms for free wording, on the example program). Rebuilding on every keystroke is feasible.
-- The trace already maps every generated line to the statement it came from.
-- The index already records choices; `explain` already says in plain words what each statement was read as.
+- `python -m cdipl live FILE` starts a server on the developer's own machine and prints an address to open in a browser. It listens on that machine only, and it can read and write only the one file it was started with.
+- The page has the text on the left and the exact generated file on the right, with line numbers: the same Python, JavaScript, HTML or CSS that the `build` command writes. This is what the owner asked for after seeing a first version that showed a card for each statement.
+- Putting the cursor on a statement highlights the lines of code it produced and scrolls them into view. Selecting a line of code selects the statement that produced it.
+- A mark beside each line of text shows how it was read: standard phrase, chosen, chosen but unsure, accepted earlier, not understood, or understood but not built. A strip under the text shows, for the statement the cursor is on, the same statement in standard phrases, the blocks used and their review status, and, if it was not understood, why and which blocks are closest.
+- A problem in one statement does not hide the rest: the code for the other statements is still shown.
+- The target language can be changed in the page: Python or JavaScript for programs, HTML for pages. For pages, each generated file has its own tab, and a further tab shows the page as a browser renders it.
+- **Saving accepts.** If every statement is read and the file is complete, saving rewrites the file in standard phrases. Otherwise the file is saved as typed.
 
-**What has to be built.**
+**How accepted wordings are recorded.** The owner asked whether there is a better way than a separate record. There is, and it is what the live view does: on saving, the accepted wording is replaced in the file by the standard phrase it was read as. The file is then the whole record. It is read by fixed rules from then on, the classifier is never consulted for it again, nothing has to be kept in step with it, and a colleague reading the file sees exactly what will be built. The cost is that the developer's own wording is not kept; they see the standard phrase beside their wording as they type, and it is what remains after saving. The index of choices built in Stage 2 is still used by the `build` command for files that have not been saved from the live view, but it is no longer needed for files that have.
 
-1. A long-running process that rebuilds on each change and reports, for every statement: the block chosen, the same statement in standard phrases, the lines of code it produced, and whether the choice was sure, unsure, or impossible.
-2. A two-pane view: text on one side, code on the other, with each statement and its code highlighted together, in both directions.
-3. For a statement that cannot be read: the reason, and the closest blocks, shown in place.
-4. A project-wide record of accepted wordings, kept in the repository, so that an accepted wording means the same block in every file and for every member of the team.
+**The first web-page blocks.** Five blocks build static pages in HTML and CSS: the page itself, headings, paragraphs, a table with a column for each field of a declared data type, and buttons with an optional width in pixels. They follow the shape of the owner's pseudocode (`app`, `data`, `page`, `table`). Their meaning is in `docs/meaning.md`, and an example is in `examples/inventory.intent`. Pages convert back to intent, build identically from English and Spanish, and pass the formatter. They have structure and style and no behaviour: a table has headings and no rows, and a button does nothing.
+
+**The owner's pseudocode, and what it shows.** The sample describes a whole application: a database, authentication, an API, a page with a table that can be searched, sorted and edited, and a rule that notifies someone when stock runs low.
+
+| Line | What happens today |
+|---|---|
+| `app Inventory:`, `data Product:` and its fields | Built |
+| `page Products:`, `table Product` | Built, as a static page |
+| `use web`, `use database`, `use authentication` | Understood, not built |
+| `expose Product as api` | Understood, not built |
+| `searchable by name`, `sortable by price`, `editable` | Understood, not built |
+| `when Product.stock < 5:`, `notify inventory_manager` | Understood, not built |
+
+This is a different and much larger kind of block than anything built so far. Three things follow.
+
+- **Each line hides many decisions.** "Use authentication" does not say how people sign in, who may see what, or how passwords are kept. A deterministic generator has to fix one answer to each such question in advance, the way an opinionated framework does, and the developer has to be able to see and change those answers.
+- **These are the tiers the roadmap put last,** because one intent meaning the same thing in several target languages is hardest there. A database, an API and a page are three different technologies, and "the language of their choice" becomes a choice of whole stack.
+- **Some of it must not be used unreviewed.** Generated authentication that is subtly wrong is worse than none. Blocks of that kind need review by a person with the right experience before anyone relies on them.
 
 **Limits that the live view does not remove.**
 
-- **"Any description should work" cannot be promised.** The tool can accept any text as input and answer at once, but it can only build what is in the library. Three boundaries remain:
-  - *One statement, one block.* A description that needs several steps, such as "find the duplicate files in a folder", has to be written as several statements, or the library has to hold a ready-made chain of blocks for it.
-  - *Only what the library holds.* Sixteen blocks are built. Anything else is recognised, at best, as a block that does not exist yet.
-  - *Descriptions that refer to something.* "Increase button size by 40px" refers to a particular button and its present size. That can be read only if the button was declared earlier in the same intent file, in which case the statement is a change to that declaration. There are no user-interface blocks yet, and changing code that CDIPL did not generate remains out of scope by the owner's earlier decision.
-- **Pseudocode with loops and branches is not in the language.** The family built so far is a chain of steps over rows. "For each user, if age > 18, print the name" would have to be recognised as a filter followed by a display. That is recognising a pattern across several lines, which the classifier does not do.
-- **A wrong choice is caught only if the developer looks.** The view must make the reading obvious, by showing the statement in standard phrases beside what was typed, and must mark unsure choices clearly.
+- **"Any description should work" cannot be promised.** The tool accepts any text and answers at once, but it can only build what is in the library, and one statement maps to one block.
+- **Free wording works only for the 90 blocks the classifier was trained on.** The page blocks are read from standard phrases only. Teaching the classifier new blocks needs new training wordings and a new test.
+- **Descriptions that refer to something, such as "increase button size by 40px",** are not read yet. Today the developer changes the width in the button's own line, and the preview follows at once.
+- **A wrong choice is caught only if the developer looks.** The view shows the reading beside what was typed, and marks unsure choices, but nothing forces a look.
 - **The values still have to be exact.** Field names, numbers, comparisons and formulas are read by fixed rules, however freely the rest is worded.
 
-**Evidence that would count as success.**
+**Evidence so far.**
 
-| ID | Criterion |
-|---|---|
-| L1 | After each change to the text, the view shows the new code within 100 ms on an ordinary laptop. |
-| L2 | Selecting a statement highlights exactly the lines the trace gives for it, and selecting a line of code highlights its statement. |
-| L3 | Every statement shows what it was read as, in standard phrases, and whether the choice was sure or unsure. |
-| L4 | A statement that cannot be read shows why and lists the closest blocks, without stopping the rest of the file from being shown. |
-| L5 | An accepted wording is recorded for the project, is reused in other files without consulting the classifier, and survives the classifier being replaced. |
-| L6 | The code shown in the view is byte-identical to what the `build` command writes for the same text and project record. |
-| L7 | Five developers who have not seen the tool each write a small program from a written task. Record how many statements were read correctly first time, how many needed rewording, and whether any wrong reading went unnoticed. This is the first test with real developers, and the one that says whether the idea works. |
+| ID | Criterion | Result |
+|---|---|---|
+| L1 | After each change to the text, the view shows the new code within 100 ms | Met on the one machine tried: an analysis takes 1 to 3 ms once the word lists are loaded, and in a browser the new blocks appeared 69 ms after the text changed, which includes a deliberate 40 ms pause after the last keystroke. The first analysis of a session takes about 20 ms. |
+| L2 | A statement and its code are highlighted together, in both directions | Met: the cursor's statement highlights exactly the lines the trace gives for it, and selecting a line of code selects its statement. |
+| L3 | Every statement shows what it was read as, and whether the choice was sure | Met |
+| L4 | A statement that cannot be read shows why and lists the closest blocks, without hiding the rest | Met |
+| L5 | An accepted wording is fixed for the project | Met by rewriting the file in standard phrases on saving |
+| L6 | What the view shows is byte-identical to what `build` writes | Met for complete files, for all three targets |
+| L7 | Five developers who have not seen the tool each write a small program | Not done. This remains the test that says whether the idea works. |
+
+The view was driven in a real browser (Chromium) by a script: typing, changing the target language, selecting in both directions, saving, and changing a button's width while watching the preview. The text shown in the right-hand panel was compared with the output of `build` and was identical. Screenshots are in `docs/live-view-program.png`, `docs/live-view-pages.png` and `docs/live-view-preview.png`.
 
 ### Stage 3: third target
 
@@ -476,12 +496,11 @@ Each has a default that this plan assumes if nobody decides otherwise.
 | ID | Decision | Default assumed here |
 |---|---|---|
 | D1 | Input format for generated programs, given that C cannot read JSON without added code | Decide before Stage 3. Stage 2 uses JSON. |
-| D2 | What counts as the developer accepting a choice, so that it becomes canonical for the project? | Saving the file. Until then a choice is provisional and may change as the text changes. |
-| D3 | What does the owner's pseudocode look like? A few real lines would settle whether the present chain-of-steps language is enough, or whether loops and branches have to be recognised. | Chain of steps, one per line, as in the examples so far |
-| D4 | Where is the project's record of accepted wordings kept, and is it shared by a team? | One file at the root of the project, committed with the code |
-| D5 | Which should come first: more blocks, so that more can be written, or the live view, so that what exists can be used as intended? | The live view, on the sixteen blocks that exist |
-| D6 | Where does the live view run first: a page in the browser served from the developer's machine, or an extension for a particular editor? | A local browser page, because it needs no editor-specific work and tests the idea soonest |
-| D7 | Should short descriptions that refer to existing things, such as "increase button size by 40px", be read as changes to an earlier declaration in the same intent file? | Yes, once there are user-interface blocks. Not before. |
+| D2 | Which behaviour should the pages get first: filling a table from data, searching, sorting, or editing? Each needs script blocks, and filling and editing also need somewhere for the data to live. | Filling a table from a JSON file, then searching and sorting, in JavaScript, since those blocks were already identified in Stage 1 |
+| D3 | For the owner's application pseudocode, which one stack is built first? "Use database", "use authentication" and "expose as api" each need fixed choices. | None yet. Decide after the pages have behaviour. |
+| D4 | Should the classifier be taught the page blocks, so that pages can also be worded freely? It needs new training wordings and a new held-out test. | Not yet; pages use standard phrases |
+| D5 | Should descriptions that refer to something already declared, such as "increase button size by 40px", be read as a change to that declaration? | Yes, as the next small addition to the live view |
+| D6 | Who are the five developers for criterion L7, and when? | The owner arranges it once the pages have some behaviour |
 
 ## Assumptions
 

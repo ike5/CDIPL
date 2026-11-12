@@ -1,0 +1,87 @@
+"""A local web server for the live view: text on one side, generated blocks on the other."""
+import json
+import secrets
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+
+from .live import analyse
+
+PAGE = Path(__file__).parent / "live_page.html"
+STARTER = 'language: en\n\nsource users from argument 1:\n    name: text\n    age: integer\n\nget users\n'
+
+
+def index_path(intent):
+    return intent.with_suffix(".index.json")
+
+
+def make_server(intent_path, port=8765):
+    """Create the server. intent_path is the one file the view may read and write."""
+    intent = Path(intent_path)
+    token = secrets.token_urlsafe(24)
+
+    def load_index():
+        path = index_path(intent)
+        return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, *args):
+            pass
+
+        def reply(self, status, body, kind="application/json"):
+            data = body.encode("utf-8")
+            self.send_response(status)
+            self.send_header("Content-Type", f"{kind}; charset=utf-8")
+            self.send_header("Content-Length", str(len(data)))
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            self.wfile.write(data)
+
+        def local(self):
+            host = (self.headers.get("Host") or "").split(":")[0]
+            return host in ("127.0.0.1", "localhost")
+
+        def do_GET(self):
+            if not self.local():
+                return self.reply(403, "{}")
+            if self.path == "/":
+                page = PAGE.read_text(encoding="utf-8").replace("__TOKEN__", token)
+                return self.reply(200, page, "text/html")
+            if self.path == "/file":
+                text = intent.read_text(encoding="utf-8") if intent.exists() else STARTER
+                return self.reply(200, json.dumps({"name": intent.name, "text": text}))
+            return self.reply(404, "{}")
+
+        def do_POST(self):
+            # Only this page may post: it must come from this machine and carry the token the page was given.
+            if not self.local() or self.headers.get("X-CDIPL-Token") != token:
+                return self.reply(403, "{}")
+            length = int(self.headers.get("Content-Length") or 0)
+            if length > 2_000_000:
+                return self.reply(413, "{}")
+            try:
+                body = json.loads(self.rfile.read(length).decode("utf-8"))
+                text = body["text"]
+            except (ValueError, KeyError, UnicodeDecodeError):
+                return self.reply(400, "{}")
+            if self.path == "/analyse":
+                return self.reply(200, json.dumps(analyse(text, body.get("target"), load_index())))
+            if self.path == "/save":
+                result = analyse(text, body.get("target"), load_index())
+                accepted = result["complete"] and result["canonical"] is not None
+                saved = result["canonical"] if accepted else text
+                intent.write_text(saved, encoding="utf-8")
+                return self.reply(200, json.dumps({"text": saved, "accepted": accepted}))
+            return self.reply(404, "{}")
+
+    return ThreadingHTTPServer(("127.0.0.1", port), Handler)
+
+
+def serve(intent_path, port=8765):
+    server = make_server(intent_path, port)
+    print(f"Live view for {intent_path}: http://127.0.0.1:{server.server_address[1]}/  (Ctrl+C to stop)")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()

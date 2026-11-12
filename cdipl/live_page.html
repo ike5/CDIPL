@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CDIPL live view</title>
+<style>
+:root { --ink:#1f2933; --soft:#52606d; --line:#d5dbe1; --paper:#ffffff; --wash:#f4f6f8; --ok:#1b7f4b; --sure:#1d5fbf; --unsure:#b26a00; --bad:#b42318; --none:#7b8794; --mark:#fff3bf; }
+@media (prefers-color-scheme: dark) { :root { --ink:#e4e7eb; --soft:#9aa5b1; --line:#3e4c59; --paper:#1a2026; --wash:#232b33; --ok:#57c98b; --sure:#7fb0ff; --unsure:#f0b35a; --bad:#ff8a80; --none:#9aa5b1; --mark:#4a3f12; } }
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; font: 14px/1.5 system-ui, sans-serif; color: var(--ink); background: var(--paper); display: flex; flex-direction: column; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 8px 16px; border-bottom: 1px solid var(--line); }
+header strong { font-size: 15px; }
+header .grow { flex: 1; }
+select, button { font: inherit; color: var(--ink); background: var(--wash); border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px; }
+button { cursor: pointer; }
+#state { color: var(--soft); }
+main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
+@media (max-width: 760px) { main { grid-template-columns: 1fr; grid-template-rows: 45% 55%; } }
+#left { display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--line); }
+#editor { flex: 1; display: flex; min-height: 0; }
+#gutter { width: 22px; padding: 12px 0; overflow: hidden; background: var(--wash); font: 13px/20px ui-monospace, monospace; text-align: center; }
+#gutter div { height: 20px; }
+#text { flex: 1; min-width: 0; resize: none; border: 0; outline: 0; padding: 12px; font: 13px/20px ui-monospace, monospace; color: var(--ink); background: var(--paper); white-space: pre; overflow: auto; tab-size: 4; }
+#reading { min-height: 76px; max-height: 40%; overflow: auto; padding: 8px 12px; border-top: 1px solid var(--line); background: var(--wash); font-size: 13px; }
+#reading code { font: 13px ui-monospace, monospace; }
+.badge { font-weight: 600; margin-right: 8px; }
+.standard { color: var(--ok); } .sure, .project { color: var(--sure); } .unsure { color: var(--unsure); } .error { color: var(--bad); } .unbuilt { color: var(--none); }
+.soft { color: var(--soft); }
+#right { display: flex; flex-direction: column; min-height: 0; background: var(--paper); }
+#tabs { display: flex; gap: 4px; padding: 6px 10px 0; border-bottom: 1px solid var(--line); background: var(--wash); }
+#tabs button { border-bottom: 0; border-radius: 4px 4px 0 0; background: transparent; color: var(--soft); }
+#tabs button.on { background: var(--paper); color: var(--ink); font-weight: 600; }
+#code { flex: 1; min-height: 0; overflow: auto; margin: 0; padding: 12px 0; font: 13px/20px ui-monospace, monospace; counter-reset: line; tab-size: 4; }
+#code div { white-space: pre; padding: 0 16px 0 0; min-height: 20px; }
+#code div::before { counter-increment: line; content: counter(line); display: inline-block; width: 44px; margin-right: 14px; text-align: right; color: var(--none); user-select: none; }
+#code div.mine { background: var(--mark); }
+#code div.pick { cursor: pointer; }
+#preview { flex: 1; min-height: 0; border: 0; background: #fff; display: none; }
+#empty { padding: 16px; color: var(--soft); }
+</style>
+</head>
+<body>
+<header>
+  <strong id="name">CDIPL</strong>
+  <label>Generate <select id="target"></select></label>
+  <span id="state"></span>
+  <span class="grow"></span>
+  <button id="save" title="Ctrl+S">Save and accept</button>
+</header>
+<main>
+  <div id="left">
+    <div id="editor"><div id="gutter"></div><textarea id="text" spellcheck="false" aria-label="Intent"></textarea></div>
+    <div id="reading" aria-live="polite"></div>
+  </div>
+  <div id="right">
+    <div id="tabs" role="tablist"></div>
+    <pre id="code" aria-label="Generated code"></pre>
+    <iframe id="preview" title="Preview of the generated page" sandbox=""></iframe>
+  </div>
+</main>
+<script>
+const token = "__TOKEN__";
+const text = document.querySelector("#text"), gutter = document.querySelector("#gutter"), reading = document.querySelector("#reading");
+const tabs = document.querySelector("#tabs"), code = document.querySelector("#code"), preview = document.querySelector("#preview");
+const targetBox = document.querySelector("#target"), state = document.querySelector("#state"), saveButton = document.querySelector("#save");
+const LABELS = { standard: "Standard phrase", sure: "Chosen", project: "Accepted earlier", unsure: "Chosen, unsure", error: "Not understood", unbuilt: "Not built yet" };
+const MARKS = { standard: "●", sure: "●", project: "●", unsure: "◐", error: "✕", unbuilt: "○" };
+let latest = null, counter = 0, timer = null, tab = null, lastLine = 0;
+
+function post(path, body) {
+  return fetch(path, { method: "POST", headers: { "Content-Type": "application/json", "X-CDIPL-Token": token }, body: JSON.stringify(body) }).then((reply) => reply.json());
+}
+function element(tag, className, content) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (content !== undefined) node.textContent = content;
+  return node;
+}
+function currentLine() {
+  return text.value.slice(0, text.selectionStart).split("\n").length;
+}
+function goToLine(line) {
+  const lines = text.value.split("\n");
+  const start = lines.slice(0, line - 1).reduce((total, each) => total + each.length + 1, 0);
+  text.focus();
+  text.setSelectionRange(start, start + (lines[line - 1] || "").length);
+  mark(true);
+}
+function showCode() {
+  const names = latest.files.map((file) => file.name);
+  const choices = latest.preview ? [...names, "Preview"] : names;
+  if (!choices.includes(tab)) tab = choices[0] || null;
+  tabs.replaceChildren(...choices.map((name) => {
+    const button = element("button", name === tab ? "on" : "", name);
+    button.setAttribute("role", "tab");
+    button.addEventListener("click", () => { tab = name; showCode(); mark(true); });
+    return button;
+  }));
+  const file = latest.files.find((each) => each.name === tab);
+  preview.style.display = tab === "Preview" ? "block" : "none";
+  code.style.display = tab === "Preview" ? "none" : "block";
+  if (tab === "Preview") { if (preview.srcdoc !== latest.preview) preview.srcdoc = latest.preview; return; }
+  if (!file) { code.replaceChildren(element("div", "", "")); code.firstChild.id = "empty"; code.firstChild.textContent = "Nothing can be generated yet."; return; }
+  code.replaceChildren(...file.lines.map((line) => {
+    const row = element("div", typeof line.origin === "number" ? "pick" : "", line.text);
+    row.dataset.origin = line.origin;
+    if (typeof line.origin === "number") row.addEventListener("click", () => goToLine(line.origin));
+    return row;
+  }));
+}
+function mark(scroll) {
+  if (!latest) return;
+  const line = currentLine();
+  let first = null;
+  for (const row of code.children) {
+    const mine = row.dataset.origin === String(line);
+    row.classList.toggle("mine", mine);
+    if (mine && !first) first = row;
+  }
+  if (first && (scroll || line !== lastLine)) first.scrollIntoView({ block: "center" });
+  lastLine = line;
+  const statement = latest.statements.find((each) => each.line === line);
+  const parts = [];
+  if (statement) {
+    const head = element("div");
+    head.append(element("span", `badge ${statement.status}`, LABELS[statement.status]));
+    if (statement.reading && statement.status !== "error" && statement.status !== "unbuilt") {
+      head.append(element("span", "soft", statement.reading === statement.text ? "" : "read as "));
+      if (statement.reading !== statement.text) head.append(element("code", "", statement.reading.replaceAll("\n", "  /  ")));
+    }
+    parts.push(head);
+    if (statement.blocks.length) parts.push(element("div", "soft", "Blocks: " + statement.blocks.map((block) => `${block.block} (${block.status})`).join(", ")));
+    if (statement.note) parts.push(element("div", "", statement.note));
+    if (statement.alternatives.length) parts.push(element("div", "soft", "Closest: " + statement.alternatives.map((block) => `${block.block} - ${block.description}`).join("; ")));
+  }
+  for (const problem of latest.problems) parts.push(element("div", "error", `Line ${problem.line}: ${problem.message}`));
+  if (!parts.length) parts.push(element("div", "soft", "Put the cursor on a statement to see how it was read. Its code is highlighted on the right."));
+  reading.replaceChildren(...parts);
+}
+function show(result) {
+  latest = result;
+  targetBox.replaceChildren(...result.targets.map((name) => Object.assign(element("option", "", name), { value: name, selected: name === result.target })));
+  const byLine = new Map(result.statements.map((statement) => [statement.line, statement]));
+  const count = text.value.split("\n").length;
+  gutter.replaceChildren(...Array.from({ length: count }, (_, index) => {
+    const statement = byLine.get(index + 1);
+    const dot = element("div", statement ? statement.status : "", statement ? MARKS[statement.status] : "");
+    if (statement) dot.title = LABELS[statement.status];
+    return dot;
+  }));
+  gutter.scrollTop = text.scrollTop;
+  const keep = code.scrollTop;
+  showCode();
+  code.scrollTop = keep;
+  const open = result.statements.filter((statement) => statement.status === "error" || statement.status === "unbuilt").length;
+  state.textContent = result.complete ? `Complete. Read in ${result.ms} ms.` : `${open} statement(s) not built. Read in ${result.ms} ms.`;
+  saveButton.textContent = result.complete ? "Save and accept" : "Save as typed";
+  mark(false);
+}
+function refresh() {
+  const mine = ++counter;
+  post("/analyse", { text: text.value, target: targetBox.value || null }).then((result) => { if (mine === counter) show(result); });
+}
+function save() {
+  post("/save", { text: text.value, target: targetBox.value || null }).then((reply) => {
+    text.value = reply.text;
+    refresh();
+    saveButton.textContent = reply.accepted ? "Saved in standard phrases" : "Saved as typed";
+  });
+}
+text.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(refresh, 40); });
+text.addEventListener("scroll", () => { gutter.scrollTop = text.scrollTop; });
+for (const name of ["keyup", "click"]) text.addEventListener(name, () => mark(false));
+text.addEventListener("keydown", (event) => {
+  if (event.key === "Tab") { event.preventDefault(); text.setRangeText("    ", text.selectionStart, text.selectionEnd, "end"); text.dispatchEvent(new Event("input")); }
+});
+document.addEventListener("keydown", (event) => { if ((event.ctrlKey || event.metaKey) && event.key === "s") { event.preventDefault(); save(); } });
+targetBox.addEventListener("change", () => { tab = null; refresh(); });
+saveButton.addEventListener("click", save);
+fetch("/file").then((reply) => reply.json()).then((file) => { document.querySelector("#name").textContent = file.name; text.value = file.text; refresh(); });
+</script>
+</body>
+</html>

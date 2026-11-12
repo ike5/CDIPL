@@ -6,8 +6,18 @@ app Inventory:
         price: decimal
         stock: integer
 
+    records Product:
+        "Widget", 9.99, 12
+        "Gadget", 24.50, 3
+        "bolt", 0.35, 400
+        "Anvil", 120.00, 1
+
     page Products:
         heading "Products"
         text "Everything we keep in stock."
         table Product
+        searchable by name
+        sortable by name
+        sortable by price
+        sortable by stock
         button "Add product" width 160px

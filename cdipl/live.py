@@ -153,10 +153,32 @@ def _analyse_app(text):
     found = []
     app = pages_module.read_lines(text, on_problem=found.append)
     by_line = {problem.line: problem for problem in found}
+    language = app.language
+    words = pages_module.PHRASES[language]
+    filled = {item.name for item in app.records}
+    readings = {}  # line -> (reading, blocks, line whose code to show)
+    for page in app.pages:
+        readings[page.line] = (None, ["html-page"], None)
+        for element in page.elements:
+            lines = pages_module.element_text(element, language)
+            blocks = [ELEMENT_BLOCKS[type(element)]]
+            if isinstance(element, pages_module.Table):
+                if element.data in filled:
+                    blocks.append("render-table")
+                if element.search is not None:
+                    readings[element.search_line] = (f"{words['searchable']} {element.search}", ["filter-elements-by-text"], None)
+                for name, line in zip(element.sort, element.sort_lines):
+                    readings[line] = (f"{words['sortable']} {name}", ["table-sort"], None)
+            readings[element.line] = (lines[0], blocks, None)
+    for item in app.records:
+        readings[item.line] = (None, ["data-records"], None)
+        for row, line in zip(item.rows, item.row_lines):
+            readings[line] = (", ".join(pages_module.value_text(value) for value in row), ["data-records"], None)
+    for line, target in app.changes:
+        if line not in readings:
+            readings[line] = (readings.get(target, (None,))[0], ["page-button-resize"], target)
     statements = []
-    lines = text.split("\n")
-    elements = {element.line: element for page in app.pages for element in page.elements}
-    for number, raw in enumerate(lines, start=1):
+    for number, raw in enumerate(text.split("\n"), start=1):
         if not raw.strip() or number == 1:
             continue
         record = {"line": number, "text": raw.strip(), "status": "standard", "reading": raw.strip(), "blocks": [],
@@ -165,30 +187,32 @@ def _analyse_app(text):
             problem = by_line[number]
             record["status"] = "unbuilt" if isinstance(problem, pages_module.NotBuilt) else "error"
             record["note"] = problem.message
-        elif number in elements:
-            record["reading"] = pages_module.element_text(elements[number], app.language)
-            record["blocks"] = describe([ELEMENT_BLOCKS[type(elements[number])]])
-        elif any(page.line == number for page in app.pages):
-            record["blocks"] = describe(["html-page"])
+        elif number in readings:
+            reading, blocks, shows = readings[number]
+            record["reading"] = reading or raw.strip()
+            record["blocks"] = describe(blocks)
+            if shows is not None:
+                record["shows"] = shows
+                record["note"] = "this changes the button declared above; saving writes the new width into that line"
         statements.append(record)
     problems = []
     complete = not found
-    usable = _usable(app)
     try:
         pages_module.check(app)
     except IntentError as problem:
         complete = False
         if problem.line not in by_line:
             problems.append({"line": problem.line, "message": problem.message})
+            for record in statements:
+                if record["line"] == problem.line:
+                    record["status"], record["note"] = "error", problem.message
+    usable = _usable(app)
     files, preview = [], None
     if usable.pages:
         generated = html.generate(usable)
         files = [{"name": name, "lines": [{"text": line, "origin": origin} for line, origin in generated[name]]}
                  for name in generated]
-        first = html.file_name(usable.pages[0])
-        styles = "\n".join(line for line, _ in generated[html.STYLES])
-        preview = "\n".join(f"<style>\n{styles}\n</style>" if "rel=\"stylesheet\"" in line else line
-                            for line, _ in generated[first])
+        preview = html.file_name(usable.pages[0])
     canonical = pages_module.render(app) if complete else None
     return {"kind": "app", "targets": ["html"], "target": "html", "statements": statements, "files": files,
             "problems": problems, "complete": complete, "canonical": canonical, "preview": preview,
@@ -196,13 +220,33 @@ def _analyse_app(text):
 
 
 def _usable(app):
-    """The part of an application that can be generated: pages with content, tables whose data exists."""
-    names = {item.name for item in app.data if item.fields}
+    """The part of an application that can be generated: what is left after dropping whatever does not fit."""
+    fields = {item.name: [name for name, _ in item.fields] for item in app.data if item.fields}
+    kinds = {item.name: [kind for _, kind in item.fields] for item in app.data if item.fields}
     usable_pages, seen = [], set()
     for page in app.pages:
-        kept = tuple(element for element in page.elements
-                     if not isinstance(element, pages_module.Table) or element.data in names)
+        kept = []
+        for element in page.elements:
+            if isinstance(element, pages_module.Table):
+                if element.data not in fields:
+                    continue
+                known = fields[element.data]
+                pairs = [(name, line) for name, line in zip(element.sort, element.sort_lines) if name in known]
+                element = pages_module.Table(
+                    data=element.data, search=element.search if element.search in known else None,
+                    sort=tuple(name for name, _ in pairs), line=element.line, search_line=element.search_line,
+                    sort_lines=tuple(line for _, line in pairs))
+            kept.append(element)
         if kept and page.name.lower() not in seen:
             seen.add(page.name.lower())
-            usable_pages.append(pages_module.Page(page.name, kept, page.line))
-    return pages_module.App(app.name, app.data, tuple(usable_pages), app.language, app.line)
+            usable_pages.append(pages_module.Page(page.name, tuple(kept), page.line))
+    records, names = [], set()
+    for item in app.records:
+        if item.name not in kinds or item.name.lower() in names or not item.rows:
+            continue
+        good = all(len(row) == len(kinds[item.name]) and all(pages_module.fits(value, kind)
+                   for value, kind in zip(row, kinds[item.name])) for row in item.rows)
+        if good:
+            names.add(item.name.lower())
+            records.append(item)
+    return pages_module.App(app.name, app.data, tuple(usable_pages), tuple(records), app.language, app.line)

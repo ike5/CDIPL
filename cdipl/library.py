@@ -29,7 +29,7 @@ def version(block):
             if owner == block:
                 digest.update(f"{name}\0{flag}\0{text}\0".encode())
         digest.update(TARGETS[name].FORMS.get(block, "").encode("utf-8"))
-    for owner, flag, text in html.SUPPORT:
+    for owner, flag, text in [*html.SUPPORT, *html.SCRIPT]:
         if owner == block:
             digest.update(f"html\0{flag}\0{text}\0".encode())
     digest.update(html.FORMS.get(block, "").encode("utf-8"))

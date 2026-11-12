@@ -90,13 +90,33 @@ class LiveTest(unittest.TestCase):
         result = analyse(OWNERS)
         status = {statement["text"]: statement["status"] for statement in result["statements"]}
         self.assertEqual(status["table Product"], "standard")
-        for line in ("use web", "expose Product as api", "searchable by name", "editable", "when Product.stock < 5:",
+        for line in ("use web", "expose Product as api", "editable", "when Product.stock < 5:",
                      "notify inventory_manager"):
             self.assertEqual(status[line], "unbuilt", line)
+        self.assertEqual(status["searchable by name"], "standard")
         self.assertEqual(result["kind"], "app")
         self.assertIn('<table data-name="Product">', text_of(result, "products.html"))
-        self.assertIn("<table", result["preview"])
+        self.assertEqual(result["preview"], "products.html")
         self.assertFalse(result["complete"])
+
+    def test_stack_keywords_are_understood_but_not_built(self):
+        text = "language: en\n\nuse sqlite\nuse FastAPI\ncreate postgres:\n    using docker\n\napp A:\n    page P:\n        heading \"Hi\"\n"
+        result = analyse(text)
+        status = {statement["text"]: statement["status"] for statement in result["statements"]}
+        for line in ("use sqlite", "use FastAPI", "create postgres:", "using docker"):
+            self.assertEqual(status[line], "unbuilt", line)
+        self.assertIn("<h1>Hi</h1>", text_of(result, "p.html"))
+
+    def test_resizing_a_button_shows_the_change_at_once(self):
+        text = (REPO / "examples" / "inventory.intent").read_text(encoding="utf-8") + "        increase button size by 40px\n"
+        result = analyse(text)
+        self.assertTrue(result["complete"])
+        self.assertIn('class="width-200"', text_of(result, "products.html"))
+        self.assertIn('button "Add product" width 200px', result["canonical"])
+        self.assertNotIn("increase", result["canonical"])
+        command = result["statements"][-1]
+        button = next(s for s in result["statements"] if s["text"].startswith("button"))
+        self.assertEqual(command["shows"], button["line"])
 
     def test_problems_before_anything_can_be_read(self):
         for text in ("", "get users\n", "language: en\n\nsource users\n"):
@@ -129,6 +149,11 @@ class LiveTest(unittest.TestCase):
                 free = HEAD + "get users\ndisplay name and age in aligned columns\n"
                 result = post("/analyse", {"text": free, "target": "python"}, {"X-CDIPL-Token": token})
                 self.assertTrue(result["complete"])
+                with self.assertRaises(urllib.error.HTTPError) as missing:
+                    opener.open(base + "/preview/wrong-token/main.py")
+                missing.exception.close()
+                shown = opener.open(f"{base}/preview/{token}/main.py").read().decode("utf-8")
+                self.assertIn("show_table(rows", shown)
                 saved = post("/save", {"text": free, "target": "python"}, {"X-CDIPL-Token": token})
                 self.assertTrue(saved["accepted"])
                 self.assertEqual(intent.read_text(encoding="utf-8"), HEAD + "get users\nshow name, age\n")

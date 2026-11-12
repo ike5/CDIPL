@@ -94,3 +94,6 @@ page-heading	A heading on a web page
 page-text	A paragraph of text on a web page
 data-table	A table on a web page with one column for each field of a data type
 page-button	A button on a web page
+table-sort	Let the reader sort a table on a web page by clicking a column heading
+page-button-resize	Make a button on a web page wider or narrower by a number of pixels
+data-records	Records of a data type, written out as a JSON file

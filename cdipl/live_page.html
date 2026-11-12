@@ -57,7 +57,7 @@ main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1
   <div id="right">
     <div id="tabs" role="tablist"></div>
     <pre id="code" aria-label="Generated code"></pre>
-    <iframe id="preview" title="Preview of the generated page" sandbox=""></iframe>
+    <iframe id="preview" title="Preview of the generated page" sandbox="allow-scripts"></iframe>
   </div>
 </main>
 <script>
@@ -67,7 +67,7 @@ const tabs = document.querySelector("#tabs"), code = document.querySelector("#co
 const targetBox = document.querySelector("#target"), state = document.querySelector("#state"), saveButton = document.querySelector("#save");
 const LABELS = { standard: "Standard phrase", sure: "Chosen", project: "Accepted earlier", unsure: "Chosen, unsure", error: "Not understood", unbuilt: "Not built yet" };
 const MARKS = { standard: "●", sure: "●", project: "●", unsure: "◐", error: "✕", unbuilt: "○" };
-let latest = null, counter = 0, timer = null, tab = null, lastLine = 0;
+let latest = null, counter = 0, timer = null, tab = null, lastLine = 0, notice = "";
 
 function post(path, body) {
   return fetch(path, { method: "POST", headers: { "Content-Type": "application/json", "X-CDIPL-Token": token }, body: JSON.stringify(body) }).then((reply) => reply.json());
@@ -101,7 +101,7 @@ function showCode() {
   const file = latest.files.find((each) => each.name === tab);
   preview.style.display = tab === "Preview" ? "block" : "none";
   code.style.display = tab === "Preview" ? "none" : "block";
-  if (tab === "Preview") { if (preview.srcdoc !== latest.preview) preview.srcdoc = latest.preview; return; }
+  if (tab === "Preview") { preview.src = `/preview/${token}/${latest.preview}?v=${counter}`; return; }
   if (!file) { code.replaceChildren(element("div", "", "")); code.firstChild.id = "empty"; code.firstChild.textContent = "Nothing can be generated yet."; return; }
   code.replaceChildren(...file.lines.map((line) => {
     const row = element("div", typeof line.origin === "number" ? "pick" : "", line.text);
@@ -113,15 +113,16 @@ function showCode() {
 function mark(scroll) {
   if (!latest) return;
   const line = currentLine();
+  const statement = latest.statements.find((each) => each.line === line);
+  const shown = String(statement && statement.shows ? statement.shows : line);
   let first = null;
   for (const row of code.children) {
-    const mine = row.dataset.origin === String(line);
+    const mine = row.dataset.origin === shown;
     row.classList.toggle("mine", mine);
     if (mine && !first) first = row;
   }
   if (first && (scroll || line !== lastLine)) first.scrollIntoView({ block: "center" });
   lastLine = line;
-  const statement = latest.statements.find((each) => each.line === line);
   const parts = [];
   if (statement) {
     const head = element("div");
@@ -155,7 +156,7 @@ function show(result) {
   showCode();
   code.scrollTop = keep;
   const open = result.statements.filter((statement) => statement.status === "error" || statement.status === "unbuilt").length;
-  state.textContent = result.complete ? `Complete. Read in ${result.ms} ms.` : `${open} statement(s) not built. Read in ${result.ms} ms.`;
+  state.textContent = (notice ? notice + " " : "") + (result.complete ? `Complete. Read in ${result.ms} ms.` : `${open} statement(s) not built. Read in ${result.ms} ms.`);
   saveButton.textContent = result.complete ? "Save and accept" : "Save as typed";
   mark(false);
 }
@@ -166,11 +167,11 @@ function refresh() {
 function save() {
   post("/save", { text: text.value, target: targetBox.value || null }).then((reply) => {
     text.value = reply.text;
+    notice = reply.accepted ? "Saved in standard phrases." : "Saved as typed.";
     refresh();
-    saveButton.textContent = reply.accepted ? "Saved in standard phrases" : "Saved as typed";
   });
 }
-text.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(refresh, 40); });
+text.addEventListener("input", () => { notice = ""; clearTimeout(timer); timer = setTimeout(refresh, 40); });
 text.addEventListener("scroll", () => { gutter.scrollTop = text.scrollTop; });
 for (const name of ["keyup", "click"]) text.addEventListener(name, () => mark(false));
 text.addEventListener("keydown", (event) => {

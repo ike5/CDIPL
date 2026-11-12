@@ -18,6 +18,13 @@ def make_server(intent_path, port=8765):
     """Create the server. intent_path is the one file the view may read and write."""
     intent = Path(intent_path)
     token = secrets.token_urlsafe(24)
+    latest = {}  # the files of the most recent analysis, served to the preview
+    kinds = {".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".json": "application/json"}
+
+    def remember(result):
+        latest.clear()
+        latest.update({file["name"]: "\n".join(line["text"] for line in file["lines"]) + "\n" for file in result["files"]})
+        return result
 
     def load_index():
         path = index_path(intent)
@@ -27,10 +34,12 @@ def make_server(intent_path, port=8765):
         def log_message(self, *args):
             pass
 
-        def reply(self, status, body, kind="application/json"):
+        def reply(self, status, body, kind="application/json", shared=False):
             data = body.encode("utf-8")
             self.send_response(status)
             self.send_header("Content-Type", f"{kind}; charset=utf-8")
+            if shared:  # the preview runs in a sandboxed frame, which counts as another origin
+                self.send_header("Access-Control-Allow-Origin", "*")
             self.send_header("Content-Length", str(len(data)))
             self.send_header("Cache-Control", "no-store")
             self.end_headers()
@@ -46,6 +55,12 @@ def make_server(intent_path, port=8765):
             if self.path == "/":
                 page = PAGE.read_text(encoding="utf-8").replace("__TOKEN__", token)
                 return self.reply(200, page, "text/html")
+            prefix = f"/preview/{token}/"
+            if self.path.startswith(prefix):
+                name = self.path[len(prefix):].split("?")[0]
+                if name in latest:
+                    return self.reply(200, latest[name], kinds.get(Path(name).suffix, "text/plain"), shared=True)
+                return self.reply(404, "{}")
             if self.path == "/file":
                 text = intent.read_text(encoding="utf-8") if intent.exists() else STARTER
                 return self.reply(200, json.dumps({"name": intent.name, "text": text}))
@@ -64,9 +79,9 @@ def make_server(intent_path, port=8765):
             except (ValueError, KeyError, UnicodeDecodeError):
                 return self.reply(400, "{}")
             if self.path == "/analyse":
-                return self.reply(200, json.dumps(analyse(text, body.get("target"), load_index())))
+                return self.reply(200, json.dumps(remember(analyse(text, body.get("target"), load_index()))))
             if self.path == "/save":
-                result = analyse(text, body.get("target"), load_index())
+                result = remember(analyse(text, body.get("target"), load_index()))
                 accepted = result["complete"] and result["canonical"] is not None
                 saved = result["canonical"] if accepted else text
                 intent.write_text(saved, encoding="utf-8")

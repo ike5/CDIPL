@@ -170,6 +170,9 @@ app Inventory:
 | `editable` | The same word in English and Spanish. Directly after a table, and after its `searchable by` and `sortable by` lines if it has any; in standard phrases it is written last. The table's data must be exposed. See "Changing and deleting from a page" below. |
 | `when D.F < V:` with `notify N` on the one line beneath it | Spanish `cuando D.F < V:` and `notificar N`. Inside the application, at the same level as `data` and `page`. A rule: after a record of D is added or changed through the API, if the condition holds for the record as stored, a notification for N is stored. D must be exposed. See "Rules and notifications" below. |
 | `notifications` | Spanish `notificaciones`. A list of the notifications the rules have stored. The application must have at least one rule. |
+| `use authentication` | Spanish `usar autenticación`. Before the application; needs `use sqlite` and `use FastAPI`. Nothing in the application can be reached without signing in. See "Authentication" below. |
+| `sign in "N" "P" "B" "F"` | Spanish `iniciar sesión`. Needs `use authentication`. The form for signing in: N labels the box for the name, P the box for the password, B is the text of the button, and F is the message shown when signing in fails. All four are required, because a page holds no words the developer did not write. |
+| `button "T" signs out` | Spanish `botón "T" cierra sesión`, optionally with `width Npx` before the action. Needs `use authentication`. Pressing the button ends the session and leads to the sign-in page. |
 
 **The table.** One row per record, with a column for each field and an `id` that the database assigns, starting at 1 and never reused while the record with the highest id still exists. Text and decimals are stored as text and integers as integers. No field may be named `id`. The table is created the first time the server starts. The records written in the intent file are put into it at that moment and never again; they are also written to a JSON file beside the server, which the server reads once and does not serve.
 
@@ -203,9 +206,49 @@ A record sent to the API must be a JSON object with exactly the declared fields.
 - **The list on a page.** `notifications` is a list with one item per notification, oldest first and newest last, each written `recipient: condition #record`, such as `inventory_manager: Product.stock < 5 #4`, and no other words. It is filled when the page opens and again after a record is added or changed from that page. It is not filled again after a deletion, nor when another page or another reader adds a record.
 - **Order and standard phrases.** A rule has exactly one `notify` line. The same rule may not be written twice. In standard phrases the rules come after the pages, ordered by the order of their data (the order of the `data` declarations in standard phrases), and for one data in the order written.
 
+**Authentication.** With `use authentication`, the server lets in only people who have signed in. It is a draft written by the AI assistant and has **not been reviewed by a person experienced in authentication**; do not rely on it until it has been.
+
+*What the developer writes.* Exactly one page holds a `sign in` element; that page is the sign-in page. It may hold only headings, text and the one `sign in`, and there must be at least one other page. In standard phrases the sign-in page is written first. No data type may be declared whose table would be named `auth_user` or `auth_session`, in any mix of capital and small letters: those tables keep the users and their sessions. `sign in` and `signs out` without `use authentication` are errors.
+
+*Users.* There is one kind of user, and every user can do everything the application allows: read, add, change and delete every record, and read every notification. Users are added and removed only from the command line, in the folder of the generated server, never from the intent file, and there is no account to begin with:
+
+| Command | What it does |
+|---|---|
+| `python server.py add-user NAME` | Adds a user. Refused if the name is taken. |
+| `python server.py set-password NAME` | Gives the user a new password, unlocks the name and ends all of the user's sessions. |
+| `python server.py remove-user NAME` | Removes the user and ends all of the user's sessions. |
+| `python server.py list-users` | Lists the names, in code point order. |
+
+When the command is run at a terminal, the password is asked for twice without being shown; otherwise it is read as one line from standard input, so that scripts can supply it. A password has from 8 to 1000 characters. A name has from 1 to 200 characters, no control characters and no space at either end. Names are compared exactly: `Ana` and `ana` are two users. Importing `server.py`, which is what uvicorn does, runs none of the commands.
+
+*Passwords.* A password is kept as a hash made with scrypt (`n = 2^14`, `r = 8`, `p = 1`, 32 bytes) and a random 16-byte salt for each user. The password itself is never stored, logged or sent back.
+
+*Signing in.* `POST /api/sign-in` with a JSON object `{"name": ..., "password": ...}`. Both must be text; the name may have at most 200 characters and the password at most 1000, or the request is refused with 422 before anything is hashed, and the reply does not repeat what was sent. If the name and password are right, the reply is 204 and a session cookie; otherwise 401, with the same body whether the name is unknown, the password is wrong or the name is locked. For an unknown name a hash is still worked out, with a fixed salt, so that the time taken does not show which names exist.
+
+*The lock.* Every attempt for a known name that is not locked is counted before its password is checked, so that attempts made at the same moment are all counted. The fifth attempt in a row that fails locks the name for five minutes; while it is locked every attempt is refused, even with the right password, and is not counted. A right password, when the name is not locked, sets the count back to zero. A name that has been locked and has failed again since is locked again after one more failure. Nothing is recorded for a name that does not exist.
+
+*Sessions.* Signing in starts a session that lasts 12 hours and cannot be extended. Its token is 32 random bytes, written in URL-safe Base64; the server keeps only the SHA-256 hash of the token, the user's name and the time it ends. The cookie is named `session`, and is `HttpOnly`, `SameSite=Lax`, `Path=/`, with `Max-Age` of 12 hours, and `Secure` when the request came over HTTPS. Sessions that have ended are deleted whenever anyone signs in. `POST /api/sign-out` deletes the session the cookie names and clears the cookie (204). A session also stops working when its user is removed or given a new password.
+
+*Default deny.* Before anything else, every request is checked. Only these pass without a session, compared exactly, path and method: `GET` of the sign-in page, `GET /styles.css`, `GET /sign-in.js`, and `POST /api/sign-in`. Every other request needs a session that exists and has not ended: without one, a request to an address under `/api/` gets 401 and `{"detail": "sign in first"}`, and anything else gets a 303 redirect to the sign-in page. This covers the API of every data type, the notifications, every page, `scripts.js`, every JSON file of records, `/`, FastAPI's own `/docs` and `/openapi.json`, and addresses that do not exist. Responses given with a session carry `Cache-Control: no-store`, so that the browser does not keep a copy of a page after signing out. With a session, `/` leads to the first page other than the sign-in page.
+
+*The pages.* The sign-in page holds a form built from the four texts, with `autocomplete="username"` and `"current-password"`, and loads only `styles.css` and its own script, `sign-in.js`, so that `scripts.js` can need a session. It links to no other page, and no page links to it. On success the browser goes to `/`, and so to the first other page; on failure the developer's message is shown and the password box is emptied. A `signs out` button posts to `/api/sign-out` and then goes to `/`, and so to the sign-in page. In `scripts.js`, every request goes through `fetchSignedIn`, which leads to `/` when the server answers 401 or answered by redirecting. No words are added to any page.
+
+*What it does not do.*
+
+- There are no roles and no permissions per record: every user can do everything.
+- There is no way to register, to change one's own password, or to reset a forgotten one, other than the commands above.
+- A session lasts exactly 12 hours from signing in, whether or not it is used. There is no "remember me" and no ending a session after a time without use.
+- The lock can be used against a user: anyone who knows a name can keep it locked by trying five wrong passwords every five minutes. There is no limit per address and no limit on attempts across many names.
+- **It must be served over HTTPS for anything beyond the developer's own machine.** Over plain HTTP the password and the session cookie cross the network as they are. The generated server does not set up HTTPS itself; put it behind a server that does. The cookie is marked `Secure` only when the request reached the server as HTTPS, which behind such a server depends on it passing the scheme on (uvicorn reads `X-Forwarded-Proto` from addresses it trusts).
+- Protection against requests from other sites rests on the cookie being `SameSite=Lax` and on the API accepting only JSON; there is no separate token for that, and other sites under the same registrable domain count as the same site.
+- Each attempt to sign in takes about 16 MB of memory and tens of milliseconds of work, so a flood of attempts can slow the server or exhaust its memory.
+- The time taken for a known name and an unknown one differs a little, by the time to store the counted attempt; the hash, which takes far longer, is worked out for both.
+- Nothing is logged by the application, so failed attempts leave no trace other than the count.
+- **The code is a draft that has not been reviewed by a person experienced in authentication.**
+
 **What the generated server does not do.** These are fixed choices of the generator, and anyone who runs the server should know them.
 
-- **There is no authentication.** Anyone who can reach the server can read, add, change and delete every record. Run it only where that is acceptable, such as on your own machine.
+- **Without `use authentication`, there is no authentication.** Anyone who can reach the server can read, add, change and delete every record. Run it only where that is acceptable, such as on your own machine.
 - There is no limit on how many records are returned or how large a request may be.
 - Two changes to the same record at the same moment are not reconciled; the last one wins.
 - Changing a `data` declaration does not change a table that already exists. Delete the database file to start again.
@@ -216,16 +259,16 @@ To run it, from the generated folder: `python -m pip install -r requirements.txt
 
 **Decimals** are kept exactly as written, digits and all, so `24.50` stays `24.50`. In the JSON file they are written as text, so that no digit is lost; they are compared by value when sorting. A decimal may have at most 15 digits.
 
-**Files.** All pages share one stylesheet, `styles.css`, which holds fixed rules for the elements that are used and one rule for each button width that is used. If any table fills, searches, sorts or is editable, or a button adds a record, or a page lists notifications, the pages also share `scripts.js`, which holds fixed code for the behaviours that are used. The colours, spacing and fonts are fixed choices of the generator.
+**Files.** All pages share one stylesheet, `styles.css`, which holds fixed rules for the elements that are used and one rule for each button width that is used. If any table fills, searches, sorts or is editable, or a button adds a record or signs out, or a page lists notifications, the pages other than the sign-in page also share `scripts.js`, which holds fixed code for the behaviours that are used. With authentication, the sign-in page loads `sign-in.js` instead. The colours, spacing and fonts are fixed choices of the generator.
 
 **Opening the pages.** A table that fills itself reads its JSON file over the web, so the folder has to be served by a web server; opened directly from disk, browsers refuse the request and the table stays empty.
 
 Text in double quotes is shown exactly as written; the characters `&`, `<` and `>` are escaped. No words are added that the developer did not write.
 
-Some statements are recognised but cannot be built yet, and say so: other parts of an application (`use authentication`, `use postgres`), and creating a service (`create postgres:` and `using docker`).
+Some statements are recognised but cannot be built yet, and say so: other parts of an application (`use postgres`), and creating a service (`create postgres:` and `using docker`).
 
-Free wording reads the lines of a page into the page blocks the classifier was trained on. `editable`, `notifications`, rules and `notify` are read in standard phrases only: the blocks `edit-table-rows` and `notify-when` were added after the classifier was trained and it has not been taught them.
+Free wording reads the lines of a page into the page blocks the classifier was trained on. `editable`, `notifications`, rules, `notify`, `use authentication`, `sign in` and `signs out` are read in standard phrases only: the blocks `edit-table-rows`, `notify-when`, `authentication`, `sign-in-form` and `sign-out-button` were added after the classifier was trained and it has not been taught them.
 
 Known limits: the language of the page is not declared in the HTML; sorting text puts all capital letters before all small letters, as the order of text above says; when a table is filled again after a record is added, changed or deleted, the rows are shown in order of `id` and unfiltered, even if the reader had sorted the table or typed in its search box; a list of notifications is not filled again after a deletion or a change made elsewhere until the page is opened again; and a line of text longer than about 300 characters would be re-wrapped by the formatter used for criterion G6, which includes a rule whose condition holds long text, since it is written into `server.py`.
 
-The live view's preview of an application with a server is the generated server itself, run on the developer's own machine in a temporary folder, so adding, changing, deleting and notifications work there as they will when it is built. Its database starts again from the records in the intent file whenever the data, the API or the rules change. If `fastapi` and `uvicorn` are not installed, the preview imitates the API instead: it lists the records written in the intent file and no notifications, and nothing done in the preview is saved.
+The live view's preview of an application with a server is the generated server itself, run on the developer's own machine in a temporary folder, so adding, changing, deleting and notifications work there as they will when it is built. Its database starts again from the records in the intent file whenever the data, the API or the rules change. With authentication, each new database of the preview is given one user, named `preview`, with a random password made when the live view starts; the note under the preview gives both, so that the developer can sign in there. The user is added, with the generated `server.py add-user` command, just before the preview server starts. `python -m cdipl run` starts with no user, and says how to add one. If `fastapi` and `uvicorn` are not installed, the preview imitates the API instead: it lists the records written in the intent file and no notifications, and nothing done in the preview is saved.

@@ -7,6 +7,7 @@ from ..model import IntentError
 from ..pages import (
     NOTIFICATIONS_TABLE,
     PHRASES,
+    SIGNS_OUT,
     App,
     Button,
     Data,
@@ -18,17 +19,20 @@ from ..pages import (
     Quoted,
     Records,
     Rule,
+    SignIn,
     Table,
     as_kind,
     check,
     condition_text,
     first_use_order,
     read_condition,
+    sign_in_page,
 )
 from .common import NotGenerated
 
 STYLES = "styles.css"
 SCRIPTS = "scripts.js"
+SIGN_IN_SCRIPT = "sign-in.js"  # the script of the sign-in page, kept apart so that scripts.js can need a session
 
 # Fixed style rules. Each piece belongs to one block and is included only when that block is used.
 SUPPORT = [
@@ -176,6 +180,27 @@ a.button {
     ("page-button", "button", '''\
 main > button {
   margin: 0 0.5rem 1rem 0;
+  padding: 0.5rem 1rem;
+  border: 1px solid #1f2933;
+  border-radius: 0.25rem;
+  font: inherit;
+  color: #ffffff;
+  background: #1f2933;
+  cursor: pointer;
+}
+'''),
+    ("sign-in-form", "signin", '''\
+form[data-sign-in] input {
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #9aa5b1;
+  border-radius: 0.25rem;
+  font: inherit;
+}
+'''),
+    ("sign-in-form", "signin", '''\
+form[data-sign-in] button {
+  margin: 0 0 1rem;
   padding: 0.5rem 1rem;
   border: 1px solid #1f2933;
   border-radius: 0.25rem;
@@ -359,6 +384,50 @@ function sortTable(button) {
   table.tBodies[0].append(...rows);
 }
 '''),
+    # With authentication, every request the script makes goes through fetchSignedIn: see script_lines.
+    ("authentication", "signedin", '''\
+async function fetchSignedIn(address, options) {
+  const reply = await fetch(address, options);
+  if (reply.status === 401 || reply.redirected) {
+    window.location.assign("/");
+  }
+  return reply;
+}
+'''),
+    ("sign-out-button", "signout", '''\
+async function signOut() {
+  const reply = await fetch("/api/sign-out", { method: "POST" });
+  if (!reply.ok && reply.status !== 401) {
+    throw new Error(`/api/sign-out: ${reply.status}`);
+  }
+  window.location.assign("/");
+}
+'''),
+    # The script of the sign-in page, sign-in.js; nothing else is in it.
+    ("sign-in-form", "sign-in-page", '''\
+async function signIn(form) {
+  const failed = form.querySelector("p[data-failed]");
+  const password = form.elements.namedItem("password");
+  failed.hidden = true;
+  const credentials = { name: form.elements.namedItem("name").value, password: password.value };
+  const reply = await fetch("/api/sign-in", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(credentials) });
+  if (reply.ok) {
+    window.location.assign("/");
+    return;
+  }
+  password.value = "";
+  failed.hidden = false;
+}
+'''),
+    ("sign-in-form", "sign-in-page", '''\
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector("form[data-sign-in]");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    signIn(form).catch((problem) => console.error(problem));
+  });
+});
+'''),
 ]
 
 # Fixed server code. Each piece belongs to one block and is included only when a data type has an API.
@@ -375,6 +444,189 @@ SERVER = [
     ('notify-when', 'def create_notifications():\n    with closing(connect()) as connection, connection:\n        connection.execute(\'CREATE TABLE IF NOT EXISTS "notification" (id INTEGER PRIMARY KEY, "recipient" TEXT NOT NULL, "condition" TEXT NOT NULL, "record" INTEGER NOT NULL, "time" TEXT NOT NULL)\')\n'),
     ('notify-when', 'def notify(connection, recipient, condition, record_id):\n    time = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")\n    connection.execute(\'INSERT INTO "notification" ("recipient", "condition", "record", "time") VALUES (?, ?, ?, ?)\', [recipient, condition, record_id, time])\n'),
     ('notify-when', 'def list_notifications():\n    with closing(connect()) as connection:\n        rows = connection.execute(\'SELECT id, "recipient", "condition", "record", "time" FROM "notification" ORDER BY id\').fetchall()\n    return [dict(row) for row in rows]\n'),
+]
+# Fixed server code for signing in, included only with authentication. Each decision is in one small function.
+SERVER += [
+    ("authentication", '''\
+def password_hash(password, salt):
+    return hashlib.scrypt(password.encode("utf-8"), salt=salt, n=2**14, r=8, p=1, dklen=32)
+'''),
+    ("authentication", '''\
+def token_hash(token):
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
+'''),
+    ("authentication", '''\
+def text_fits(value, longest):
+    """Whether a name or a password is text of at least one and at most `longest` characters."""
+    if not isinstance(value, str) or not 0 < len(value) <= longest:
+        return False
+    try:
+        value.encode("utf-8")
+    except UnicodeEncodeError:
+        return False
+    return True
+'''),
+    ("authentication", '''\
+def create_authentication():
+    with closing(connect()) as connection, connection:
+        connection.execute('CREATE TABLE IF NOT EXISTS "auth_user" (name TEXT PRIMARY KEY, salt BLOB NOT NULL, hash BLOB NOT NULL, failures INTEGER NOT NULL, locked_until INTEGER NOT NULL)')
+        connection.execute('CREATE TABLE IF NOT EXISTS "auth_session" (token_hash TEXT PRIMARY KEY, name TEXT NOT NULL, expires INTEGER NOT NULL)')
+'''),
+    ("authentication", '''\
+def count_attempt(name, now):
+    """Count an attempt to sign in before its password is checked, so that attempts made at the same moment are all counted.
+
+    Returns the salt and hash of the name, or None if the name is unknown or locked. When this attempt is the
+    MAX_FAILURES-th in a row, the name is locked now; a right password unlocks it again in check_password.
+    """
+    with closing(connect()) as connection, connection:
+        rows = connection.execute('UPDATE "auth_user" SET failures = failures + 1 WHERE name = ? AND locked_until <= ? RETURNING salt, hash, failures', [name, now]).fetchall()
+        if rows and rows[0]["failures"] >= MAX_FAILURES:
+            connection.execute('UPDATE "auth_user" SET locked_until = ? WHERE name = ?', [now + LOCK_SECONDS, name])
+    return rows[0] if rows else None
+'''),
+    ("authentication", '''\
+def check_password(name, password):
+    """Whether the password is right for the name and the name may sign in now."""
+    user = count_attempt(name, int(time.time()))
+    if user is None:
+        password_hash(password, DUMMY_SALT)  # the same work as for a known name, so that the time taken tells nothing
+        return False
+    if not hmac.compare_digest(password_hash(password, user["salt"]), user["hash"]):
+        return False
+    with closing(connect()) as connection, connection:
+        connection.execute('UPDATE "auth_user" SET failures = 0, locked_until = 0 WHERE name = ?', [name])
+    return True
+'''),
+    ("authentication", '''\
+def start_session(name):
+    """Start a session for a name and return its token. Only the hash of the token is kept."""
+    now = int(time.time())
+    token = secrets.token_urlsafe(32)
+    with closing(connect()) as connection, connection:
+        connection.execute('DELETE FROM "auth_session" WHERE expires <= ?', [now])
+        connection.execute('INSERT INTO "auth_session" (token_hash, name, expires) VALUES (?, ?, ?)', [token_hash(token), name, now + SESSION_SECONDS])
+    return token
+'''),
+    ("authentication", '''\
+def session_name(token):
+    """The name a session token was given to, or None if the token is missing, unknown or expired, or its user was removed."""
+    if token is None or len(token) > 100:
+        return None
+    with closing(connect()) as connection:
+        row = connection.execute('SELECT "auth_user".name FROM "auth_session" JOIN "auth_user" ON "auth_user".name = "auth_session".name WHERE token_hash = ? AND expires > ?', [token_hash(token), int(time.time())]).fetchone()
+    return None if row is None else row["name"]
+'''),
+    ("authentication", '''\
+def end_session(token):
+    if token is not None:
+        with closing(connect()) as connection, connection:
+            connection.execute('DELETE FROM "auth_session" WHERE token_hash = ?', [token_hash(token)])
+'''),
+    ("authentication", '''\
+@app.middleware("http")
+async def require_session(request: Request, call_next):
+    """Default deny: every request needs a valid session, except the few in PUBLIC that signing in needs."""
+    path = request.scope["path"]
+    if (request.method, path) in PUBLIC:
+        return await call_next(request)
+    if await run_in_threadpool(session_name, request.cookies.get(SESSION_COOKIE)) is None:
+        if path.startswith("/api/"):
+            return JSONResponse({"detail": "sign in first"}, status_code=401)
+        return RedirectResponse(url=SIGN_IN_PAGE, status_code=303)
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-store"
+    return response
+'''),
+    ("authentication", '''\
+@app.post("/api/sign-in", status_code=204)
+def sign_in(request: Request, credentials: Annotated[Any, Body()]):
+    """The body is checked here rather than by FastAPI, so that a refusal never repeats what was sent."""
+    if not isinstance(credentials, dict) or not text_fits(credentials.get("name"), MAX_NAME) or not text_fits(credentials.get("password"), MAX_PASSWORD):
+        raise HTTPException(status_code=422, detail=f"send a JSON object with a name of at most {MAX_NAME} characters and a password of at most {MAX_PASSWORD}")
+    name, password = credentials["name"], credentials["password"]
+    if not check_password(name, password):
+        raise HTTPException(status_code=401, detail="the name or the password is wrong")  # the same for an unknown or a locked name
+    response = Response(status_code=204)
+    response.set_cookie(SESSION_COOKIE, start_session(name), max_age=SESSION_SECONDS, path="/", secure=request.url.scheme == "https", httponly=True, samesite="lax")
+    return response
+'''),
+    ("authentication", '''\
+@app.post("/api/sign-out", status_code=204)
+def sign_out(request: Request):
+    end_session(request.cookies.get(SESSION_COOKIE))
+    response = Response(status_code=204)
+    response.delete_cookie(SESSION_COOKIE, path="/", secure=request.url.scheme == "https", httponly=True, samesite="lax")
+    return response
+'''),
+    ("authentication", '''\
+def read_password():
+    """A new password: asked for twice on a terminal, or read as one line from standard input."""
+    if sys.stdin.isatty():
+        password = getpass("Password: ")
+        if getpass("Password again: ") != password:
+            sys.exit("the two passwords differ")
+    else:
+        password = sys.stdin.readline().removesuffix("\\n")
+    if len(password) < MIN_PASSWORD or not text_fits(password, MAX_PASSWORD):
+        sys.exit(f"a password must have from {MIN_PASSWORD} to {MAX_PASSWORD} characters")
+    return password
+'''),
+    ("authentication", '''\
+def user_exists(name):
+    with closing(connect()) as connection:
+        return connection.execute('SELECT 1 FROM "auth_user" WHERE name = ?', [name]).fetchone() is not None
+'''),
+    ("authentication", '''\
+def add_user(name):
+    if not text_fits(name, MAX_NAME) or name != name.strip() or not name.isprintable():
+        sys.exit(f"a name must have from 1 to {MAX_NAME} characters, with no control characters and no space at either end")
+    if user_exists(name):
+        sys.exit(f"there is already a user named {name!r}")
+    password = read_password()
+    salt = secrets.token_bytes(16)
+    with closing(connect()) as connection, connection:
+        connection.execute('INSERT INTO "auth_user" (name, salt, hash, failures, locked_until) VALUES (?, ?, ?, 0, 0)', [name, salt, password_hash(password, salt)])
+    print(f"added the user {name!r}")
+'''),
+    ("authentication", '''\
+def set_password(name):
+    """Give a user a new password, unlock the name, and end every session of that user."""
+    if not user_exists(name):
+        sys.exit(f"there is no user named {name!r}")
+    password = read_password()
+    salt = secrets.token_bytes(16)
+    with closing(connect()) as connection, connection:
+        connection.execute('UPDATE "auth_user" SET salt = ?, hash = ?, failures = 0, locked_until = 0 WHERE name = ?', [salt, password_hash(password, salt), name])
+        connection.execute('DELETE FROM "auth_session" WHERE name = ?', [name])
+    print(f"changed the password of {name!r} and ended their sessions")
+'''),
+    ("authentication", '''\
+def remove_user(name):
+    with closing(connect()) as connection, connection:
+        connection.execute('DELETE FROM "auth_session" WHERE name = ?', [name])
+        removed = connection.execute('DELETE FROM "auth_user" WHERE name = ?', [name]).rowcount
+    if not removed:
+        sys.exit(f"there is no user named {name!r}")
+    print(f"removed the user {name!r} and ended their sessions")
+'''),
+    ("authentication", '''\
+def list_users():
+    with closing(connect()) as connection:
+        for row in connection.execute('SELECT name FROM "auth_user" ORDER BY name'):
+            print(row["name"])
+'''),
+    ("authentication", '''\
+def main(arguments):
+    """The commands that manage users: python server.py add-user NAME, set-password NAME, remove-user NAME or list-users."""
+    commands = {"add-user": add_user, "set-password": set_password, "remove-user": remove_user}
+    if arguments == ["list-users"]:
+        list_users()
+    elif len(arguments) == 2 and arguments[0] in commands:
+        commands[arguments[0]](arguments[1])
+    else:
+        sys.exit("usage: python server.py add-user NAME | set-password NAME | remove-user NAME | list-users")
+'''),
 ]
 REQUIREMENTS = ["fastapi==0.162.5", "uvicorn==0.54.0"]  # the versions the generated server was tested with
 
@@ -399,11 +651,21 @@ FORMS = {
     "render-list": "<ul data-notifications></ul>; one <li>RECIPIENT: CONDITION #RECORD</li> per notification from /api/notification",
     "notify-when": 'def TABLE_rules(connection, record_id, record): if COMPARISONS: notify(connection, "RECIPIENT", "CONDITION", '
                    "record_id); GET /api/notification",
+    "authentication": 'tables "auth_user" and "auth_session"; PUBLIC = {("GET", "/SIGNIN.html"), ("GET", "/styles.css"), ("GET", '
+                      '"/sign-in.js"), ("POST", "/api/sign-in")}; every other request needs a session: 401 under /api/, else 303 to '
+                      '/SIGNIN.html; POST /api/sign-in, POST /api/sign-out; python server.py add-user | set-password | remove-user | '
+                      'list-users; in scripts.js every "await fetch(" becomes "await fetchSignedIn("',
+    "sign-in-form": '<form data-sign-in> <label>NAME <input name="name" autocomplete="username" required /></label> '
+                    '<label>PASSWORD <input name="password" type="password" autocomplete="current-password" required /></label> '
+                    '<button type="submit">BUTTON</button> <p data-failed role="alert" hidden>FAILURE</p></form>; '
+                    '<script src="sign-in.js" defer></script>; the sign-in page has no links to the other pages',
+    "sign-out-button": '<button type="button" class="width-N" data-sign-out>TEXT</button>; POST /api/sign-out, then go to /',
 }
 
 
 ELEMENT_BLOCKS = {Heading: "page-heading", Paragraph: "page-text", Table: "data-table", Button: "page-button",
-                  Notifications: "render-list"}
+                  Notifications: "render-list", SignIn: "sign-in-form"}
+FETCHING = {"fill", "form", "edit", "list"}  # the behaviours whose scripts make requests to the server
 
 
 def file_name(page):
@@ -428,14 +690,21 @@ def tables(app):
     return [element for page in app.pages for element in page.elements if isinstance(element, Table)]
 
 
+def authenticated(app):
+    return "authentication" in app.uses
+
+
 def features(app):
-    """Which behaviours the application uses: fill, search, sort, form, edit, list."""
+    """Which behaviours the scripts of the application use: fill, search, sort, form, edit, list, signout, and, with
+    authentication and any of the behaviours that make requests, signedin."""
     filled = {item.name for item in app.records} | set(app.exposed)
     found = set()
     for page in app.pages:
         for element in page.elements:
             if isinstance(element, Button) and element.action is not None and element.action[0] == "adds":
                 found.add("form")
+            if isinstance(element, Button) and element.action == SIGNS_OUT:
+                found.add("signout")
             if isinstance(element, Notifications):
                 found.add("list")
     for table in tables(app):
@@ -447,7 +716,14 @@ def features(app):
             found.add("search")
         if table.sort:
             found.add("sort")
+    if authenticated(app) and found & FETCHING:
+        found.add("signedin")
     return found
+
+
+def script_owner(app):
+    """The block that scripts.js, and the line that loads it, belong to."""
+    return "render-table" if features(app) - {"signout"} else "sign-out-button"
 
 
 def blocks_used(app):
@@ -465,11 +741,13 @@ def blocks_used(app):
         add("sqlite-table", "rest-api")
     if app.rules:
         add("notify-when")
+    if authenticated(app):
+        add("sqlite-table", "authentication")  # authentication reaches its tables through the database connection
     for page in app.pages:
         for element in page.elements:
             add(ELEMENT_BLOCKS[type(element)])
             if isinstance(element, Button) and element.action is not None:
-                add("add-record-form" if element.action[0] == "adds" else "button-opens-page")
+                add({"adds": "add-record-form", "opens": "button-opens-page", SIGNS_OUT[0]: "sign-out-button"}[element.action[0]])
             if isinstance(element, Table):
                 if element.data in filled or element.search is not None or element.sort:
                     add("render-table")
@@ -484,6 +762,13 @@ def blocks_used(app):
     return used
 
 
+def linked_pages(app):
+    """The pages every other page links to: all of them, except the sign-in page, which links to none."""
+    if authenticated(app):
+        return [page for page in app.pages if page != sign_in_page(app)]
+    return list(app.pages)
+
+
 def page_lines(app, page):
     """One page as (text, origin) pairs. origin is an intent line number or the name of a block."""
     data = {item.name: item for item in app.data}
@@ -494,12 +779,16 @@ def page_lines(app, page):
            ('    <meta name="viewport" content="width=device-width, initial-scale=1" />', "html-page"),
            (f"    <title>{page.name} - {app.name}</title>", page.line),
            (f'    <link rel="stylesheet" href="{STYLES}" />', "html-page")]
-    if features(app):
-        out.append((f'    <script src="{SCRIPTS}" defer></script>', "render-table"))
+    signing_in = authenticated(app) and page == sign_in_page(app)
+    if signing_in:
+        out.append((f'    <script src="{SIGN_IN_SCRIPT}" defer></script>', "sign-in-form"))
+    elif features(app):
+        out.append((f'    <script src="{SCRIPTS}" defer></script>', script_owner(app)))
     out += [("  </head>", "html-page"), ("  <body>", "html-page")]
-    if len(app.pages) > 1:
+    listed = linked_pages(app)
+    if len(listed) > 1 and not signing_in:
         out.append(("    <nav>", "html-page"))
-        out += [(f'      <a href="{file_name(other)}">{other.name}</a>', other.line) for other in app.pages]
+        out += [(f'      <a href="{file_name(other)}">{other.name}</a>', other.line) for other in listed]
         out.append(("    </nav>", "html-page"))
     out.append(("    <main>", "html-page"))
     headings = 0
@@ -538,6 +827,18 @@ def page_lines(app, page):
                 out += [(f'      <dialog data-change="{element.data}">', edit)] + form_lines(data[element.data], "✓", edit)
         elif isinstance(element, Notifications):
             out.append(("      <ul data-notifications></ul>", element.line))
+        elif isinstance(element, SignIn):
+            out += [("      <form data-sign-in>", element.line),
+                    (f'        <label>{escape(element.name_label)} <input name="name" autocomplete="username" required /></label>',
+                     element.line),
+                    (f'        <label>{escape(element.password_label)} <input name="password" type="password" '
+                     f'autocomplete="current-password" required /></label>', element.line),
+                    (f'        <button type="submit">{escape(element.button)}</button>', element.line),
+                    (f"        <p data-failed role=\"alert\" hidden>{escape(element.failure)}</p>", element.line),
+                    ("      </form>", element.line)]
+        elif element.action == SIGNS_OUT:
+            width_class = "" if element.width is None else f' class="width-{element.width}"'
+            out.append((f'      <button type="button"{width_class} data-sign-out>{escape(element.text)}</button>', element.line))
         elif element.action is not None and element.action[0] == "opens":
             width_class = "" if element.width is None else f" width-{element.width}"
             out.append((f'      <a class="button{width_class}" href="{files[element.action[1]]}">{escape(element.text)}</a>',
@@ -578,10 +879,12 @@ def style_lines(app):
                 flags.add("link")
             else:
                 flags.add({Heading: "heading", Paragraph: "text", Table: "table", Button: "button",
-                           Notifications: "list"}[type(element)])
+                           Notifications: "list", SignIn: "signin"}[type(element)])
+            if isinstance(element, SignIn):
+                flags.add("label")
             if isinstance(element, Button) and element.width is not None:
                 widths.setdefault(element.width, element.line)
-    if len(app.pages) > 1:
+    if len(linked_pages(app)) > 1:
         flags.add("nav")
     out = []
     for block, flag, text in SUPPORT:
@@ -596,12 +899,17 @@ def style_lines(app):
 
 
 def script_lines(app):
-    flags = {"always"} | features(app)
+    flags = features(app)
+    owner = script_owner(app)
+    if owner == "render-table":  # a script that only signs out needs none of the code tables share
+        flags.add("always")
     out = []
     for block, flag, text in SCRIPT:
         if flag in flags:
+            if "signedin" in flags and flag in FETCHING:  # with authentication, a request refused for want of a session leads to /
+                text = text.replace("await fetch(", "await fetchSignedIn(")
             out += [(line, block) for line in text.rstrip("\n").split("\n")] + [("", "support")]
-    out.append(('document.addEventListener("DOMContentLoaded", () => {', "render-table"))
+    out.append(('document.addEventListener("DOMContentLoaded", () => {', owner))
     if "edit" in flags:  # before the tables are filled, so that every row gets its controls
         block = "edit-table-rows"
         out += [('  for (const table of document.querySelectorAll("table[data-editable]")) {', block),
@@ -638,7 +946,21 @@ def script_lines(app):
                 ("    fillNotifications(list).catch((problem) => console.error(problem));", block),
                 ('    document.addEventListener("stored", () => fillNotifications(list).catch((problem) => console.error(problem)));', block),
                 ("  }", block)]
-    out.append(("});", "render-table"))
+    if "signout" in flags:
+        block = "sign-out-button"
+        out += [('  for (const button of document.querySelectorAll("button[data-sign-out]")) {', block),
+                ('    button.addEventListener("click", () => signOut().catch((problem) => console.error(problem)));', block),
+                ("  }", block)]
+    out.append(("});", owner))
+    return out
+
+
+def sign_in_script_lines():
+    """sign-in.js, the one script the sign-in page loads."""
+    out = []
+    for block, flag, text in SCRIPT:
+        if flag == "sign-in-page":
+            out += ([("", "support")] if out else []) + [(line, block) for line in text.rstrip("\n").split("\n")]
     return out
 
 
@@ -665,34 +987,48 @@ def server_lines(app):
     lines = dict(zip(app.exposed, app.expose_lines or (app.line,) * len(app.exposed)))
     use = dict(zip(app.uses, app.use_lines or (app.line,) * len(app.uses)))
     web, base = use.get("fastapi", app.line), use.get("sqlite", app.line)
-    out = []
+    auth = authenticated(app)
+    stored = bool(exposed) or auth  # whether the server keeps anything in the database
+    imports = []
+    if stored:
+        imports += [("import sqlite3", base), ("from contextlib import closing", base),
+                    ("from typing import Annotated, Any" if auth else "from typing import Annotated", web)]
     if exposed:
-        out += [("import json", base), ("import re", base), ("import sqlite3", base),
-                ("from contextlib import closing", base)]
+        imports += [("import json", base), ("import re", base)]
+    if auth:
+        imports += [(f"import {module}", "authentication") for module in ("hashlib", "hmac", "secrets", "sys", "time")]
+        imports.append(("from getpass import getpass", "authentication"))
     if app.rules:
-        out.append(("from datetime import UTC, datetime", "notify-when"))
+        imports.append(("from datetime import UTC, datetime", "notify-when"))
         kinds = {item.name: dict(item.fields) for item in exposed}
         decimal = [rule for rule in app.rules if any(kinds[rule.data][name] == "decimal" for name, _, _ in rule.conditions)]
         if decimal:
-            out.append(("from decimal import Decimal", decimal[0].line))
-    out.append(("from pathlib import Path", web))
+            imports.append(("from decimal import Decimal", decimal[0].line))
+    imports.append(("from pathlib import Path", web))
+    out = sorted(imports, key=lambda pair: (pair[0].startswith("from "), pair[0].split()[1]))  # 'import' first, then by module
+    names = "Body, FastAPI, HTTPException" if stored else "FastAPI"
+    out += [("", "support"), (f"from fastapi import {names}{', Request' if auth else ''}", web)]
+    if auth:
+        out += [("from fastapi.concurrency import run_in_threadpool", "authentication"),
+                ("from fastapi.responses import JSONResponse, RedirectResponse, Response", "authentication")]
+    else:
+        out.append(("from fastapi.responses import RedirectResponse", web))
+    out += [("from fastapi.staticfiles import StaticFiles", web), ("", "support"), ("HERE = Path(__file__).parent", web)]
+    if stored:
+        out.append((f'DATABASE = HERE / "{app.name.lower()}.db"', base))
     if exposed:
-        out.append(("from typing import Annotated", web))
-    names = "Body, FastAPI, HTTPException" if exposed else "FastAPI"
-    out += [("", "support"), (f"from fastapi import {names}", web),
-            ("from fastapi.responses import RedirectResponse", web), ("from fastapi.staticfiles import StaticFiles", web),
-            ("", "support"), ("HERE = Path(__file__).parent", web)]
-    if exposed:
-        out += [(f'DATABASE = HERE / "{app.name.lower()}.db"', base), ("MAX_INTEGER = 9007199254740991", "sqlite-table"),
-                ('DECIMAL = re.compile(r"-?\\d+(\\.\\d+)?")', "sqlite-table")]
+        out += [("MAX_INTEGER = 9007199254740991", "sqlite-table"), ('DECIMAL = re.compile(r"-?\\d+(\\.\\d+)?")', "sqlite-table")]
         for item in exposed:
             fields = ", ".join(f'"{name}": "{kind}"' for name, kind in item.fields)
             out.append((f"{item.name.upper()}_FIELDS = {{{fields}}}", item.line))
+    if auth:
+        out += authentication_constants(app)
     out += [("", "support"), (f'app = FastAPI(title="{app.name}")', app.line)]
-    if exposed:
-        for block, text in SERVER:
-            if block != "notify-when" or app.rules:
-                out += [("", "support"), ("", "support")] + [(line, block) for line in text.rstrip("\n").split("\n")]
+    wanted = ({"sqlite-table", "rest-api"} if exposed else set()) | ({"notify-when"} if app.rules else set())
+    wanted |= {"authentication"} if auth else set()
+    for block, text in SERVER:
+        if block in wanted or (auth and (block, text) == SERVER[0]):  # authentication keeps its users through connect()
+            out += [("", "support"), ("", "support")] + [(line, block) for line in text.rstrip("\n").split("\n")]
     ruled = {}
     for rule in app.rules:
         ruled.setdefault(rule.data, []).append(rule)
@@ -721,7 +1057,7 @@ def server_lines(app):
         block = "notify-when"
         out += [("", "support"), ("", "support"), (f'@app.get("/api/{NOTIFICATIONS_TABLE}")', block),
                 (f"def {NOTIFICATIONS_TABLE}_list():", block), ("    return list_notifications()", block)]
-    first = app.pages[0]
+    first = linked_pages(app)[0]  # with authentication, the first page after the sign-in page
     out += [("", "support"), ("", "support"), ('@app.get("/")', first.line), ("def first_page():", first.line),
             (f'    return RedirectResponse(url="/{file_name(first)}")', first.line), ("", "support"), ("", "support")]
     for item in exposed:
@@ -729,8 +1065,26 @@ def server_lines(app):
         out.append((f'create_table("{table}", {item.name.upper()}_FIELDS, HERE / "{table}.json")', lines[item.name]))
     if app.rules:
         out.append(("create_notifications()", "notify-when"))
+    if auth:
+        out.append(("create_authentication()", "authentication"))
     out.append(('app.mount("/", StaticFiles(directory=HERE / "static"), name="pages")', web))
+    if auth:  # the commands that manage users; importing the server, as uvicorn does, runs none of them
+        out += [("", "support"), ('if __name__ == "__main__":', "authentication"), ("    main(sys.argv[1:])", "authentication")]
     return out
+
+
+def authentication_constants(app):
+    """The fixed choices of authentication, and the requests that need no session."""
+    form = next(element for element in sign_in_page(app).elements if isinstance(element, SignIn))
+    page = f"/{file_name(sign_in_page(app))}"
+    block = "authentication"
+    return [(f'SIGN_IN_PAGE = "{page}"', form.line),
+            (f'PUBLIC = {{("GET", SIGN_IN_PAGE), ("GET", "/{STYLES}"), ("GET", "/{SIGN_IN_SCRIPT}"), ("POST", "/api/sign-in")}}'
+             "  # the only requests that need no session", form.line),
+            ('SESSION_COOKIE = "session"', block), ("SESSION_SECONDS = 12 * 60 * 60", block),
+            ("MAX_FAILURES = 5  # failed attempts in a row, after which a name is locked", block),
+            ("LOCK_SECONDS = 5 * 60", block), ("MIN_PASSWORD = 8", block), ("MAX_PASSWORD = 1000", block),
+            ("MAX_NAME = 200", block), ("DUMMY_SALT = bytes(16)  # hashed with for unknown names, so that they take as long as known ones", block)]
 
 
 def python_string(text):
@@ -773,6 +1127,8 @@ def generate(app):
     files[folder + STYLES] = style_lines(app)
     if features(app):
         files[folder + SCRIPTS] = script_lines(app)
+    if authenticated(app):
+        files[folder + SIGN_IN_SCRIPT] = sign_in_script_lines()
     for records in app.records:
         files[("" if records.name in app.exposed else folder) + records_file(records.name)] = record_lines(app, records)
     if served:
@@ -825,6 +1181,11 @@ def lift(files):
                 continue
             elif line == "      <ul data-notifications></ul>":
                 elements.append(Notifications())
+            elif line == "      <form data-sign-in>":
+                elements.append(_sign_in_form(name, body[index:index + 5]))
+                index += 5
+            elif match := re.fullmatch(r'      <button type="button"(?: class="width-(\d+)")? data-sign-out>(.*)</button>', line):
+                elements.append(Button(text=unescape(match[2]), width=int(match[1]) if match[1] else None, action=SIGNS_OUT))
             elif match := re.fullmatch(rf'      <table data-name="{NAME}"(?: data-source="(/api/)?[a-z0-9_]+(?:\.json)?")?( data-editable)?>', line):
                 if match[2] and match[1] not in exposed:
                     exposed.append(match[1])
@@ -875,10 +1236,14 @@ def lift(files):
         pages[page_name] = Page(page_name, tuple(elements))
     if len(app_names) != 1 or not pages:
         raise NotGenerated("the files do not belong to one application")
+    # With authentication, the sign-in page links to no page and no page links to it; it is written first.
+    signing_in = [page.name for page in pages.values() if any(isinstance(element, SignIn) for element in page.elements)]
+    linked = [name for name in pages if name not in signing_in[:1]]
     if order is None:
-        order = list(pages)
-    if sorted(order) != sorted(pages) or (len(pages) > 1 and len(order) != len(pages)):
+        order = linked
+    if sorted(order) != sorted(linked) or (len(linked) > 1 and len(order) != len(linked)):
         raise NotGenerated("the pages listed do not match the files")
+    order = signing_in[:1] + order
     by_file = {file_name(page): page.name for page in pages.values()}
     for (page_name, position), target in opens.items():
         if target not in by_file:
@@ -896,7 +1261,9 @@ def lift(files):
             records.append(Records(item.name, _rows(text, item)))
     position = {item.name: index for index, item in enumerate(data)}
     exposed.sort(key=lambda name: position.get(name, len(position)))
-    uses = (("sqlite",) if exposed else ()) + (("fastapi",) if served else ())
+    authentication = bool(signing_in)  # rebuilding checks that the server is the one authentication generates
+    uses = (("sqlite",) if exposed or authentication else ()) + (("fastapi",) if served else ())
+    uses += ("authentication",) if authentication else ()
     rules = _rules(files.get("server.py", ""), data)
     app = App(app_names.pop(), data, ordered, tuple(records), uses, tuple(exposed), rules=rules)
     try:
@@ -904,6 +1271,22 @@ def lift(files):
     except IntentError as problem:
         raise NotGenerated(problem.message) from None
     return app
+
+
+SIGN_IN_LINES = [re.compile(r'        <label>(.*) <input name="name" autocomplete="username" required /></label>'),
+                 re.compile(r'        <label>(.*) <input name="password" type="password" autocomplete="current-password" required /></label>'),
+                 re.compile(r'        <button type="submit">(.*)</button>'),
+                 re.compile(r'        <p data-failed role="alert" hidden>(.*)</p>'),
+                 re.compile(r"      </form>()")]
+
+
+def _sign_in_form(name, lines):
+    """Read the sign-in form back from the five lines after its opening tag."""
+    found = [pattern.fullmatch(line) for pattern, line in zip(SIGN_IN_LINES, lines)]
+    if len(found) != len(SIGN_IN_LINES) or not all(found):
+        raise NotGenerated(f"{name}: the sign-in form is not as generated")
+    texts = [unescape(match[1]) for match in found[:4]]
+    return SignIn(name_label=texts[0], password_label=texts[1], button=texts[2], failure=texts[3])
 
 
 def _rules(server, data):

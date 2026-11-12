@@ -96,7 +96,7 @@ class RealWordingTest(unittest.TestCase):
         model = json.loads(path.read_text(encoding="utf-8"))
         # The classifier knows every block of the catalogue except the last ones, which were added after it was
         # trained and have no training wordings yet: they are written in standard phrases only.
-        untaught = ["edit-table-rows", "notify-when"]
+        untaught = ["edit-table-rows", "notify-when", "authentication", "sign-in-form", "sign-out-button"]
         self.assertEqual(model["blocks"] + untaught, list(library.catalogue()))
         rebuilt = classifier.make_model(model["weights"], model["blocks"], model["threshold"])
         self.assertEqual(rebuilt["version"], model["version"])

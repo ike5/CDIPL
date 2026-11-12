@@ -1,5 +1,6 @@
 {
   "add-record-form": "draft",
+  "authentication": "draft",
   "button-opens-page": "draft",
   "calculate": "draft",
   "check-list-of-records": "draft",
@@ -29,6 +30,8 @@
   "render-list": "draft",
   "render-table": "draft",
   "rest-api": "draft",
+  "sign-in-form": "draft",
+  "sign-out-button": "draft",
   "sort-rows": "draft",
   "sqlite-table": "draft",
   "table-sort": "draft",

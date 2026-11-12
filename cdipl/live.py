@@ -164,7 +164,8 @@ def _analyse_app(text):
             lines = pages_module.element_text(element, language)
             blocks = [ELEMENT_BLOCKS[type(element)]]
             if isinstance(element, pages_module.Button) and element.action is not None:
-                blocks.append("add-record-form" if element.action[0] == "adds" else "button-opens-page")
+                blocks.append({"adds": "add-record-form", "opens": "button-opens-page",
+                               pages_module.SIGNS_OUT[0]: "sign-out-button"}[element.action[0]])
             if isinstance(element, pages_module.Table):
                 if element.data in filled:
                     blocks.append("render-table")
@@ -178,8 +179,9 @@ def _analyse_app(text):
     for rule in app.rules:
         readings[rule.line] = (f"{words['when']} {pages_module.condition_text(rule, language)}:", ["notify-when"], None)
         readings[rule.notify_line] = (f"{words['notify']} {rule.recipient}", ["notify-when"], None)
+    part_blocks = {"sqlite": "sqlite-table", "fastapi": "fastapi-app", "authentication": "authentication"}
     for part, line in zip(app.uses, app.use_lines):
-        readings[line] = (f"{words['use']} {pages_module.PARTS[part]}", ["sqlite-table" if part == "sqlite" else "fastapi-app"], None)
+        readings[line] = (f"{words['use']} {pages_module.part_text(part, language)}", [part_blocks[part]], None)
     for name, line in zip(app.exposed, app.expose_lines):
         readings[line] = (words["expose_text"].format(name), ["rest-api", "sqlite-table"], None)
     for item in app.records:
@@ -238,6 +240,8 @@ def _analyse_app(text):
     canonical = pages_module.render(app) if complete else None
     note = ("The preview imitates the API: it lists the records written in the file, and nothing added is saved."
             if usable.exposed else "")
+    if "authentication" in usable.uses:
+        note = (note + " " if note else "") + "Signing in works only when the preview is the generated server itself."
     return {"kind": "app", "targets": ["html"], "target": "html", "statements": statements, "files": files,
             "problems": problems, "complete": complete, "canonical": canonical, "preview": preview,
             "preview_note": note, "index": empty_index()}
@@ -251,11 +255,18 @@ def _usable(app):
     fields = {item.name: [name for name, _ in item.fields] for item in app.data if item.fields}
     kinds = {item.name: [kind for _, kind in item.fields] for item in app.data if item.fields}
     exposed, tables, dropped = [], set(), {}
-    if set(app.uses) == set(pages_module.PARTS):
+    served = pages_module.SERVER_PARTS <= set(app.uses)
+    form_page = pages_module.sign_in_page(app)
+    auth = served and "authentication" in app.uses and form_page is not None
+    if served:
         for name in app.exposed:
             if app.rules and name.lower() == pages_module.NOTIFICATIONS_TABLE:
                 line = dict(zip(app.exposed, app.expose_lines)).get(name, app.line)
                 dropped[line] = f"'{name}' cannot have an API: its table would be named 'notification', where the notifications are kept"
+                continue
+            if auth and name.lower() in pages_module.AUTH_TABLES:
+                line = dict(zip(app.exposed, app.expose_lines)).get(name, app.line)
+                dropped[line] = f"'{name}' cannot have an API: its table would be named '{name.lower()}', where the users are kept"
                 continue
             if name in fields and "id" not in fields[name] and name.lower() not in tables:
                 tables.add(name.lower())
@@ -270,15 +281,25 @@ def _usable(app):
         elif rule not in seen:
             seen.add(rule)
             rules.append(rule)
-    uses = tuple(part for part in app.uses if part != "sqlite" or exposed)
     page_names = {page.name for page in app.pages if page.elements}
     usable_pages, seen = [], set()
     for page in app.pages:
         kept = []
         for element in page.elements:
+            if auth and page == form_page and not isinstance(element, (pages_module.Heading, pages_module.Paragraph, pages_module.SignIn)):
+                dropped[element.line] = "the sign-in page may hold only headings, text and the sign-in form"
+                continue
+            if isinstance(element, pages_module.SignIn):
+                if not auth:
+                    dropped[element.line] = "signing in needs 'use authentication', 'use sqlite' and 'use FastAPI'"
+                    continue
+                if page != form_page or any(isinstance(other, pages_module.SignIn) for other in kept):
+                    dropped[element.line] = "there is already a sign-in form; an application has exactly one"
+                    continue
             if isinstance(element, pages_module.Button) and element.action is not None:
                 verb, target = element.action
-                if (verb == "adds" and target not in exposed) or (verb == "opens" and target not in page_names):
+                if (verb == "adds" and target not in exposed) or (verb == "opens" and target not in page_names) or \
+                        (element.action == pages_module.SIGNS_OUT and not auth):
                     element = pages_module.Button(text=element.text, width=element.width, line=element.line)
             if isinstance(element, pages_module.Notifications) and not rules:
                 dropped[element.line] = "there are no notifications to show: no rule that can be built notifies anyone"
@@ -300,6 +321,11 @@ def _usable(app):
         if kept and page.name.lower() not in seen:
             seen.add(page.name.lower())
             usable_pages.append(pages_module.Page(page.name, tuple(kept), page.line))
+    if auth and len(usable_pages) < 2:  # nothing to sign in to: build the pages without authentication
+        auth = False
+        usable_pages = [pages_module.Page(page.name, kept, page.line) for page in usable_pages
+                        if (kept := tuple(element for element in page.elements if not isinstance(element, pages_module.SignIn)))]
+    uses = tuple(part for part in app.uses if (part != "sqlite" or exposed or auth) and (part != "authentication" or auth))
     records, names = [], set()
     for item in app.records:
         if item.name not in kinds or item.name.lower() in names or not item.rows:

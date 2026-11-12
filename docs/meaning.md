@@ -151,8 +151,13 @@ app Inventory:
 
     page Products:
         table Product
+        editable
         button "Add product" adds Product
         button "Suppliers" opens Suppliers
+        notifications
+
+    when Product.stock < 5:
+        notify inventory_manager
 ```
 
 | Statement | Meaning |
@@ -162,6 +167,9 @@ app Inventory:
 | `expose D as api` | Needs both of the above. Creates a table for the data D and an API over it, at the address `/api/` followed by the name of D in lower case. A table of D on a page then fills itself from the API. |
 | `button "T" adds D` | D must be exposed. Pressing the button opens a form with one input for each field of D. Sending the form adds the record through the API and refills the tables of D on the page. The browser refuses a number that is not written as a number before anything is sent. |
 | `button "T" opens P` | Pressing the button opens the page P. |
+| `editable` | The same word in English and Spanish. Directly after a table, and after its `searchable by` and `sortable by` lines if it has any; in standard phrases it is written last. The table's data must be exposed. See "Changing and deleting from a page" below. |
+| `when D.F < V:` with `notify N` on the one line beneath it | Spanish `cuando D.F < V:` and `notificar N`. Inside the application, at the same level as `data` and `page`. A rule: after a record of D is added or changed through the API, if the condition holds for the record as stored, a notification for N is stored. D must be exposed. See "Rules and notifications" below. |
+| `notifications` | Spanish `notificaciones`. A list of the notifications the rules have stored. The application must have at least one rule. |
 
 **The table.** One row per record, with a column for each field and an `id` that the database assigns, starting at 1 and never reused while the record with the highest id still exists. Text and decimals are stored as text and integers as integers. No field may be named `id`. The table is created the first time the server starts. The records written in the intent file are put into it at that moment and never again; they are also written to a JSON file beside the server, which the server reads once and does not serve.
 
@@ -176,24 +184,48 @@ app Inventory:
 
 A record sent to the API must be a JSON object with exactly the declared fields. Text must be a JSON string, an integer a JSON whole number in range, and a decimal a JSON string such as `"9.99"` with at most 15 digits. Anything else is refused with status 422 and nothing is stored. Unlike reading a source file, `18.0` is not accepted as an integer here.
 
+**Changing and deleting from a page.** A table marked `editable` has one more column at the end, with no heading. When the table fills, each row is given the `id` of its record, which is kept on the row and not shown, and the last cell of the row holds two buttons: ✎ and ×. No words are added; the buttons are the same whatever human language the intent was written in, and nothing asks for confirmation.
+
+- ✎ opens a form, after the table, with one input for each field of the data, in the order declared, each labelled with the field's name and filled with the value the row shows. The browser checks numbers as in the form for adding a record. Sending the form with ✓ replaces the record through the API (`PUT /api/d/ID`), closes the form and fills every table of the same data on the page again. × in the form closes it and changes nothing.
+- × in a row deletes the record through the API (`DELETE /api/d/ID`) at once, and fills every table of the same data on the page again.
+- If the server refuses a change or a deletion, the page stays as it was, the form stays open, and the problem is written to the browser's console only.
+- The form for changing a record is the same kind of form as the one for adding a record, and shares its style; the trace therefore lists the block `add-record-form` with `edit-table-rows`.
+
+**Rules and notifications.**
+
+- **The condition** is one or more comparisons joined by `and` (Spanish `y`). Each comparison is written `D.F`, an operator, and a fixed value: `Product.stock < 5`. The operators are `=`, `!=`, `<`, `<=`, `>` and `>=`. Every comparison of one rule names the same data D, which must be exposed, and a field F of it. The value must fit the field, as in records: text in double quotes, a whole number, or a decimal such as `9.99`; a whole number may be written for a decimal field, as in records. In standard phrases the comparisons are written with one space on each side of the operator, decimals keep the digits as written, and text is written in double quotes with `"` and `\` escaped by `\`.
+- **Comparing.** Integers are compared by value. Decimals are compared by value exactly, not as floating point: `"10.5"` is not below `9.99`, and `"9.990"` equals `9.99`. Text is compared exactly for `=` and `!=`, and by Unicode code point, character by character, for the others, as in the order of text above; capital and small letters are different.
+- **When a rule is applied.** After a record is added (`POST`) or changed (`PUT`) through the API, to the record as stored, in the same transaction as the record itself: either both are stored or neither is. A request that is refused, a change to a record that does not exist, a deletion, and the records written in the intent file do not apply any rule. When several rules hold for one record, one notification is stored for each, in the order of the rules.
+- **A notification** holds its own `id` (assigned like a record's), `recipient` (the name after `notify`), `condition` (the rule's condition in standard English phrases, with the data name, exactly as an intent file in standard phrases writes it after `when`; this does not depend on the human language the intent was written in), `record` (the `id` of the record), and `time` (when it was stored, by the server's clock, in UTC, ISO 8601 to the second, ending in `Z`, such as `2026-11-12T09:30:00Z`).
+- **Nothing is sent.** The name after `notify` is a label: no message, e-mail or other signal goes to anyone. Notifications are only stored and listed.
+- **Where they are kept.** In a table named `notification` in the same database, created the first time the server starts with at least one rule. Notifications are kept when their record is changed again or deleted, and when the server restarts. Because the table is named `notification`, no data type with an API may be named `Notification`, in any mix of capital and small letters, in an application that has a rule; this is reported at its `expose` line.
+- **The API.** `GET /api/notification` lists every notification, as objects with the five keys above, in order of `id`. Notifications cannot be added, changed or deleted through the API: such requests are refused with 405 and change nothing.
+- **The list on a page.** `notifications` is a list with one item per notification, oldest first and newest last, each written `recipient: condition #record`, such as `inventory_manager: Product.stock < 5 #4`, and no other words. It is filled when the page opens and again after a record is added or changed from that page. It is not filled again after a deletion, nor when another page or another reader adds a record.
+- **Order and standard phrases.** A rule has exactly one `notify` line. The same rule may not be written twice. In standard phrases the rules come after the pages, ordered by the order of their data (the order of the `data` declarations in standard phrases), and for one data in the order written.
+
 **What the generated server does not do.** These are fixed choices of the generator, and anyone who runs the server should know them.
 
 - **There is no authentication.** Anyone who can reach the server can read, add, change and delete every record. Run it only where that is acceptable, such as on your own machine.
 - There is no limit on how many records are returned or how large a request may be.
 - Two changes to the same record at the same moment are not reconciled; the last one wins.
 - Changing a `data` declaration does not change a table that already exists. Delete the database file to start again.
-- The pages can add records. Changing and deleting are available through the API only.
+- The pages can add records, and change and delete them in a table marked `editable`. There is no undo and no confirmation.
+- Notifications are never removed; the table `notification` grows with every one.
 
 To run it, from the generated folder: `python -m pip install -r requirements.txt`, then `python -m uvicorn server:app`.
 
 **Decimals** are kept exactly as written, digits and all, so `24.50` stays `24.50`. In the JSON file they are written as text, so that no digit is lost; they are compared by value when sorting. A decimal may have at most 15 digits.
 
-**Files.** All pages share one stylesheet, `styles.css`, which holds fixed rules for the elements that are used and one rule for each button width that is used. If any table fills, searches or sorts, the pages also share `scripts.js`, which holds fixed code for the behaviours that are used. The colours, spacing and fonts are fixed choices of the generator.
+**Files.** All pages share one stylesheet, `styles.css`, which holds fixed rules for the elements that are used and one rule for each button width that is used. If any table fills, searches, sorts or is editable, or a button adds a record, or a page lists notifications, the pages also share `scripts.js`, which holds fixed code for the behaviours that are used. The colours, spacing and fonts are fixed choices of the generator.
 
 **Opening the pages.** A table that fills itself reads its JSON file over the web, so the folder has to be served by a web server; opened directly from disk, browsers refuse the request and the table stays empty.
 
 Text in double quotes is shown exactly as written; the characters `&`, `<` and `>` are escaped. No words are added that the developer did not write.
 
-Some statements are recognised but cannot be built yet, and say so: other parts of an application (`use authentication`, `use postgres`), creating a service (`create postgres:` and `using docker`), editing a table (`editable`), and rules that react to data (`when ...:` and `notify`).
+Some statements are recognised but cannot be built yet, and say so: other parts of an application (`use authentication`, `use postgres`), and creating a service (`create postgres:` and `using docker`).
 
-Known limits: records can be added from a page but not changed or deleted; the language of the page is not declared in the HTML; sorting text puts all capital letters before all small letters, as the order of text above says; and a line of text longer than about 300 characters would be re-wrapped by the formatter used for criterion G6.
+Free wording reads the lines of a page into the page blocks the classifier was trained on. `editable`, `notifications`, rules and `notify` are read in standard phrases only: the blocks `edit-table-rows` and `notify-when` were added after the classifier was trained and it has not been taught them.
+
+Known limits: the language of the page is not declared in the HTML; sorting text puts all capital letters before all small letters, as the order of text above says; when a table is filled again after a record is added, changed or deleted, the rows are shown in order of `id` and unfiltered, even if the reader had sorted the table or typed in its search box; a list of notifications is not filled again after a deletion or a change made elsewhere until the page is opened again; and a line of text longer than about 300 characters would be re-wrapped by the formatter used for criterion G6, which includes a rule whose condition holds long text, since it is written into `server.py`.
+
+The live view's preview of an application with a server is the generated server itself, run on the developer's own machine in a temporary folder, so adding, changing, deleting and notifications work there as they will when it is built. Its database starts again from the records in the intent file whenever the data, the API or the rules change. If `fastapi` and `uvicorn` are not installed, the preview imitates the API instead: it lists the records written in the intent file and no notifications, and nothing done in the preview is saved.

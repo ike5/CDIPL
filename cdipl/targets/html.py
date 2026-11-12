@@ -1,9 +1,30 @@
 """Generate web pages in HTML, CSS and JavaScript, and recognise pages this generator wrote."""
+import ast
 import json
 import re
 
 from ..model import IntentError
-from ..pages import App, Button, Data, Decimal, Heading, Page, Paragraph, Quoted, Records, Table, check, first_use_order
+from ..pages import (
+    NOTIFICATIONS_TABLE,
+    PHRASES,
+    App,
+    Button,
+    Data,
+    Decimal,
+    Heading,
+    Notifications,
+    Page,
+    Paragraph,
+    Quoted,
+    Records,
+    Rule,
+    Table,
+    as_kind,
+    check,
+    condition_text,
+    first_use_order,
+    read_condition,
+)
 from .common import NotGenerated
 
 STYLES = "styles.css"
@@ -98,14 +119,14 @@ th button {
   text-decoration: underline;
 }
 '''),
-    ("add-record-form", "form", '''\
+    ("add-record-form", "dialog", '''\
 dialog {
   padding: 1.5rem;
   border: 1px solid #9aa5b1;
   border-radius: 0.25rem;
 }
 '''),
-    ("add-record-form", "form", '''\
+    ("add-record-form", "dialog", '''\
 dialog input {
   margin-left: 0.5rem;
   padding: 0.25rem 0.5rem;
@@ -114,11 +135,28 @@ dialog input {
   font: inherit;
 }
 '''),
-    ("add-record-form", "form", '''\
+    ("add-record-form", "dialog", '''\
 dialog button {
   margin: 0.5rem 0.5rem 0 0;
   padding: 0.5rem 1rem;
   font: inherit;
+}
+'''),
+    ("edit-table-rows", "edit", '''\
+td button {
+  margin: 0 0.25rem 0 0;
+  padding: 0 0.5rem;
+  border: 1px solid #9aa5b1;
+  border-radius: 0.25rem;
+  font: inherit;
+  background: none;
+  cursor: pointer;
+}
+'''),
+    ("render-list", "list", '''\
+ul {
+  margin: 0 0 1rem;
+  padding-left: 1.5rem;
 }
 '''),
     ("button-opens-page", "link", '''\
@@ -176,6 +214,7 @@ async function fillTable(table) {
     return row;
   });
   table.tBodies[0].replaceChildren(...rows);
+  table.dispatchEvent(new CustomEvent("filled", { detail: records }));
 }
 '''),
     ("filter-elements-by-text", "search", '''\
@@ -207,9 +246,84 @@ async function addRecord(form) {
   }
   form.reset();
   dialog.close();
+  document.dispatchEvent(new Event("stored"));
   for (const table of document.querySelectorAll(`table[data-name="${name}"]`)) {
     await fillTable(table);
   }
+}
+'''),
+    ("edit-table-rows", "edit", '''\
+function addControls(table, records) {
+  for (const [index, row] of Array.from(table.tBodies[0].rows).entries()) {
+    row.dataset.id = String(records[index].id);
+    const change = document.createElement("button");
+    change.type = "button";
+    change.textContent = "✎";
+    change.addEventListener("click", () => openChange(table, row));
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.textContent = "×";
+    remove.addEventListener("click", () => deleteRecord(table, row).catch((problem) => console.error(problem)));
+    const cell = document.createElement("td");
+    cell.append(change, remove);
+    row.append(cell);
+  }
+}
+'''),
+    ("edit-table-rows", "edit", '''\
+function openChange(table, row) {
+  const dialog = table.nextElementSibling;
+  dialog.dataset.id = row.dataset.id;
+  for (const input of dialog.querySelectorAll("input")) {
+    input.value = row.cells[columnOf(table, input.name)].textContent;
+  }
+  dialog.showModal();
+}
+'''),
+    ("edit-table-rows", "edit", '''\
+async function changeRecord(form) {
+  const dialog = form.closest("dialog");
+  const name = dialog.dataset.change;
+  const record = {};
+  for (const input of form.querySelectorAll("input")) {
+    record[input.name] = input.type === "number" ? Number(input.value) : input.value;
+  }
+  const reply = await fetch(`/api/${name.toLowerCase()}/${dialog.dataset.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(record) });
+  if (!reply.ok) {
+    throw new Error(`${name}: ${reply.status}`);
+  }
+  dialog.close();
+  document.dispatchEvent(new Event("stored"));
+  for (const table of document.querySelectorAll(`table[data-name="${name}"]`)) {
+    await fillTable(table);
+  }
+}
+'''),
+    ("edit-table-rows", "edit", '''\
+async function deleteRecord(table, row) {
+  const name = table.dataset.name;
+  const reply = await fetch(`/api/${name.toLowerCase()}/${row.dataset.id}`, { method: "DELETE" });
+  if (!reply.ok) {
+    throw new Error(`${name}: ${reply.status}`);
+  }
+  for (const other of document.querySelectorAll(`table[data-name="${name}"]`)) {
+    await fillTable(other);
+  }
+}
+'''),
+    ("render-list", "list", '''\
+async function fillNotifications(list) {
+  const reply = await fetch("/api/notification");
+  if (!reply.ok) {
+    throw new Error(`/api/notification: ${reply.status}`);
+  }
+  const notifications = await reply.json();
+  const items = notifications.map((notification) => {
+    const item = document.createElement("li");
+    item.textContent = `${notification.recipient}: ${notification.condition} #${notification.record}`;
+    return item;
+  });
+  list.replaceChildren(...items);
 }
 '''),
     ("table-sort", "sort", '''\
@@ -255,9 +369,12 @@ SERVER = [
     ('sqlite-table', 'def columns(fields):\n    return ", ".join(f\'"{name}"\' for name in fields)\n'),
     ('sqlite-table', 'def create_table(table, fields, seed):\n    kinds = ", ".join(f\'"{name}" {"INTEGER" if kind == "integer" else "TEXT"} NOT NULL\' for name, kind in fields.items())\n    with closing(connect()) as connection, connection:\n        if connection.execute("SELECT 1 FROM sqlite_master WHERE type = \'table\' AND name = ?", (table,)).fetchone():\n            return\n        connection.execute(f\'CREATE TABLE "{table}" (id INTEGER PRIMARY KEY, {kinds})\')\n        if seed.exists():\n            marks = ", ".join("?" for _ in fields)\n            rows = [checked(record, fields) for record in json.loads(seed.read_text(encoding="utf-8"))]\n            connection.executemany(f\'INSERT INTO "{table}" ({columns(fields)}) VALUES ({marks})\', rows)\n'),
     ('rest-api', 'def list_records(table, fields):\n    with closing(connect()) as connection:\n        rows = connection.execute(f\'SELECT id, {columns(fields)} FROM "{table}" ORDER BY id\').fetchall()\n    return [dict(row) for row in rows]\n'),
-    ('rest-api', 'def add_record(table, fields, record):\n    values = checked(record, fields)\n    marks = ", ".join("?" for _ in fields)\n    with closing(connect()) as connection, connection:\n        cursor = connection.execute(f\'INSERT INTO "{table}" ({columns(fields)}) VALUES ({marks})\', values)\n    return {"id": cursor.lastrowid, **dict(zip(fields, values))}\n'),
-    ('rest-api', 'def change_record(table, fields, record_id, record):\n    values = checked(record, fields)\n    changes = ", ".join(f\'"{name}" = ?\' for name in fields)\n    with closing(connect()) as connection, connection:\n        cursor = connection.execute(f\'UPDATE "{table}" SET {changes} WHERE id = ?\', [*values, record_id])\n    if cursor.rowcount == 0:\n        raise HTTPException(status_code=404, detail="there is no record with that id")\n    return {"id": record_id, **dict(zip(fields, values))}\n'),
+    ('rest-api', 'def add_record(table, fields, record, after=None):\n    values = checked(record, fields)\n    marks = ", ".join("?" for _ in fields)\n    with closing(connect()) as connection, connection:\n        cursor = connection.execute(f\'INSERT INTO "{table}" ({columns(fields)}) VALUES ({marks})\', values)\n        if after is not None:\n            after(connection, cursor.lastrowid, dict(zip(fields, values)))\n    return {"id": cursor.lastrowid, **dict(zip(fields, values))}\n'),
+    ('rest-api', 'def change_record(table, fields, record_id, record, after=None):\n    values = checked(record, fields)\n    changes = ", ".join(f\'"{name}" = ?\' for name in fields)\n    with closing(connect()) as connection, connection:\n        cursor = connection.execute(f\'UPDATE "{table}" SET {changes} WHERE id = ?\', [*values, record_id])\n        if cursor.rowcount and after is not None:\n            after(connection, record_id, dict(zip(fields, values)))\n    if cursor.rowcount == 0:\n        raise HTTPException(status_code=404, detail="there is no record with that id")\n    return {"id": record_id, **dict(zip(fields, values))}\n'),
     ('rest-api', 'def delete_record(table, record_id):\n    with closing(connect()) as connection, connection:\n        cursor = connection.execute(f\'DELETE FROM "{table}" WHERE id = ?\', [record_id])\n    if cursor.rowcount == 0:\n        raise HTTPException(status_code=404, detail="there is no record with that id")\n'),
+    ('notify-when', 'def create_notifications():\n    with closing(connect()) as connection, connection:\n        connection.execute(\'CREATE TABLE IF NOT EXISTS "notification" (id INTEGER PRIMARY KEY, "recipient" TEXT NOT NULL, "condition" TEXT NOT NULL, "record" INTEGER NOT NULL, "time" TEXT NOT NULL)\')\n'),
+    ('notify-when', 'def notify(connection, recipient, condition, record_id):\n    time = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")\n    connection.execute(\'INSERT INTO "notification" ("recipient", "condition", "record", "time") VALUES (?, ?, ?, ?)\', [recipient, condition, record_id, time])\n'),
+    ('notify-when', 'def list_notifications():\n    with closing(connect()) as connection:\n        rows = connection.execute(\'SELECT id, "recipient", "condition", "record", "time" FROM "notification" ORDER BY id\').fetchall()\n    return [dict(row) for row in rows]\n'),
 ]
 REQUIREMENTS = ["fastapi==0.162.5", "uvicorn==0.54.0"]  # the versions the generated server was tested with
 
@@ -277,7 +394,16 @@ FORMS = {
     "rest-api": "GET and POST /api/TABLE; PUT and DELETE /api/TABLE/{record_id}",
     "add-record-form": '<button data-add="DATA">; <dialog data-form="DATA"><form method="dialog"> one input per field',
     "button-opens-page": '<a class="button" href="PAGE.html">TEXT</a>',
+    "edit-table-rows": '<table data-editable>; <td></td> after the headings; <dialog data-change="DATA"><form method="dialog"> one input '
+                       "per field; each row: data-id, a cell with buttons ✎ (PUT /api/TABLE/ID) and × (DELETE /api/TABLE/ID)",
+    "render-list": "<ul data-notifications></ul>; one <li>RECIPIENT: CONDITION #RECORD</li> per notification from /api/notification",
+    "notify-when": 'def TABLE_rules(connection, record_id, record): if COMPARISONS: notify(connection, "RECIPIENT", "CONDITION", '
+                   "record_id); GET /api/notification",
 }
+
+
+ELEMENT_BLOCKS = {Heading: "page-heading", Paragraph: "page-text", Table: "data-table", Button: "page-button",
+                  Notifications: "render-list"}
 
 
 def file_name(page):
@@ -303,14 +429,18 @@ def tables(app):
 
 
 def features(app):
-    """Which behaviours the application uses: fill, search, sort."""
+    """Which behaviours the application uses: fill, search, sort, form, edit, list."""
     filled = {item.name for item in app.records} | set(app.exposed)
     found = set()
     for page in app.pages:
         for element in page.elements:
             if isinstance(element, Button) and element.action is not None and element.action[0] == "adds":
                 found.add("form")
+            if isinstance(element, Notifications):
+                found.add("list")
     for table in tables(app):
+        if table.editable:
+            found.add("edit")
         if table.data in filled:
             found.add("fill")
         if table.search is not None:
@@ -333,9 +463,11 @@ def blocks_used(app):
         add("fastapi-app")
     if app.exposed:
         add("sqlite-table", "rest-api")
+    if app.rules:
+        add("notify-when")
     for page in app.pages:
         for element in page.elements:
-            add({Heading: "page-heading", Paragraph: "page-text", Table: "data-table", Button: "page-button"}[type(element)])
+            add(ELEMENT_BLOCKS[type(element)])
             if isinstance(element, Button) and element.action is not None:
                 add("add-record-form" if element.action[0] == "adds" else "button-opens-page")
             if isinstance(element, Table):
@@ -345,6 +477,8 @@ def blocks_used(app):
                     add("filter-elements-by-text")
                 if element.sort:
                     add("table-sort")
+                if element.editable:
+                    add("edit-table-rows", "add-record-form")  # the form for changing a record is the add form's
     if app.records:
         add("data-records")
     return used
@@ -383,6 +517,8 @@ def page_lines(app, page):
             source = f' data-source="{records_file(element.data)}"' if element.data in filled else ""
             if element.data in app.exposed:
                 source = f' data-source="/api/{element.data.lower()}"'
+            if element.editable:
+                source += " data-editable"
             out += [(f'      <table data-name="{element.data}"{source}>', element.line), ("        <thead>", element.line),
                     ("          <tr>", element.line)]
             sort_lines = dict(zip(element.sort, element.sort_lines or (element.line,) * len(element.sort)))
@@ -393,8 +529,15 @@ def page_lines(app, page):
                                 f"{name}</button></th>", sort_lines[name]))
                 else:
                     out.append((f'            <th scope="col"{kind_class}>{name}</th>', element.line))
+            edit = element.editable_line or element.line
+            if element.editable:
+                out.append(("            <td></td>", edit))
             out += [("          </tr>", element.line), ("        </thead>", element.line),
                     ("        <tbody></tbody>", element.line), ("      </table>", element.line)]
+            if element.editable:
+                out += [(f'      <dialog data-change="{element.data}">', edit)] + form_lines(data[element.data], "✓", edit)
+        elif isinstance(element, Notifications):
+            out.append(("      <ul data-notifications></ul>", element.line))
         elif element.action is not None and element.action[0] == "opens":
             width_class = "" if element.width is None else f" width-{element.width}"
             out.append((f'      <a class="button{width_class}" href="{files[element.action[1]]}">{escape(element.text)}</a>',
@@ -404,30 +547,38 @@ def page_lines(app, page):
             adds = "" if element.action is None else f' data-add="{element.action[1]}"'
             out.append((f'      <button type="button"{width_class}{adds}>{escape(element.text)}</button>', element.line))
             if element.action is not None:
-                out += [(f'      <dialog data-form="{element.action[1]}">', element.line),
-                        ('        <form method="dialog">', element.line)]
-                for name, kind in data[element.action[1]].fields:
-                    extra = {"text": "", "integer": ' type="number" step="1" required',
-                             "decimal": ' inputmode="decimal" pattern="-?\\d+(\\.\\d+)?" required'}[kind]
-                    out.append((f'          <label>{name} <input name="{name}"{extra} /></label>', element.line))
-                out += [(f'          <button type="submit">{escape(element.text)}</button>', element.line),
-                        ('          <button type="button" value="close">×</button>', element.line),
-                        ("        </form>", element.line), ("      </dialog>", element.line)]
+                out += [(f'      <dialog data-form="{element.action[1]}">', element.line)]
+                out += form_lines(data[element.action[1]], escape(element.text), element.line)
     out += [("    </main>", "html-page"), ("  </body>", "html-page"), ("</html>", "html-page")]
     return out
 
 
+def form_lines(data, send, origin):
+    """The form inside a dialog, with one input for each field of a data type, and the end of the dialog."""
+    out = [('        <form method="dialog">', origin)]
+    for name, kind in data.fields:
+        extra = {"text": "", "integer": ' type="number" step="1" required',
+                 "decimal": ' inputmode="decimal" pattern="-?\\d+(\\.\\d+)?" required'}[kind]
+        out.append((f'          <label>{name} <input name="{name}"{extra} /></label>', origin))
+    return out + [(f'          <button type="submit">{send}</button>', origin),
+                  ('          <button type="button" value="close">×</button>', origin),
+                  ("        </form>", origin), ("      </dialog>", origin)]
+
+
 def style_lines(app):
     flags = {"always"} | features(app)
-    if flags & {"search", "form"}:
+    if flags & {"search", "form", "edit"}:
         flags.add("label")
+    if flags & {"form", "edit"}:
+        flags.add("dialog")
     widths = {}
     for page in app.pages:
         for element in page.elements:
             if isinstance(element, Button) and element.action is not None and element.action[0] == "opens":
                 flags.add("link")
             else:
-                flags.add({Heading: "heading", Paragraph: "text", Table: "table", Button: "button"}[type(element)])
+                flags.add({Heading: "heading", Paragraph: "text", Table: "table", Button: "button",
+                           Notifications: "list"}[type(element)])
             if isinstance(element, Button) and element.width is not None:
                 widths.setdefault(element.width, element.line)
     if len(app.pages) > 1:
@@ -451,6 +602,16 @@ def script_lines(app):
         if flag in flags:
             out += [(line, block) for line in text.rstrip("\n").split("\n")] + [("", "support")]
     out.append(('document.addEventListener("DOMContentLoaded", () => {', "render-table"))
+    if "edit" in flags:  # before the tables are filled, so that every row gets its controls
+        block = "edit-table-rows"
+        out += [('  for (const table of document.querySelectorAll("table[data-editable]")) {', block),
+                ("    const dialog = table.nextElementSibling;", block),
+                ('    table.addEventListener("filled", (event) => addControls(table, event.detail));', block),
+                ("    dialog.querySelector('button[value=\"close\"]').addEventListener(\"click\", () => dialog.close());", block),
+                ('    dialog.querySelector("form").addEventListener("submit", (event) => {', block),
+                ("      event.preventDefault();", block),
+                ("      changeRecord(event.target).catch((problem) => console.error(problem));", block),
+                ("    });", block), ("  }", block)]
     if "fill" in flags:
         out += [('  for (const table of document.querySelectorAll("table[data-source]")) {', "render-table"),
                 ("    fillTable(table).catch((problem) => console.error(problem));", "render-table"), ("  }", "render-table")]
@@ -471,6 +632,12 @@ def script_lines(app):
                 ("      event.preventDefault();", block),
                 ("      addRecord(event.target).catch((problem) => console.error(problem));", block),
                 ("    });", block), ("  }", block)]
+    if "list" in flags:
+        block = "render-list"
+        out += [('  for (const list of document.querySelectorAll("ul[data-notifications]")) {', block),
+                ("    fillNotifications(list).catch((problem) => console.error(problem));", block),
+                ('    document.addEventListener("stored", () => fillNotifications(list).catch((problem) => console.error(problem)));', block),
+                ("  }", block)]
     out.append(("});", "render-table"))
     return out
 
@@ -502,6 +669,12 @@ def server_lines(app):
     if exposed:
         out += [("import json", base), ("import re", base), ("import sqlite3", base),
                 ("from contextlib import closing", base)]
+    if app.rules:
+        out.append(("from datetime import UTC, datetime", "notify-when"))
+        kinds = {item.name: dict(item.fields) for item in exposed}
+        decimal = [rule for rule in app.rules if any(kinds[rule.data][name] == "decimal" for name, _, _ in rule.conditions)]
+        if decimal:
+            out.append(("from decimal import Decimal", decimal[0].line))
     out.append(("from pathlib import Path", web))
     if exposed:
         out.append(("from typing import Annotated", web))
@@ -518,31 +691,77 @@ def server_lines(app):
     out += [("", "support"), (f'app = FastAPI(title="{app.name}")', app.line)]
     if exposed:
         for block, text in SERVER:
-            out += [("", "support"), ("", "support")] + [(line, block) for line in text.rstrip("\n").split("\n")]
+            if block != "notify-when" or app.rules:
+                out += [("", "support"), ("", "support")] + [(line, block) for line in text.rstrip("\n").split("\n")]
+    ruled = {}
+    for rule in app.rules:
+        ruled.setdefault(rule.data, []).append(rule)
+    for item in exposed:
+        if item.name in ruled:
+            out += [("", "support"), ("", "support")] + rule_lines(item, ruled[item.name])
     for item in exposed:
         table, fields, line = item.name.lower(), f"{item.name.upper()}_FIELDS", lines[item.name]
+        after = f", {table}_rules" if item.name in ruled else ""
         out += [("", "support"), ("", "support"),
                 (f'@app.get("/api/{table}")', line), (f"def {table}_list():", line),
                 (f'    return list_records("{table}", {fields})', line),
                 ("", "support"), ("", "support"),
                 (f'@app.post("/api/{table}", status_code=201)', line),
                 (f"def {table}_add(record: Annotated[dict, Body()]):", line),
-                (f'    return add_record("{table}", {fields}, record)', line),
+                (f'    return add_record("{table}", {fields}, record{after})', line),
                 ("", "support"), ("", "support"),
                 (f'@app.put("/api/{table}/{{record_id}}")', line),
                 (f"def {table}_change(record_id: int, record: Annotated[dict, Body()]):", line),
-                (f'    return change_record("{table}", {fields}, record_id, record)', line),
+                (f'    return change_record("{table}", {fields}, record_id, record{after})', line),
                 ("", "support"), ("", "support"),
                 (f'@app.delete("/api/{table}/{{record_id}}", status_code=204)', line),
                 (f"def {table}_delete(record_id: int):", line),
                 (f'    delete_record("{table}", record_id)', line)]
+    if app.rules:
+        block = "notify-when"
+        out += [("", "support"), ("", "support"), (f'@app.get("/api/{NOTIFICATIONS_TABLE}")', block),
+                (f"def {NOTIFICATIONS_TABLE}_list():", block), ("    return list_notifications()", block)]
     first = app.pages[0]
     out += [("", "support"), ("", "support"), ('@app.get("/")', first.line), ("def first_page():", first.line),
             (f'    return RedirectResponse(url="/{file_name(first)}")', first.line), ("", "support"), ("", "support")]
     for item in exposed:
         table = item.name.lower()
         out.append((f'create_table("{table}", {item.name.upper()}_FIELDS, HERE / "{table}.json")', lines[item.name]))
+    if app.rules:
+        out.append(("create_notifications()", "notify-when"))
     out.append(('app.mount("/", StaticFiles(directory=HERE / "static"), name="pages")', web))
+    return out
+
+
+def python_string(text):
+    """A Python string literal for text, written as the formatter writes it: double quotes unless single quotes
+    need fewer escapes, and characters that are not printable as escapes."""
+    body = "".join(ch if ch.isprintable() else (f"\\u{ord(ch):04x}" if ord(ch) < 0x10000 else f"\\U{ord(ch):08x}")
+                   for ch in text.replace("\\", "\\\\"))
+    if text.count('"') > text.count("'"):
+        return "'" + body.replace("'", "\\'") + "'"
+    return '"' + body.replace('"', '\\"') + '"'
+
+
+def comparison_code(name, operator, value, kind):
+    """One comparison of a rule as a Python expression over the record as stored."""
+    python = "==" if operator == "=" else operator
+    if kind == "decimal":  # compared exactly; a whole number needs no Decimal of its own
+        return f'Decimal(record["{name}"]) {python} ' + (f'Decimal("{value}")' if "." in value else str(int(value)))
+    if kind == "text":
+        return f'record["{name}"] {python} {python_string(value)}'
+    return f'record["{name}"] {python} {value}'
+
+
+def rule_lines(data, rules):
+    """The function that applies the rules of one data type to a record that has just been stored."""
+    kinds = dict(data.fields)
+    out = [(f"def {data.name.lower()}_rules(connection, record_id, record):", rules[0].line)]
+    for rule in rules:
+        test = " and ".join(comparison_code(name, operator, value, kinds[name]) for name, operator, value in rule.conditions)
+        out += [(f"    if {test}:", rule.line),
+                (f"        notify(connection, {python_string(rule.recipient)}, {python_string(condition_text(rule))}, record_id)",
+                 rule.notify_line or rule.line)]
     return out
 
 
@@ -604,7 +823,9 @@ def lift(files):
                     raise NotGenerated(f"{name}: a search box is not as generated")
                 search = (match[2], match[1])
                 continue
-            elif match := re.fullmatch(rf'      <table data-name="{NAME}"(?: data-source="(/api/)?[a-z0-9_]+(?:\.json)?")?>', line):
+            elif line == "      <ul data-notifications></ul>":
+                elements.append(Notifications())
+            elif match := re.fullmatch(rf'      <table data-name="{NAME}"(?: data-source="(/api/)?[a-z0-9_]+(?:\.json)?")?( data-editable)?>', line):
                 if match[2] and match[1] not in exposed:
                     exposed.append(match[1])
                 found, sortable = [], []
@@ -622,7 +843,16 @@ def lift(files):
                     raise NotGenerated(f"tables of '{match[1]}' do not agree on its fields")
                 if search is not None and search[0] != match[1]:
                     raise NotGenerated(f"{name}: a search box does not belong to the table after it")
-                elements.append(Table(data=match[1], search=search[1] if search else None, sort=tuple(sortable)))
+                editable = bool(match[3])
+                if editable:  # the form for changing a record follows the table; rebuilding checks every line of it
+                    if index >= len(body) or body[index] != f'      <dialog data-change="{match[1]}">':
+                        raise NotGenerated(f"{name}: an editable table is not followed by its form")
+                    try:
+                        index = body.index("      </dialog>", index) + 1
+                    except ValueError:
+                        raise NotGenerated(f"{name}: a form is not as generated") from None
+                elements.append(Table(data=match[1], search=search[1] if search else None, sort=tuple(sortable),
+                                      editable=editable))
                 search = None
             elif match := re.fullmatch(rf'      <button type="button"(?: class="width-(\d+)")?(?: data-add="{NAME}")?>(.*)</button>', line):
                 action = ("adds", match[2]) if match[2] else None
@@ -667,12 +897,41 @@ def lift(files):
     position = {item.name: index for index, item in enumerate(data)}
     exposed.sort(key=lambda name: position.get(name, len(position)))
     uses = (("sqlite",) if exposed else ()) + (("fastapi",) if served else ())
-    app = App(app_names.pop(), data, ordered, tuple(records), uses, tuple(exposed))
+    rules = _rules(files.get("server.py", ""), data)
+    app = App(app_names.pop(), data, ordered, tuple(records), uses, tuple(exposed), rules=rules)
     try:
         check(app)
     except IntentError as problem:
         raise NotGenerated(problem.message) from None
     return app
+
+
+def _rules(server, data):
+    """Read the rules back from the calls that store notifications in a generated server.
+
+    Each call holds the rule's recipient and its condition in standard English phrases; the comparisons
+    in the code are not read, because rebuilding the server checks that they are exactly as generated.
+    """
+    fields = {item.name: dict(item.fields) for item in data}
+    rules = []
+    for line in server.split("\n"):
+        match = re.fullmatch(rf'        notify\(connection, "{NAME}", (.+), record_id\)', line)
+        if match is None:
+            continue
+        try:
+            condition = ast.literal_eval(match[2])
+        except (ValueError, SyntaxError):
+            raise NotGenerated("a rule in the server is not as generated") from None
+        if not isinstance(condition, str):
+            raise NotGenerated("a rule in the server is not as generated")
+        try:
+            name, comparisons = read_condition(condition, 0, PHRASES["en"])
+        except IntentError:
+            raise NotGenerated("a rule in the server is not as generated") from None
+        kinds = fields.get(name, {})
+        comparisons = tuple((field, operator, as_kind(value, kinds.get(field))) for field, operator, value in comparisons)
+        rules.append(Rule(name, comparisons, match[1]))
+    return tuple(rules)
 
 
 def _rows(text, data):

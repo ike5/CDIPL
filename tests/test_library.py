@@ -20,7 +20,7 @@ EXAMPLE = REPO / "examples" / "adult_users.intent"
 class LibraryTest(unittest.TestCase):
     def test_every_implemented_block_is_in_the_catalogue_with_a_status(self):
         catalogue, statuses = library.catalogue(), library.statuses()
-        self.assertEqual(len(catalogue), 103)  # the 90 blocks of the Stage 1 inventory and thirteen for applications
+        self.assertEqual(len(catalogue), 105)  # the 90 blocks of the Stage 1 inventory and fifteen for applications
         for block, status in statuses.items():
             self.assertIn(block, catalogue)
             self.assertIn(status, library.STATUSES)

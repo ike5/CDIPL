@@ -29,10 +29,16 @@ app Inventory:
         table Product
         searchable by name
         sortable by price
+        editable
         button "Add product" width 160px adds Product
         button "Suppliers" opens Suppliers
+        heading "Notifications"
+        notifications
 
     page Suppliers:
         heading "Suppliers"
         table Supplier
         button "Products" opens Products
+
+    when Product.stock < 5:
+        notify inventory_manager

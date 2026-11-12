@@ -1,6 +1,6 @@
 """Intent files that describe an application's pages: the checked form, the reader and the writer."""
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from .model import IntentError
 
@@ -9,6 +9,8 @@ STRING = r'"(?:[^"\\]|\\.)*"'
 FIELD_TYPES = ("text", "integer", "decimal")
 MAX_WIDTH = 2000
 PARTS = {"sqlite": "sqlite", "fastapi": "FastAPI"}  # the parts of an application that can be built, as written
+OPERATORS = ("=", "!=", "<", "<=", ">", ">=")
+NOTIFICATIONS_TABLE = "notification"  # the table, and the address under /api/, that keeps the notifications
 
 PHRASES = {
     "en": {"header": "language: en", "app": "app", "data": "data", "records": "records", "page": "page",
@@ -16,6 +18,7 @@ PHRASES = {
            "searchable": "searchable by", "sortable": "sortable by", "use": "use", "expose": r"expose (\S+) as api",
            "expose_text": "expose {} as api", "adds": "adds", "opens": "opens",
            "increase": r"increase button(?: (STRING))? size by (\d+)px", "decrease": r"decrease button(?: (STRING))? size by (\d+)px",
+           "editable": "editable", "when": "when", "notify": "notify", "and": "and", "notifications": "notifications",
            "types": {"text": "text", "integer": "integer", "decimal": "decimal"}},
     "es": {"header": "idioma: es", "app": "aplicación", "data": "datos", "records": "registros", "page": "página",
            "heading": "encabezado", "text": "texto", "table": "tabla", "button": "botón", "width": "ancho",
@@ -23,6 +26,7 @@ PHRASES = {
            "expose_text": "exponer {} como api", "adds": "añade", "opens": "abre",
            "increase": r"aumentar tamaño del botón(?: (STRING))? en (\d+)px",
            "decrease": r"reducir tamaño del botón(?: (STRING))? en (\d+)px",
+           "editable": "editable", "when": "cuando", "notify": "notificar", "and": "y", "notifications": "notificaciones",
            "types": {"text": "texto", "integer": "entero", "decimal": "decimal"}},
 }
 HEADERS = {phrases["header"]: code for code, phrases in PHRASES.items()}
@@ -33,17 +37,11 @@ NOT_BUILT = {
         (r"use\s+\S+", "choosing the parts of an application, such as SQLite, Postgres or FastAPI"),
         (r"create\s+\S+\s*:", "creating a service, such as a Postgres database"),
         (r"using\s+\S+", "choosing how a service is run, such as Docker"),
-        (r"editable", "editing a table, which needs somewhere to store the data"),
-        (r"when\s+.+:", "rules that react to data"),
-        (r"notify\s+\S+", "notifying someone"),
     ],
     "es": [
         (r"usar\s+\S+", "choosing the parts of an application, such as SQLite, Postgres or FastAPI"),
         (r"crear\s+\S+\s*:", "creating a service, such as a Postgres database"),
         (r"usando\s+\S+", "choosing how a service is run, such as Docker"),
-        (r"editable", "editing a table, which needs somewhere to store the data"),
-        (r"cuando\s+.+:", "rules that react to data"),
-        (r"notificar\s+\S+", "notifying someone"),
     ],
 }
 
@@ -68,8 +66,10 @@ class Table(Element):
     data: str = ""
     search: str | None = None  # the field a search box looks in
     sort: tuple[str, ...] = ()  # the fields whose column headings sort the table
+    editable: bool = False  # each row has controls that change or delete its record
     search_line: int = field(default=0, compare=False, kw_only=True)
     sort_lines: tuple[int, ...] = field(default=(), compare=False, kw_only=True)
+    editable_line: int = field(default=0, compare=False, kw_only=True)
 
 
 @dataclass(frozen=True)
@@ -77,6 +77,24 @@ class Button(Element):
     text: str = ""
     width: int | None = None
     action: tuple[str, str] | None = None  # ("adds", a data name) or ("opens", a page name)
+
+
+@dataclass(frozen=True)
+class Notifications(Element):
+    """The list of notifications stored by the rules of the application."""
+
+
+@dataclass(frozen=True)
+class Rule:
+    """When a record of a data type, as stored, meets every comparison, someone is notified.
+
+    Each comparison is (field, operator, value); values are kept as in records: Quoted, int or Decimal.
+    """
+    data: str
+    conditions: tuple[tuple[str, str, object], ...]
+    recipient: str
+    line: int = field(default=0, compare=False)
+    notify_line: int = field(default=0, compare=False)
 
 
 @dataclass(frozen=True)
@@ -115,6 +133,7 @@ class App:
     changes: tuple[tuple[int, int], ...] = field(default=(), compare=False)  # (line of a change, line it changes)
     use_lines: tuple[int, ...] = field(default=(), compare=False)
     expose_lines: tuple[int, ...] = field(default=(), compare=False)
+    rules: tuple[Rule, ...] = ()  # rules that notify, in the order of their data, then as written
 
 
 class NotBuilt(IntentError):
@@ -208,10 +227,43 @@ def check(app):
                     raise IntentError(element.line, f"a button can add a '{target}' only if '{target}' is exposed as an API")
                 if verb == "opens" and target not in page_names:
                     raise IntentError(element.line, f"there is no page named '{target}'")
+            if isinstance(element, Table) and element.editable and element.data not in app.exposed:
+                raise IntentError(element.editable_line or element.line,
+                                  f"a table can be editable only if '{element.data}' is exposed as an API")
+            if isinstance(element, Notifications) and not app.rules:
+                raise IntentError(element.line, "there are no notifications to show: no rule notifies anyone")
+    check_rules(app, names, lines)
     shown = {element.data for page in app.pages for element in page.elements if isinstance(element, Table)}
     for item in app.data:
         if item.name not in shown:
             raise IntentError(item.line, f"'{item.name}' is declared but no page shows it")
+
+
+def check_rules(app, names, expose_lines):
+    """Check the rules that notify. Raises IntentError at the line of the problem."""
+    seen = set()
+    for rule in app.rules:
+        if rule.data not in names:
+            raise IntentError(rule.line, f"there is no data named '{rule.data}'")
+        if rule.data not in app.exposed:
+            raise IntentError(rule.line, f"a rule about '{rule.data}' needs '{rule.data}' to be exposed as an API")
+        kinds = dict(names[rule.data].fields)
+        for name, _, value in rule.conditions:
+            if name not in kinds:
+                raise IntentError(rule.line, f"'{rule.data}' has no field named '{name}'")
+            if not fits(value, kinds[name]):
+                raise IntentError(rule.line, f"the value compared with '{name}' must be {VALUE_HELP[kinds[name]]}")
+        if not IDENTIFIER.match(rule.recipient):
+            raise IntentError(rule.notify_line or rule.line, f"'{rule.recipient}' is not a valid name")
+        if rule in seen:
+            raise IntentError(rule.line, "this rule is written twice")
+        seen.add(rule)
+    if app.rules:
+        for name in app.exposed:
+            if name.lower() == NOTIFICATIONS_TABLE:
+                raise IntentError(expose_lines.get(name, app.line),
+                                  f"'{name}' cannot have an API: its table would be named '{NOTIFICATIONS_TABLE}', "
+                                  f"where the notifications are kept")
 
 
 DECIMAL = re.compile(r"-?\d+(?:\.\d+)?\Z")
@@ -269,19 +321,26 @@ def read_lines(text, on_problem=None, resolver=None):
     types = {word: kind for kind, word in words["types"].items()}
     app_name, app_line, data, records, pages, changes = None, numbered[0][0], [], [], [], []
     uses, use_lines, exposed, expose_lines = [], [], [], []
+    rules = []
     current = None  # [kind, name, line, indent, items, lines of the items]
 
     def close():
         nonlocal current
         if current is not None:
             kind, name, line, _, items, lines = current
+            current = None
             if kind == "data":
                 data.append(Data(name, tuple(items), line))
             elif kind == "records":
                 records.append(Records(name, tuple(items), line, tuple(lines)))
+            elif kind == "rule":
+                if not items:
+                    problem(IntentError(line, f"a rule needs one line beneath it naming who is notified, such as "
+                                              f"'{words['notify']} manager'"))
+                elif name is not None:
+                    rules.append(Rule(name[0], name[1], items[0], line, lines[0]))
             else:
                 pages.append(Page(name, tuple(items), line))
-        current = None
 
     kinds = {words["data"]: "data", words["records"]: "records", words["page"]: "page"}
     opener = re.compile(rf"({'|'.join(re.escape(word) for word in kinds)})\s+(\S+)\s*:")
@@ -327,6 +386,18 @@ def read_lines(text, on_problem=None, resolver=None):
         if app_name is None:
             problem(IntentError(number, f"expected the application, written as '{words['app']} Name:'"))
             continue
+        if match := re.fullmatch(rf"{words['when']}\s+(.*?)\s*:", line):
+            close()
+            if not indent:
+                problem(IntentError(number, "this belongs inside the application, so it must be indented"))
+                continue
+            try:
+                condition = read_condition(match[1], number, words)
+            except IntentError as error:
+                problem(error)
+                condition = None
+            current = ["rule", condition, number, indent, [], []]
+            continue
         if match := opener.fullmatch(line):
             close()
             if not indent:
@@ -343,8 +414,21 @@ def read_lines(text, on_problem=None, resolver=None):
                                         f"or '{words['page']} Name:'"))
             continue
         kind, name, _, _, items, lines = current
+        notify = re.fullmatch(rf"{words['notify']}\s+(\S+)", line)
         try:
-            if kind == "data":
+            if kind == "rule":
+                if notify is None:
+                    raise IntentError(number, f"expected '{words['notify']} name' beneath the rule")
+                if not IDENTIFIER.match(notify[1]):
+                    raise IntentError(number, f"'{notify[1]}' is not a valid name")
+                if items:
+                    raise IntentError(number, f"a rule has exactly one '{words['notify']}' line")
+                items.append(notify[1])
+                lines.append(number)
+            elif notify is not None:
+                raise IntentError(number, f"'{words['notify']}' belongs beneath a rule written as "
+                                          f"'{words['when']} Data.field < 5:'")
+            elif kind == "data":
                 items.append(_field(line, number, types, items))
             elif kind == "records":
                 declared = next((item for item in data if item.name == name), None)
@@ -365,9 +449,61 @@ def read_lines(text, on_problem=None, resolver=None):
     records.sort(key=lambda item: position.get(item.name, len(position)))
     pairs = sorted(zip(exposed, expose_lines), key=lambda pair: position.get(pair[0], len(position)))
     parts = sorted(zip(uses, use_lines), key=lambda pair: list(PARTS).index(pair[0]))
+    rules.sort(key=lambda rule: position.get(rule.data, len(position)))
+    known = {item.name: dict(item.fields) for item in data}
+    rules = [replace(rule, conditions=tuple((name, operator, as_kind(value, known.get(rule.data, {}).get(name)))
+                                            for name, operator, value in rule.conditions)) for rule in rules]
     return App(app_name, ordered, tuple(pages), tuple(records), tuple(part for part, _ in parts),
                tuple(name for name, _ in pairs), language, app_line, tuple(changes),
-               tuple(line for _, line in parts), tuple(line for _, line in pairs))
+               tuple(line for _, line in parts), tuple(line for _, line in pairs), tuple(rules))
+
+
+def as_kind(value, kind):
+    """A whole number written for a decimal field is that decimal, as in records."""
+    if kind == "decimal" and isinstance(value, int) and not isinstance(value, bool):
+        return Decimal(str(value))
+    return value
+
+
+def read_condition(text, number, words):
+    """The condition of a rule: comparisons of fields of one data type with fixed values, joined by 'and'.
+
+    Returns (data name, ((field, operator, value), ...)). Raises IntentError.
+    """
+    comparison = re.compile(rf"([A-Za-z_][A-Za-z0-9_]*)\.([A-Za-z_][A-Za-z0-9_]*)\s*(!=|<=|>=|=|<|>)\s*"
+                            rf"(?:({STRING})|(-?\d+\.\d+)|(-?\d+))")
+    joiner = re.compile(rf"\s+{words['and']}\s+")
+    data_name, conditions, position = None, [], 0
+    while True:
+        match = comparison.match(text, position)
+        if match is None:
+            raise IntentError(number, f"expected a condition such as 'Product.stock < 5', comparing a field with a value "
+                                      f"using {' '.join(OPERATORS)}, joined by '{words['and']}'")
+        if data_name is not None and match[1] != data_name:
+            raise IntentError(number, "the comparisons of a rule must all be about the same data type")
+        data_name = match[1]
+        if match[4]:
+            value = Quoted(unquote(match[4]))
+            if any(ord(ch) < 32 for ch in value):
+                raise IntentError(number, "text must not contain control characters")
+        elif match[5]:
+            value = Decimal(match[5])
+        else:
+            value = int(match[6])
+        conditions.append((match[2], match[3], value))
+        position = match.end()
+        if position == len(text):
+            return data_name, tuple(conditions)
+        joined = joiner.match(text, position)
+        if joined is None:
+            raise IntentError(number, f"comparisons must be joined by '{words['and']}'")
+        position = joined.end()
+
+
+def condition_text(rule, language="en"):
+    """The condition of a rule in standard phrases, such as 'Product.stock < 5'."""
+    joiner = f" {PHRASES[language]['and']} "
+    return joiner.join(f"{rule.data}.{name} {operator} {value_text(value)}" for name, operator, value in rule.conditions)
 
 
 def _record(line, number, declared):
@@ -428,6 +564,8 @@ def _element(line, number, words):
         if not IDENTIFIER.match(match[1]):
             raise IntentError(number, f"'{match[1]}' is not a valid name")
         return Table(data=match[1], line=number)
+    if re.fullmatch(words["notifications"], line):
+        return Notifications(line=number)
     if match := re.fullmatch(rf"{words['button']}\s+({STRING})(?:\s+{words['width']}\s+(\d+)px)?"
                              rf"(?:\s+({words['adds']}|{words['opens']})\s+(\S+))?", line):
         width = int(match[2]) if match[2] else None
@@ -454,13 +592,15 @@ def _page_line(line, number, words, items, data, resolver):
     for key in ("searchable", "sortable"):
         if match := re.fullmatch(rf"{words[key]}\s+(\S+)", line):
             return _table_feature(key, match[1], number, items)
+    if line == words["editable"]:
+        return _table_feature("editable", None, number, items)
     for key, sign in (("increase", 1), ("decrease", -1)):
         if match := re.fullmatch(words[key].replace("STRING", STRING), line):
             return resize(items, number, sign * int(match[2]), unquote(match[1]) if match[1] else None)
     if resolver is not None:
         return resolver(line, number, items, data)
     raise IntentError(number, f"'{line}' is not something a page can hold; use {words['heading']}, {words['text']}, "
-                              f"{words['table']} or {words['button']}")
+                              f"{words['table']}, {words['button']} or {words['notifications']}")
 
 
 def _table_feature(key, name, number, items):
@@ -470,13 +610,15 @@ def _table_feature(key, name, number, items):
     if key == "searchable":
         if table.search is not None:
             raise IntentError(number, "the table already has a search box")
-        items[-1] = Table(data=table.data, search=name, sort=table.sort, line=table.line, search_line=number,
-                          sort_lines=table.sort_lines)
-    else:
+        items[-1] = replace(table, search=name, search_line=number)
+    elif key == "sortable":
         if name in table.sort:
             raise IntentError(number, f"the table can already be sorted by '{name}'")
-        items[-1] = Table(data=table.data, search=table.search, sort=(*table.sort, name), line=table.line,
-                          search_line=table.search_line, sort_lines=(*table.sort_lines, number))
+        items[-1] = replace(table, sort=(*table.sort, name), sort_lines=(*table.sort_lines, number))
+    else:
+        if table.editable:
+            raise IntentError(number, "the table is already editable")
+        items[-1] = replace(table, editable=True, editable_line=number)
     return table.line
 
 
@@ -522,7 +664,10 @@ def element_text(element, language):
         lines = [f"{words['table']} {element.data}"]
         if element.search is not None:
             lines.append(f"{words['searchable']} {element.search}")
-        return lines + [f"{words['sortable']} {name}" for name in element.sort]
+        lines += [f"{words['sortable']} {name}" for name in element.sort]
+        return lines + ([words["editable"]] if element.editable else [])
+    if isinstance(element, Notifications):
+        return [words["notifications"]]
     suffix = f" {words['width']} {element.width}px" if element.width is not None else ""
     if element.action is not None:
         suffix += f" {words[element.action[0]]} {element.action[1]}"
@@ -556,4 +701,6 @@ def render(app, language=None):
         out += [f"        {line}" for element in page.elements for line in element_text(element, language)]
         if index < len(app.pages) - 1:
             out.append("")
+    for rule in app.rules:
+        out += ["", f"    {words['when']} {condition_text(rule, language)}:", f"        {words['notify']} {rule.recipient}"]
     return "\n".join(out) + "\n"

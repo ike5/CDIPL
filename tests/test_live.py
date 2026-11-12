@@ -38,6 +38,49 @@ app Inventory:
     when Product.stock < 5:
         notify inventory_manager
 '''
+OWNERS_BUILT = '''language: en
+
+use sqlite
+use FastAPI
+
+app Inventory:
+    data Product:
+        name: text
+        price: decimal
+        stock: integer
+
+    expose Product as api
+
+    page Products:
+        table Product
+        searchable by name
+        sortable by price
+        editable
+
+    when Product.stock < 5:
+        notify inventory_manager
+'''
+OWNERS_BUILT_ES = '''idioma: es
+
+usar sqlite
+usar FastAPI
+
+aplicación Inventory:
+    datos Product:
+        name: texto
+        price: decimal
+        stock: entero
+
+    exponer Product como api
+
+    página Products:
+        tabla Product
+        editable
+        notificaciones
+
+    cuando   Product.stock<5   y Product.price >= 1.50 :
+        notificar inventory_manager
+'''
 
 
 def text_of(result, name):
@@ -89,16 +132,66 @@ class LiveTest(unittest.TestCase):
 
     def test_the_owners_pseudocode(self):
         result = analyse(OWNERS)
-        status = {statement["text"]: statement["status"] for statement in result["statements"]}
+        statements = {statement["text"]: statement for statement in result["statements"]}
+        status = {text: statement["status"] for text, statement in statements.items()}
         self.assertEqual(status["table Product"], "standard")
-        for line in ("use web", "editable", "when Product.stock < 5:", "notify inventory_manager"):
-            self.assertEqual(status[line], "unbuilt", line)
+        self.assertEqual(status["use web"], "unbuilt")
         self.assertEqual(status["expose Product as api"], "error")  # it needs 'use sqlite' and 'use FastAPI'
+        # without an API, the table cannot be edited and the rule cannot be applied: each line says so
+        for line in ("editable", "when Product.stock < 5:", "notify inventory_manager"):
+            self.assertEqual(status[line], "error", line)
+            self.assertIn("exposed as an API", statements[line]["note"])
         self.assertEqual(status["searchable by name"], "standard")
         self.assertEqual(result["kind"], "app")
         self.assertIn('<table data-name="Product">', text_of(result, "products.html"))
         self.assertEqual(result["preview"], "products.html")
         self.assertFalse(result["complete"])
+
+    def test_the_owners_pseudocode_with_a_database_and_a_framework(self):
+        text = OWNERS_BUILT  # exactly the owner's pseudocode, after the line that names the language
+        result = analyse(text)
+        self.assertTrue(result["complete"], result["problems"])
+        self.assertEqual(result["canonical"], text)
+        built = build(text, "html")
+        self.assertEqual(sorted(file["name"] for file in result["files"]), sorted(name for name in built if name != "trace.json"))
+        for file in result["files"]:
+            self.assertEqual(text_of(result, file["name"]), built[file["name"]])
+        statements = {statement["text"]: statement for statement in result["statements"]}
+        blocks = {text: [block["block"] for block in statement["blocks"]] for text, statement in statements.items()}
+        self.assertEqual(blocks["editable"], ["edit-table-rows", "add-record-form"])
+        self.assertEqual(blocks["when Product.stock < 5:"], ["notify-when"])
+        self.assertEqual(blocks["notify inventory_manager"], ["notify-when"])
+        for line in ("editable", "when Product.stock < 5:", "notify inventory_manager"):
+            self.assertEqual(statements[line]["status"], "standard", line)
+            self.assertEqual(statements[line]["reading"], line)
+        rule = statements["when Product.stock < 5:"]["line"]
+        mine = [line["text"].strip() for file in result["files"] if file["name"] == "server.py" for line in file["lines"]
+                if line["origin"] == rule]
+        self.assertEqual(mine, ['def product_rules(connection, record_id, record):', 'if record["stock"] < 5:'])
+        # the same in Spanish, and freely spaced: read in standard phrases
+        spanish = analyse(OWNERS_BUILT_ES)
+        self.assertTrue(spanish["complete"], spanish["problems"])
+        readings = [statement["reading"] for statement in spanish["statements"]]
+        self.assertIn("cuando Product.stock < 5 y Product.price >= 1.50:", readings)
+        self.assertIn("notificar inventory_manager", readings)
+        listed = next(statement for statement in spanish["statements"] if statement["text"] == "notificaciones")
+        self.assertEqual(([block["block"] for block in listed["blocks"]], listed["status"]), (["render-list"], "standard"))
+        self.assertIn("<ul data-notifications></ul>", text_of(spanish, "static/products.html"))
+
+    def test_a_broken_rule_does_not_hide_the_rest(self):
+        text = OWNERS_BUILT + "\n    when Product.colour < 5:\n        notify nobody\n\n    when Product.stock >> 5:\n        notify nobody\n"
+        result = analyse(text)
+        statements = {statement["text"]: statement for statement in result["statements"]}
+        self.assertFalse(result["complete"])
+        self.assertEqual(statements["when Product.stock >> 5:"]["status"], "error")
+        self.assertIn("expected a condition", statements["when Product.stock >> 5:"]["note"])
+        self.assertEqual(statements["when Product.colour < 5:"]["status"], "error")
+        self.assertEqual(statements["when Product.stock < 5:"]["status"], "standard")
+        self.assertEqual(statements["editable"]["status"], "standard")
+        server = text_of(result, "server.py")
+        self.assertIn('notify(connection, "inventory_manager", "Product.stock < 5", record_id)', server)
+        self.assertNotIn("nobody", server)
+        self.assertIn("data-editable", text_of(result, "static/products.html"))
 
     def test_stack_keywords_are_understood_but_not_built(self):
         text = "language: en\n\nuse sqlite\nuse FastAPI\ncreate postgres:\n    using docker\n\napp A:\n    page P:\n        heading \"Hi\"\n"

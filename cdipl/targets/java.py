@@ -207,7 +207,7 @@ SUPPORT = [
         try {
             data = Files.readAllBytes(Path.of(path));
         } catch (IOException | InvalidPathException error) {
-            throw new Failure(3, "cannot-read", path + ": " + error.getMessage());
+            throw new Failure(3, "cannot-read", path + ": " + error.getClass().getSimpleName());
         }
         try {
             return StandardCharsets.UTF_8.newDecoder()
